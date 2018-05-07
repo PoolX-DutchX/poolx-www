@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bignumber.js": "^6.0.0",
+    "eth-contract-class": "^0.0.8",
     "feathers": "^2.2.3",
     "feathers-authentication-client": "^0.3.3",
     "feathers-client": "^2.3.0",

@@ -4259,7 +4259,7 @@ eth-contract-class@0.0.6:
   dependencies:
     web3-core-promievent "^1.0.0-beta.21"
 
-eth-contract-class@0.0.8:
+eth-contract-class@0.0.8, eth-contract-class@^0.0.8:
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/eth-contract-class/-/eth-contract-class-0.0.8.tgz#0ba4590e6185f156c08b7f44b0581fd8d6b7c5b0"
   dependencies:
