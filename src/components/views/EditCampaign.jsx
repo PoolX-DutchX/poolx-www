@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import InputToken from 'react-input-token';
 import 'react-input-token/lib/style.css';
 
-import { Form, Input } from 'formsy-react-components';
+import { Form, Input, Date } from 'formsy-react-components';
 import { feathersClient } from '../../lib/feathersClient';
 import Loader from '../Loader';
 import QuillFormsy from '../QuillFormsy';
@@ -21,7 +21,9 @@ import LoaderButton from '../../components/LoaderButton';
 import User from '../../models/User';
 import GivethWallet from '../../lib/blockchain/GivethWallet';
 import Campaign from '../../models/Campaign';
+import Pool from '../../models/Pool';
 import CampaignService from '../../services/Campaign';
+import PoolService from '../../services/Pool';
 import ErrorPopup from '../ErrorPopup';
 
 /**
@@ -47,8 +49,8 @@ class EditCampaign extends Component {
         title: `${r.name ? r.name : 'Anonymous user'} - ${r.address}`,
       })),
       reviewers: [],
-      // Campaign model
-      campaign: new Campaign({
+      // Pool model
+      pool: new Pool({
         owner: props.currentUser,
       }),
     };
@@ -63,40 +65,18 @@ class EditCampaign extends Component {
       .then(() => isInWhitelist(this.props.currentUser, React.whitelist.projectOwnerWhitelist))
       .then(() => checkWalletBalance(this.props.wallet))
       .then(() => {
-        if (!this.state.hasWhitelist) this.getReviewers();
-      })
-      .then(() => {
-        this.dacsObserver = feathersClient
-          .service('dacs')
-          .watch({ listStrategy: 'always' })
-          .find({ query: { $select: ['title', '_id'] } })
-          .subscribe(
-            resp =>
-              this.setState({
-                // TODO: should we filter the available causes to those that have been mined?
-                // It is possible that a createCause tx will fail and the dac will not be
-                // available
-                dacsOptions: resp.data.map(({ _id, title }) => ({
-                  name: title,
-                  id: _id,
-                  element: <span key={_id}>{title}</span>,
-                })),
-              }),
-            () => this.setState({ isLoading: false }),
-          );
-
         // Load this Campaign
         if (!this.props.isNew) {
-          CampaignService.get(this.props.match.params.id)
-            .then(campaign => {
-              if (isOwner(campaign.owner.address, this.props.currentUser)) {
-                this.setState({ campaign, isLoading: false });
+          PoolService.get(this.props.match.params.id)
+            .then(pool => {
+              if (isOwner(pool.owner.address, this.props.currentUser)) {
+                this.setState({ pool, isLoading: false });
               } else history.goBack();
             })
             .catch(() => err => {
               this.setState({ isLoading: false });
               ErrorPopup(
-                'There has been a problem loading the Campaign. Please refresh the page and try again.',
+                'There has been a problem loading the Pool. Please refresh the page and try again.',
                 err,
               );
             });
@@ -107,38 +87,6 @@ class EditCampaign extends Component {
   }
 
   componentWillUnmount() {
-    if (this.dacsObserver) this.dacsObserver.unsubscribe();
-  }
-
-  getReviewers() {
-    return feathersClient
-      .service('/users')
-      .find({
-        query: {
-          email: { $exists: true },
-          $select: ['_id', 'name', 'address'],
-        },
-      })
-      .then(resp =>
-        this.setState({
-          reviewers: resp.data.map(r => ({
-            value: r.address,
-            title: `${r.name ? r.name : 'Anonymous user'} - ${r.address}`,
-          })),
-        }),
-      )
-      .catch(err => {
-        ErrorPopup(
-          'Unable to load Campaign reviewers. Please refresh the page and try again.',
-          err,
-        );
-      });
-  }
-
-  setImage(image) {
-    const { campaign } = this.state;
-    campaign.image = image;
-    this.setState({ campaign });
   }
 
   submit() {
@@ -158,7 +106,7 @@ class EditCampaign extends Component {
       } else {
         if (this.mounted) this.setState({ isSaving: false });
         React.toast.success('Your Campaign has been updated!');
-        history.push(`/campaigns/${this.state.campaign.id}`);
+        // history.push(`/campaigns/${this.state.pool.id}`);
       }
     };
 
@@ -173,12 +121,12 @@ class EditCampaign extends Component {
         </p>
       );
       React.toast.info(msg);
-      history.push('/my-campaigns');
+      // history.push('/my-campaigns');
     };
 
-    // Save the capaign
+    // Save the pool
     confirmBlockchainTransaction(
-      () => this.state.campaign.save(afterCreate, afterMined),
+      () => this.state.pool.save(afterCreate, afterMined),
       () => this.setState({ isSaving: false }),
     );
   }
@@ -187,24 +135,13 @@ class EditCampaign extends Component {
     this.setState({ formIsValid: state });
   }
 
-  selectDACs({ target }) {
-    const { campaign } = this.state;
-    campaign.dacs = target.value;
-
-    this.setState({ campaign });
-  }
-
   render() {
     const { isNew } = this.props;
     const {
       isLoading,
       isSaving,
-      campaign,
+      pool,
       formIsValid,
-      dacsOptions,
-      hasWhitelist,
-      whitelistOptions,
-      reviewers,
     } = this.state;
 
     return (
@@ -219,179 +156,72 @@ class EditCampaign extends Component {
                   <GoBackButton history={history} />
 
                   <div className="form-header">
-                    {isNew && <h3>Start a new campaign!</h3>}
+                    {isNew && <h3>Start a pool!</h3>}
 
-                    {!isNew && <h3>Edit campaign {campaign.title}</h3>}
+                    {!isNew && <h3>Edit pool {pool.title}</h3>}
                     <p>
                       <i className="fa fa-question-circle" />
-                      A campaign solves a specific cause by executing a project via its Milestones.
-                      Funds raised by a campaign need to be delegated to its Milestones in order to
-                      be paid out.
+                      Go ahead and fill out this form to get started on launching your ico presale pool
                     </p>
                   </div>
 
                   <Form
                     onSubmit={this.submit}
                     mapping={inputs => {
-                      campaign.title = inputs.title;
-                      campaign.description = inputs.description;
-                      campaign.communityUrl = inputs.communityUrl;
-                      campaign.reviewerAddress = inputs.reviewerAddress;
-                      campaign.tokenName = inputs.tokenName;
-                      campaign.tokenSymbol = inputs.tokenSymbol;
-                      campaign.summary = getTruncatedText(inputs.description, 100);
+                      campaign.poolThreshold = inputs.poolThreshold;
+                      campaign.startDate = inputs.startDate;
+                      campaign.closeDate = inputs.closeDate;
+                      campaign.tokenConversionRate = inputs.tokenConversionRate;
                     }}
                     onValid={() => this.toggleFormValid(true)}
                     onInvalid={() => this.toggleFormValid(false)}
                     layout="vertical"
                   >
+
+                  <div className="form-group">
+                    <label htmlFor>
+                      Start date of pool
+                      <Input
+                        name="startDate"
+                        id="startDate"
+                        value="pool.startDate"
+                        type="date"
+                        placeholder="yyyy-mm-dd"
+                      />
+                    </label>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor>
+                      Closing date of pool
+                      <Input
+                        name="closeDate"
+                        id="closeDate"
+                        value="pool.closeDate"
+                        type="date"
+                        placeholder="yyyy-mm-dd"
+                      />
+                    </label>
+                  </div>
+                  <div className="form-group">
                     <Input
-                      name="title"
-                      id="title-input"
-                      label="What are you working on?"
-                      type="text"
-                      value={campaign.title}
-                      placeholder="E.g. Installing 1000 solar panels."
-                      help="Describe your campaign in 1 sentence."
-                      validations="minLength:3"
-                      validationErrors={{
-                        minLength: 'Please provide at least 3 characters.',
-                      }}
-                      required
-                      autoFocus
+                      name="threshold"
+                      id="threshold"
+                      label="Minimum amount of Ether for pool to be realized"
+                      type="number"
+                      value={pool.threshold}
+                      placeholder="amount in Ether"
                     />
-
-                    <QuillFormsy
-                      name="description"
-                      label="Explain how you are going to do this successfully."
-                      helpText="Make it as extensive as necessary.
-                      Your goal is to build trust, so that people donate Ether to your campaign."
-                      value={campaign.description}
-                      placeholder="Describe how you're going to execute your campaign successfully..."
-                      validations="minLength:20"
-                      help="Describe your campaign."
-                      validationErrors={{
-                        minLength: 'Please provide at least 10 characters.',
-                      }}
-                      required
+                  </div>
+                  <div className="form-group">
+                    <Input
+                      name="tokenConversionRate"
+                      id="tokenConversionRate"
+                      label="Number of tokens per Ether to be redeemed"
+                      type="number"
+                      value={pool.tokenConversionRate}
+                      placeholder="Redeemable Tokens per Ether"
                     />
-
-                    <div className="form-group">
-                      <FormsyImageUploader
-                        setImage={this.setImage}
-                        previewImage={campaign.image}
-                        isRequired={isNew}
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor>
-                        Relate your campaign to a community
-                        <small className="form-text">
-                          By linking your Campaign to a Community, Ether from that community can be
-                          delegated to your Campaign. This increases your chances of successfully
-                          funding your Campaign.
-                        </small>
-                        <InputToken
-                          name="dac"
-                          id="dac"
-                          placeholder="Select one or more Communities (DACs)"
-                          value={campaign.dacs}
-                          options={dacsOptions}
-                          onSelect={this.selectDACs}
-                        />
-                      </label>
-                    </div>
-
-                    <div className="form-group">
-                      <Input
-                        name="communityUrl"
-                        id="community-url"
-                        label="Url to join your Community"
-                        type="text"
-                        value={campaign.communityUrl}
-                        placeholder="https://slack.giveth.com"
-                        help="Where can people join your Community? Giveth redirects people there."
-                        validations="isUrl"
-                        validationErrors={{ isUrl: 'Please provide a url.' }}
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <Input
-                        name="tokenName"
-                        id="token-name-input"
-                        label="Token Name"
-                        type="text"
-                        value={campaign.tokenName}
-                        placeholder={campaign.title}
-                        help="The name of the token that Givers will receive when they
-                        donate to this Campaign."
-                        validations="minLength:3"
-                        validationErrors={{
-                          minLength: 'Please provide at least 3 characters.',
-                        }}
-                        required
-                        disabled={!isNew}
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <Input
-                        name="tokenSymbol"
-                        id="token-symbol-input"
-                        label="Token Symbol"
-                        type="text"
-                        value={campaign.tokenSymbol}
-                        help="The symbol of the token that Givers will receive when
-                        they donate to this Campaign."
-                        validations="minLength:2"
-                        validationErrors={{
-                          minLength: 'Please provide at least 2 characters.',
-                        }}
-                        required
-                        disabled={!isNew}
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      {hasWhitelist && (
-                        <SelectFormsy
-                          name="reviewerAddress"
-                          id="reviewer-select"
-                          label="Select a reviewer"
-                          helpText="This person or smart contract will be reviewing your Campaign to increase trust for Givers."
-                          value={campaign.reviewerAddress}
-                          cta="--- Select a reviewer ---"
-                          options={whitelistOptions}
-                          validations="isEtherAddress"
-                          validationErrors={{
-                            isEtherAddress: 'Please select a reviewer.',
-                          }}
-                          required
-                          disabled={!isNew}
-                        />
-                      )}
-
-                      {!hasWhitelist && (
-                        <SelectFormsy
-                          name="reviewerAddress"
-                          id="reviewer-select"
-                          label="Select a reviewer"
-                          helpText="This person or smart contract will be reviewing your Campaign to increase trust for Givers."
-                          value={campaign.reviewerAddress}
-                          cta="--- Select a reviewer ---"
-                          options={reviewers}
-                          validations="isEtherAddress"
-                          validationErrors={{
-                            isEtherAddress: 'Please select a reviewer.',
-                          }}
-                          required
-                          disabled={!isNew}
-                        />
-                      )}
-                    </div>
-
+                  </div>
                     <div className="form-group row">
                       <div className="col-md-6">
                         <GoBackButton history={history} />
@@ -405,7 +235,7 @@ class EditCampaign extends Component {
                           isLoading={isSaving}
                           loadingText="Saving..."
                         >
-                          {isNew ? 'Create' : 'Update'} Campaign
+                          {isNew ? 'Create' : 'Update'} your pool
                         </LoaderButton>
                       </div>
                     </div>
