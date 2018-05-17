@@ -131,7 +131,7 @@ class JoinGivethCommunity extends Component {
             )}
             {this.state.canCreateDAC && (
               <button className="btn btn-info" onClick={() => this.createCampaign()}>
-                Start a Campaign
+                Start a Pool
               </button>
             )}
           </center>

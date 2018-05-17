@@ -78,7 +78,7 @@ class MainMenu extends Component {
               </ul>
 
               <Link className="navbar-brand" to="/">
-                <img src="/img/Giveth-typelogo.svg" width="70px" alt="Giveth logo" />
+                <img src="/img/poolchain_logo.png" width="70px" alt="Poolchain logo" />
               </Link>
 
               <div
@@ -87,13 +87,8 @@ class MainMenu extends Component {
               >
                 <ul className="navbar-nav mr-auto">
                   <li className="nav-item">
-                    <NavLink className="nav-link" to="/dacs" activeClassName="active">
-                      Communities
-                    </NavLink>
-                  </li>
-                  <li className="nav-item">
-                    <NavLink className="nav-link" to="/campaigns" activeClassName="active">
-                      Campaigns
+                    <NavLink className="nav-link" to="/pools" activeClassName="active">
+                      Pools
                     </NavLink>
                   </li>
 
@@ -114,20 +109,11 @@ class MainMenu extends Component {
                         className={`dropdown-menu ${showMobileMenu ? 'show' : ''} `}
                         aria-labelledby="navbarDropdownDashboard"
                       >
-                        <NavLink className="dropdown-item" to="/my-milestones">
-                          My Milestones
+                        <NavLink className="dropdown-item" to="/investments">
+                          My Investments
                         </NavLink>
-                        <NavLink className="dropdown-item" to="/donations">
-                          My Donations
-                        </NavLink>
-                        <NavLink className="dropdown-item" to="/delegations">
-                          My Delegations
-                        </NavLink>
-                        <NavLink className="dropdown-item" to="/my-dacs">
-                          My Communities
-                        </NavLink>
-                        <NavLink className="dropdown-item" to="/my-campaigns">
-                          My Campaigns
+                        <NavLink className="dropdown-item" to="/my-pools">
+                          My Pools
                         </NavLink>
                       </div>
                     </li>
@@ -169,11 +155,6 @@ class MainMenu extends Component {
                       Sign In
                     </NavLink>
                   )}
-                  {!state.currentUser && (
-                    <NavLink className="nav-link" to="/signup" activeClassName="active">
-                      Sign Up
-                    </NavLink>
-                  )}
 
                   {state.currentUser && (
                     <li className="nav-item dropdown">
@@ -207,9 +188,6 @@ class MainMenu extends Component {
                         <NavLink className="dropdown-item" to="/profile">
                           Profile
                         </NavLink>
-                        <NavLink className="dropdown-item" to="/wallet">
-                          Wallet
-                        </NavLink>
                         <button className="dropdown-item" onClick={actions.onSignOut}>
                           Sign out
                         </button>
@@ -219,26 +197,6 @@ class MainMenu extends Component {
                 </ul>
               </div>
             </nav>
-            <div
-              className="alert alert-warning alert-dismissible fade show"
-              role="alert"
-              style={{
-                marginTop: '60px',
-                marginBottom: '0',
-                borderRadius: '0',
-              }}
-            >
-              <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-              <center>
-                Please note that this is a very early stage of the Giveth DApp available only to a
-                curated group of testers.<br />
-                <strong>Do not send in any Ether!</strong> If you have sent Ether please contact us
-                on &nbsp;
-                <a href="http://join.giveth.io">Slack or Riot</a>.
-              </center>
-            </div>
           </div>
         )}
       </UserConsumer>
