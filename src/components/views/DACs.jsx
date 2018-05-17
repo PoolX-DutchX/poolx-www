@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import JoinGivethCommunity from '../JoinGivethCommunity';
+import HeroBanner from '../HeroBanner';
 import DacCard from '../DacCard';
 import GivethWallet from '../../lib/blockchain/GivethWallet';
 import User from '../../models/User';
@@ -17,7 +17,7 @@ import DAC from '../../models/DAC';
  */
 const DACs = ({ currentUser, wallet, dacs, history }) => (
   <div id="dacs-view" className="card-view">
-    <JoinGivethCommunity currentUser={currentUser} wallet={wallet} history={history} />
+    <HeroBanner currentUser={currentUser} wallet={wallet} history={history} />
 
     <div className="container-fluid page-layout reduced-padding">
       {// There are some Campaigns in the system, show them
