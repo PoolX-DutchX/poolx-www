@@ -33,6 +33,7 @@ import NotFound from './../components/views/NotFound';
 
 import EditCampaign from './../components/views/EditCampaign';
 import ViewCampaign from './../components/views/ViewCampaign';
+import ViewPool from './../components/views/ViewPool';
 import EditMilestone from './../components/views/EditMilestone';
 
 // components
@@ -94,6 +95,7 @@ class Application extends Component {
               state: {
                 wallet,
                 currentUser,
+                userAddress,
                 web3,
                 isLoading,
                 hasError,
@@ -152,7 +154,13 @@ class Application extends Component {
                             <EditDAC currentUser={currentUser} wallet={wallet} {...props} />
                           )}
                         />
-
+                        <Route
+                          exact
+                          path="/pools/:id"
+                          component={props => (
+                            <ViewPool currentUser={currentUser} {...props} />
+                          )}
+                        />
                         <Route
                           exact
                           path="/campaigns/new"
@@ -280,6 +288,7 @@ class Application extends Component {
                           component={props => (
                             <SignIn
                               wallet={wallet}
+                              userAddress={userAddress}
                               cachedWallet={wallet}
                               onSignIn={onSignIn}
                               {...props}
