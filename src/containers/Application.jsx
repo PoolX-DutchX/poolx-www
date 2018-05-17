@@ -31,7 +31,7 @@ import MyCampaigns from './../components/views/MyCampaigns';
 import MyMilestones from './../components/views/MyMilestones';
 import NotFound from './../components/views/NotFound';
 
-import EditCampaign from './../components/views/EditCampaign';
+import EditPool from './../components/views/EditPool';
 import ViewCampaign from './../components/views/ViewCampaign';
 import ViewPool from './../components/views/ViewPool';
 import EditMilestone from './../components/views/EditMilestone';
@@ -163,9 +163,9 @@ class Application extends Component {
                         />
                         <Route
                           exact
-                          path="/campaigns/new"
+                          path="/pools/new"
                           component={props => (
-                            <EditCampaign
+                            <EditPool
                               isNew
                               currentUser={currentUser}
                               wallet={wallet}
@@ -182,9 +182,9 @@ class Application extends Component {
                         />
                         <Route
                           exact
-                          path="/campaigns/:id/edit"
+                          path="/pools/:id/edit"
                           component={props => (
-                            <EditCampaign currentUser={currentUser} wallet={wallet} {...props} />
+                            <EditPool currentUser={currentUser} wallet={wallet} {...props} />
                           )}
                         />
 

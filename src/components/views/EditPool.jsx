@@ -21,21 +21,19 @@ import {
 import LoaderButton from '../../components/LoaderButton';
 import User from '../../models/User';
 import GivethWallet from '../../lib/blockchain/GivethWallet';
-import Campaign from '../../models/Campaign';
 import Pool from '../../models/Pool';
-import CampaignService from '../../services/Campaign';
 import PoolService from '../../services/Pool';
 import ErrorPopup from '../ErrorPopup';
 
 /**
- * View to create or edit a Campaign
+ * View to create or edit a Pool
  *
  * @param isNew    If set, component will load an empty model.
- *                 Otherwise component expects an id param and will load a campaign object
- * @param id       URL parameter which is an id of a campaign object
+ *                 Otherwise component expects an id param and will load a pool object
+ * @param id       URL parameter which is an id of a pool object
  * @param wallet   Wallet object with the balance and all keystores
  */
-class EditCampaign extends Component {
+class EditPool extends Component {
   constructor(props) {
     super(props);
 
@@ -64,7 +62,7 @@ class EditCampaign extends Component {
       // .then(() => isInWhitelist(this.props.currentUser, React.whitelist.projectOwnerWhitelist))
       // .then(() => checkWalletBalance(this.props.wallet))
       .then(() => {
-        // Load this Campaign
+        // Load this Pool
         if (!this.props.isNew) {
           PoolService.get(this.props.match.params.id)
             .then(pool => {
@@ -109,7 +107,7 @@ class EditCampaign extends Component {
       } else {
         if (this.mounted) this.setState({ isSaving: false });
         React.toast.success('Your Pool has been updated!');
-        // history.push(`/campaigns/${this.state.pool.id}`);
+        // history.push(`/pools/${this.state.pool.id}`);
       }
     };
 
@@ -124,7 +122,7 @@ class EditCampaign extends Component {
         </p>
       );
       React.toast.info(msg);
-      // history.push('/my-campaigns');
+      // history.push('/my-pools');
     };
 
     // Save the pool
@@ -148,7 +146,7 @@ class EditCampaign extends Component {
     } = this.state;
 
     return (
-      <div id="edit-campaign-view">
+      <div id="edit-pool-view">
         <div className="container-fluid page-layout edit-view">
           <div>
             <div className="col-md-8 m-auto">
@@ -240,7 +238,7 @@ class EditCampaign extends Component {
   }
 }
 
-EditCampaign.propTypes = {
+EditPool.propTypes = {
   currentUser: PropTypes.instanceOf(User).isRequired,
   isNew: PropTypes.bool,
   match: PropTypes.shape({
@@ -250,8 +248,8 @@ EditCampaign.propTypes = {
   }).isRequired,
 };
 
-EditCampaign.defaultProps = {
+EditPool.defaultProps = {
   isNew: false,
 };
 
-export default EditCampaign;
+export default EditPool;
