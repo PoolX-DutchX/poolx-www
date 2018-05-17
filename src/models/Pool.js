@@ -1,5 +1,5 @@
 import BasicModel from './BasicModel';
-import CampaignService from '../services/Campaign';
+import PoolService from '../services/Pool';
 import UploadService from '../services/Uploads';
 /**
  * The DApp Pool model
@@ -18,11 +18,10 @@ class Pool extends BasicModel {
   constructor(data) {
     super(data);
 
-    this.threshold = data.threshold;
-    this.closeDate = data.closeDate;
-    this.tokenConversionRate = data.tokenConversionRate;
+    this.threshold = data.threshold || 0;
+    this.closeDate = data.closeDate || 0;
+    this.tokenConversionRate = data.tokenConversionRate || 0;
     this.status = data.status || Pool.PENDING;
-    this.address;
   }
 
   toFeathers() {
@@ -31,7 +30,9 @@ class Pool extends BasicModel {
       threshold: this.threshold,
       closeDate: this.closeDate,
       tokenConversionRate: this.tokenConversionRate,
-      status: this.status
+      status: this.status,
+      address: this.address,
+      txHash: this.txHash
     };
   }
 
@@ -58,15 +59,6 @@ class Pool extends BasicModel {
    */
   cancel(from, afterCreate, afterMined) {
     PoolService.cancel(this, from, afterCreate, afterMined);
-  }
-
-  get address() {
-    return this.myAddress;
-  }
-
-  set address(value) {
-    this.checkType(value, ['string'], 'address');
-    this.myAddress = value;
   }
 
   get status() {
@@ -108,6 +100,24 @@ class Pool extends BasicModel {
     this.checkType(value, ['number'], 'tokenConversionRate');
     this.myTokenConversionRate = value;
   }
+
+  // get contractAddress() {
+  //   return this.myContractAddress;
+  // }
+  //
+  // set contractAddress(value) {
+  //   this.checkType(value, ['string', 'undefined'], 'contractAddress');
+  //   this.myContractAddress = value;
+  // }
+  //
+  // get txHash() {
+  //   return this.myTxHash;
+  // }
+  //
+  // set txHash(value) {
+  //   this.checkType(value, ['string', 'undefined'], 'txHash');
+  //   this.myTxHash = value;
+  // }
 
 }
 

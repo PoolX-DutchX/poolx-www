@@ -4,8 +4,10 @@ import getWeb3 from '../lib/blockchain/getWeb3';
 import { feathersClient } from '../lib/feathersClient';
 import { getGasPrice } from '../lib/helpers';
 import Pool from '../models/Pool';
-
+import generateClass from 'eth-contract-class';
 import ErrorPopup from '../components/ErrorPopup';
+const felixPoolArtifact = require('../lib/blockchain/contracts/FelixPool.json');
+
 
 class PoolService {
   /**
@@ -81,6 +83,8 @@ class PoolService {
    * @param afterMined  Callback to be triggered after the transaction is mined
    */
   static save(pool, from, afterCreate = () => {}, afterMined = () => {}) {
+    console.log('pool', pool);
+    console.log('from', from);
     if (pool.id) {
       feathersClient
         .service('pool')
@@ -90,52 +94,58 @@ class PoolService {
       let txHash;
       let etherScanUrl;
       Promise.all([getNetwork(), getWeb3(), getGasPrice()])
-        .then(([network, web3, gasPrice]) => {
-          const { lppCampaignFactory } = network;
+        .then(([network, web3 , gasPrice]) => {
+          // const { lppCampaignFactory } = network;
           etherScanUrl = network.etherscan;
 
+          const { abi, bytecode } = felixPoolArtifact;
+          const felixPool = generateClass( abi, bytecode );
+          const { threshold, closeDate, tokenConversionRate } = pool;
+
           /**
-          LPPCampaignFactory params:
+          FelixPool params:
 
-          string name,
-          string url,
-          uint64 parentProject,
-          address reviewer,
-          string tokenName,
-          string tokenSymbol,
-          address escapeHatchCaller,
-          address escapeHatchDestination
+          string threshold,
+          string closeDate,
+          string tokenConversionRate
           * */
-
-          lppCampaignFactory
-            .newCampaign(
-              campaign.title,
-              '',
-              0,
-              campaign.reviewerAddress,
-              campaign.tokenName,
-              campaign.tokenSymbol,
-              from,
-              from,
-              { from, gasPrice, $extraGas: 200000 },
-            )
-            .once('transactionHash', hash => {
-              txHash = hash;
-              campaign.txHash = txHash;
-              feathersClient
-                .service('campaigns')
-                .create(campaign.toFeathers())
-                .then(() => afterCreate(`${etherScanUrl}tx/${txHash}`));
-            })
-            .then(() => {
-              afterMined(`${etherScanUrl}tx/${txHash}`);
-            })
-            .catch(() => {
-              ErrorPopup(
-                'Something went wrong with the transaction. Is your wallet unlocked?',
-                `${etherScanUrl}tx/${txHash}`,
-              );
-            });
+          const contract = new web3.eth.Contract(abi, { from });
+          contract.deploy({
+            data: bytecode, // add deploy params
+            arguments: [ threshold, closeDate, tokenConversionRate ]
+          }).send({
+            from,
+            gas: 1500000,
+            gasPrice
+          })
+          .once('transactionHash', hash => {
+            txHash = hash;
+            console.log('txHash', txHash);
+            pool.txHash = txHash;
+            feathersClient
+              .service('pools')
+              .create(pool.toFeathers())
+              .then(() => afterCreate(`${etherScanUrl}tx/${txHash}`));
+          })
+          .on('confirmation', (confirmationNumber, receipt) => {
+            console.log('confirmationNumber', confirmationNumber);
+            console.log('receipt', receipt);
+          })
+          .then(function(newContractInstance){
+            const address = newContractInstance.options.address;
+            pool.address = address;
+            feathersClient
+              .service('pools')
+              .create(pool.toFeathers())
+              .then(() => afterMined(`${etherScanUrl}address/${address}`));
+          })
+          .catch((err) => {
+            console.log('err', err);
+            ErrorPopup(
+              'Something went wrong with the transaction. Is your wallet unlocked?',
+              `${etherScanUrl}tx/${txHash}`,
+            );
+          });
         })
         .catch(err => {
           ErrorPopup(
@@ -158,41 +168,41 @@ class PoolService {
   static cancel(campaign, from, afterCreate = () => {}, afterMined = () => {}) {
     let txHash;
     let etherScanUrl;
-    Promise.all([getNetwork(), getWeb3(), getGasPrice()])
-      .then(([network, web3, gasPrice]) => {
-        const lppCampaign = new LPPCampaign(web3, campaign.pluginAddress);
-        etherScanUrl = network.etherscan;
-
-        lppCampaign
-          .cancelCampaign({ from, gasPrice, $extraGas: 100000 })
-          .once('transactionHash', hash => {
-            txHash = hash;
-            feathersClient
-              .service('/campaigns')
-              .patch(campaign.id, {
-                status: Campaign.CANCELED,
-                mined: false,
-                txHash,
-              })
-              .then(afterCreate(`${etherScanUrl}tx/${txHash}`))
-              .catch(err => {
-                ErrorPopup('Something went wrong with updating campaign', err);
-              });
-          })
-          .then(() => afterMined(`${etherScanUrl}tx/${txHash}`))
-          .catch(err => {
-            ErrorPopup(
-              'Something went wrong with cancelling your campaign',
-              `${etherScanUrl}tx/${txHash} => ${JSON.stringify(err, null, 2)}`,
-            );
-          });
-      })
-      .catch(err => {
-        ErrorPopup(
-          'Something went wrong with cancelling your campaign',
-          `${etherScanUrl}tx/${txHash} => ${JSON.stringify(err, null, 2)}`,
-        );
-      });
+    // Promise.all([getNetwork(), getWeb3(), getGasPrice()])
+    //   .then(([network, web3, gasPrice]) => {
+    //     const lppCampaign = new LPPCampaign(web3, campaign.pluginAddress);
+    //     etherScanUrl = network.etherscan;
+    //
+    //     lppCampaign
+    //       .cancelCampaign({ from, gasPrice, $extraGas: 100000 })
+    //       .once('transactionHash', hash => {
+    //         txHash = hash;
+    //         feathersClient
+    //           .service('/campaigns')
+    //           .patch(campaign.id, {
+    //             status: Campaign.CANCELED,
+    //             mined: false,
+    //             txHash,
+    //           })
+    //           .then(afterCreate(`${etherScanUrl}tx/${txHash}`))
+    //           .catch(err => {
+    //             ErrorPopup('Something went wrong with updating campaign', err);
+    //           });
+    //       })
+    //       .then(() => afterMined(`${etherScanUrl}tx/${txHash}`))
+    //       .catch(err => {
+    //         ErrorPopup(
+    //           'Something went wrong with cancelling your campaign',
+    //           `${etherScanUrl}tx/${txHash} => ${JSON.stringify(err, null, 2)}`,
+    //         );
+    //       });
+    //   })
+    //   .catch(err => {
+    //     ErrorPopup(
+    //       'Something went wrong with cancelling your campaign',
+    //       `${etherScanUrl}tx/${txHash} => ${JSON.stringify(err, null, 2)}`,
+    //     );
+    //   });
   }
 }
 
