@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import JoinGivethCommunity from '../JoinGivethCommunity';
+import HeroBanner from '../HeroBanner';
 import CampaignCard from '../CampaignCard';
 import GivethWallet from '../../lib/blockchain/GivethWallet';
 import User from '../../models/User';
@@ -17,7 +17,7 @@ import Campaign from '../../models/Campaign';
  */
 const Campaigns = ({ campaigns, currentUser, history, wallet }) => (
   <div id="campaigns-view" className="card-view">
-    <JoinGivethCommunity currentUser={currentUser} wallet={wallet} history={history} />
+    <HeroBanner currentUser={currentUser} wallet={wallet} history={history} />
 
     <div className="container-fluid page-layout reduced-padding">
       {// There are some Campaigns in the system, show them
