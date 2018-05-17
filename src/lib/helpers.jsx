@@ -7,6 +7,7 @@ import BigNumber from 'bignumber.js';
 
 import { feathersClient } from './feathersClient';
 import DefaultAvatar from './../assets/avatar-100.svg';
+import getWeb3 from './blockchain/getWeb3';
 import config from '../configuration';
 
 export const isOwner = (address, currentUser) =>
@@ -24,7 +25,6 @@ export const authenticate = wallet => {
       // verify our identity
       if (response.code === 401 && response.data.startsWith('Challenge =')) {
         const msg = response.data.replace('Challenge =', '').trim();
-
         return resolve(wallet.signMessage(msg).signature);
       }
       return reject(response);
@@ -35,6 +35,56 @@ export const authenticate = wallet => {
       return feathersClient.authenticate(authData);
     })
     .then(response => response.accessToken);
+};
+
+export const authenticateAddress = address => {
+
+  const authData = {
+    strategy: 'web3'
+  }
+
+  return new Promise((resolve, reject) => {
+    getWeb3().then(web3 => {
+      authData.address = web3.utils.toChecksumAddress(address);
+      return feathersClient.authenticate(authData).catch(response => {
+        // normal flow will issue a 401 with a challenge message we need to sign and send to
+        // verify our identity
+        console.log('response', response);
+        if (response.code === 401 && response.data.startsWith('Challenge =')) {
+          const msg = response.data.replace('Challenge =', '').trim();
+          console.log('msg', msg);
+
+          console.log('web3.currentProvider.', web3.currentProvider);
+          const msgParams = [
+            { type: 'string', name: 'Message', value: msg }
+          ];
+          return web3.currentProvider.sendAsync({
+              method: 'eth_signTypedData',
+              params: [
+                msgParams,
+                authData.address,
+              ],
+              from: authData.address,
+            }, (err, { result }) => {
+              console.log('err', err);
+              console.log('result', result);
+              authData.signature = result;
+              authData.msgParams = msgParams
+
+              resolve();
+            })
+        }
+        return reject(response);
+      });
+    })
+  })
+  .then(() => feathersClient.authenticate(authData))
+  .then(response => {
+    console.log('response', response);
+    return response.accessToken
+  }).catch((err) => {
+    console.log('err', err);
+  });
 };
 
 export const getTruncatedText = (text, maxLength) => {

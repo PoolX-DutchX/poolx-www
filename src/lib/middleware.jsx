@@ -32,9 +32,10 @@ export const isLoggedIn = currentUser =>
  *    isAuthenticated(currentUser, wallet)
  *      .then(()=> ...do something when authenticated)
  */
-export const isAuthenticated = (currentUser, wallet) =>
+export const isAuthenticated = (currentUser) =>
   new Promise(resolve => {
-    if (currentUser && currentUser.address && wallet && wallet.unlocked) resolve();
+    // ToDo: need another flag to check for authentication, previously ---  && wallet && wallet.unlocked
+    if (currentUser && currentUser.address) resolve();
     else history.goBack();
   });
 

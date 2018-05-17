@@ -1,4 +1,5 @@
 import React, { Component, createContext } from 'react';
+import { history } from '../lib/helpers';
 import PropTypes from 'prop-types';
 import { feathersClient } from '../lib/feathersClient';
 
@@ -53,6 +54,7 @@ class UserProvider extends Component {
     this.state = {
       web3: undefined,
       currentUser: undefined,
+      userAddress: undefined,
       isLoading: true,
       hasError: false,
       wallet: undefined,
@@ -73,59 +75,85 @@ class UserProvider extends Component {
 
   componentWillMount() {
     //  Load the wallet if it is cached
+    /* Get Token,
+      if Token =>  grab id and match it with metamask,
+        if match => verityJWT, authenticated === true
+        if mismatch feathersClient.logOut (app.logOut), authenticated === false
+      if !Token => send to connect(signin) page
+    */
+
+    const userAddress = this.getUserAddress();
+    // ToDo: prompt user to login to metamask
+
     feathersClient.passport
       .getJWT()
       .then(token => {
-        if (token) return feathersClient.passport.verifyJWT(token);
-        return null;
+        if (token) { return feathersClient.passport.verifyJWT(token) }
+          else { throw new Error('No Token') }
       })
-      .then(payload => UserProvider.getUserProfile(payload.userId))
+      .then(payload => {
+        const { address, userId } = payload;
+        if (address && address === userAddress ) {
+          return UserProvider.getUserProfile(userId);
+        } else {
+          feathersClient.logout();
+          this.setState({
+            isLoading: false,
+            hasError: false
+          });
+          history.push(`/signin`);
+        }
+      })
       .then(user => {
+        console.log('user', user);
         if (!user) throw new Error('No User');
         feathersClient.authenticate(); // need to authenticate the socket connection
-
         this.setState({
           isLoading: false,
           hasError: false,
           currentUser: new User(user),
         });
       })
-      .catch(() => {
-        this.setState({ isLoading: false, hasError: false });
+      .catch((err) => {
+        this.setState({
+          isLoading: false,
+          hasError: false
+        });
+        console.log('err', err);
+        // history.push(`/signin`);
       });
 
-    GivethWallet.getCachedKeystore()
-      .then(keystore => {
-        // TODO: change to getWeb3() when implemented. actually remove provider from GivethWallet
-        const provider = this.state.web3 ? this.state.web3.currentProvider : undefined;
-        return GivethWallet.loadWallet(keystore, provider);
-      })
-      .then(wallet => {
-        getWeb3().then(web3 => web3.setWallet(wallet));
-        this.setState({ wallet });
-      })
-      .catch(err => {
-        if (err.message !== 'No keystore found') {
-          ErrorPopup(
-            'Something went wrong with getting the cached keystore. Please try again after refresh.',
-            err,
-          );
-        }
+  }
+
+  async getUserAddress() {
+    try {
+      const web3 = await getWeb3();
+      const accounts = await web3.eth.getAccounts();
+      const userAddress = accounts[0];
+      this.setState({
+        userAddress
       });
+    } catch(err) {
+      console.log('err', err);
+      // ToDo : flash oops something went wrong, check metamask
+    }
   }
 
   onSignOut() {
-    if (this.state.wallet) this.state.wallet.lock();
-
     feathersClient.logout();
     this.setState({ currentUser: undefined });
   }
 
   onSignIn() {
-    const address = this.state.wallet.getAddresses()[0];
-    return UserProvider.getUserProfile(address).then(user =>
-      this.setState({ currentUser: new User(user) }),
-    );
+    getWeb3().then(web3 => {
+      web3.eth.getAccounts((err, accounts) => {
+        console.log('accounts', accounts);
+        UserProvider.getUserProfile(accounts[0]).then(user =>
+          this.setState({ currentUser: new User(user) }),
+        );
+      })
+    });
+
   }
 
   handleWalletChange(wallet) {
@@ -179,6 +207,7 @@ class UserProvider extends Component {
   render() {
     const {
       currentUser,
+      userAddress,
       wallet,
       web3,
       isLoading,
@@ -202,6 +231,7 @@ class UserProvider extends Component {
         value={{
           state: {
             currentUser,
+            userAddress,
             wallet,
             web3,
             isLoading,

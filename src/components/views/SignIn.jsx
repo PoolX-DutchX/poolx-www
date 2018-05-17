@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 
 import { feathersClient } from '../../lib/feathersClient';
 import Loader from '../Loader';
-import UnlockWalletForm from '../UnlockWalletForm';
-import { authenticate } from '../../lib/helpers';
+import AuthenticateForm from '../AuthenticateForm';
+import { authenticate, authenticateAddress } from '../../lib/helpers';
 import GivethWallet from '../../lib/blockchain/GivethWallet';
 
 /* global window */
@@ -36,16 +36,16 @@ class SignIn extends Component {
   }
 
   handleProps(props) {
-    if (!props.cachedWallet) {
-      this.props.history.push('/change-account');
-    } else if (props.wallet && (!this.state.address || props.wallet !== this.props.wallet)) {
+    // if (!props.cachedWallet) {
+    //   this.props.history.push('/change-account');
+    // } else if (props.wallet && (!this.state.address || props.wallet !== this.props.wallet)) {
       this.setState(
         {
-          address: props.wallet.getAddresses()[0],
+          address: props.userAddress,
         },
         () => this.fetchUserProfile(),
       );
-    }
+    // }
   }
 
   fetchUserProfile() {
@@ -66,7 +66,7 @@ class SignIn extends Component {
       });
   }
 
-  submit(password) {
+  submit() {
     this.setState(
       {
         isSigninIn: true,
@@ -74,18 +74,16 @@ class SignIn extends Component {
       },
       () => {
         function loadWallet() {
-          this.props.wallet
-            .unlock(password)
-            .then(() => authenticate(this.props.wallet))
+          authenticateAddress(this.state.address)
             .then(token => {
+              console.log('token', token);
               this.props.onSignIn();
               return feathersClient.passport.verifyJWT(token);
             })
             .then(() => {
               React.toast.success(
                 <p>
-                  Welcome back! <br />Note that your wallet is unlocked and will
-                  <strong> auto-lock</strong> upon page refresh.
+                  Welcome back! <br />
                 </p>,
               );
               this.props.history.goBack();
@@ -95,7 +93,7 @@ class SignIn extends Component {
                 error:
                   err.type && err.type === 'FeathersError'
                     ? 'authentication error'
-                    : 'Error unlocking wallet. Possibly an invalid password.',
+                    : 'Error authenticating account.',
                 isSigninIn: false,
               });
             });
@@ -103,7 +101,7 @@ class SignIn extends Component {
 
         // web3 blocks all rendering, so we need to request an animation frame
         window.requestAnimationFrame(loadWallet.bind(this));
-      },
+      }
     );
   }
 
@@ -114,52 +112,47 @@ class SignIn extends Component {
       return <Loader className="fixed" />;
     }
 
+    console.log('avatar', avatar);
+    console.log('name', name);
+    console.log('address', address);
+
     return (
       <div id="account-view" className="container-fluid page-layout">
         <div className="row">
           <div className="col-md-8 m-auto">
             <div>
-              {this.props.wallet && (
-                <div className="card">
-                  <center>
-                    {avatar && <Avatar size={100} src={avatar} round />}
+              <div className="card">
+                <center>
+                  {avatar && <Avatar size={100} src={avatar} round />}
 
-                    {name && (
-                      <h1>
-                        Welcome back<br />
-                        <strong>{name}!</strong>
-                      </h1>
+                  {name && (
+                    <h1>
+                      Welcome back<br />
+                      <strong>{name}!</strong>
+                    </h1>
+                  )}
+                  {name && <p className="small">Your address: {address}</p>}
+
+                  {address &&
+                    !name && (
+                      <div>
+                        <h1>Welcome back</h1>
+                        <strong>{address}</strong>
+                      </div>
                     )}
 
-                    {address &&
-                      !name && (
-                        <div>
-                          <h1>Welcome back</h1>
-                          <strong>{address}</strong>
-                        </div>
-                      )}
-
-                    {name && <p className="small">Your address: {address}</p>}
-
-                    <div className="spacer-top">
-                      <UnlockWalletForm
-                        submit={this.submit}
-                        label="Sign in by entering your wallet password"
-                        error={error}
-                        buttonText="Sign in"
-                        unlocking={isSigninIn}
-                      >
-                        <div className="form-group">
-                          <p className="small">
-                            <Link to="/signup">Not you</Link>, or&nbsp;
-                            <Link to="/change-account">want to change wallet?</Link>
-                          </p>
-                        </div>
-                      </UnlockWalletForm>
-                    </div>
-                  </center>
-                </div>
-              )}
+                  <div className="spacer-top">
+                    <AuthenticateForm
+                      submit={this.submit}
+                      label="Sign in by way of Metamask confirming your identity"
+                      error={error}
+                      buttonText="Sign in"
+                      authenticating={isSigninIn}
+                    >
+                    </AuthenticateForm>
+                  </div>
+                </center>
+              </div>
             </div>
           </div>
         </div>
@@ -173,7 +166,7 @@ SignIn.propTypes = {
     push: PropTypes.func.isRequired,
     goBack: PropTypes.func.isRequired,
   }).isRequired,
-  wallet: PropTypes.instanceOf(GivethWallet).isRequired,
+  // userAddress: PropTypes.string.isRequired,
   onSignIn: PropTypes.func.isRequired,
 };
 

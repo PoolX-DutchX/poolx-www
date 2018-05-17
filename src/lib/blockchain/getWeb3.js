@@ -82,7 +82,9 @@ function setWallet(wallet) {
 const getWeb3 = () =>
   new Promise(resolve => {
     if (!givethWeb3) {
-      givethWeb3 = new Web3(config.nodeConnection);
+      console.log('window.web3', window.web3);
+      Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send
+      givethWeb3 = new Web3(window.web3.currentProvider);
 
       // hack to keep the ws connection from timing-out
       // I commented this out b/c we have the getBalance interval above
@@ -108,7 +110,7 @@ const getWeb3 = () =>
         }
       });
 
-      givethWeb3.setWallet = setWallet;
+      // givethWeb3.setWallet = setWallet;
     }
 
     resolve(givethWeb3);
