@@ -7,10 +7,6 @@ import { GivethBridge, ForeignGivethBridge } from 'giveth-bridge';
 import getWeb3 from './getWeb3';
 import config from '../../configuration';
 
-const generateClass = require('eth-contract-class').default;
-const felixPool = require('./contracts/FelixPool.json');
-
-
 let network;
 
 export default () => {
@@ -18,8 +14,7 @@ export default () => {
 
   return getWeb3().then(web3 => {
     network = Object.assign({}, config);
-    console.log('felixPool', felixPool);
-    // network.felixPool = generateClass(felixPool.abi, felixPool.deployedBytecode);
+
     network.liquidPledging = new LiquidPledging(web3, network.liquidPledgingAddress);
     network.lppDacFactory = new LPPDacFactory(web3, network.lppDacFactoryAddress);
     network.lppCampaignFactory = new LPPCampaignFactory(web3, network.lppCampaignFactoryAddress);
