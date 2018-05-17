@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import InputToken from 'react-input-token';
+import moment from 'moment';
 import 'react-input-token/lib/style.css';
 
 import { Form, Input, Date } from 'formsy-react-components';
@@ -43,11 +44,11 @@ class EditCampaign extends Component {
       isSaving: false,
       formIsValid: false,
       dacsOptions: [],
-      hasWhitelist: React.whitelist.reviewerWhitelist.length > 0,
-      whitelistOptions: React.whitelist.projectOwnerWhitelist.map(r => ({
-        value: r.address,
-        title: `${r.name ? r.name : 'Anonymous user'} - ${r.address}`,
-      })),
+      // hasWhitelist: React.whitelist.reviewerWhitelist.length > 0,
+      // whitelistOptions: React.whitelist.projectOwnerWhitelist.map(r => ({
+      //   value: r.address,
+      //   title: `${r.name ? r.name : 'Anonymous user'} - ${r.address}`,
+      // })),
       reviewers: [],
       // Pool model
       pool: new Pool({
@@ -56,14 +57,12 @@ class EditCampaign extends Component {
     };
 
     this.submit = this.submit.bind(this);
-    this.setImage = this.setImage.bind(this);
-    this.selectDACs = this.selectDACs.bind(this);
   }
 
   componentDidMount() {
-    isAuthenticated(this.props.currentUser, this.props.wallet)
-      .then(() => isInWhitelist(this.props.currentUser, React.whitelist.projectOwnerWhitelist))
-      .then(() => checkWalletBalance(this.props.wallet))
+    isAuthenticated(this.props.currentUser)
+      // .then(() => isInWhitelist(this.props.currentUser, React.whitelist.projectOwnerWhitelist))
+      // .then(() => checkWalletBalance(this.props.wallet))
       .then(() => {
         // Load this Campaign
         if (!this.props.isNew) {
@@ -83,6 +82,9 @@ class EditCampaign extends Component {
         } else {
           this.setState({ isLoading: false });
         }
+      })
+      .catch((err, anythingElse) => {
+        console.log('err', err);
       });
   }
 
@@ -93,10 +95,11 @@ class EditCampaign extends Component {
     this.setState({ isSaving: true });
 
     const afterMined = url => {
+      console.log('url', url);
       if (url) {
         const msg = (
           <p>
-            Your Campaign has been created!<br />
+            Your Pool has been created!<br />
             <a href={url} target="_blank" rel="noopener noreferrer">
               View transaction
             </a>
@@ -105,7 +108,7 @@ class EditCampaign extends Component {
         React.toast.success(msg);
       } else {
         if (this.mounted) this.setState({ isSaving: false });
-        React.toast.success('Your Campaign has been updated!');
+        React.toast.success('Your Pool has been updated!');
         // history.push(`/campaigns/${this.state.pool.id}`);
       }
     };
@@ -114,7 +117,7 @@ class EditCampaign extends Component {
       if (this.mounted) this.setState({ isSaving: false });
       const msg = (
         <p>
-          Your Campaign is pending....<br />
+          Your Pool is pending....<br />
           <a href={url} target="_blank" rel="noopener noreferrer">
             View transaction
           </a>
@@ -168,28 +171,15 @@ class EditCampaign extends Component {
                   <Form
                     onSubmit={this.submit}
                     mapping={inputs => {
-                      campaign.poolThreshold = inputs.poolThreshold;
-                      campaign.startDate = inputs.startDate;
-                      campaign.closeDate = inputs.closeDate;
-                      campaign.tokenConversionRate = inputs.tokenConversionRate;
+                      console.log('inputs.closeDate', inputs.closeDate);
+                      pool.threshold = parseInt(inputs.threshold);
+                      pool.closeDate = moment(inputs.closeDate, 'YYYY-MM-DD').unix();
+                      pool.tokenConversionRate = parseInt(inputs.tokenConversionRate);
                     }}
                     onValid={() => this.toggleFormValid(true)}
                     onInvalid={() => this.toggleFormValid(false)}
                     layout="vertical"
                   >
-
-                  <div className="form-group">
-                    <label htmlFor>
-                      Start date of pool
-                      <Input
-                        name="startDate"
-                        id="startDate"
-                        value="pool.startDate"
-                        type="date"
-                        placeholder="yyyy-mm-dd"
-                      />
-                    </label>
-                  </div>
                   <div className="form-group">
                     <label htmlFor>
                       Closing date of pool
@@ -253,7 +243,6 @@ class EditCampaign extends Component {
 EditCampaign.propTypes = {
   currentUser: PropTypes.instanceOf(User).isRequired,
   isNew: PropTypes.bool,
-  wallet: PropTypes.instanceOf(GivethWallet).isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string,
