@@ -36,18 +36,6 @@ feathersClient
  * if passed as props to children.
  */
 class UserProvider extends Component {
-  static getUserProfile(address) {
-    return feathersClient
-      .service('/users')
-      .get(address)
-      .then(user => user)
-      .catch(err => {
-        ErrorPopup(
-          'Something went wrong with getting user profile. Please try again after refresh.',
-          err,
-        );
-      });
-  }
   constructor() {
     super();
 
@@ -73,7 +61,7 @@ class UserProvider extends Component {
     React.unlockWallet = this.unlockWallet;
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     //  Load the wallet if it is cached
     /* Get Token,
       if Token =>  grab id and match it with metamask,
@@ -82,7 +70,7 @@ class UserProvider extends Component {
       if !Token => send to connect(signin) page
     */
 
-    const userAddress = this.getUserAddress();
+    await this.getUserAddress();
     // ToDo: prompt user to login to metamask
 
     feathersClient.passport
@@ -92,16 +80,16 @@ class UserProvider extends Component {
           else { throw new Error('No Token') }
       })
       .then(payload => {
-        const { address, userId } = payload;
-        if (address && address === userAddress ) {
-          return UserProvider.getUserProfile(userId);
+        const { userId: address } = payload;
+        if (address && address === this.state.userAddress ) {
+          return UserProvider.getUserProfile(address);
         } else {
           feathersClient.logout();
           this.setState({
             isLoading: false,
             hasError: false
           });
-          history.push(`/signin`);
+          history.push(`/`);
         }
       })
       .then(user => {
@@ -137,6 +125,19 @@ class UserProvider extends Component {
       console.log('err', err);
       // ToDo : flash oops something went wrong, check metamask
     }
+  }
+
+  static getUserProfile(address) {
+    return feathersClient
+      .service('/users')
+      .get(address)
+      .then(user => user)
+      .catch(err => {
+        ErrorPopup(
+          'Something went wrong with getting user profile. Please try again after refresh.',
+          err,
+        );
+      });
   }
 
   onSignOut() {
