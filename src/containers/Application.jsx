@@ -156,13 +156,6 @@ class Application extends Component {
                         />
                         <Route
                           exact
-                          path="/pools/:id"
-                          component={props => (
-                            <ViewPool currentUser={currentUser} {...props} />
-                          )}
-                        />
-                        <Route
-                          exact
                           path="/pools/new"
                           component={props => (
                             <EditPool
@@ -171,6 +164,13 @@ class Application extends Component {
                               wallet={wallet}
                               {...props}
                             />
+                          )}
+                        />
+                        <Route
+                          exact
+                          path="/pools/:address"
+                          component={props => (
+                            <ViewPool currentUser={currentUser} {...props} />
                           )}
                         />
                         <Route
