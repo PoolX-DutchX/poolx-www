@@ -15,11 +15,11 @@ class PoolService {
    *
    * @param id   ID of the Pool to be retrieved
    */
-  static get(id) {
+  static get(address) {
     return new Promise((resolve, reject) => {
       feathersClient
         .service('pools')
-        .find({ query: { _id: id } })
+        .find({ query: { address: address } })
         .then(resp => {
           resolve(new Pool(resp.data[0]));
         })
@@ -125,9 +125,11 @@ class PoolService {
             feathersClient
               .service('pools')
               .create(pool.toFeathers())
-              .then(() => afterCreate(`${etherScanUrl}tx/${txHash}`));
+              .then((stuff, moreStuff) => {
+                afterCreate(`${etherScanUrl}tx/${txHash}`)
+              });
           })
-          .on('confirmation', (confirmationNumber, receipt) => {
+          .once('confirmation', (confirmationNumber, receipt) => {
             console.log('confirmationNumber', confirmationNumber);
             console.log('receipt', receipt);
           })

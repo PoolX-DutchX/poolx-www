@@ -18,10 +18,16 @@ class Pool extends BasicModel {
   constructor(data) {
     super(data);
 
-    this.threshold = data.threshold || 0;
-    this.closeDate = data.closeDate || 0;
-    this.tokenConversionRate = data.tokenConversionRate || 0;
-    this.status = data.status || Pool.PENDING;
+    // this.threshold = data.threshold || 0;
+    // this.closeDate = data.closeDate || 0;
+    // this.tokenConversionRate = data.tokenConversionRate || 0;
+    // this.status = data.status || Pool.PENDING;
+    //
+    // this.title: this.title;
+    // this.description: this.description;
+    // this.tokenUrl: this.tokenUrl;
+    // this.tokenName: this.tokenName;
+    // this.tokenSymbol: this.tokenSymbo;
   }
 
   toFeathers() {
@@ -32,7 +38,13 @@ class Pool extends BasicModel {
       tokenConversionRate: this.tokenConversionRate,
       status: this.status,
       address: this.address,
-      txHash: this.txHash
+      txHash: this.txHash,
+      image: this.image,
+      title: this.title,
+      description: this.description,
+      tokenUrl: this.tokenUrl,
+      tokenName: this.tokenName,
+      tokenSymbol: this.tokenSymbol
     };
   }
 
@@ -99,6 +111,33 @@ class Pool extends BasicModel {
   set tokenConversionRate(value) {
     this.checkType(value, ['number'], 'tokenConversionRate');
     this.myTokenConversionRate = value;
+  }
+
+  get tokenName() {
+    return this.myTokenName;
+  }
+
+  set tokenName(value) {
+    this.checkType(value, ['string'], 'tokenName');
+    this.myTokenName = value;
+  }
+
+  get tokenSymbol() {
+    return this.myTokenSymbol;
+  }
+
+  set tokenSymbol(value) {
+    this.checkType(value, ['string'], 'tokenSymbol');
+    this.myTokenSymbol = value;
+  }
+
+  get tokenUrl() {
+    return this.myTokenUrl;
+  }
+
+  set tokenUrl(value) {
+    this.checkType(value, ['string'], 'tokenUrl');
+    this.myTokenUrl = value;
   }
 
   // get contractAddress() {

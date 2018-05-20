@@ -43,9 +43,9 @@ class ViewPool extends Component {
   }
 
   componentDidMount() {
-    const poolId = this.props.match.params.id;
+    const poolAddress = this.props.match.params.address;
 
-    PoolService.get(poolId)
+    PoolService.get(poolAddress)
       .then(pool => this.setState({ pool, isLoading: false }))
       .catch(err => {
         ErrorPopup('Something went wrong loading pool. Please try refresh the page.', err);

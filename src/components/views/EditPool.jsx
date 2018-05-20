@@ -55,6 +55,7 @@ class EditPool extends Component {
     };
 
     this.submit = this.submit.bind(this);
+    this.setImage = this.setImage.bind(this);
   }
 
   componentDidMount() {
@@ -104,10 +105,11 @@ class EditPool extends Component {
           </p>
         );
         React.toast.success(msg);
+        history.push(`/pools/${this.state.pool.address}`);
       } else {
         if (this.mounted) this.setState({ isSaving: false });
         React.toast.success('Your Pool has been updated!');
-        // history.push(`/pools/${this.state.pool.id}`);
+        history.push(`/pools/${this.state.pool.address}`);
       }
     };
 
@@ -134,6 +136,13 @@ class EditPool extends Component {
 
   toggleFormValid(state) {
     this.setState({ formIsValid: state });
+  }
+
+  setImage(image) {
+    const { pool } = this.state;
+    console.log('image', image);
+    pool.image = image;
+    this.setState({ pool });
   }
 
   render() {
@@ -173,43 +182,127 @@ class EditPool extends Component {
                       pool.threshold = parseInt(inputs.threshold);
                       pool.closeDate = moment(inputs.closeDate, 'YYYY-MM-DD').unix();
                       pool.tokenConversionRate = parseInt(inputs.tokenConversionRate);
+                      pool.title = inputs.name;
+                      pool.description = inputs.description;
+                      pool.tokenUrl = inputs.tokenUrl;
+                      pool.tokenName = inputs.tokenName;
+                      pool.tokenSymbol = inputs.tokenSymbol;
                     }}
                     onValid={() => this.toggleFormValid(true)}
                     onInvalid={() => this.toggleFormValid(false)}
                     layout="vertical"
                   >
-                  <div className="form-group">
-                    <label htmlFor>
-                      Closing date of pool
-                      <Input
-                        name="closeDate"
-                        id="closeDate"
-                        value="pool.closeDate"
-                        type="date"
-                        placeholder="yyyy-mm-dd"
+                    <Input
+                      name="name"
+                      id="name-input"
+                      label="What's the name of your pool'?"
+                      type="text"
+                      value={pool.name}
+                      placeholder="E.g. TinderCoin Private Sale"
+                      validations="minLength:3"
+                      validationErrors={{
+                        minLength: 'Please provide at least 3 characters.',
+                      }}
+                      required
+                      autoFocus
+                    />
+                    <QuillFormsy
+                      name="description"
+                      label="Explain how the pool is going to proceed."
+                      helpText="Make it as extensive as necessary.
+                      Your goal is to build trust, so that people donate Ether to your pool."
+                      value={pool.description}
+                      placeholder="Describe how you're pool is going to proceed...."
+                      validations="minLength:20"
+                      help="Describe your pool."
+                      validationErrors={{
+                        minLength: 'Please provide at least 10 characters.',
+                      }}
+                    />
+                    <div className="form-group">
+                      <FormsyImageUploader
+                        setImage={this.setImage}
+                        previewImage={pool.image}
                       />
-                    </label>
-                  </div>
-                  <div className="form-group">
-                    <Input
-                      name="threshold"
-                      id="threshold"
-                      label="Minimum amount of Ether for pool to be realized"
-                      type="number"
-                      value={pool.threshold}
-                      placeholder="amount in Ether"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <Input
-                      name="tokenConversionRate"
-                      id="tokenConversionRate"
-                      label="Number of tokens per Ether to be redeemed"
-                      type="number"
-                      value={pool.tokenConversionRate}
-                      placeholder="Redeemable Tokens per Ether"
-                    />
-                  </div>
+                    </div>
+                    <div className="form-group">
+                      <Input
+                        name="tokenUrl"
+                        id="token-url"
+                        label="Url for token sale."
+                        type="text"
+                        value={pool.tokenUrl}
+                        placeholder="https://golem.network"
+                        help="Where can people read about the token sale? Poolbase redirects people there."
+                        validations="isUrl"
+                        validationErrors={{ isUrl: 'Please provide a url.' }}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <Input
+                        name="tokenName"
+                        id="token-name-input"
+                        label="Token Name"
+                        type="text"
+                        value={pool.tokenName}
+                        placeholder={pool.title}
+                        help="The name of the token that contributers will receive when they
+                        donate to this Pool."
+                        validations="minLength:3"
+                        validationErrors={{
+                          minLength: 'Please provide at least 3 characters.',
+                        }}
+                        disabled={!isNew}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <Input
+                        name="tokenSymbol"
+                        id="token-symbol-input"
+                        label="Token Symbol"
+                        type="text"
+                        value={pool.tokenSymbol}
+                        help="The symbol of the token that contributers will receive when
+                        they donate to this pool."
+                        validations="minLength:2"
+                        validationErrors={{
+                          minLength: 'Please provide at least 2 characters.',
+                        }}
+                        disabled={!isNew}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor>
+                        Closing date of pool
+                        <Input
+                          name="closeDate"
+                          id="closeDate"
+                          value={pool.closeDate}
+                          type="date"
+                          placeholder="yyyy-mm-dd"
+                        />
+                      </label>
+                    </div>
+                    <div className="form-group">
+                      <Input
+                        name="threshold"
+                        id="threshold"
+                        label="Minimum amount of Ether for pool to be realized"
+                        type="number"
+                        value={pool.threshold}
+                        placeholder="amount in Ether"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <Input
+                        name="tokenConversionRate"
+                        id="tokenConversionRate"
+                        label="Number of tokens per Ether to be redeemed"
+                        type="number"
+                        value={pool.tokenConversionRate}
+                        placeholder="Redeemable Tokens per Ether"
+                      />
+                    </div>
                     <div className="form-group row">
                       <div className="col-md-6">
                         <GoBackButton history={history} />
