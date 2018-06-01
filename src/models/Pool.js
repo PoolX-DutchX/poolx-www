@@ -18,16 +18,16 @@ class Pool extends BasicModel {
   constructor(data) {
     super(data);
 
-    // this.threshold = data.threshold || 0;
-    // this.closeDate = data.closeDate || 0;
-    // this.tokenConversionRate = data.tokenConversionRate || 0;
-    // this.status = data.status || Pool.PENDING;
-    //
-    // this.title: this.title;
-    // this.description: this.description;
-    // this.tokenUrl: this.tokenUrl;
-    // this.tokenName: this.tokenName;
-    // this.tokenSymbol: this.tokenSymbo;
+    this.threshold = data.threshold || 0;
+    this.closeDate = data.closeDate || 0;
+    this.tokenConversionRate = data.tokenConversionRate || 0;
+    this.status = data.status || Pool.PENDING;
+    this.address = data.address;
+    this.title = data.title;
+    this.description = data.description;
+    this.tokenUrl = data.tokenUrl;
+    this.tokenName = data.tokenName;
+    this.tokenSymbol = data.tokenSymbol;
   }
 
   toFeathers() {
@@ -44,7 +44,7 @@ class Pool extends BasicModel {
       description: this.description,
       tokenUrl: this.tokenUrl,
       tokenName: this.tokenName,
-      tokenSymbol: this.tokenSymbol
+      tokenSymbol: this.tokenSymbol,
     };
   }
 
@@ -84,6 +84,15 @@ class Pool extends BasicModel {
     else if (value === Pool.ACTIVE) this.myOrder = 2;
     else if (value === Pool.CANCELED) this.myOrder = 3;
     else this.myOrder = 4;
+  }
+
+  get address() {
+    return this.myAddress;
+  }
+
+  set address(value) {
+    this.checkType(value, ['undefined', 'string'], 'address');
+    this.myAddress = value;
   }
 
   get threshold() {
@@ -157,7 +166,6 @@ class Pool extends BasicModel {
   //   this.checkType(value, ['string', 'undefined'], 'txHash');
   //   this.myTxHash = value;
   // }
-
 }
 
 export default Pool;

@@ -8,7 +8,7 @@ import ReactHtmlParser from 'react-html-parser';
 import Loader from '../Loader';
 import GoBackButton from '../GoBackButton';
 import BackgroundImageHeader from '../BackgroundImageHeader';
-import DonateButton from '../DonateButton';
+import ContributeButton from '../ContributeButton';
 import ShowTypeDonations from '../ShowTypeDonations';
 import CommunityButton from '../CommunityButton';
 import User from '../../models/User';
@@ -95,7 +95,7 @@ class ViewDAC extends Component {
               <h6>Decentralized Altruistic Community</h6>
               <h1>{dac.title}</h1>
 
-              <DonateButton
+              <ContributeButton
                 type="DAC"
                 model={{
                   title: dac.title,
@@ -164,7 +164,7 @@ class ViewDAC extends Component {
                 <div className="col-md-8 m-auto">
                   <h4>Donations</h4>
                   <ShowTypeDonations donations={donations} isLoading={isLoadingDonations} />
-                  <DonateButton
+                  <ContributeButton
                     type="DAC"
                     model={{
                       title: dac.title,

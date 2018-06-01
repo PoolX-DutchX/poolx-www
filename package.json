@@ -50,6 +50,7 @@
     "request": "^2.85.0",
     "socket.io-client": "^2.0.4",
     "sweetalert": "^2.0",
+    "truffle-contract": "^3.0.5",
     "underscore": "^1.8.3",
     "web3": "1.0.0-beta.34",
     "web3-eth-accounts": "^1.0.0-beta.18",
@@ -81,11 +82,6 @@
     "eslint:fix": "npm run eslint --fix",
     "eject": "react-scripts eject",
     "prettify": "prettier --write 'src/**/*.js*'"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "lint-staged": {
     "src/**/*.{js,jsx}": [

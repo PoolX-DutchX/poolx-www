@@ -12,7 +12,7 @@ import GoBackButton from '../GoBackButton';
 import { isOwner, getUserName, getUserAvatar } from '../../lib/helpers';
 import { checkWalletBalance } from '../../lib/middleware';
 import BackgroundImageHeader from '../BackgroundImageHeader';
-import DonateButton from '../DonateButton';
+import ContributeButton from '../ContributeButton';
 import ShowTypeDonations from '../ShowTypeDonations';
 import AuthenticatedLink from '../AuthenticatedLink';
 
@@ -113,7 +113,7 @@ class ViewCampaign extends Component {
               <h6>Campaign</h6>
               <h1>{campaign.title}</h1>
 
-              <DonateButton
+              <ContributeButton
                 type="campaign"
                 model={{
                   title: campaign.title,
@@ -196,7 +196,7 @@ class ViewCampaign extends Component {
                 <div className="col-md-8 m-auto">
                   <h4>Donations</h4>
                   <ShowTypeDonations donations={donations} isLoading={isLoadingDonations} />
-                  <DonateButton
+                  <ContributeButton
                     type="campaign"
                     model={{
                       title: campaign.title,

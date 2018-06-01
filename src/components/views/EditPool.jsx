@@ -51,6 +51,13 @@ class EditPool extends Component {
       // Pool model
       pool: new Pool({
         owner: props.currentUser,
+        threshold: 200,
+        tokenConversionRate: 15,
+        title: 'TinderCoin Private Sale',
+        description: 'Stuff and more stuff',
+        tokenUrl: 'http://www.tindercoin.com',
+        tokenName: 'Quantstramp',
+        tokenSymbol: 'QSP',
       }),
     };
 
@@ -87,8 +94,7 @@ class EditPool extends Component {
       });
   }
 
-  componentWillUnmount() {
-  }
+  componentWillUnmount() {}
 
   submit() {
     this.setState({ isSaving: true });
@@ -147,12 +153,7 @@ class EditPool extends Component {
 
   render() {
     const { isNew } = this.props;
-    const {
-      isLoading,
-      isSaving,
-      pool,
-      formIsValid,
-    } = this.state;
+    const { isLoading, isSaving, pool, formIsValid } = this.state;
 
     return (
       <div id="edit-pool-view">
@@ -171,7 +172,8 @@ class EditPool extends Component {
                     {!isNew && <h3>Edit pool {pool.title}</h3>}
                     <p>
                       <i className="fa fa-question-circle" />
-                      Go ahead and fill out this form to get started on launching your ico presale pool
+                      Go ahead and fill out this form to get started on launching your ico presale
+                      pool
                     </p>
                   </div>
 
@@ -182,7 +184,7 @@ class EditPool extends Component {
                       pool.threshold = parseInt(inputs.threshold);
                       pool.closeDate = moment(inputs.closeDate, 'YYYY-MM-DD').unix();
                       pool.tokenConversionRate = parseInt(inputs.tokenConversionRate);
-                      pool.title = inputs.name;
+                      pool.title = inputs.title;
                       pool.description = inputs.description;
                       pool.tokenUrl = inputs.tokenUrl;
                       pool.tokenName = inputs.tokenName;
@@ -193,11 +195,11 @@ class EditPool extends Component {
                     layout="vertical"
                   >
                     <Input
-                      name="name"
-                      id="name-input"
+                      name="title"
+                      id="title-input"
                       label="What's the name of your pool'?"
                       type="text"
-                      value={pool.name}
+                      value={pool.title}
                       placeholder="E.g. TinderCoin Private Sale"
                       validations="minLength:3"
                       validationErrors={{
@@ -220,10 +222,7 @@ class EditPool extends Component {
                       }}
                     />
                     <div className="form-group">
-                      <FormsyImageUploader
-                        setImage={this.setImage}
-                        previewImage={pool.image}
-                      />
+                      <FormsyImageUploader setImage={this.setImage} previewImage={pool.image} />
                     </div>
                     <div className="form-group">
                       <Input

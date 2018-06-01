@@ -15,7 +15,7 @@ import { redirectAfterWalletUnlock, checkWalletBalance } from '../../lib/middlew
 import Loader from './../Loader';
 import GoBackButton from '../GoBackButton';
 import BackgroundImageHeader from '../BackgroundImageHeader';
-import DonateButton from '../DonateButton';
+import ContributeButton from '../ContributeButton';
 import ShowTypeDonations from '../ShowTypeDonations';
 import getNetwork from './../../lib/blockchain/getNetwork';
 import MilestoneItem from './../MilestoneItem';
@@ -191,7 +191,7 @@ class ViewMilestone extends Component {
               <p>Campaign: {campaign.title} </p>
 
               {this.isActiveMilestone() && (
-                <DonateButton
+                <ContributeButton
                   type="milestone"
                   model={{ title, id, adminId: projectId }}
                   wallet={wallet}
@@ -391,7 +391,7 @@ class ViewMilestone extends Component {
                   <h4>Donations</h4>
                   <ShowTypeDonations donations={donations} isLoading={isLoadingDonations} />
                   {this.isActiveMilestone() && (
-                    <DonateButton
+                    <ContributeButton
                       type="milestone"
                       model={{ title, id, adminId: projectId }}
                       wallet={wallet}

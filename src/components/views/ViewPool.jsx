@@ -12,7 +12,7 @@ import GoBackButton from '../GoBackButton';
 import { isOwner, getUserName, getUserAvatar } from '../../lib/helpers';
 import { checkWalletBalance } from '../../lib/middleware';
 import BackgroundImageHeader from '../BackgroundImageHeader';
-import DonateButton from '../DonateButton';
+import ContributeButton from '../ContributeButton';
 import ShowTypeDonations from '../ShowTypeDonations';
 import AuthenticatedLink from '../AuthenticatedLink';
 
@@ -52,7 +52,6 @@ class ViewPool extends Component {
         this.setState({ isLoading: false });
       }); // TODO: inform user of error
 
-
     // Lazy load donations
     // this.donationsObserver = PoolService.subscribeDonations(
     //   poolId,
@@ -78,23 +77,12 @@ class ViewPool extends Component {
       // isLoadingDonations,
     } = this.state;
     console.log('pool', pool);
-    // <DonateButton
-    //   type="pool"
-    //   model={{
-    //     title: pool.title,
-    //     id: pool.id,
-    //     adminId: pool.projectId,
-    //   }}
-    //   wallet={wallet}
-    //   currentUser={currentUser}
-    //   history={history}
-    // />
 
     // <div className="row spacer-top-50 spacer-bottom-50">
     //   <div className="col-md-8 m-auto">
     //     <h4>Donations</h4>
     //     <ShowTypeDonations donations={donations} isLoading={isLoadingDonations} />
-    //     <DonateButton
+    //     <ContributeButton
     //       type="campaign"
     //       model={{
     //         title: campaign.title,
@@ -116,13 +104,22 @@ class ViewPool extends Component {
         {!isLoading && (
           <div>
             <BackgroundImageHeader image={pool.image} height={300}>
-              <h6>Pool</h6>
               <h1>{pool.title}</h1>
               <h3>Total ether needed: {pool.threshold}</h3>
               <h3>Tokens per Ether: {pool.tokenConversionRate}</h3>
-              <h3>Close date: {moment.unix(pool.closeDate).format("MM/DD/YYYY")}</h3>
+              <h3>Close date: {moment.unix(pool.closeDate).format('MM/DD/YYYY')}</h3>
 
-              <button>Invest</button>
+              {pool && (
+                <ContributeButton
+                  type="pool"
+                  model={{
+                    title: pool.title,
+                    poolAddress: pool.address,
+                  }}
+                  currentUser={currentUser}
+                  history={history}
+                />
+              )}
             </BackgroundImageHeader>
 
             <div className="container-fluid">
@@ -160,11 +157,11 @@ ViewPool.propTypes = {
     params: PropTypes.shape({
       id: PropTypes.string,
     }).isRequired,
-  }).isRequired
+  }).isRequired,
 };
 
 ViewPool.defaultProps = {
-  currentUser: undefined
+  currentUser: undefined,
 };
 
 export default ViewPool;

@@ -1,66 +1,67 @@
 // import { LPPCampaign } from 'lpp-campaign';
-import generateClass from 'eth-contract-class';
 import getNetwork from '../lib/blockchain/getNetwork';
 import getWeb3 from '../lib/blockchain/getWeb3';
+import contract from 'truffle-contract';
 import { feathersClient } from '../lib/feathersClient';
 import { getGasPrice } from '../lib/helpers';
-import Pool from '../models/Pool';
+import Investment from '../models/Investment';
+import generateClass from 'eth-contract-class';
 import ErrorPopup from '../components/ErrorPopup';
 
 const felixPoolArtifact = require('../lib/blockchain/contracts/FelixPool.json');
 
-class PoolService {
+class InvestmentService {
   /**
-   * Get a Pool defined by ID
+   * Get a Investment defined by ID
    *
-   * @param id   ID of the Pool to be retrieved
+   * @param id   ID of the Investment to be retrieved
    */
   static get(address) {
     return new Promise((resolve, reject) => {
       feathersClient
-        .service('pools')
+        .service('investments')
         .find({ query: { address } })
         .then(resp => {
-          resolve(new Pool(resp.data[0]));
+          resolve(new Investment(resp.data[0]));
         })
         .catch(reject);
     });
   }
 
   /**
-   * Lazy-load Pools by subscribing to Pools listener
+   * Lazy-load Investments by subscribing to Investments listener
    *
    * @param onSuccess Callback function once response is obtained successfully
    * @param onError   Callback function if error is encountered
    */
   static subscribe(onSuccess, onError) {
     return feathersClient
-      .service('pools')
+      .service('investments')
       .watch({ listStrategy: 'always' })
       .find({
         query: {
-          status: Pool.ACTIVE,
+          status: Investment.ACTIVE,
           $limit: 200,
         },
       })
       .subscribe(resp => {
         const newResp = Object.assign({}, resp, {
-          data: resp.data.map(c => new Pool(c)),
+          data: resp.data.map(c => new Investment(c)),
         });
         onSuccess(newResp);
       }, onError);
   }
 
   /**
-   * Get the user's Pools
+   * Get the user's Investments
    *
    * @param userAddress Address of the user whose Campaign list should be retrieved
    * @param onSuccess   Callback function once response is obtained successfully
    * @param onError     Callback function if error is encountered
    */
-  static getUserPools(userAddress, onSuccess, onError) {
+  static getUserInvestments(userAddress, onSuccess, onError) {
     return feathersClient
-      .service('pools')
+      .service('investments')
       .watch({ listStrategy: 'always' })
       .find({
         query: {
@@ -68,7 +69,10 @@ class PoolService {
         },
       })
       .subscribe(
-        resp => onSuccess(resp.data.map(pool => new Pool(pool)).sort(Pool.compare)),
+        resp =>
+          onSuccess(
+            resp.data.map(investment => new Investment(investment)).sort(Investment.compare),
+          ),
         onError,
       );
   }
@@ -77,18 +81,18 @@ class PoolService {
    * Save new Campaign to the blockchain or update existing one in feathers
    * TODO: Handle error states properly
    *
-   * @param pool    Campaign object to be saved
+   * @param investment    Campaign object to be saved
    * @param from        Address of the user creating the Campaign
    * @param afterCreate Callback to be triggered after the Campaign is created in feathers
    * @param afterMined  Callback to be triggered after the transaction is mined
    */
-  static save(pool, from, afterCreate = () => {}, afterMined = () => {}) {
-    console.log('pool', pool);
+  static save(investment, from, afterCreate = () => {}, afterMined = () => {}) {
+    console.log('investment', investment);
     console.log('from', from);
-    if (pool.id) {
+    if (investment.id) {
       feathersClient
-        .service('pool')
-        .patch(pool.id, pool.toFeathers())
+        .service('investment')
+        .patch(investment.id, investment.toFeathers())
         .then(() => afterMined());
     } else {
       let txHash;
@@ -99,61 +103,47 @@ class PoolService {
           etherScanUrl = network.etherscan;
 
           const { abi, bytecode } = felixPoolArtifact;
-          const felixPool = generateClass(abi, bytecode);
-          const { threshold, closeDate, tokenConversionRate } = pool;
-          console.log('threshold', threshold);
-          console.log('closeDate', closeDate);
-          console.log('tokenConversionRate', tokenConversionRate);
-
-          /**
-          FelixPool params:
-
-          string threshold,
-          string closeDate,
-          string tokenConversionRate
-          * */
-          const contract = new web3.eth.Contract(abi, { from });
-          contract
-            .deploy({
-              data: bytecode, // add deploy params
-              arguments: [threshold, closeDate, tokenConversionRate],
-            })
+          const { amount, poolAddress } = investment;
+          console.log('investment', investment);
+          console.log('abi', !!abi);
+          console.log('amount', amount);
+          console.log('poolAddress', poolAddress);
+          console.log('from', from);
+          const contract = new web3.eth.Contract(abi, poolAddress, { from });
+          contract.methods
+            .deposit()
             .send({
               from,
               gas: 1500000,
               gasPrice,
+              value: amount,
             })
-            .on('transactionHash', hash => {
+            .once('transactionHash', hash => {
               txHash = hash;
               console.log('txHash', txHash);
-              pool.txHash = txHash;
-              feathersClient
-                .service('pools')
-                .create(pool.toFeathers())
-                .then((stuff, moreStuff) => {
-                  afterCreate(`${etherScanUrl}tx/${txHash}`);
-                });
+              investment.txHash = txHash;
+              // investment.txTimestamp = txTimestamp;
+
+              afterCreate(`${etherScanUrl}tx/${txHash}`);
+
+              // feathersClient
+              //   .service('investments')
+              //   .create(investment.toFeathers())
+              //   .then((stuff, moreStuff) => {
+              //     afterCreate(`${etherScanUrl}tx/${txHash}`)
+              //   });
             })
-            .on('receipt', receipt => {
-              console.log('receipt.contractAddress', receipt.contractAddress); // contains the new contract address
-              pool.address = receipt.contractAddress;
-              feathersClient
-                .service('pools')
-                .create(pool.toFeathers())
-                .then(() => afterMined(`${etherScanUrl}address/${receipt.contractAddress}`));
-            })
-            .on('confirmation', (confirmationNumber, receipt) => {
+            .once('confirmation', (confirmationNumber, receipt) => {
               console.log('confirmationNumber', confirmationNumber);
               console.log('receipt', receipt);
-            })
-            .then(newContractInstance => {
-              const address = newContractInstance.options.address;
-              console.log('address', address);
-              pool.address = address;
-              feathersClient
-                .service('pools')
-                .create(pool.toFeathers())
-                .then(() => afterMined(`${etherScanUrl}address/${address}`));
+
+              // afterMined(`${etherScanUrl}tx/${txHash}`)
+              // investment.txHash = txHash;
+              // investment.txTimestamp = timestamp;
+              // feathersClient
+              //   .service('investments')
+              //   .create(investment.toFeathers())
+              //   .then(() => afterMined(`${etherScanUrl}address/${address}`));
             })
             .catch(err => {
               console.log('err', err);
@@ -222,4 +212,4 @@ class PoolService {
   }
 }
 
-export default PoolService;
+export default InvestmentService;
