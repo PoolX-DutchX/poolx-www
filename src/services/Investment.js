@@ -65,7 +65,7 @@ class InvestmentService {
       .watch({ listStrategy: 'always' })
       .find({
         query: {
-          ownerAddress: userAddress,
+          investorAddress: userAddress,
         },
       })
       .subscribe(
@@ -118,32 +118,21 @@ class InvestmentService {
               gasPrice,
               value: amount,
             })
-            .once('transactionHash', hash => {
-              txHash = hash;
-              console.log('txHash', txHash);
+            .once('transactionHash', txHash => {
               investment.txHash = txHash;
-              // investment.txTimestamp = txTimestamp;
-
               afterCreate(`${etherScanUrl}tx/${txHash}`);
 
-              // feathersClient
-              //   .service('investments')
-              //   .create(investment.toFeathers())
-              //   .then((stuff, moreStuff) => {
-              //     afterCreate(`${etherScanUrl}tx/${txHash}`)
-              //   });
+              feathersClient
+                .service('investments')
+                .create(investment.toFeathers())
+                .then((result) => {
+                  investment.id = result._id;
+                  afterCreate(`${etherScanUrl}tx/${txHash}`)
+                });
             })
             .once('confirmation', (confirmationNumber, receipt) => {
               console.log('confirmationNumber', confirmationNumber);
-              console.log('receipt', receipt);
-
-              // afterMined(`${etherScanUrl}tx/${txHash}`)
-              // investment.txHash = txHash;
-              // investment.txTimestamp = timestamp;
-              // feathersClient
-              //   .service('investments')
-              //   .create(investment.toFeathers())
-              //   .then(() => afterMined(`${etherScanUrl}address/${address}`));
+              afterMined(`${etherScanUrl}tx/${txHash}`)
             })
             .catch(err => {
               console.log('err', err);

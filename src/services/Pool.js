@@ -83,8 +83,6 @@ class PoolService {
    * @param afterMined  Callback to be triggered after the transaction is mined
    */
   static save(pool, from, afterCreate = () => {}, afterMined = () => {}) {
-    console.log('pool', pool);
-    console.log('from', from);
     if (pool.id) {
       feathersClient
         .service('pool')
@@ -129,30 +127,23 @@ class PoolService {
               feathersClient
                 .service('pools')
                 .create(pool.toFeathers())
-                .then((stuff, moreStuff) => {
+                .then((result) => {
+                  console.log('pool.id', pool.id);
+                  pool.id = result._id;
+                  console.log('pool.id', pool.id);
                   afterCreate(`${etherScanUrl}tx/${txHash}`);
                 });
             })
             .on('receipt', receipt => {
-              console.log('receipt.contractAddress', receipt.contractAddress); // contains the new contract address
-              pool.address = receipt.contractAddress;
-              feathersClient
-                .service('pools')
-                .create(pool.toFeathers())
-                .then(() => afterMined(`${etherScanUrl}address/${receipt.contractAddress}`));
-            })
+               console.log('receipt.contractAddress', receipt.contractAddress); // contains the new contract address
+               pool.address = receipt.contractAddress;
+               feathersClient
+                 .service('pools')
+                 .patch(pool.id, pool.toFeathers())
+                 .then(() => afterMined(`${etherScanUrl}address/${receipt.contractAddress}`));
+             })
             .on('confirmation', (confirmationNumber, receipt) => {
               console.log('confirmationNumber', confirmationNumber);
-              console.log('receipt', receipt);
-            })
-            .then(newContractInstance => {
-              const address = newContractInstance.options.address;
-              console.log('address', address);
-              pool.address = address;
-              feathersClient
-                .service('pools')
-                .create(pool.toFeathers())
-                .then(() => afterMined(`${etherScanUrl}address/${address}`));
             })
             .catch(err => {
               console.log('err', err);

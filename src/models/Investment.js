@@ -32,6 +32,7 @@ class Investment extends BasicModel {
       txHash: this.txHash,
       txTimestamp: this.txTimestamp,
       status: this.status,
+      // investorAddress
     };
   }
 
