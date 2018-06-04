@@ -78,7 +78,7 @@ class MainMenu extends Component {
               </ul>
 
               <Link className="navbar-brand" to="/">
-                <img src="/img/poolchain_logo.png" width="70px" alt="Poolchain logo" />
+                <img src="/img/poolbase_logo.png" width="140px" alt="Poolbase logo" />
               </Link>
 
               <div

@@ -99,7 +99,6 @@ class PoolService {
           etherScanUrl = network.etherscan;
 
           const { abi, bytecode } = felixPoolArtifact;
-          const felixPool = generateClass(abi, bytecode);
           const { threshold, closeDate, tokenConversionRate } = pool;
           console.log('threshold', threshold);
           console.log('closeDate', closeDate);
