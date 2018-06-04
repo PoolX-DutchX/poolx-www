@@ -127,7 +127,6 @@ class InvestmentService {
                 .create(investment.toFeathers())
                 .then((result) => {
                   investment.id = result._id;
-                  afterCreate(`${etherScanUrl}tx/${txHash}`)
                 });
             })
             .once('confirmation', (confirmationNumber, receipt) => {
