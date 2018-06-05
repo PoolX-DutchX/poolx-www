@@ -35,6 +35,7 @@ export const isLoggedIn = currentUser =>
 export const isAuthenticated = (currentUser) =>
   new Promise(resolve => {
     // ToDo: need another flag to check for authentication, previously ---  && wallet && wallet.unlocked
+    // check JWT? or session??
     if (currentUser && currentUser.address) resolve();
     else history.goBack();
   });

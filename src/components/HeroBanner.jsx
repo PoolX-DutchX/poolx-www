@@ -51,7 +51,7 @@ class HeroBanner extends Component {
       <div id="hero-banner">
         <div className="vertical-align">
           <center>
-            <h3>Let's make some money boys!</h3>
+            <h3>Your ICO pooling destination!</h3>
             &nbsp;
             {this.state.canCreatePool && (
               <button className="btn btn-info" onClick={this.createPool}>

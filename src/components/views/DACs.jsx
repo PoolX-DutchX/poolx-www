@@ -21,46 +21,48 @@ const DACs = ({ currentUser, wallet, dacs, history }) => (
 
     <div className="container-fluid page-layout reduced-padding">
       {// There are some Campaigns in the system, show them
-      dacs.data &&
-        dacs.data.length > 0 && (
-          <div>
-            <center>
-              <p>
-                These Communities are solving causes. Help them realise their goals by joining them
-                and giving Ether!
-              </p>
-            </center>
-            <div className="cards-grid-container">
-              {dacs.data.map(dac => (
-                <DacCard
-                  key={dac.id}
-                  dac={dac}
-                  removeDAC={this.removeDAC}
-                  currentUser={currentUser}
-                  wallet={wallet}
-                  history={history}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+      // dacs.data &&
+      //   dacs.data.length > 0 && (
+      //     <div>
+      //       <center>
+      //         <p>
+      //           These Communities are solving causes. Help them realise their goals by joining them
+      //           and giving Ether!
+      //         </p>
+      //       </center>
+      //       <div className="cards-grid-container">
+      //         {dacs.data.map(dac => (
+      //           <DacCard
+      //             key={dac.id}
+      //             dac={dac}
+      //             removeDAC={this.removeDAC}
+      //             currentUser={currentUser}
+      //             wallet={wallet}
+      //             history={history}
+      //           />
+      //         ))}
+      //       </div>
+      //     </div>
+      //   )
+      }
 
       {// There are no Campaigns, show empty state
-      dacs.data &&
-        dacs.data.length === 0 && (
-          <div>
-            <center>
-              <p>There are no decentralized altruistic communities (DACs) yet!</p>
-              <img
-                className="empty-state-img"
-                src={`${process.env.PUBLIC_URL}/img/community.svg`}
-                width="200px"
-                height="200px"
-                alt="no-dacs-icon"
-              />
-            </center>
-          </div>
-        )}
+      // dacs.data &&
+      //   dacs.data.length === 0 && (
+      //     <div>
+      //       <center>
+      //         <p>There are no decentralized altruistic communities (DACs) yet!</p>
+      //         <img
+      //           className="empty-state-img"
+      //           src={`${process.env.PUBLIC_URL}/img/community.svg`}
+      //           width="200px"
+      //           height="200px"
+      //           alt="no-dacs-icon"
+      //         />
+      //       </center>
+      //     </div>
+      //   )
+      }
     </div>
   </div>
 );
