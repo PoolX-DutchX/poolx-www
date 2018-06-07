@@ -62,58 +62,34 @@ class UserProvider extends Component {
   }
 
   async componentWillMount() {
-    //  Load the wallet if it is cached
-    /* Get Token,
-      if Token =>  grab id and match it with metamask,
-        if match => verityJWT, authenticated === true
-        if mismatch feathersClient.logOut (app.logOut), authenticated === false
-      if !Token => send to connect(signin) page
-    */
+    try {
+      const token = await feathersClient.passport.getJWT();
+      if (token) {
+        const tokenPayload = await feathersClient.passport.verifyJWT(token);
+        console.log('tokenPayload', tokenPayload);
+        const { userId } = tokenPayload;
+        const user = userId && await UserProvider.getUserProfile(userId);
 
-    await this.getUserAddress();
-    // ToDo: prompt user to login to metamask
-
-    feathersClient.passport
-      .getJWT()
-      .then(token => {
-        if (token) { return feathersClient.passport.verifyJWT(token) }
-          else { throw new Error('No Token') }
-      })
-      .then(payload => {
-        const { userId: address } = payload;
-        if (address && address === this.state.userAddress ) {
-          return UserProvider.getUserProfile(address);
-        } else {
+        if (!user) {
           feathersClient.logout();
-          this.setState({
-            isLoading: false,
-            hasError: false
-          });
-          history.push(`/`);
+          this.setState({ isLoading: false, hasError: false });
+        } else {
+          feathersClient.authenticate();
+          this.setState({ isLoading: false, hasError: false, currentUser: new User(user)});
         }
-      })
-      .then(user => {
-        console.log('user', user);
-        if (!user) throw new Error('No User');
-        feathersClient.authenticate(); // need to authenticate the socket connection
-        this.setState({
-          isLoading: false,
-          hasError: false,
-          currentUser: new User(user),
-        });
-      })
-      .catch((err) => {
-        this.setState({
-          isLoading: false,
-          hasError: false
-        });
-        console.log('err', err);
-        // history.push(`/signin`);
-      });
+      } else {
+        this.setState({ isLoading: false, hasError: false });
+      }
 
+    }  catch (err) {
+      console.log('err', err);
+      this.setState({ isLoading: false, hasError: false });
+      history.push(`/`);
+    }
   }
 
   async getUserAddress() {
+    console.log('getting user address');
     try {
       const web3 = await getWeb3();
       const accounts = await web3.eth.getAccounts();
@@ -127,12 +103,14 @@ class UserProvider extends Component {
     }
   }
 
-  static getUserProfile(address) {
+  static getUserProfile(userId) {
+    console.log('getting user profile', userId);
     return feathersClient
       .service('/users')
-      .get(address)
+      .get(userId)
       .then(user => user)
       .catch(err => {
+        console.log('err on getUserProfile', err);
         ErrorPopup(
           'Something went wrong with getting user profile. Please try again after refresh.',
           err,
@@ -143,18 +121,13 @@ class UserProvider extends Component {
   onSignOut() {
     feathersClient.logout();
     this.setState({ currentUser: undefined });
+    history.push('/');
   }
 
-  onSignIn() {
-    getWeb3().then(web3 => {
-      web3.eth.getAccounts((err, accounts) => {
-        console.log('accounts', accounts);
-        UserProvider.getUserProfile(accounts[0]).then(user =>
-          this.setState({ currentUser: new User(user) }),
-        );
-      })
-    });
-
+  async onSignIn(userId) {
+    console.log('triggering onSignin');
+    const user = await UserProvider.getUserProfile(userId);
+    this.setState({ currentUser: new User(user) });
   }
 
   handleWalletChange(wallet) {

@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Avatar from 'react-avatar';
 import { Link } from 'react-router-dom';
+import { Form, Input } from 'formsy-react-components';
 
 import { feathersClient } from '../../lib/feathersClient';
 import Loader from '../Loader';
+import LoaderButton from '../LoaderButton';
 import AuthenticateForm from '../AuthenticateForm';
-import { authenticate, authenticateAddress } from '../../lib/helpers';
+import { authenticateUser } from '../../lib/helpers';
 import GivethWallet from '../../lib/blockchain/GivethWallet';
 
 /* global window */
@@ -21,7 +23,8 @@ class SignIn extends Component {
       isLoading: true,
       error: undefined,
       address: undefined,
-      isSigninIn: false,
+      isSigningIn: false,
+      formIsValid: false,
     };
 
     this.submit = this.submit.bind(this);
@@ -66,55 +69,51 @@ class SignIn extends Component {
       });
   }
 
-  submit() {
+  submit({ email, password }) {
+    console.log('email', email);
+    console.log('password', password);
+
     this.setState(
       {
-        isSigninIn: true,
+        isSigningIn: true,
         error: undefined,
       },
       () => {
-        function loadWallet() {
-          authenticateAddress(this.state.address)
-            .then(token => {
-              console.log('token', token);
-              this.props.onSignIn();
-              return feathersClient.passport.verifyJWT(token);
-            })
-            .then(() => {
-              React.toast.success(
-                <p>
-                  Welcome back! <br />
-                </p>,
-              );
-              this.props.history.goBack();
-            })
-            .catch(err => {
-              this.setState({
-                error:
-                  err.type && err.type === 'FeathersError'
-                    ? 'authentication error'
-                    : 'Error authenticating account.',
-                isSigninIn: false,
-              });
+        authenticateUser({ email, password })
+          .then(token => {
+            return feathersClient.passport.verifyJWT(token);
+          })
+          .then(tokenPayload => {
+            const {userId} = tokenPayload;
+            this.setState({isSigningIn: false});
+            this.props.onSignIn(userId);
+            React.toast.success(
+              <p>
+                Welcome back! <br />
+              </p>,
+            );
+            this.props.history.goBack();
+          })
+          .catch(err => {
+            this.setState({
+              error: 'There was a problem signing into your account. Please refresh the page and try again.',
+              isSigningIn: false,
             });
-        }
-
-        // web3 blocks all rendering, so we need to request an animation frame
-        window.requestAnimationFrame(loadWallet.bind(this));
+          });
       }
     );
   }
 
+  toggleFormValid(state) {
+    this.setState({ formIsValid: state });
+  }
+
   render() {
-    const { avatar, name, address, error, isLoading, isSigninIn } = this.state;
+    const { error, isLoading, isSigningIn, formIsValid } = this.state;
 
     if (isLoading) {
       return <Loader className="fixed" />;
     }
-
-    console.log('avatar', avatar);
-    console.log('name', name);
-    console.log('address', address);
 
     return (
       <div id="account-view" className="container-fluid page-layout">
@@ -123,33 +122,56 @@ class SignIn extends Component {
             <div>
               <div className="card">
                 <center>
-                  {avatar && <Avatar size={100} src={avatar} round />}
+                  <div>
+                    <h1>SignIn</h1>
+                    <p>
+                      Please provide a username and password to sign in
+                    </p>
 
-                  {name && (
-                    <h1>
-                      Welcome back<br />
-                      <strong>{name}!</strong>
-                    </h1>
-                  )}
-                  {name && <p className="small">Your address: {address}</p>}
+                    {error && <div className="alert alert-danger">{error}</div>}
 
-                  {address &&
-                    !name && (
-                      <div>
-                        <h1>Welcome back</h1>
-                        <strong>{address}</strong>
-                      </div>
-                    )}
-
-                  <div className="spacer-top">
-                    <AuthenticateForm
-                      submit={this.submit}
-                      label="Sign in by way of Metamask confirming your identity"
-                      error={error}
-                      buttonText="Sign in"
-                      authenticating={isSigninIn}
+                    <Form
+                      className="sign-in-form"
+                      onSubmit={this.submit}
+                      onValid={() => this.toggleFormValid(true)}
+                      onInvalid={() => this.toggleFormValid(false)}
+                      layout="vertical"
                     >
-                    </AuthenticateForm>
+                      <div className="form-group">
+                        <Input
+                          name="email"
+                          id="email-input"
+                          label="Email"
+                          type="text"
+                          value={this.state.email}
+                          placeholder="Your email"
+                          required
+                          autoFocus
+                        />
+                      </div>
+                      <div className="form-group">
+                        <Input
+                          name="password"
+                          autoComplete="password"
+                          id="password-input"
+                          label="Password"
+                          type="password"
+                          value={this.state.password}
+                          placeholder="Your password"
+                          required
+                        />
+                      </div>
+                      <LoaderButton
+                        className="btn btn-success btn-block"
+                        formNoValidate
+                        type="submit"
+                        disabled={isSigningIn || !formIsValid}
+                        isLoading={isSigningIn}
+                        loadingText="Signing you in..."
+                      >
+                        Sign in
+                      </LoaderButton>
+                    </Form>
                   </div>
                 </center>
               </div>

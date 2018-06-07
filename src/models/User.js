@@ -12,7 +12,7 @@ import Model from './Model';
  * @attribute name        Name of the user
  */
 class User extends Model {
-  constructor({ address, avatar, commitTime, email, giverId, linkedin, name }) {
+  constructor({ address, avatar, commitTime, email, giverId, linkedin, name, _id }) {
     super();
     this.address = address;
     this.avatar = avatar;
@@ -21,6 +21,17 @@ class User extends Model {
     this.giverId = giverId;
     this.linkedin = linkedin;
     this.name = name;
+    this.id = _id;
+  }
+
+
+  get id() {
+    return this.myId;
+  }
+
+  set id(value) {
+    this.checkType(value, ['undefined', 'string'], 'id');
+    this.myId = value;
   }
 
   get address() {

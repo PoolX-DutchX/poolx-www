@@ -303,6 +303,7 @@ class Application extends Component {
                             <Signup
                               provider={web3 ? web3.currentProvider : undefined}
                               walletCreated={handleWalletChange}
+                              onSignIn={onSignIn}
                               {...props}
                             />
                           )}
@@ -327,11 +328,12 @@ class Application extends Component {
                             <UserWallet currentUser={currentUser} wallet={wallet} {...props} />
                           )}
                         />
-                        <Route
+                        <PrivateRoute
                           exact
                           path="/profile"
+                          currentUser={currentUser}
                           component={props => (
-                            <EditProfile currentUser={currentUser} wallet={wallet} {...props} />
+                            <EditProfile currentUser={currentUser} onSignIn={onSignIn} {...props} />
                           )}
                         />
                         <Route

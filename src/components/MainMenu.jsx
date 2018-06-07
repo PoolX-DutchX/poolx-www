@@ -155,6 +155,11 @@ class MainMenu extends Component {
                       Sign In
                     </NavLink>
                   )}
+                  {!state.currentUser && (
+                    <NavLink className="nav-link" to="/signup" activeClassName="active">
+                      Sign Up
+                    </NavLink>
+                  )}
 
                   {state.currentUser && (
                     <li className="nav-item dropdown">

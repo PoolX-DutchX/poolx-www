@@ -37,6 +37,25 @@ export const authenticate = wallet => {
     .then(response => response.accessToken);
 };
 
+export const authenticateUser = ({ email, password }) => {
+  const authData = {
+    strategy: 'local',
+    email,
+    password,
+  };
+
+  return feathersClient.authenticate(authData)
+    .then(response => {
+      console.log('response', response);
+      return response.accessToken
+    })
+    .catch(err => {
+      console.log('AuthenticateUser response error', err);
+      return err;
+    });
+
+}
+
 export const authenticateAddress = address => {
 
   const authData = {

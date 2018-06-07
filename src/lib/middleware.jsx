@@ -13,9 +13,11 @@ import { history } from '../lib/helpers';
  *    isAuthenticated(currentUser, wallet)
  *      .then(()=> ...do something when authenticated)
  */
+
+ // ToDo: This does not to be a promise task: remove all promisified usage of this in app
 export const isLoggedIn = currentUser =>
   new Promise(resolve => {
-    if (currentUser && currentUser.address) resolve();
+    if (currentUser && currentUser.email) resolve();
     else history.goBack();
   });
 
@@ -36,7 +38,7 @@ export const isAuthenticated = (currentUser) =>
   new Promise(resolve => {
     // ToDo: need another flag to check for authentication, previously ---  && wallet && wallet.unlocked
     // check JWT? or session??
-    if (currentUser && currentUser.address) resolve();
+    if (currentUser && currentUser.email) resolve();
     else history.goBack();
   });
 
