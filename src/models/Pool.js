@@ -14,37 +14,47 @@ class Pool extends BasicModel {
   static get ACTIVE() {
     return 'Active';
   }
+  static get CURRENCY_ETHER() {
+    return 'ether';
+  }
+  static get CURRENCY_TOKEN() {
+    return 'token';
+  }
 
   constructor(data) {
     super(data);
-
-    this.threshold = data.threshold || 0;
-    this.closeDate = data.closeDate || 0;
-    this.tokenConversionRate = data.tokenConversionRate || 0;
+    this.wallet = data.wallet || '';
+    this.cap = data.cap || '';
+    this.minContribution = data.minContribution || '';
+    this.maxContribution = data.maxContribution || '';
+    this.fee = data.fee || '0.0';
+    this.feePayoutCurrency = data.feePayoutCurrency || Pool.CURRENCY_ETHER;
+    this.adminAddresses = data.adminAddresses || [];
+    this.destinationAddress = data.destinationAddress || '';
+    this.destinationData = data.destinationData || '';
+    this.name = data.name || '';
+    this.description = data.description || '';
     this.status = data.status || Pool.PENDING;
-    this.address = data.address;
-    this.title = data.title;
-    this.description = data.description;
-    this.tokenUrl = data.tokenUrl;
-    this.tokenName = data.tokenName;
-    this.tokenSymbol = data.tokenSymbol;
+    this.address = data.address || '';
   }
 
   toFeathers() {
     return {
       id: this.id,
-      threshold: this.threshold,
-      closeDate: this.closeDate,
-      tokenConversionRate: this.tokenConversionRate,
-      status: this.status,
-      address: this.address,
-      txHash: this.txHash,
-      image: this.image,
-      title: this.title,
+      wallet: this.wallet,
+      cap: this.cap,
+      minContribution: this.minContribution,
+      maxContribution: this.maxContribution,
+      fee: this.fee,
+      feePayoutCurrency: this.feePayoutCurrency,
+      adminAddresses: this.adminAddresses,
+      destinationAddress: this.destinationAddress,
+      destinationData: this.destinationData,
+      name: this.name,
       description: this.description,
-      tokenUrl: this.tokenUrl,
-      tokenName: this.tokenName,
-      tokenSymbol: this.tokenSymbol,
+      status: this.status,
+      txHash: this.txHash,
+      address: this.address,
     };
   }
 
@@ -86,6 +96,15 @@ class Pool extends BasicModel {
     else this.myOrder = 4;
   }
 
+  get wallet() {
+    return this.myWallet;
+  }
+
+  set wallet(value) {
+    this.checkType(value, ['undefined', 'string'], 'wallet');
+    this.myWallet = value;
+  }
+
   get address() {
     return this.myAddress;
   }
@@ -95,77 +114,78 @@ class Pool extends BasicModel {
     this.myAddress = value;
   }
 
-  get threshold() {
-    return this.myThreshold;
+  get cap() {
+    return this.myCap;
   }
 
-  set threshold(value) {
-    this.checkType(value, ['number'], 'threshold');
-    this.myThreshold = value;
+  set cap(value) {
+    console.log('value', value);
+    this.checkType(value, ['undefined','string'], 'cap');
+    this.myCap = value;
   }
 
-  get closeDate() {
-    return this.myCloseDate;
+  get minContribution() {
+    return this.myMinContribution;
   }
 
-  set closeDate(value) {
-    this.checkType(value, ['number'], 'closeDate');
-    this.myCloseDate = value;
+  set minContribution(value) {
+    this.checkType(value, ['undefined','string'], 'minContribution');
+    this.myMinContribution = value;
   }
 
-  get tokenConversionRate() {
-    return this.myTokenConversionRate;
+  get maxContribution() {
+    return this.myMaxContribution;
   }
 
-  set tokenConversionRate(value) {
-    this.checkType(value, ['number'], 'tokenConversionRate');
-    this.myTokenConversionRate = value;
+  set maxContribution(value) {
+    this.checkType(value, ['undefined','string'], 'maxContribution');
+    this.myMaxContribution = value;
   }
 
-  get tokenName() {
-    return this.myTokenName;
+  get fee() {
+    return this.myFee;
   }
 
-  set tokenName(value) {
-    this.checkType(value, ['string'], 'tokenName');
-    this.myTokenName = value;
+  set fee(value) {
+    this.checkType(value, ['string'], 'fee');
+    this.myFee = value;
   }
 
-  get tokenSymbol() {
-    return this.myTokenSymbol;
+  get feePayoutCurrency() {
+    return this.myFeePayoutCurrency;
   }
 
-  set tokenSymbol(value) {
-    this.checkType(value, ['string'], 'tokenSymbol');
-    this.myTokenSymbol = value;
+  set feePayoutCurrency(value) {
+    this.checkValue(value, [Pool.CURRENCY_ETHER, Pool.CURRENCY_TOKEN], 'feePayoutCurrency');
+    this.myFeePayoutCurrency = value;
   }
 
-  get tokenUrl() {
-    return this.myTokenUrl;
+  get adminAddresses() {
+    return this.myAdminAddresses;
   }
 
-  set tokenUrl(value) {
-    this.checkType(value, ['string'], 'tokenUrl');
-    this.myTokenUrl = value;
+  set adminAddresses(value) {
+    this.checkType(value, ['object', 'array'], 'adminAddresses');
+    this.myAdminAddresses = value;
   }
 
-  // get contractAddress() {
-  //   return this.myContractAddress;
-  // }
-  //
-  // set contractAddress(value) {
-  //   this.checkType(value, ['string', 'undefined'], 'contractAddress');
-  //   this.myContractAddress = value;
-  // }
-  //
-  // get txHash() {
-  //   return this.myTxHash;
-  // }
-  //
-  // set txHash(value) {
-  //   this.checkType(value, ['string', 'undefined'], 'txHash');
-  //   this.myTxHash = value;
-  // }
+  get destinationAddress() {
+    return this.myDestinationAddress;
+  }
+
+  set destinationAddress(value) {
+    this.checkType(value, ['undefined', 'string'], 'destinationAddress');
+    this.myDestinationAddress = value;
+  }
+
+  get destinationData() {
+    return this.myDestinationData;
+  }
+
+  set destinationData(value) {
+    this.checkType(value, ['undefined', 'string'], 'destinationData');
+    this.myDestinationData = value;
+  }
 }
 
 export default Pool;

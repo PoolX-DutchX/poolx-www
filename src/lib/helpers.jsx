@@ -224,6 +224,19 @@ export const calculateRiskFactor = (owner, dependencies) => {
 
 export const history = createBrowserHistory();
 
+export const removeFromArray = (array, element) => {
+  return array.filter(e => e !== element);
+};
+
+export const addToArray = (array, element) => {
+  console.log('array.includes(element)', array.includes(element));
+  if (!array.includes(element)) {
+    return [...array, element];
+  } else {
+    return array
+  }
+};
+
 // Get start of the day in UTC for a given date or start of current day in UTC
 export const getStartOfDayUTC = date => moment.utc(date || moment()).startOf('day');
 
@@ -237,3 +250,12 @@ export const convertEthHelper = amount => {
 
   return eth;
 };
+
+export const copyToClipboard = (node) => {
+    if (!navigator.clipboard) {
+      node.select();
+      document.execCommand('copy');
+      return;
+    }
+    navigator.clipboard.writeText(node.value);
+}

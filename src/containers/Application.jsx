@@ -31,7 +31,7 @@ import MyCampaigns from './../components/views/MyCampaigns';
 import MyMilestones from './../components/views/MyMilestones';
 import NotFound from './../components/views/NotFound';
 
-import EditPool from './../components/views/EditPool';
+import CreatePool from './../components/views/CreatePool/index.jsx';
 import ViewCampaign from './../components/views/ViewCampaign';
 import ViewPool from './../components/views/ViewPool';
 import EditMilestone from './../components/views/EditMilestone';
@@ -40,6 +40,7 @@ import EditMilestone from './../components/views/EditMilestone';
 import MainMenu from './../components/MainMenu';
 import Loader from './../components/Loader';
 import UnlockWallet from '../components/UnlockWallet';
+import PrivateRoute from '../components/PrivateRoute';
 
 // context providers
 import UserProvider, { Consumer as UserConsumer } from '../contextProviders/UserProvider';
@@ -110,7 +111,7 @@ class Application extends Component {
                 handleWalletChange,
               },
             }) => (
-              <div>
+              <div className="full-height">
                 {isLoading && <Loader className="fixed" />}
 
                 {wallet &&
@@ -125,7 +126,7 @@ class Application extends Component {
 
                 {!isLoading &&
                   !hasError && (
-                    <div>
+                    <div className="full-height">
                       <MainMenu onSignOut={onSignOut} wallet={wallet} currentUser={currentUser} />
 
                       <Switch>
@@ -158,7 +159,7 @@ class Application extends Component {
                           exact
                           path="/pools/new"
                           component={props => (
-                            <EditPool
+                            <CreatePool
                               isNew
                               currentUser={currentUser}
                               wallet={wallet}
@@ -184,7 +185,7 @@ class Application extends Component {
                           exact
                           path="/pools/:id/edit"
                           component={props => (
-                            <EditPool currentUser={currentUser} wallet={wallet} {...props} />
+                            <CreatePool currentUser={currentUser} wallet={wallet} {...props} />
                           )}
                         />
 

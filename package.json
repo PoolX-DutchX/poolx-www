@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^1.2.0",
+    "@material-ui/icons": "^1.1.0",
     "bignumber.js": "^6.0.0",
     "eth-contract-class": "^0.0.8",
     "feathers": "^2.2.3",
@@ -27,7 +29,7 @@
     "minimetoken": "^0.2.0",
     "moment": "^2.22.1",
     "node-fetch": "^2.1.1",
-    "node-sass-chokidar": "^0.0.3",
+    "node-sass": "^4.9.0",
     "npm-run-all": "^4.0.2",
     "prop-types": "^15.5.10",
     "react": "16.3.1",
@@ -72,8 +74,8 @@
     "prettier": "1.9.2"
   },
   "scripts": {
-    "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
-    "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
+    "build-css": "node-sass --include-path ./src --include-path ./node_modules src/ -o src/",
+    "watch-css": "npm run build-css && node-sass --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
     "build": "npm run build-css && react-scripts build",

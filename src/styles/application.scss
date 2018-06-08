@@ -3,10 +3,12 @@
 @import 'mixins';
 @import 'layout.scss';
 @import 'colors.scss';
-@import 'typography.scss';
+@import 'fontSizing.scss';
+@import 'fontFace.scss';
 
 // views
 @import 'causesView.scss';
+@import 'createPoolView.scss';
 @import 'editCausesView.scss';
 @import 'viewCauseView.scss';
 @import 'viewCampaignView.scss';
@@ -14,7 +16,6 @@
 @import 'campaignsView';
 @import 'accountView.scss';
 @import 'dashboard.scss';
-@import 'edit-view.scss';
 @import 'editMilestoneView.scss';
 // components
 @import 'loader.scss';
@@ -39,28 +40,52 @@
 @import 'myMilestones.scss';
 @import 'buttons.scss';
 
-html,
-body {
-    font-family: 'Quicksand', sans-serif;
-}
 
-body {
+// html {
+//   -webkit-box-sizing: border-box;
+//   -moz-box-sizing: border-box;
+//   box-sizing: border-box;
+// }
+// *, *:before, *:after {
+//   -webkit-box-sizing: inherit;
+//   -moz-box-sizing: inherit;
+//   box-sizing: inherit;
+//   }
+
+html,
+body,
+#root  {
+    height: 100%;
+    font-family: 'Proxima Nova Rg', sans-serif;
+    color: #32313a;
     margin: 0;
     padding: 0;
     background-color: $page-background;
+
 }
 
+button:focus {outline:0;}
+
+.underline {
+  text-decoration: underline;
+}
+
+.full-height {
+  height: 100%;
+}
 .page-layout {
-    padding: 130px 20px 50px 20px;
-    &.reduced-padding {
-        padding-top: 50px;
-    }
-    &.extended-padding {
-        padding-top: 80px + 50px;
-    }
-    @media (max-width: 768px) {
-        padding: 130px 20px 50px 20px;
-    }
+    padding-top: 80px;
+    // height: 100%;
+    // padding: 130px 20px 50px 20px;
+    // &.reduced-padding {
+    //     padding-top: 50px;
+    // }
+    // &.extended-padding {
+    //     padding-top: 80px + 50px;
+    // }
+    // @media (max-width: 768px) {
+    //     padding: 130px 20px 50px 20px;
+    // }
 }
 
 a,

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Button from '@material-ui/core/Button';
 
 import CommunityButton from './CommunityButton';
 import User from '../models/User';
@@ -54,9 +55,9 @@ class HeroBanner extends Component {
             <h3>Your ICO pooling destination!</h3>
             &nbsp;
             {this.state.canCreatePool && (
-              <button className="btn btn-info" onClick={this.createPool}>
+              <Button variant="contained" onClick={this.createPool}>
                 Create a Pool
-              </button>
+              </Button>
             )}
           </center>
         </div>

@@ -68,6 +68,15 @@ class BasicModel extends Model {
     this.myTitle = value;
   }
 
+  get name() {
+    return this.myName;
+  }
+
+  set name(value) {
+    this.checkType(value, ['string'], 'name');
+    this.myName = value;
+  }
+
   get description() {
     return this.myDescription;
   }

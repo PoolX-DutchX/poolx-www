@@ -75,6 +75,8 @@ class UserProvider extends Component {
           this.setState({ isLoading: false, hasError: false });
         } else {
           feathersClient.authenticate();
+          console.log('user', user);
+          console.log('user', new User(user));
           this.setState({ isLoading: false, hasError: false, currentUser: new User(user)});
         }
       } else {
