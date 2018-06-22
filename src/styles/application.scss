@@ -11,7 +11,7 @@
 @import 'createPoolView.scss';
 @import 'editCausesView.scss';
 @import 'viewCauseView.scss';
-@import 'viewCampaignView.scss';
+@import 'viewPoolView.scss';
 @import 'viewMilestoneView.scss';
 @import 'campaignsView';
 @import 'accountView.scss';
@@ -74,7 +74,8 @@ button:focus {outline:0;}
   height: 100%;
 }
 .page-layout {
-    padding-top: 80px;
+    margin-top: 80px;
+    padding: 20px;
     // height: 100%;
     // padding: 130px 20px 50px 20px;
     // &.reduced-padding {

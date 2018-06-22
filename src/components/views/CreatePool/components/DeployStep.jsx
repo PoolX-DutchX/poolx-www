@@ -12,17 +12,19 @@ import WalletPanel from './WalletPanel';
 import DeployDataFields from './DeployDataFields';
 
 import { copyToClipboard } from '../../../../lib/helpers';
+import WithTooltip from '../../../../components/WithTooltip';
+import GasPricePanel from '../../../../components/GasPricePanel';
+
 
 // import getNetwork from '../lib/blockchain/getNetwork';
 // import { feathersClient } from '../lib/feathersClient';
 // import { displayTransactionError, getGasPrice } from '../lib/helpers';
 // import getWeb3 from '../lib/blockchain/getWeb3';
 // import LoaderButton from './LoaderButton';
-// import Investment from '../models/Investment';
-// import InvestmentService from '../services/Investment';
+// import Contribution from '../models/Contribution';
+// import ContributionService from '../services/Contribution';
 
 // const felixPoolArtifact = require('../lib/blockchain/contracts/FelixPool.json');
-
 const getDeployData = ({ toAddress, amount, gasLimit, txData }) => {
   return [
     {
@@ -46,23 +48,17 @@ const getDeployData = ({ toAddress, amount, gasLimit, txData }) => {
 class DeployStep extends React.Component {
   constructor(props) {
     super();
-    const { amount } = props;
-
-    //temporary
-    const txData = '0x_transactionData';
-    const gasLimit = '200000';
-    const gasPrice = utils.toWei('10', 'gwei');
-    const poolFactoryAddress = '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1';
+    const { wallet, toAddress, amount, txData, gasLimit } = props;
 
     this.state = {
       isSaving: false,
-      toAddress: poolFactoryAddress,
-      amount: amount || 0,
-      gasPrice,
-      gasLimit,
+      wallet,
+      toAddress,
+      amount,
       txData,
-      myEtherWalletUrl: `https://www.myetherwallet.com/?to=${poolFactoryAddress.toUpperCase()}&gaslimit=${gasLimit}&data=${txData}&value=${amount}#send-transaction`,
-      myCryptoUrl: `https://www.mycrypto.com/?to=${poolFactoryAddress.toUpperCase()}&gasLimit=${gasLimit}&data=${txData}&value=${amount}#send-transaction`,
+      gasLimit,
+      myEtherWalletUrl: `https://www.myetherwallet.com/?to=${toAddress.toUpperCase()}&gaslimit=${gasLimit}&data=${txData}&value=${amount}#send-transaction`,
+      myCryptoUrl: `https://www.mycrypto.com/?to=${toAddress.toUpperCase()}&gasLimit=${gasLimit}&data=${txData}&value=${amount}#send-transaction`,
 
     };
 
@@ -70,6 +66,7 @@ class DeployStep extends React.Component {
   }
 
   async componentDidMount() {
+
   // const { abi, bytecode } = felixPoolArtifact;
   // const {model: { poolAddress }} = this.props;
   //
@@ -101,28 +98,15 @@ class DeployStep extends React.Component {
   }
 
   render() {
-    const { pool: { wallet } } = this.props;
-    const { toAddress, amount, gasLimit, txData } = this.state;
+    const { wallet } = this.state;
 
     return (<div>
         <Typography variant="subheading" gutterBottom>
           To perform this operation, you need to send a transaction from:
         </Typography>
-        <div class="alert alert-info" role="alert">
+        <div className="alert alert-info" role="alert">
           {wallet}
         </div>
-        {/*
-          <Grid container spacing={8} alignItems="flex-end">
-           <Grid item sm={11}>
-             <TextField id="wallet" value={wallet} inputRef={node => this.walletAddressNode = node} fullWidth/>
-           </Grid>
-           <Grid item sm={1}>
-             <Button variant="contained" size="small" color="primary" onClick={()=>{copyToClipboard(this.walletAddressNode)}}>
-               Copy
-             </Button>
-           </Grid>
-         </Grid>
-       */}
         <Typography variant="subheading" gutterBottom>
           Transact by way of these popular wallet providers:
         </Typography>
@@ -131,12 +115,19 @@ class DeployStep extends React.Component {
           Or do so manually with the following data:
         </Typography>
         <DeployDataFields  data={ getDeployData(this.state) }/>
+        <GasPricePanel/>
       </div>)
   }
 
 }
 
-// DeployStep.propTypes = { };
+DeployStep.propTypes = {
+  wallet: PropTypes.string.isRequired,
+  toAddress: PropTypes.string.isRequired,
+  amount: PropTypes.number.isRequired,
+  txData: PropTypes.string.isRequired,
+  gasLimit: PropTypes.number.isRequired
+};
 // DeployStep.defaultProps = { };
 
 export default DeployStep;

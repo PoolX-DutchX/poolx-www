@@ -16,6 +16,7 @@
     "feathers-reactive": "^0.5.2",
     "feathers-rest": "^1.8.1",
     "feathers-socketio": "^2.0.1",
+    "formik": "^0.11.11",
     "formsy-react": "^1.1.4",
     "formsy-react-components": "^1.0.0",
     "giveth-bridge": "0.0.3",
@@ -57,7 +58,8 @@
     "web3": "1.0.0-beta.34",
     "web3-eth-accounts": "^1.0.0-beta.18",
     "web3-provider-engine": "^13.3.3",
-    "whatwg-fetch": "^2.0.3"
+    "whatwg-fetch": "^2.0.3",
+    "yup": "^0.25.1"
   },
   "devDependencies": {
     "eslint": "^4.10.0",

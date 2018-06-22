@@ -4,6 +4,9 @@ import InputToken from 'react-input-token';
 import moment from 'moment';
 import 'react-input-token/lib/style.css';
 
+import { withFormik } from 'formik';
+import Yup from 'yup';
+
 import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -40,6 +43,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import { feathersClient } from '../../../lib/feathersClient';
 import Loader from '../../Loader';
@@ -61,6 +65,7 @@ import {
   confirmBlockchainTransaction,
 } from '../../../lib/middleware';
 import LoaderButton from '../../../components/LoaderButton';
+import WithTooltip from '../../../components/WithTooltip';
 import User from '../../../models/User';
 import GivethWallet from '../../../lib/blockchain/GivethWallet';
 import Pool from '../../../models/Pool';
@@ -154,7 +159,7 @@ class CreatePool extends Component {
       formIsValid: false,
       pool: new Pool({
         owner: props.currentUser,
-        // ...poolData
+        ...poolData
       }),
       activeStep: 0,
       completed: {},
@@ -358,7 +363,7 @@ class CreatePool extends Component {
     }
   };
 
-   handleReset() {
+  handleReset() {
      this.setState({
        activeStep: 0,
      });
@@ -373,7 +378,7 @@ class CreatePool extends Component {
     const { activeStep } = this.state;
 
     return (
-      <div id="create-pool-view" className="page-layout">
+      <div id="create-pool-view">
         {isLoading && <Loader className="fixed" />}
         {!isLoading && (
           <div>
@@ -403,23 +408,27 @@ class CreatePool extends Component {
                         />
                         <Grid container spacing={16} className='spacer-top-15'>
                           <Grid item md={3}>
-                            <FormLabel className='spacer-top-40'>Limits: </FormLabel>
+                            <WithTooltip title="There's a limit to your love">
+                              <FormLabel className='spacer-top-40'>Limits</FormLabel>
+                            </WithTooltip>
                           </Grid>
                           <Grid item md={9} >
                               <div className='flex-wrap-between'>
-                                <TextField
-                                  id="cap"
-                                  label="Pool cap"
-                                  inputProps={{style: {width:"100%"}}}
-                                  className={formStyles.textField}
-                                  placeholder="Ξther amount"
-                                  value={pool.cap}
-                                  onChange={this.handlePoolChange('cap')}
-                                  min="0"
-                                  type= "number"
-                                  margin="normal"
-                                  fullWidth
-                                />
+                                <WithTooltip title="Cap his ass">
+                                  <TextField
+                                    id="cap"
+                                    label="Net pool cap"
+                                    inputProps={{style: {width:"100%"}}}
+                                    className={formStyles.textField}
+                                    placeholder="Ξther amount"
+                                    value={pool.cap}
+                                    onChange={this.handlePoolChange('cap')}
+                                    min="0"
+                                    type= "number"
+                                    margin="normal"
+                                    fullWidth
+                                  />
+                                </WithTooltip>
                                 <TextField
                                   id="minContribution"
                                   className={formStyles.textField}
@@ -586,7 +595,7 @@ class CreatePool extends Component {
                       this.state.activeStep === 3 && <PoolReview pool={pool}></PoolReview>
                     }
                     {
-                      this.state.activeStep === 4 && <DeployStep pool={pool}/>
+                      this.state.activeStep === 4 && <DeployStep wallet={pool.wallet}/>
                     }
                     { (activeStep < 4) &&
                       <div className="flex-end spacer-top-50 spacer-bottom-50">

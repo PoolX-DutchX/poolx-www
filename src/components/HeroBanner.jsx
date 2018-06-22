@@ -29,7 +29,7 @@ class HeroBanner extends Component {
 
   createPool() {
     if (this.props.currentUser) {
-      this.props.history.push('/pools/new');
+      this.props.history.push('/pools/create');
     } else {
       React.swal({
         title: "You're almost there...",
