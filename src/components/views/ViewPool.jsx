@@ -3,21 +3,25 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Avatar from 'react-avatar';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
-import ReactHtmlParser from 'react-html-parser';
 import moment from 'moment';
+
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import AutorenewIcon from '@material-ui/icons/Autorenew';
+import { withStyles } from '@material-ui/core/styles';
 
 import { feathersClient } from '../../lib/feathersClient';
 import Loader from '../Loader';
 import GoBackButton from '../GoBackButton';
 import { isOwner, getUserName, getUserAvatar } from '../../lib/helpers';
 import { checkWalletBalance } from '../../lib/middleware';
-import BackgroundImageHeader from '../BackgroundImageHeader';
-import ContributeButton from '../ContributeButton';
-import ShowTypeDonations from '../ShowTypeDonations';
+
 import AuthenticatedLink from '../AuthenticatedLink';
 
 import User from '../../models/User';
-import GivethWallet from '../../lib/blockchain/GivethWallet';
 import PoolService from '../../services/Pool';
 
 import ErrorPopup from '../ErrorPopup';
@@ -29,28 +33,37 @@ import ErrorPopup from '../ErrorPopup';
  * @param history      Browser history object
  * @param wallet       Wallet object with the balance and all keystores
  */
+//  const iconClasses = theme => ({
+//   button: {
+//     height: '30px',
+//     verticalAlign: 'text-top',
+//     width: '30px'
+//   }
+// });
+//  const RefreshIconButton = ({classes}) => {
+//    <IconButton className={classes.button}><AutorenewIcon/></IconButton>
+//  }
+//
+// const RefreshIcon = withStyles(iconClasses)(RefreshIconButton);
+
 class ViewPool extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      isLoading: true,
-      isLoadingMilestones: true,
-      isLoadingDonations: true,
-      donations: [],
-      milestones: [],
+      isLoading: true
     };
   }
 
-  componentDidMount() {
-    const poolAddress = this.props.match.params.address;
-
-    PoolService.get(poolAddress)
-      .then(pool => this.setState({ pool, isLoading: false }))
-      .catch(err => {
-        ErrorPopup('Something went wrong loading pool. Please try refresh the page.', err);
-        this.setState({ isLoading: false });
-      }); // TODO: inform user of error
+  async componentDidMount() {
+    const poolId = this.props.match.params.poolId;
+    try {
+      const pool = await PoolService.get(poolId);
+      this.setState({ pool, isLoading: false });
+    } catch (err) {
+      ErrorPopup('Something went wrong loading pool. Please try refresh the page.', err);
+      this.setState({ isLoading: false });
+    }
 
     // Lazy load donations
     // this.donationsObserver = PoolService.subscribeDonations(
@@ -72,70 +85,71 @@ class ViewPool extends Component {
     const { history, currentUser } = this.props;
     const {
       isLoading,
-      pool,
-      // donations,
-      // isLoadingDonations,
+      pool
     } = this.state;
-    console.log('pool', pool);
 
-    // <div className="row spacer-top-50 spacer-bottom-50">
-    //   <div className="col-md-8 m-auto">
-    //     <h4>Donations</h4>
-    //     <ShowTypeDonations donations={donations} isLoading={isLoadingDonations} />
-    //     <ContributeButton
-    //       type="campaign"
-    //       model={{
-    //         title: campaign.title,
-    //         id: campaign.id,
-    //         adminId: campaign.projectId,
-    //       }}
-    //       wallet={wallet}
-    //       currentUser={currentUser}
-    //       history={history}
-    //     />
-    //   </div>
-    // </div>
-    //
-    //
+    let poolProgress = 0;
+    if (!isLoading) {
+      poolProgress = (pool.totalInvested / pool.cap) * 100;
+    }
+
+    console.log('pool', pool);
     return (
-      <div id="view-campaign-view">
+      <div id="view-pool-view" className="container">
         {isLoading && <Loader className="fixed" />}
 
         {!isLoading && (
           <div>
-            <BackgroundImageHeader image={pool.image} height={300}>
-              <h1>{pool.title}</h1>
-              <h3>Total ether needed: {pool.threshold}</h3>
-              <h3>Tokens per Ether: {pool.tokenConversionRate}</h3>
-              <h3>Close date: {moment.unix(pool.closeDate).format('MM/DD/YYYY')}</h3>
-
-              {pool && (
-                <ContributeButton
-                  type="pool"
-                  model={{
-                    title: pool.title,
-                    poolAddress: pool.address,
-                  }}
-                  currentUser={currentUser}
-                  history={history}
-                />
-              )}
-            </BackgroundImageHeader>
-
-            <div className="container-fluid">
-              <div className="row">
-                <div className="col-md-8 m-auto">
-                  <GoBackButton history={history} />
-
-                  <center>
-                    <Link to={`/profile/${pool.owner.address}`}>
-                      <Avatar size={50} src={getUserAvatar(pool.owner)} round />
-                      <p className="small">{getUserName(pool.owner)}</p>
-                    </Link>
-                  </center>
-
-                  <div className="card content-card ">
-                    <div className="card-body content">{ReactHtmlParser(pool.description)}</div>
+            <div className="row justify-content-between">
+              <div className="col-md-6 ">
+                <h1><strong>{pool.name}</strong></h1>
+                <div className="pool-creator">Pool Creator Verified <img src={"/img/telegram_logo.png"} width="20" alt="Telegram logo"/> KYC</div>
+                <p className="info-disclaimer">The following information is provided by the pool creator</p>
+                <p>{pool.description}</p>
+              </div>
+              <div className="col-md-5 pool-action-panel">
+                <h3><strong>{pool.status}</strong></h3>
+                <LinearProgress variant="determinate" value={poolProgress} />
+                <div className="total-invested-section">
+                  <h4 className="invested"><strong>{pool.totalInvested} ETH </strong></h4>
+                  <div className="subheading">
+                    of {pool.cap} ETH maximum
+                  </div>
+                </div>
+                <div className="min-max-section">
+                  <span>
+                    <h4><strong>{pool.minContribution} ETH </strong></h4>
+                    <div className="subheading">Min. Contribution</div>
+                  </span>
+                  <span>
+                    <h4><strong>{pool.maxContribution} ETH </strong></h4>
+                    <div className="subheading">Max. Contribution</div>
+                  </span>
+                </div>
+                <Button variant="contained" color="primary" fullWidth>
+                  Contribute to Pool
+                </Button>
+                <div className="row margin-top-bottom">
+                  <div className="col">
+                    <Button variant="outlined" fullWidth>
+                      Withdraw
+                    </Button>
+                  </div>
+                  <div className="col">
+                    <Button variant="outlined" fullWidth>
+                      Bookmark
+                    </Button>
+                  </div>
+                </div>
+                <div class="row justify-content-start">
+                  <div class="col">
+                    Whitelist <strong>Off</strong>
+                  </div>
+                  <div class="col-md-auto">
+                    Autodistribution <strong>On</strong>
+                  </div>
+                  <div class="col">
+                    Fee <strong>{pool.fee}%</strong>
                   </div>
                 </div>
               </div>

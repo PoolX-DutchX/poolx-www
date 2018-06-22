@@ -15,11 +15,11 @@ class PoolService {
    *
    * @param id   ID of the Pool to be retrieved
    */
-  static get(address) {
+  static get(poolId) {
     return new Promise((resolve, reject) => {
       feathersClient
         .service('pools')
-        .find({ query: { address } })
+        .find(poolId)
         .then(resp => {
           resolve(new Pool(resp.data[0]));
         })

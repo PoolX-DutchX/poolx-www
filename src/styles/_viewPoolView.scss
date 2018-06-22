@@ -1,0 +1,57 @@
+#view-pool-view {
+  @include content-styling;
+  margin-top: 40px;
+
+  .pool-creator {
+    font-size: 13px;
+    margin-left: 13px;
+    margin-top: -13px;
+  }
+  .info-disclaimer {
+    margin: 2rem 0 1.5rem 0;
+    font-size: 13px;
+    color: #7114C2;
+  }
+  .pool-action-panel {
+    padding-top: 80px; 
+
+    .total-invested-section {
+      margin-top: 15px;
+      .invested {
+        color: #7114C2;
+      }
+    }
+    .min-max-section {
+      margin: 20px 0;
+      display: flex;
+      span {
+        margin-right: 10px;
+      }
+    }
+    .subheading {
+      font-size: 13px;
+      color: grey;
+      margin-top: -13px;
+    }
+    .margin-top-bottom {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+  }
+  .cause-title {
+    margin-bottom: 20px;
+  }
+
+  .milestone-header h3 {
+      display: inline-block;
+  }
+
+  .milestone-card {
+    margin-bottom: 10px;
+
+    small {
+      font-size: 0.7rem;
+      color: lighten(black, 60%);
+    }
+  }
+}

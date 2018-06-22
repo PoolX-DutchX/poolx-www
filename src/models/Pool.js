@@ -11,6 +11,10 @@ class Pool extends BasicModel {
   static get PENDING() {
     return 'Pending';
   }
+
+  static get OPEN() {
+    return 'Open';
+  }
   static get ACTIVE() {
     return 'Active';
   }
@@ -25,6 +29,7 @@ class Pool extends BasicModel {
     super(data);
     this.wallet = data.wallet || '';
     this.cap = data.cap || '';
+    this.totalInvested = data.totalInvested || '';
     this.minContribution = data.minContribution || '';
     this.maxContribution = data.maxContribution || '';
     this.fee = data.fee || '0.0';
@@ -43,6 +48,7 @@ class Pool extends BasicModel {
       id: this.id,
       wallet: this.wallet,
       cap: this.cap,
+      totalInvested: this.totalInvested,
       minContribution: this.minContribution,
       maxContribution: this.maxContribution,
       fee: this.fee,
@@ -88,12 +94,13 @@ class Pool extends BasicModel {
   }
 
   set status(value) {
-    this.checkValue(value, [Pool.PENDING, Pool.ACTIVE, Pool.CANCELED], 'status');
+    this.checkValue(value, [Pool.PENDING, Pool.OPEN, Pool.ACTIVE, Pool.CANCELED], 'status');
     this.myStatus = value;
     if (value === Pool.PENDING) this.myOrder = 1;
-    else if (value === Pool.ACTIVE) this.myOrder = 2;
-    else if (value === Pool.CANCELED) this.myOrder = 3;
-    else this.myOrder = 4;
+    else if (value === Pool.OPEN) this.myOrder = 2;
+    else if (value === Pool.ACTIVE) this.myOrder = 3;
+    else if (value === Pool.CANCELED) this.myOrder = 4;
+    else this.myOrder = 5;
   }
 
   get wallet() {
@@ -122,6 +129,16 @@ class Pool extends BasicModel {
     console.log('value', value);
     this.checkType(value, ['undefined','string'], 'cap');
     this.myCap = value;
+  }
+
+  get totalInvested() {
+    return this.myTotalInvested;
+  }
+
+  set totalInvested(value) {
+    console.log('value', value);
+    this.checkType(value, ['undefined','string'], 'totalInvested');
+    this.myTotalInvested = value;
   }
 
   get minContribution() {
