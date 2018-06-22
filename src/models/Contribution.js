@@ -1,26 +1,30 @@
 import BasicModel from './BasicModel';
-import InvestmentService from '../services/Investment';
+import ContributionService from '../services/Contribution';
 import UploadService from '../services/Uploads';
 /**
- * The DApp Investment model
+ * The DApp Contribution model
  */
-class Investment extends BasicModel {
-  static get CANCELED() {
-    return 'Canceled';
+class Contribution extends BasicModel {
+  static get CANCELLED() {
+    return 'Cancelled';
+  }
+  static get FAILED() {
+    return 'Failed';
   }
   static get PENDING() {
     return 'Pending';
   }
-  static get ACTIVE() {
-    return 'Active';
+  static get CONFIRMED() {
+    return 'Confirmed';
   }
 
   constructor(data) {
     super(data);
 
-    this.poolAddress = data.poolAddress;
-    this.amount = data.amount; // in Wei
-    this.status = data.status || Investment.PENDING;
+    this.poolAddress = data.poolAddress || '';
+    this.wallet = data.wallet || '';
+    this.amount = data.amount || 0; // in Ether
+    this.status = data.status || Contribution.PENDING;
     // ToDo: currency, ether by default for now
   }
 
@@ -28,16 +32,16 @@ class Investment extends BasicModel {
     return {
       id: this.id,
       poolAddress: this.poolAddress,
+      wallet: this.wallet,
       amount: this.amount,
       txHash: this.txHash,
       txTimestamp: this.txTimestamp,
       status: this.status,
-      // investorAddress
     };
   }
 
   get isActive() {
-    return this.status === Investment.ACTIVE;
+    return this.status === Contribution.ACTIVE;
   }
 
   /**
@@ -47,7 +51,7 @@ class Investment extends BasicModel {
    * @param afterMined  Callback function once the transaction is mined and feathers updated
    */
   save(afterCreate, afterMined) {
-    InvestmentService.save(this, this.owner.address, afterCreate, afterMined);
+    ContributionService.save(this, this.owner.address, afterCreate, afterMined);
   }
 
   /**
@@ -58,7 +62,7 @@ class Investment extends BasicModel {
    * @param afterMined  Callback function once the transaction is mined and feathers updated
    */
   cancel(from, afterCreate, afterMined) {
-    InvestmentService.cancel(this, from, afterCreate, afterMined);
+    ContributionService.cancel(this, from, afterCreate, afterMined);
   }
 
   get status() {
@@ -66,11 +70,11 @@ class Investment extends BasicModel {
   }
 
   set status(value) {
-    this.checkValue(value, [Investment.PENDING, Investment.ACTIVE, Investment.CANCELED], 'status');
+    this.checkValue(value, [Contribution.PENDING, Contribution.ACTIVE, Contribution.CANCELED], 'status');
     this.myStatus = value;
-    if (value === Investment.PENDING) this.myOrder = 1;
-    else if (value === Investment.ACTIVE) this.myOrder = 2;
-    else if (value === Investment.CANCELED) this.myOrder = 3;
+    if (value === Contribution.PENDING) this.myOrder = 1;
+    else if (value === Contribution.ACTIVE) this.myOrder = 2;
+    else if (value === Contribution.CANCELED) this.myOrder = 3;
     else this.myOrder = 4;
   }
 
@@ -79,7 +83,7 @@ class Investment extends BasicModel {
   }
 
   set amount(value) {
-    this.checkType(value, ['string'], 'amount');
+    this.checkType(value, ['number'], 'amount');
     this.myAmount = value;
   }
 
@@ -90,6 +94,15 @@ class Investment extends BasicModel {
   set poolAddress(value) {
     this.checkType(value, ['undefined', 'string'], 'poolAddress');
     this.myPoolAddress = value;
+  }
+
+  get wallet() {
+    return this.myWallet;
+  }
+
+  set wallet(value) {
+    this.checkType(value, ['undefined', 'string'], 'wallet');
+    this.myWallet = value;
   }
 
   get txTimestamp() {
@@ -111,4 +124,4 @@ class Investment extends BasicModel {
   }
 }
 
-export default Investment;
+export default Contribution;

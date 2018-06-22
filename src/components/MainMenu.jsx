@@ -109,8 +109,8 @@ class MainMenu extends Component {
                         className={`dropdown-menu ${showMobileMenu ? 'show' : ''} `}
                         aria-labelledby="navbarDropdownDashboard"
                       >
-                        <NavLink className="dropdown-item" to="/investments">
-                          My Investments
+                        <NavLink className="dropdown-item" to="/contributions">
+                          My Contributions
                         </NavLink>
                         <NavLink className="dropdown-item" to="/my-pools">
                           My Pools

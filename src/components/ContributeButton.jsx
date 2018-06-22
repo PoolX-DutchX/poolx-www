@@ -15,8 +15,8 @@ import { displayTransactionError, getGasPrice } from '../lib/helpers';
 import GivethWallet from '../lib/blockchain/GivethWallet';
 import getWeb3 from '../lib/blockchain/getWeb3';
 import LoaderButton from './LoaderButton';
-import Investment from '../models/Investment';
-import InvestmentService from '../services/Investment';
+import Contribution from '../models/Contribution';
+import ContributionService from '../services/Contribution';
 
 const felixPoolArtifact = require('../lib/blockchain/contracts/FelixPool.json');
 
@@ -131,10 +131,10 @@ class ContributeButton extends React.Component {
   submit(formData) {
     const { currentUser, model: { poolAddress } } = this.props;
     const { amount, paymentMethod } = formData;
-    const investment = new Investment({ amount: utils.toWei(amount), poolAddress, owner: currentUser });
+    const contribution = new Contribution({ amount: utils.toWei(amount), poolAddress, owner: currentUser });
 
     this.setState({
-      investment,
+      contribution,
       isSaving: true,
     });
 
@@ -156,7 +156,7 @@ class ContributeButton extends React.Component {
                 <b>to:</b>
               </div>
               <div className="col-sm-10" style={{ wordWrap: 'break-word' }}>
-                {investment.poolAddress}
+                {contribution.poolAddress}
               </div>
             </div>
             <div className="row">
@@ -191,7 +191,7 @@ class ContributeButton extends React.Component {
     });
 
     if (paymentMethod === METAMASK) {
-      this.contributeWithMetamask(investment);
+      this.contributeWithMetamask(contribution);
     } else if (paymentMethod === MY_ETHER_WALLET) {
         window.open(`${this.state.myEtherWalletUrl}&value=${amount}#send-transaction`, '_blank');
     } else if (paymentMethod === MY_CRYPTO){
@@ -201,13 +201,13 @@ class ContributeButton extends React.Component {
 
   }
 
-  contributeWithMetamask(investment) {
+  contributeWithMetamask(contribution) {
     const afterMined = url => {
       console.log('url', url);
       if (url) {
         const msg = (
           <p>
-            Your Investment has been created!<br />
+            Your Contribution has been created!<br />
             <a href={url} target="_blank" rel="noopener noreferrer">
               View transaction
             </a>
@@ -221,7 +221,7 @@ class ContributeButton extends React.Component {
     const afterCreate = url => {
       const msg = (
         <p>
-          Your Investment is pending....<br />
+          Your Contribution is pending....<br />
           <a href={url} target="_blank" rel="noopener noreferrer">
             View transaction
           </a>
@@ -231,7 +231,7 @@ class ContributeButton extends React.Component {
       // history.push('/my-pools');
     };
 
-    investment.save(afterCreate, afterMined);
+    contribution.save(afterCreate, afterMined);
   }
 
   render() {
