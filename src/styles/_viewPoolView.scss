@@ -1,7 +1,10 @@
 #view-pool-view {
   @include content-styling;
   margin-top: 40px;
-
+  .my-contributions-panel {
+    margin-top: 1rem;
+    padding: 1.5rem;
+  }
   .pool-creator {
     font-size: 13px;
     margin-left: 13px;

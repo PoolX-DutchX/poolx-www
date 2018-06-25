@@ -75,6 +75,24 @@ class ContributionService {
   }
 
   /**
+   * Get the user's Contributions made to a particular pool
+   *
+   * @param userId Id of user who made the contribution
+   * @param poolAddress Address of the pool whose contribution was made to
+   *
+   */
+  static getUserContributionsByPoolAddress(userId, poolAddress) {
+    return feathersClient
+      .service('contributions')
+      .find({
+        query: {
+          ownerId: userId,
+          poolAddress
+        },
+      });
+  }
+
+  /**
    * Save new Campaign to the blockchain or update existing one in feathers
    * TODO: Handle error states properly
    *

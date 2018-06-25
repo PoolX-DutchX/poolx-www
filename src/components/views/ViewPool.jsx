@@ -4,9 +4,11 @@ import PropTypes from 'prop-types';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Button from '@material-ui/core/Button';
 import Loader from '../Loader';
+import WithTooltip from '../WithTooltip';
 
 import User from '../../models/User';
 import PoolService from '../../services/Pool';
+import ContributionService from '../../services/Contribution';
 
 import ErrorPopup from '../ErrorPopup';
 
@@ -15,15 +17,22 @@ class ViewPool extends Component {
     super(props);
 
     this.state = {
-      isLoading: true
+      isLoading: true,
+      contributions: []
     };
   }
 
   async componentDidMount() {
     const poolId = this.props.match.params.poolId;
     try {
+      let contributions = [];
       const pool = await PoolService.get(poolId);
-      this.setState({ pool, isLoading: false });
+      if (this.props.currentUser) {
+        console.log('this.props.currentUser', this.props.currentUser);
+        const { data } = await ContributionService.getUserContributionsByPoolAddress(this.props.currentUser.id, pool.address);
+        contributions = data;
+      }
+      this.setState({ pool, contributions, isLoading: false });
     } catch (err) {
       ErrorPopup('Something went wrong loading pool. Please try refresh the page.', err);
       this.setState({ isLoading: false });
@@ -66,6 +75,21 @@ class ViewPool extends Component {
               <div className="col-md-6 ">
                 <h1><strong>{pool.name}</strong></h1>
                 <div className="pool-creator">Pool Creator Verified <img src={"/img/telegram_logo.png"} width="20" alt="Telegram logo"/> KYC</div>
+                {
+                  this.state.contributions.length &&
+                  <div className="alert alert-success row my-contributions-panel" role="alert">
+                    <div className="col-md-4 ">
+                      <h6><WithTooltip title="Sum total of all your contributions for this pool">My Contribution</WithTooltip></h6>
+                      <h2>20 Eth</h2>
+                    </div>
+                    <div className="col-md-8 ">
+                      <h6>My Transactions</h6>
+                      {
+                        this.state.contributions.map((contribution, index) => <div key={index}>Deposit {contribution.amount} Eth</div> )
+                      }
+                    </div>
+                  </div>
+                }
                 <p className="info-disclaimer">The following information is provided by the pool creator</p>
                 <p>{pool.description}</p>
               </div>
