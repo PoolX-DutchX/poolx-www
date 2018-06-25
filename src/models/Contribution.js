@@ -1,9 +1,6 @@
 import BasicModel from './BasicModel';
 import ContributionService from '../services/Contribution';
-import UploadService from '../services/Uploads';
-/**
- * The DApp Contribution model
- */
+
 class Contribution extends BasicModel {
   static get CANCELLED() {
     return 'Cancelled';

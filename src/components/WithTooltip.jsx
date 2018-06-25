@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
 import InformationIcon from '@material-ui/icons/Info';
 

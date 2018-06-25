@@ -10,8 +10,8 @@ import { history } from '../lib/helpers';
  * @return new Promise
  *
  * usage:
- *    isAuthenticated(currentUser, wallet)
- *      .then(()=> ...do something when authenticated)
+ *    isLoggedIn(currentUser, wallet)
+ *      .then(()=> ...do something when loggedIn)
  */
 
  // ToDo: This does not to be a promise task: remove all promisified usage of this in app
@@ -40,93 +40,6 @@ export const isAuthenticated = (currentUser) =>
     // check JWT? or session??
     if (currentUser && currentUser.email) resolve();
     else history.goBack();
-  });
-
-/**
- * check if the currentUser is in a particular whitelist. If not, route back.
- * If yes, resolve promise
- *
- * @param currentUser {object} Current User object
- * @param whitelist   {array}  Array of whitelisted addresses
- *
- * @return new Promise
- *
- * usage:
- *    isInWhitelist(currentUser, whitelist)
- *      .then(()=> ...do something when in whitelist)
- */
-export const isInWhitelist = (currentUser, whitelist) =>
-  new Promise((resolve, reject) => {
-    if (
-      (whitelist && whitelist.length === 0) ||
-      (currentUser &&
-        currentUser.address &&
-        whitelist.find(u => u.address.toLowerCase() === currentUser.address.toLowerCase()))
-    ) {
-      resolve();
-    } else {
-      // TODO: Not in whitelist, should handle the exception
-      reject();
-    }
-  });
-
-/**
- * If the wallet is locked, asks the user to unlock his wallet before redirecting to a route
- *
- * @param wallet  {object} Wallet object
- * @param history {object} Standard history object
- * @param to      {string} Route to which the user should be redirected
- */
-export const redirectAfterWalletUnlock = (to, wallet) => {
-  if (!wallet || (wallet && !wallet.unlocked)) {
-    React.unlockWallet(to);
-  } else {
-    history.push(to);
-  }
-};
-
-/**
- * If the wallet is locked, asks the user to unlock his wallet, otherwise performs the action
- *
- * @param wallet {object}   Wallet object
- * @param action {function} Function to call when the wallet is unlocked
- *
- */
-export const takeActionAfterWalletUnlock = (wallet, action) => {
-  if (!wallet || (wallet && !wallet.unlocked)) {
-    React.unlockWallet();
-  } else {
-    action();
-  }
-};
-
-/**
- * Checks for sufficient wallet balance.
- *
- * @param wallet  {object} Wallet object
- * @param history {object} Standard history object
- *
- */
-export const checkWalletBalance = wallet =>
-  new Promise((resolve, reject) => {
-    if (wallet.getBalance() >= React.minimumWalletBalance) {
-      resolve();
-    } else {
-      React.swal({
-        title: 'Insufficient wallet balance',
-        content: React.swal.msg(
-          <p>
-            Unfortunately you need at least {React.minimumWalletBalance} ETH in your wallet to
-            continue. Please transfer some ETH to your Giveth wallet first.
-          </p>,
-        ),
-        icon: 'warning',
-        buttons: ['OK', 'View wallet info'],
-      }).then(isConfirmed => {
-        if (isConfirmed) history.push('/wallet');
-        reject(new Error('noBalance'));
-      });
-    }
   });
 
 /**

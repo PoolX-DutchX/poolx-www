@@ -7,10 +7,7 @@ import Loader from '../Loader';
 import FormsyImageUploader from './../FormsyImageUploader';
 import { isLoggedIn } from '../../lib/middleware';
 import LoaderButton from '../../components/LoaderButton';
-import getNetwork from '../../lib/blockchain/getNetwork';
 import User from '../../models/User';
-import { getGasPrice, history } from '../../lib/helpers';
-import GivethWallet from '../../lib/blockchain/GivethWallet';
 import ErrorPopup from '../ErrorPopup';
 
 /**

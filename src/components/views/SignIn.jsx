@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Avatar from 'react-avatar';
-import { Link } from 'react-router-dom';
 import { Form, Input } from 'formsy-react-components';
 
 import { feathersClient } from '../../lib/feathersClient';
 import Loader from '../Loader';
 import LoaderButton from '../LoaderButton';
-import AuthenticateForm from '../AuthenticateForm';
 import { authenticateUser } from '../../lib/helpers';
-import GivethWallet from '../../lib/blockchain/GivethWallet';
 
 /* global window */
 /**
@@ -20,7 +16,7 @@ class SignIn extends Component {
     super(props);
 
     this.state = {
-      isLoading: true,
+      isLoading: false,
       error: undefined,
       address: undefined,
       isSigningIn: false,
@@ -28,45 +24,6 @@ class SignIn extends Component {
     };
 
     this.submit = this.submit.bind(this);
-  }
-
-  componentDidMount() {
-    this.handleProps(this.props);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.handleProps(nextProps);
-  }
-
-  handleProps(props) {
-    // if (!props.cachedWallet) {
-    //   this.props.history.push('/change-account');
-    // } else if (props.wallet && (!this.state.address || props.wallet !== this.props.wallet)) {
-      this.setState(
-        {
-          address: props.userAddress,
-        },
-        () => this.fetchUserProfile(),
-      );
-    // }
-  }
-
-  fetchUserProfile() {
-    feathersClient
-      .service('users')
-      .get(this.state.address)
-      .then(resp => {
-        this.setState(
-          Object.assign({}, resp, {
-            isLoading: false,
-          }),
-        );
-      })
-      .catch(() => {
-        this.setState({
-          isLoading: false,
-        });
-      });
   }
 
   submit({ email, password }) {
@@ -188,7 +145,6 @@ SignIn.propTypes = {
     push: PropTypes.func.isRequired,
     goBack: PropTypes.func.isRequired,
   }).isRequired,
-  // userAddress: PropTypes.string.isRequired,
   onSignIn: PropTypes.func.isRequired,
 };
 

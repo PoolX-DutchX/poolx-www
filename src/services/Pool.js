@@ -1,5 +1,4 @@
 // import { LPPCampaign } from 'lpp-campaign';
-import generateClass from 'eth-contract-class';
 import getNetwork from '../lib/blockchain/getNetwork';
 import getWeb3 from '../lib/blockchain/getWeb3';
 import { feathersClient } from '../lib/feathersClient';
@@ -172,8 +171,8 @@ class PoolService {
    * @param afterMined  Callback to be triggered after the transaction is mined
    */
   static cancel(campaign, from, afterCreate = () => {}, afterMined = () => {}) {
-    let txHash;
-    let etherScanUrl;
+    // let txHash;
+    // let etherScanUrl;
     // Promise.all([getNetwork(), getWeb3(), getGasPrice()])
     //   .then(([network, web3, gasPrice]) => {
     //     const lppCampaign = new LPPCampaign(web3, campaign.pluginAddress);

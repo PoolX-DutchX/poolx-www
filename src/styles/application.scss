@@ -7,23 +7,15 @@
 @import 'fontFace.scss';
 
 // views
-@import 'causesView.scss';
 @import 'createPoolView.scss';
-@import 'editCausesView.scss';
-@import 'viewCauseView.scss';
 @import 'viewPoolView.scss';
-@import 'viewMilestoneView.scss';
-@import 'campaignsView';
 @import 'accountView.scss';
-@import 'dashboard.scss';
-@import 'editMilestoneView.scss';
 // components
 @import 'loader.scss';
 @import 'mainMenu.scss';
 @import 'goBackButton.scss';
 @import 'heroBanner.scss';
 @import 'backgroundImageHeader.scss';
-@import 'dac-card.scss';
 // misc
 @import 'quill-overrides.scss';
 @import 'react-skylight.scss';
@@ -35,9 +27,7 @@
 @import 'pagination.scss';
 @import 'cropper.scss';
 // overrides
-@import 'card.scss';
 @import 'formsyOverrides.scss';
-@import 'myMilestones.scss';
 @import 'buttons.scss';
 
 
@@ -75,7 +65,7 @@ button:focus {outline:0;}
 }
 .page-layout {
     margin-top: 80px;
-    padding: 20px;
+    // padding: 20px;
     // height: 100%;
     // padding: 130px 20px 50px 20px;
     // &.reduced-padding {

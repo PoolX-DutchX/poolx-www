@@ -1,50 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import Avatar from 'react-avatar';
-import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
-import moment from 'moment';
 
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import AutorenewIcon from '@material-ui/icons/Autorenew';
-import { withStyles } from '@material-ui/core/styles';
-
-import { feathersClient } from '../../lib/feathersClient';
 import Loader from '../Loader';
-import GoBackButton from '../GoBackButton';
-import { isOwner, getUserName, getUserAvatar } from '../../lib/helpers';
-import { checkWalletBalance } from '../../lib/middleware';
-
-import AuthenticatedLink from '../AuthenticatedLink';
 
 import User from '../../models/User';
 import PoolService from '../../services/Pool';
 
 import ErrorPopup from '../ErrorPopup';
-
-/**
- * The Campaign detail view mapped to /campaing/id
- *
- * @param currentUser  Currently logged in user information
- * @param history      Browser history object
- * @param wallet       Wallet object with the balance and all keystores
- */
-//  const iconClasses = theme => ({
-//   button: {
-//     height: '30px',
-//     verticalAlign: 'text-top',
-//     width: '30px'
-//   }
-// });
-//  const RefreshIconButton = ({classes}) => {
-//    <IconButton className={classes.button}><AutorenewIcon/></IconButton>
-//  }
-//
-// const RefreshIcon = withStyles(iconClasses)(RefreshIconButton);
 
 class ViewPool extends Component {
   constructor(props) {
@@ -65,24 +29,23 @@ class ViewPool extends Component {
       this.setState({ isLoading: false });
     }
 
-    // Lazy load donations
-    // this.donationsObserver = PoolService.subscribeDonations(
+    // Lazy load contributions
+    // this.contributionObserver = PoolService.subscribeContributions(
     //   poolId,
-    //   donations =>
+    //   contributions =>
     //     this.setState({
-    //       donations,
+    //       contributions,
     //       isLoadingDonations: false,
     //     }),
-    //   () => this.setState({ isLoadingDonations: false }),
+    //   () => this.setState({ isLoadingContributions: false }),
     // );
   }
 
   componentWillUnmount() {
-    // this.donationsObserver.unsubscribe();
+    // this.contributionObserver.unsubscribe();
   }
 
   render() {
-    const { history, currentUser } = this.props;
     const {
       isLoading,
       pool
@@ -93,7 +56,6 @@ class ViewPool extends Component {
       poolProgress = (pool.totalInvested / pool.cap) * 100;
     }
 
-    console.log('pool', pool);
     return (
       <div id="view-pool-view" className="container">
         {isLoading && <Loader className="fixed" />}
@@ -126,7 +88,7 @@ class ViewPool extends Component {
                     <div className="subheading">Max. Contribution</div>
                   </span>
                 </div>
-                <Button variant="contained" color="primary" fullWidth>
+                <Button variant="contained" color="primary" fullWidth onClick={()=> (this.props.history.push(`/pools/contribute/${this.state.pool.id}`))}>
                   Contribute to Pool
                 </Button>
                 <div className="row margin-top-bottom">
@@ -141,14 +103,14 @@ class ViewPool extends Component {
                     </Button>
                   </div>
                 </div>
-                <div class="row justify-content-start">
-                  <div class="col">
+                <div className="row justify-content-start">
+                  <div className="col">
                     Whitelist <strong>Off</strong>
                   </div>
-                  <div class="col-md-auto">
+                  <div className="col-md-auto">
                     Autodistribution <strong>On</strong>
                   </div>
-                  <div class="col">
+                  <div className="col">
                     Fee <strong>{pool.fee}%</strong>
                   </div>
                 </div>

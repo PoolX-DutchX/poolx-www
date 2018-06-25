@@ -1,9 +1,6 @@
 import BasicModel from './BasicModel';
 import PoolService from '../services/Pool';
-import UploadService from '../services/Uploads';
-/**
- * The DApp Pool model
- */
+
 class Pool extends BasicModel {
   static get CANCELED() {
     return 'Canceled';

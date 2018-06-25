@@ -5,7 +5,6 @@ import { Form, Input } from 'formsy-react-components';
 import { authenticateUser } from '../../lib/helpers';
 import { feathersClient } from '../../lib/feathersClient';
 import LoaderButton from '../LoaderButton';
-import ErrorPopup from '../ErrorPopup';
 
 /* global window */
 /**
@@ -173,11 +172,6 @@ SignUp.propTypes = {
     push: PropTypes.func.isRequired,
     goBack: PropTypes.func.isRequired,
   }).isRequired,
-  provider: PropTypes.shape({}),
-};
-
-SignUp.defaultProps = {
-  provider: {},
 };
 
 export default SignUp;

@@ -1,12 +1,11 @@
 {
-  "name": "giveth-dapp",
+  "name": "poolbase-www",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^1.2.0",
     "@material-ui/icons": "^1.1.0",
     "bignumber.js": "^6.0.0",
-    "eth-contract-class": "^0.0.8",
     "feathers": "^2.2.3",
     "feathers-authentication-client": "^0.3.3",
     "feathers-client": "^2.3.0",
@@ -19,15 +18,9 @@
     "formik": "^0.11.11",
     "formsy-react": "^1.1.4",
     "formsy-react-components": "^1.0.0",
-    "giveth-bridge": "0.0.3",
-    "giveth-liquidpledging": "0.1.1",
     "giveth-react-scripts": "1.0.12",
     "history": "^4.7.2",
     "localforage": "^1.5.0",
-    "lpp-campaign": "0.1.1",
-    "lpp-capped-milestone": "0.1.2",
-    "lpp-dac": "0.1.5",
-    "minimetoken": "^0.2.0",
     "moment": "^2.22.1",
     "node-fetch": "^2.1.1",
     "node-sass": "^4.9.0",
@@ -96,12 +89,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Giveth/giveth-dapp.git"
+    "url": "https://bitbucket.org/account/user/felixpool/projects/FP/poolbase-www.git"
   },
   "author": {
-    "name": "Giveth",
-    "email": "info@giveth.io",
-    "url": "http://giveth.io"
+    "name": "poolbase",
+    "email": "info@poolbase.io",
+    "url": "http://poolbase.io"
   },
   "license": "GPL-3.0"
 }

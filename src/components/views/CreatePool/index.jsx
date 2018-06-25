@@ -1,76 +1,44 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import InputToken from 'react-input-token';
-import moment from 'moment';
 import 'react-input-token/lib/style.css';
 
-import { withFormik } from 'formik';
-import Yup from 'yup';
+// import { withFormik } from 'formik';
+// import Yup from 'yup';
 
 import TextField from '@material-ui/core/TextField';
-import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Switch from '@material-ui/core/Switch';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
 import StepButton from '@material-ui/core/StepButton';
-import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import AccountIcon from '@material-ui/icons/AccountBox';
 import AddIcon from '@material-ui/icons/Add';
 import Divider from '@material-ui/core/Divider';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Tooltip from '@material-ui/core/Tooltip';
 
 import { feathersClient } from '../../../lib/feathersClient';
 import Loader from '../../Loader';
 
 import PoolReview from './components/PoolReview';
-import WalletPanel from './components/WalletPanel';
-import DeployDataFields from './components/DeployDataFields';
 import DeployStep from './components/DeployStep';
 
-import QuillFormsy from '../../QuillFormsy';
-import SelectFormsy from './../../SelectFormsy';
-import FormsyImageUploader from './../../FormsyImageUploader';
-import GoBackButton from '../../GoBackButton';
-import { isOwner, getTruncatedText, history, removeFromArray, addToArray } from '../../../lib/helpers';
+import { history, removeFromArray, addToArray } from '../../../lib/helpers';
 import {
   isAuthenticated,
-  checkWalletBalance,
-  isInWhitelist,
   confirmBlockchainTransaction,
 } from '../../../lib/middleware';
-import LoaderButton from '../../../components/LoaderButton';
-import WithTooltip from '../../../components/WithTooltip';
 import User from '../../../models/User';
-import GivethWallet from '../../../lib/blockchain/GivethWallet';
 import Pool from '../../../models/Pool';
-import PoolService from '../../../services/Pool';
-import ErrorPopup from '../../ErrorPopup';
 
 const poolData = {
   name: 'IIOC',
@@ -91,15 +59,15 @@ const poolData = {
   description: 'This is the best pool you could ever hope for.'
 };
 
-const poolKeys = ['wallet','cap','minContribution','maxContribution','fee','feePayoutCurrency','adminAddresses','destinationAddress','destinationData','name','description','status','address','status','txHash'];
-
 function getSteps() {
   return ['Wallet & Limits', 'Fees & Admins', 'Additional Info', 'Review & Save', 'Deploy'];
 }
 
 function getButtonText(step) {
   switch(step) {
-    case 0,1,2:
+    case 0:
+    case 1:
+    case 2:
       return 'Continue';
 
     case 3:
@@ -163,17 +131,6 @@ class CreatePool extends Component {
       }),
       activeStep: 0,
       completed: {},
-      // wallet,
-      // cap,
-      // minContribution,
-      // maxContribution,
-      // fee,
-      // feePayoutCurrency,
-      // adminAddresses,
-      // destinationAddress,
-      // destinationData,
-      // name,
-      // description
     };
 
     this.handleStateChange = this.handleStateChange.bind(this);
@@ -188,23 +145,8 @@ class CreatePool extends Component {
 
   componentDidMount() {
     isAuthenticated(this.props.currentUser)
-      // .then(() => isInWhitelist(this.props.currentUser, React.whitelist.projectOwnerWhitelist))
       .then(() => {
           this.setState({ isLoading: false });
-          // Use this for EditPool component
-          // PoolService.get(this.props.match.params.id)
-          //   .then(pool => {
-          //     if (isOwner(pool.owner.address, this.props.currentUser)) {
-          //       this.setState({ pool, isLoading: false });
-          //     } else history.goBack();
-          //   })
-          //   .catch(() => err => {
-          //     this.setState({ isLoading: false });
-          //     ErrorPopup(
-          //       'There has been a problem loading the Pool. Please refresh the page and try again.',
-          //       err,
-          //     );
-          //   });
       })
       .catch((err, anythingElse) => {
         console.log('err', err);
@@ -332,12 +274,19 @@ class CreatePool extends Component {
     console.log('this.state.activeStep', this.state.activeStep);
     console.log('totalSteps()', totalSteps());
     if (this.state.activeStep === totalSteps() - 2 ) { //check validation
-      console.log("I be here, now");
       const result = await feathersClient
         .service('pools')
         .create(this.state.pool.toFeathers())
 
-    // console.log('result', result);
+      this.deployData = {
+        wallet: this.state.pool.wallet,
+        toAddress: this.state.pool.address,
+        amount: this.state.pool.amount,
+        txData: 'txData',
+        gasLimit: 2000000
+      }
+
+    console.log('result', result);
       //
       // feathersClient
       //   .service('pools')
@@ -370,10 +319,7 @@ class CreatePool extends Component {
    };
 
   render() {
-    const { isLoading, isSaving, pool, formIsValid } = this.state;
-    console.log('pool', pool);
-    console.log('pool.name', pool.name);
-    console.log('pool.adminAddresses', pool.adminAddresses);
+    const { isLoading, pool } = this.state;
     const steps = getSteps();
     const { activeStep } = this.state;
 
@@ -408,27 +354,23 @@ class CreatePool extends Component {
                         />
                         <Grid container spacing={16} className='spacer-top-15'>
                           <Grid item md={3}>
-                            <WithTooltip title="There's a limit to your love">
-                              <FormLabel className='spacer-top-40'>Limits</FormLabel>
-                            </WithTooltip>
+                            <FormLabel className='spacer-top-40'>Limits</FormLabel>
                           </Grid>
                           <Grid item md={9} >
                               <div className='flex-wrap-between'>
-                                <WithTooltip title="Cap his ass">
-                                  <TextField
-                                    id="cap"
-                                    label="Net pool cap"
-                                    inputProps={{style: {width:"100%"}}}
-                                    className={formStyles.textField}
-                                    placeholder="Ξther amount"
-                                    value={pool.cap}
-                                    onChange={this.handlePoolChange('cap')}
-                                    min="0"
-                                    type= "number"
-                                    margin="normal"
-                                    fullWidth
-                                  />
-                                </WithTooltip>
+                                <TextField
+                                  id="cap"
+                                  label="Net pool cap"
+                                  inputProps={{style: {width:"100%"}}}
+                                  className={formStyles.textField}
+                                  placeholder="Ξther amount"
+                                  value={pool.cap}
+                                  onChange={this.handlePoolChange('cap')}
+                                  min="0"
+                                  type= "number"
+                                  margin="normal"
+                                  fullWidth
+                                />
                                 <TextField
                                   id="minContribution"
                                   className={formStyles.textField}
@@ -595,7 +537,7 @@ class CreatePool extends Component {
                       this.state.activeStep === 3 && <PoolReview pool={pool}></PoolReview>
                     }
                     {
-                      this.state.activeStep === 4 && <DeployStep wallet={pool.wallet}/>
+                      this.state.activeStep === 4 && <DeployStep {...this.deployData}/>
                     }
                     { (activeStep < 4) &&
                       <div className="flex-end spacer-top-50 spacer-bottom-50">

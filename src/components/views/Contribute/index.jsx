@@ -18,10 +18,8 @@ import { confirmBlockchainTransaction } from '../../../lib/middleware';
 
 
 import User from '../../../models/User';
-import Pool from '../../../models/Pool';
 import PoolService from '../../../services/Pool';
 import Contribution from '../../../models/Contribution';
-import ContributionService from '../../../services/Contribution';
 
 import DeployStep from '../CreatePool/components/DeployStep';
 
@@ -35,38 +33,6 @@ function getSteps() {
 function totalSteps() {
   return getSteps().length;
 };
-
-const formStyles = theme => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between'
-  },
-  button: {
-   margin: theme.spacing.unit,
-  },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit
-  },
-  numberField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 40
-  },
-  formControl: {
-    margin: theme.spacing.unit * 3,
-  },
-  group: {
-    margin: `${theme.spacing.unit}px 0`,
-  },
-  menu: {
-    width: 200,
-  },
-});
-
-
-var invalidDate = new Date('');
 
 function checkEthereumAddress(message) {
   return this.test({
@@ -97,7 +63,8 @@ class Contribute extends Component {
       isSaving: false,
       formIsValid: false,
       activeStep: 0,
-      completed: {}
+      completed: {},
+      pool: {}
     };
     this.handleNext = this.handleNext.bind(this);
     this.handleStep = this.handleStep.bind(this);
@@ -107,7 +74,7 @@ class Contribute extends Component {
     this.submit = this.submit.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     PoolService.get(this.props.match.params.poolId)
       .then(pool => {
         console.log('pool', pool);
@@ -234,7 +201,7 @@ class Contribute extends Component {
    };
 
   render() {
-    const { isLoading, isSaving, formIsValid, contribution } = this.state;
+    const { isLoading } = this.state;
 
     const steps = getSteps();
     const { activeStep, pool: { minContribution: min, maxContribution: max } } = this.state;

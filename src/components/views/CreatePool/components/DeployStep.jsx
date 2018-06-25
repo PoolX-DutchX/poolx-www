@@ -1,18 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { utils } from 'web3';
-
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
 
 import WalletPanel from './WalletPanel';
 import DeployDataFields from './DeployDataFields';
 
-import { copyToClipboard } from '../../../../lib/helpers';
-import WithTooltip from '../../../../components/WithTooltip';
 import GasPricePanel from '../../../../components/GasPricePanel';
 
 

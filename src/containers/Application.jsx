@@ -9,38 +9,23 @@ import 'react-toastify/dist/ReactToastify.min.css';
 
 import Sweetalert from 'sweetalert';
 
-import DataRoutes from './DataRoutes';
-
 import { history } from '../lib/helpers';
 
 // views
-import Profile from './../components/views/Profile';
-import UserWallet from './../components/views/UserWallet';
 import EditProfile from './../components/views/EditProfile';
 import SignIn from './../components/views/SignIn';
-import Signup from './../components/views/SignUp';
-import ChangeAccount from './../components/views/ChangeAccount';
-
-import ViewMilestone from './../components/views/ViewMilestone';
-import EditDAC from './../components/views/EditDAC';
-import ViewDAC from './../components/views/ViewDAC';
-import Donations from './../components/views/Donations';
-import Delegations from './../components/views/Delegations';
-import MyDACs from './../components/views/MyDACs';
-import MyCampaigns from './../components/views/MyCampaigns';
-import MyMilestones from './../components/views/MyMilestones';
-import NotFound from './../components/views/NotFound';
+import SignUp from './../components/views/SignUp';
+import Home from './../components/views/Home';
 
 import CreatePool from './../components/views/CreatePool/index.jsx';
-import Contribute from './../components/views/Contribute/index.jsx';
-import ViewCampaign from './../components/views/ViewCampaign';
 import ViewPool from './../components/views/ViewPool';
-import EditMilestone from './../components/views/EditMilestone';
+import Contribute from './../components/views/Contribute/index.jsx';
+
+import NotFound from './../components/views/NotFound';
 
 // components
 import MainMenu from './../components/MainMenu';
 import Loader from './../components/Loader';
-import UnlockWallet from '../components/UnlockWallet';
 import PrivateRoute from '../components/PrivateRoute';
 
 // context providers
@@ -65,27 +50,20 @@ React.swal.msg = reactNode => {
 // make toast globally available
 React.toast = toast;
 
-// TO DO: This is the minimum transaction view required to:
-// create a DAC / Campaign / Milestone / Profile
-React.minimumWalletBalance = 0.02;
-
 /**
  * This container holds the application and its routes.
  * It is also responsible for loading application persistent data.
  * As long as this component is mounted, the data will be persistent,
  * if passed as props to children.
- * -> moved to data to UserProvider
  */
 class Application extends Component {
   constructor() {
     super();
 
     localforage.config({
-      name: 'giveth',
+      name: 'poolbase',
     });
 
-    // Making unlock wallet global
-    React.unlockWallet = this.unlockWallet;
   }
 
   render() {
@@ -95,75 +73,33 @@ class Application extends Component {
           <UserConsumer>
             {({
               state: {
-                wallet,
                 currentUser,
-                userAddress,
-                web3,
                 isLoading,
-                hasError,
-                showUnlockWalletModal,
-                redirectAfter,
+                hasError
               },
               actions: {
                 onSignIn,
                 onSignOut,
-                walletUnlocked,
-                hideUnlockWalletModal,
-                handleWalletChange,
               },
             }) => (
               <div className="full-height">
                 {isLoading && <Loader className="fixed" />}
 
-                {wallet &&
-                  showUnlockWalletModal && (
-                    <UnlockWallet
-                      wallet={wallet}
-                      redirectAfter={redirectAfter}
-                      onClose={walletUnlocked}
-                      onCloseClicked={hideUnlockWalletModal}
-                    />
-                  )}
-
                 {!isLoading &&
                   !hasError && (
                     <div className="full-height">
-                      <MainMenu onSignOut={onSignOut} wallet={wallet} currentUser={currentUser} />
+                      <MainMenu onSignOut={onSignOut} currentUser={currentUser} />
                       <section className="page-layout">
                         <Switch>
                           {/* Routes are defined here. Persistent data is set as props on components
                     NOTE order matters, wrong order breaks routes!
                  */}
-
-                          <Route
-                            exact
-                            path="/dacs/new"
-                            component={props => (
-                              <EditDAC isNew currentUser={currentUser} wallet={wallet} {...props} />
-                            )}
-                          />
-                          <Route
-                            exact
-                            path="/dacs/:id"
-                            component={props => (
-                              <ViewDAC currentUser={currentUser} wallet={wallet} {...props} />
-                            )}
-                          />
-                          <Route
-                            exact
-                            path="/dacs/:id/edit"
-                            component={props => (
-                              <EditDAC currentUser={currentUser} wallet={wallet} {...props} />
-                            )}
-                          />
                           <Route
                             exact
                             path="/pools/create"
                             component={props => (
                               <CreatePool
-                                isNew
                                 currentUser={currentUser}
-                                wallet={wallet}
                                 {...props}
                               />
                             )}
@@ -184,157 +120,22 @@ class Application extends Component {
                           />
                           <Route
                             exact
-                            path="/campaigns/:id"
-                            component={props => (
-                              <ViewCampaign currentUser={currentUser} wallet={wallet} {...props} />
-                            )}
-                          />
-                          <Route
-                            exact
-                            path="/pools/:id/edit"
-                            component={props => (
-                              <CreatePool currentUser={currentUser} wallet={wallet} {...props} />
-                            )}
-                          />
-
-                          <Route
-                            exact
-                            path="/campaigns/:id/milestones/new"
-                            component={props => (
-                              <EditMilestone
-                                isNew
-                                currentUser={currentUser}
-                                wallet={wallet}
-                                {...props}
-                              />
-                            )}
-                          />
-                          <Route
-                            exact
-                            path="/campaigns/:id/milestones/propose"
-                            component={props => (
-                              <EditMilestone
-                                isNew
-                                isProposed
-                                currentUser={currentUser}
-                                wallet={wallet}
-                                {...props}
-                              />
-                            )}
-                          />
-                          <Route
-                            exact
-                            path="/campaigns/:id/milestones/:milestoneId"
-                            component={props => (
-                              <ViewMilestone currentUser={currentUser} wallet={wallet} {...props} />
-                            )}
-                          />
-                          <Route
-                            exact
-                            path="/campaigns/:id/milestones/:milestoneId/edit"
-                            component={props => (
-                              <EditMilestone currentUser={currentUser} wallet={wallet} {...props} />
-                            )}
-                          />
-                          <Route
-                            exact
-                            path="/milestones/:milestoneId/edit"
-                            component={props => (
-                              <EditMilestone currentUser={currentUser} wallet={wallet} {...props} />
-                            )}
-                          />
-                          <Route
-                            exact
-                            path="/milestones/:milestoneId/edit/proposed"
-                            component={props => (
-                              <EditMilestone
-                                currentUser={currentUser}
-                                wallet={wallet}
-                                isProposed
-                                {...props}
-                              />
-                            )}
-                          />
-                          <Route
-                            exact
-                            path="/donations"
-                            component={props => (
-                              <Donations currentUser={currentUser} wallet={wallet} {...props} />
-                            )}
-                          />
-                          <Route
-                            exact
-                            path="/delegations"
-                            component={props => (
-                              <Delegations currentUser={currentUser} wallet={wallet} {...props} />
-                            )}
-                          />
-                          <Route
-                            exact
-                            path="/my-dacs"
-                            component={props => (
-                              <MyDACs currentUser={currentUser} wallet={wallet} {...props} />
-                            )}
-                          />
-                          <Route
-                            exact
-                            path="/my-campaigns"
-                            component={props => (
-                              <MyCampaigns currentUser={currentUser} wallet={wallet} {...props} />
-                            )}
-                          />
-                          <Route
-                            exact
-                            path="/my-milestones"
-                            component={props => (
-                              <MyMilestones currentUser={currentUser} wallet={wallet} {...props} />
-                            )}
-                          />
-
-                          <Route
-                            exact
                             path="/signin"
                             component={props => (
                               <SignIn
-                                wallet={wallet}
-                                userAddress={userAddress}
-                                cachedWallet={wallet}
                                 onSignIn={onSignIn}
                                 {...props}
                               />
                             )}
                           />
-
                           <Route
                             exact
                             path="/signup"
                             render={props => (
-                              <Signup
-                                provider={web3 ? web3.currentProvider : undefined}
-                                walletCreated={handleWalletChange}
+                              <SignUp
                                 onSignIn={onSignIn}
                                 {...props}
                               />
-                            )}
-                          />
-
-                          <Route
-                            exact
-                            path="/change-account"
-                            render={props => (
-                              <ChangeAccount
-                                provider={web3 ? web3.currentProvider : undefined}
-                                handleWalletChange={handleWalletChange}
-                                {...props}
-                              />
-                            )}
-                          />
-
-                          <Route
-                            exact
-                            path="/wallet"
-                            component={props => (
-                              <UserWallet currentUser={currentUser} wallet={wallet} {...props} />
                             )}
                           />
                           <PrivateRoute
@@ -347,11 +148,11 @@ class Application extends Component {
                           />
                           <Route
                             exact
-                            path="/profile/:userAddress"
-                            component={props => <Profile {...props} />}
+                            path="/"
+                            render={props => (
+                              <Home currentUser={currentUser} {...props} />
+                            )}
                           />
-
-                          <DataRoutes currentUser={currentUser} wallet={wallet} />
 
                           <Route component={NotFound} />
                         </Switch>
@@ -363,7 +164,7 @@ class Application extends Component {
                   hasError && (
                     <center>
                       <h2>Oops, something went wrong...</h2>
-                      <p>The Giveth dapp could not load for some reason. Please try again...</p>
+                      <p>Poolbase could not load for some reason. Please try again...</p>
                     </center>
                   )}
 

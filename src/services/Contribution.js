@@ -1,11 +1,8 @@
-// import { LPPCampaign } from 'lpp-campaign';
 import getNetwork from '../lib/blockchain/getNetwork';
 import getWeb3 from '../lib/blockchain/getWeb3';
-import contract from 'truffle-contract';
 import { feathersClient } from '../lib/feathersClient';
 import { getGasPrice } from '../lib/helpers';
 import Contribution from '../models/Contribution';
-import generateClass from 'eth-contract-class';
 import ErrorPopup from '../components/ErrorPopup';
 
 const felixPoolArtifact = require('../lib/blockchain/contracts/FelixPool.json');
@@ -102,7 +99,7 @@ class ContributionService {
           // const { lppCampaignFactory } = network;
           etherScanUrl = network.etherscan;
 
-          const { abi, bytecode } = felixPoolArtifact;
+          const { abi } = felixPoolArtifact;
           const { amount, poolAddress } = contribution;
           console.log('contribution', contribution);
           console.log('abi', !!abi);
@@ -160,8 +157,8 @@ class ContributionService {
    * @param afterMined  Callback to be triggered after the transaction is mined
    */
   static cancel(campaign, from, afterCreate = () => {}, afterMined = () => {}) {
-    let txHash;
-    let etherScanUrl;
+    // let txHash;
+    // let etherScanUrl;
     // Promise.all([getNetwork(), getWeb3(), getGasPrice()])
     //   .then(([network, web3, gasPrice]) => {
     //     const lppCampaign = new LPPCampaign(web3, campaign.pluginAddress);

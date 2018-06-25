@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import Avatar from 'react-avatar';
 import { Link, NavLink, withRouter } from 'react-router-dom';
-
-import AuthenticatedNavLink from './AuthenticatedNavLink';
 import { Consumer as UserConsumer } from '../contextProviders/UserProvider';
 import { history } from '../lib/helpers';
 
@@ -47,36 +45,6 @@ class MainMenu extends Component {
                   className={`navbar-toggler-icon fa ${showMobileMenu ? 'fa-close' : 'fa-bars'}`}
                 />
               </button>
-
-              <ul className="navbar-nav mobile-wallet-lock">
-                {state.currentUser &&
-                  state.wallet &&
-                  state.walletLocked && (
-                    <li className="nav-item mr-sm-2">
-                      <AuthenticatedNavLink className="nav-link" to="#">
-                        <i className="fa fa-lock" />
-                        Wallet
-                      </AuthenticatedNavLink>
-                    </li>
-                  )}
-                {state.currentUser &&
-                  state.wallet &&
-                  !state.walletLocked && (
-                    <li className="nav-item mr-sm-2">
-                      <span
-                        className="nav-link"
-                        onClick={actions.lockWallet}
-                        onKeyDown={actions.lockWallet}
-                        role="button"
-                        tabIndex={0}
-                      >
-                        <i className="fa fa-unlock" />
-                        Wallet
-                      </span>
-                    </li>
-                  )}
-              </ul>
-
               <Link className="navbar-brand" to="/">
                 <img src="/img/poolbase_logo.png" width="140px" alt="Poolbase logo" />
               </Link>
@@ -92,7 +60,7 @@ class MainMenu extends Component {
                     </NavLink>
                   </li>
 
-                  {state.currentUser && (
+                  {/* state.currentUser && (
                     <li className="nav-item dropdown">
                       <NavLink
                         className="nav-link dropdown-toggle"
@@ -109,46 +77,13 @@ class MainMenu extends Component {
                         className={`dropdown-menu ${showMobileMenu ? 'show' : ''} `}
                         aria-labelledby="navbarDropdownDashboard"
                       >
-                        <NavLink className="dropdown-item" to="/contributions">
-                          My Contributions
-                        </NavLink>
                         <NavLink className="dropdown-item" to="/my-pools">
                           My Pools
                         </NavLink>
                       </div>
                     </li>
-                  )}
+                  )*/}
                 </ul>
-
-                <ul className="navbar-nav ml-auto mr-sm-2">
-                  {state.currentUser &&
-                    state.wallet &&
-                    state.walletLocked && (
-                      <li className="nav-item mr-sm-2">
-                        <AuthenticatedNavLink className="nav-link" to="#">
-                          <i className="fa fa-lock" />
-                          &nbsp;UnLock Wallet
-                        </AuthenticatedNavLink>
-                      </li>
-                    )}
-                  {state.currentUser &&
-                    state.wallet &&
-                    !state.walletLocked && (
-                      <li className="nav-item mr-sm-2">
-                        <NavLink className="nav-link" to="#" onClick={actions.lockWallet}>
-                          <i className="fa fa-unlock" />
-                          &nbsp;Lock Wallet
-                        </NavLink>
-                      </li>
-                    )}
-                </ul>
-                {/*
-            <form id="search-form" className="form-inline my-2 my-lg-0">
-              <input className="form-control mr-sm-2" type="text" placeholder="E.g. save the whales"/>
-              <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Find</button>
-            </form>
-          */}
-
                 <ul className="navbar-nav">
                   {!state.currentUser && (
                     <NavLink className="nav-link" to="/signin" activeClassName="active">
@@ -160,7 +95,6 @@ class MainMenu extends Component {
                       Sign Up
                     </NavLink>
                   )}
-
                   {state.currentUser && (
                     <li className="nav-item dropdown">
                       <Link

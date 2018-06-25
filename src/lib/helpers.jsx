@@ -6,7 +6,7 @@ import moment from 'moment';
 import BigNumber from 'bignumber.js';
 
 import { feathersClient } from './feathersClient';
-import DefaultAvatar from './../assets/avatar-100.svg';
+import DefaultAvatar from './../assets/defaultAvatar.svg';
 import getWeb3 from './blockchain/getWeb3';
 import config from '../configuration';
 
@@ -156,8 +156,6 @@ export const getUserAvatar = owner => {
   return DefaultAvatar;
 };
 
-export const getRandomWhitelistAddress = wl => wl[Math.floor(Math.random() * wl.length)].address;
-
 export const getGasPrice = () =>
   feathersClient
     .service('/gasprice')
@@ -171,56 +169,6 @@ export const getGasPrice = () =>
       gasPrice = Math.round(gasPrice) / 10;
       return utils.toWei(`${gasPrice}`, 'gwei');
     });
-
-export const getReadableStatus = status => {
-  switch (status) {
-    case 'InProgress':
-      return 'In progress';
-    case 'NeedsReview':
-      return 'Needs review';
-    default:
-      return status;
-  }
-};
-
-// returns a risk indicator
-export const calculateRiskFactor = (owner, dependencies) => {
-  const reasons = {
-    risk: 0,
-    hasName: true,
-    hasAvatar: true,
-    hasEmail: true,
-    hasLinkedIn: true,
-    hasDependencies: true,
-  };
-
-  if (!owner.name) {
-    reasons.risk += 3;
-    reasons.hasName = false;
-  }
-
-  if (!owner.avatar) {
-    reasons.risk += 2;
-    reasons.hasAvatar = false;
-  }
-
-  if (!owner.email) {
-    reasons.risk += 15;
-    reasons.hasEmail = false;
-  }
-
-  if (!owner.linkedIn) {
-    reasons.risk += 35;
-    reasons.hasLinkedIn = false;
-  }
-
-  if (dependencies === 0) {
-    reasons.risk += 40;
-    reasons.hasDependencies = false;
-  }
-
-  return reasons;
-};
 
 export const history = createBrowserHistory();
 
