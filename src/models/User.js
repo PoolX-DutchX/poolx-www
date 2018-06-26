@@ -12,16 +12,14 @@ import Model from './Model';
  * @attribute name        Name of the user
  */
 class User extends Model {
-  constructor({ address, avatar, commitTime, email, giverId, linkedin, name, _id }) {
+  constructor({ _id, name, email, wallets, avatar, linkedin }) {
     super();
-    this.address = address;
-    this.avatar = avatar;
-    this.commitTime = commitTime;
-    this.email = email;
-    this.giverId = giverId;
-    this.linkedin = linkedin;
-    this.name = name;
     this.id = _id;
+    this.name = name;
+    this.email = email;
+    this.wallets = wallets;
+    this.avatar = avatar;
+    this.linkedin = linkedin;
   }
 
 
@@ -34,13 +32,13 @@ class User extends Model {
     this.myId = value;
   }
 
-  get address() {
-    return this.myAddress;
+  get wallets() {
+    return this.myWallets;
   }
 
-  set address(value) {
-    this.checkType(value, ['undefined', 'string'], 'address');
-    this.myAddress = value;
+  set wallets(value) {
+    this.checkType(value, ['object', 'array'], 'wallets');
+    this.myWallets = value;
   }
 
   get avatar() {

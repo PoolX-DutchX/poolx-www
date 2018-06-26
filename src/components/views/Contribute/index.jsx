@@ -25,6 +25,7 @@ import DeployStep from '../CreatePool/components/DeployStep';
 
 import ErrorPopup from '../../ErrorPopup';
 import Loader from '../../Loader';
+import ChooseWalletDialog from '../../ChooseWalletDialog';
 
 function getSteps() {
   return ['Contribution Details', 'Perform transaction'];
@@ -64,13 +65,16 @@ class Contribute extends Component {
       formIsValid: false,
       activeStep: 0,
       completed: {},
-      pool: {}
+      pool: {},
+      walletDialogOpen: false,
+      wallet: '0xc38e6069cf20f345f24070c52ef68fa2c9314d5b'
     };
     this.handleNext = this.handleNext.bind(this);
     this.handleStep = this.handleStep.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleBack = this.handleBack.bind(this);
     this.handleReset = this.handleReset.bind(this);
+    this.handleChooseWalletClick = this.handleChooseWalletClick.bind(this);
     this.submit = this.submit.bind(this);
   }
 
@@ -200,6 +204,17 @@ class Contribute extends Component {
      }
    };
 
+  handleChooseWalletClick() {
+    this.setState({
+      walletDialogOpen: true,
+    });
+  }
+
+  handleWalletDialogClose = value => {
+    console.log('value', value);
+    this.setState({ wallet: value, walletDialogOpen: false });
+  };
+
   render() {
     const { isLoading } = this.state;
 
@@ -226,8 +241,9 @@ class Contribute extends Component {
                     this.state.activeStep === 0 &&
                     <div>
                       <Formik
+                        enableReinitialize="true"
                         initialValues={{
-                          wallet: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1',
+                          wallet: this.state.wallet,
                           amount: 16,
                         }}
                         onSubmit={async(
@@ -274,21 +290,38 @@ class Contribute extends Component {
                           isSubmitting,
                         }) => (
                           <form onSubmit={handleSubmit}>
-                            <TextField
-                              id="wallet"
-                              name="wallet"
-                              label="Wallet address"
-                              value={values.wallet}
-                              autoComplete="Off"
-                              spellCheck="false"
-                              placeholder="Your wallet address"
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              error={touched.wallet && !!errors.wallet}
-                              helperText={touched.wallet && errors.wallet}
-                              margin="normal"
-                              fullWidth
-                            />
+                            <div class="row align-items-center">
+                              <div class="col">
+                                <TextField
+                                  id="wallet"
+                                  name="wallet"
+                                  label="Wallet address"
+                                  value={values.wallet}
+                                  autoComplete="Off"
+                                  spellCheck="false"
+                                  placeholder="Your wallet address"
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  error={touched.wallet && !!errors.wallet}
+                                  helperText={touched.wallet && errors.wallet}
+                                  margin="normal"
+                                  fullWidth
+                                />
+                              </div>
+                              {
+                                this.props.currentUser && <div class="col-md-3">
+                                  <Button type="button" color="primary" size="small" onClick={this.handleChooseWalletClick}>
+                                    Choose wallet
+                                  </Button>
+                                  <ChooseWalletDialog
+                                    wallets={this.props.currentUser.wallets}
+                                    selectedValue={this.state.selectedValue}
+                                    open={this.state.walletDialogOpen}
+                                    onClose={this.handleWalletDialogClose}
+                                  />
+                                </div>
+                              }
+                            </div>
                             <TextField
                               id="amount"
                               name="amount"
