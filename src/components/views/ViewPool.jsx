@@ -18,8 +18,9 @@ class ViewPool extends Component {
 
     this.state = {
       isLoading: true,
-      contributions: []
+      contributions: [],
     };
+    this.contribute = this.contribute.bind(this);
   }
 
   async componentDidMount() {
@@ -50,6 +51,49 @@ class ViewPool extends Component {
     // );
   }
 
+  contribute() {
+    const { history } = this.props;
+    if (!this.props.currentUser) {
+      React.swal({
+        title: "You're almost there...",
+        content: React.swal.msg(
+          <p>
+            It&#8217;s great to see that you want to contribute, however, if you first sign in or sign up, you'll get the benefit of tracking your contributions after they're made. <br />
+            <br />
+            You can also continue anonymously.
+          </p>,
+        ),
+        icon: 'info',
+        buttons: {
+          signin: {
+            text: 'Signin'
+          },
+          signup: {
+            text: 'Signup'
+          },
+          continue: {
+            text: 'Continue'
+          }
+
+        },
+      }).then(value => {
+        switch(value) {
+          case 'signin':
+            history.push('/signin');
+            break;
+          case 'signup':
+            history.push('/signup');
+            break;
+          case 'continue':
+            history.push(`/pools/contribute/${this.state.pool.id}`);
+            break;
+        }
+      });
+    } else {
+      history.push(`/pools/contribute/${this.state.pool.id}`)
+    }
+  }
+
   componentWillUnmount() {
     // this.contributionObserver.unsubscribe();
   }
@@ -76,7 +120,7 @@ class ViewPool extends Component {
                 <h1><strong>{pool.name}</strong></h1>
                 <div className="pool-creator">Pool Creator Verified <img src={"/img/telegram_logo.png"} width="20" alt="Telegram logo"/> KYC</div>
                 {
-                  this.state.contributions.length &&
+                  !!this.state.contributions.length &&
                   <div className="alert alert-success row my-contributions-panel" role="alert">
                     <div className="col-md-4 ">
                       <h6><WithTooltip title="Sum total of all your contributions for this pool">My Contribution</WithTooltip></h6>
@@ -112,7 +156,7 @@ class ViewPool extends Component {
                     <div className="subheading">Max. Contribution</div>
                   </span>
                 </div>
-                <Button variant="contained" color="primary" fullWidth onClick={()=> (this.props.history.push(`/pools/contribute/${this.state.pool.id}`))}>
+                <Button variant="contained" color="primary" fullWidth onClick={this.contribute}>
                   Contribute to Pool
                 </Button>
                 <div className="row margin-top-bottom">
