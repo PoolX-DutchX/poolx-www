@@ -17,9 +17,10 @@ import SignIn from './../components/views/SignIn';
 import SignUp from './../components/views/SignUp';
 import Home from './../components/views/Home';
 
-import CreatePool from './../components/views/CreatePool/index.jsx';
 import ViewPool from './../components/views/ViewPool';
-import Contribute from './../components/views/Contribute/index.jsx';
+import CreatePool from './../components/views/CreatePool/';
+import Contribute from './../components/views/Contribute/';
+import Dashboard from './../components/views/Dashboard/';
 
 import NotFound from './../components/views/NotFound';
 
@@ -116,6 +117,13 @@ class Application extends Component {
                             path="/pools/:poolId"
                             component={props => (
                               <ViewPool currentUser={currentUser} {...props} />
+                            )}
+                          />
+                          <Route
+                            exact
+                            path="/dashboard"
+                            component={props => (
+                              <Dashboard currentUser={currentUser} {...props} />
                             )}
                           />
                           <Route

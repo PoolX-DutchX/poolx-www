@@ -1,34 +1,48 @@
 import BasicModel from './BasicModel';
 import ContributionService from '../services/Contribution';
+import {
+  AWAITING_CONTRIBUTION_TX,
+  CONTRIBUTION_TX_PENDING,
+  CONTRIBUTION_COMPLETE,
+  AWAITING_CLAIM_TX,
+  CLAIM_TX_PENDING,
+  CLAIM_COMPLETE,
+} from '../constants';
 
 class Contribution extends BasicModel {
-  static get CANCELLED() {
-    return 'Cancelled';
+  static get AWAITING_CONTRIBUTION_TX() {
+    return AWAITING_CONTRIBUTION_TX;
   }
-  static get FAILED() {
-    return 'Failed';
+  static get CONTRIBUTION_TX_PENDING() {
+    return CONTRIBUTION_TX_PENDING;
   }
-  static get PENDING() {
-    return 'Pending';
+  static get CONTRIBUTION_COMPLETE() {
+    return CONTRIBUTION_COMPLETE;
   }
-  static get CONFIRMED() {
-    return 'Confirmed';
+  static get AWAITING_CLAIM_TX() {
+    return AWAITING_CLAIM_TX;
+  }
+  static get CLAIM_TX_PENDING() {
+    return CLAIM_TX_PENDING;
+  }
+  static get CLAIM_COMPLETE() {
+    return CLAIM_COMPLETE;
   }
 
   constructor(data) {
     super(data);
 
-    this.poolAddress = data.poolAddress || '';
+    this.pool = data.pool || '';
     this.wallet = data.wallet || '';
     this.amount = data.amount || 0; // in Ether
-    this.status = data.status || Contribution.PENDING;
+    this.status = data.status || Contribution.AWAITING_CONTRIBUTION_TX;
     // ToDo: currency, ether by default for now
   }
 
   toFeathers() {
     return {
       id: this.id,
-      poolAddress: this.poolAddress,
+      pool: this.pool,
       wallet: this.wallet,
       amount: this.amount,
       txHash: this.txHash,
@@ -67,12 +81,19 @@ class Contribution extends BasicModel {
   }
 
   set status(value) {
-    this.checkValue(value, [Contribution.PENDING, Contribution.ACTIVE, Contribution.CANCELED], 'status');
+    this.checkValue(value, [
+      Contribution.AWAITING_CONTRIBUTION_TX,
+      Contribution.CONTRIBUTION_TX_PENDING,
+      Contribution.CONTRIBUTION_COMPLETE,
+      Contribution.AWAITING_CLAIM_TX,
+      Contribution.CLAIM_TX_PENDING,
+      Contribution.CLAIM_COMPLETE
+    ], 'status');
     this.myStatus = value;
-    if (value === Contribution.PENDING) this.myOrder = 1;
-    else if (value === Contribution.ACTIVE) this.myOrder = 2;
-    else if (value === Contribution.CANCELED) this.myOrder = 3;
-    else this.myOrder = 4;
+    // if (value === Contribution.PENDING) this.myOrder = 1;
+    // else if (value === Contribution.ACTIVE) this.myOrder = 2;
+    // else if (value === Contribution.CANCELED) this.myOrder = 3;
+    // else this.myOrder = 4;
   }
 
   get amount() {
@@ -84,13 +105,13 @@ class Contribution extends BasicModel {
     this.myAmount = value;
   }
 
-  get poolAddress() {
-    return this.myPoolAddress;
+  get pool() {
+    return this.myPool;
   }
 
-  set poolAddress(value) {
-    this.checkType(value, ['undefined', 'string'], 'poolAddress');
-    this.myPoolAddress = value;
+  set pool(value) {
+    this.checkType(value, ['object', 'string'], 'pool');
+    this.myPool = value;
   }
 
   get wallet() {

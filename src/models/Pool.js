@@ -1,19 +1,43 @@
 import BasicModel from './BasicModel';
 import PoolService from '../services/Pool';
+import { STATUS_OPEN, STATUS_CLOSED } from '../constants';
 
 class Pool extends BasicModel {
+  static get ACTIVE() {
+    return 'Active';
+  }
+  static get PENDING() {
+   return 'Pending';
+  }
   static get CANCELED() {
     return 'Canceled';
   }
-  static get PENDING() {
-    return 'Pending';
+  static get AWAITING_DEPLOY_TX() {
+    return 'awaiting_deploy_tx';
   }
-
+  static get POOL_DEPLOYED() {
+    return 'pool_deployed';
+  }
   static get OPEN() {
-    return 'Open';
+    return STATUS_OPEN;
   }
-  static get ACTIVE() {
-    return 'Active';
+  static get CLOSED() {
+    return STATUS_CLOSED;
+  }
+  static get AWAITING_SEND_FUNDS_TX() {
+    return 'awaiting_send_funds_tx';
+  }
+  static get FUNDS_SENT() {
+    return 'funds_sent';
+  }
+  static get TOKENS_RECEIPT_CONFIRMED() {
+    return 'tokens_receipt_confirmed';
+  }
+  static get AWAITING_REFUND_TX() {
+    return 'awaiting_refund_tx';
+  }
+  static get REFUNDED() {
+    return 'refunded';
   }
   static get CURRENCY_ETHER() {
     return 'ether';
@@ -26,10 +50,13 @@ class Pool extends BasicModel {
     super(data);
     this.wallet = data.wallet || '';
     this.cap = data.cap || '';
-    this.totalInvested = data.totalInvested || '';
+    this.createdAt = data.createdAt || '';
+    this.netInvested = data.netInvested || '';
+    this.grossInvested = data.grossInvested || '';
     this.minContribution = data.minContribution || '';
     this.maxContribution = data.maxContribution || '';
     this.fee = data.fee || '0.0';
+    this.contributionCount = data.contributionCount || 0;
     this.feePayoutCurrency = data.feePayoutCurrency || Pool.CURRENCY_ETHER;
     this.adminAddresses = data.adminAddresses || [];
     this.destinationAddress = data.destinationAddress || '';
@@ -38,6 +65,7 @@ class Pool extends BasicModel {
     this.description = data.description || '';
     this.status = data.status || Pool.PENDING;
     this.address = data.address || '';
+    this.whitelist = data.whitelist || [];
   }
 
   toFeathers() {
@@ -45,7 +73,8 @@ class Pool extends BasicModel {
       id: this.id,
       wallet: this.wallet,
       cap: this.cap,
-      totalInvested: this.totalInvested,
+      netInvested: this.netInvested,
+      grossInvested: this.grossInvested,
       minContribution: this.minContribution,
       maxContribution: this.maxContribution,
       fee: this.fee,
@@ -58,6 +87,7 @@ class Pool extends BasicModel {
       status: this.status,
       txHash: this.txHash,
       address: this.address,
+      whitelist: this.whitelist
     };
   }
 
@@ -91,7 +121,7 @@ class Pool extends BasicModel {
   }
 
   set status(value) {
-    this.checkValue(value, [Pool.PENDING, Pool.OPEN, Pool.ACTIVE, Pool.CANCELED], 'status');
+    this.checkValue(value, [Pool.PENDING, Pool.OPEN, Pool.ACTIVE, Pool.CANCELED, Pool.CLOSED], 'status');
     this.myStatus = value;
     if (value === Pool.PENDING) this.myOrder = 1;
     else if (value === Pool.OPEN) this.myOrder = 2;
@@ -123,19 +153,44 @@ class Pool extends BasicModel {
   }
 
   set cap(value) {
-    console.log('value', value);
     this.checkType(value, ['undefined','string'], 'cap');
     this.myCap = value;
   }
 
-  get totalInvested() {
-    return this.myTotalInvested;
+  get createdAt() {
+    return this.myCreatedAt;
   }
 
-  set totalInvested(value) {
-    console.log('value', value);
-    this.checkType(value, ['undefined','string'], 'totalInvested');
-    this.myTotalInvested = value;
+  set createdAt(value) {
+    this.checkType(value, ['undefined','string'], 'createdAt');
+    this.myCreatedAt = value;
+  }
+
+  get tokenBalance() {
+    return this.myTokenBalance;
+  }
+
+  set tokenBalance(value) {
+    this.checkType(value, ['undefined','string'], 'tokenBalance');
+    this.myTokenBalance = value;
+  }
+
+  get netInvested() {
+    return this.myNetInvested;
+  }
+
+  set netInvested(value) {
+    this.checkType(value, ['undefined','string'], 'netInvested');
+    this.myNetInvested = value;
+  }
+
+  get grossInvested() {
+    return this.myGrossInvested;
+  }
+
+  set grossInvested(value) {
+    this.checkType(value, ['undefined','string'], 'grossInvested');
+    this.myGrossInvested = value;
   }
 
   get minContribution() {
@@ -154,6 +209,15 @@ class Pool extends BasicModel {
   set maxContribution(value) {
     this.checkType(value, ['undefined','string'], 'maxContribution');
     this.myMaxContribution = value;
+  }
+
+  get contributionCount() {
+    return this.myContributionCount;
+  }
+
+  set contributionCount(value) {
+    this.checkType(value, ['undefined','number'], 'contributionCount');
+    this.myContributionCount = value;
   }
 
   get fee() {
@@ -199,6 +263,15 @@ class Pool extends BasicModel {
   set destinationData(value) {
     this.checkType(value, ['undefined', 'string'], 'destinationData');
     this.myDestinationData = value;
+  }
+
+  get whitelist() {
+    return this.myWhitelist;
+  }
+
+  set whitelist(value) {
+    this.checkType(value, ['object', 'array'], 'whitelist');
+    this.myWhitelist = value;
   }
 }
 

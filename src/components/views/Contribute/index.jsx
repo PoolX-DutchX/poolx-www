@@ -67,7 +67,8 @@ class Contribute extends Component {
       completed: {},
       pool: {},
       walletDialogOpen: false,
-      wallet: '0xc38e6069cf20f345f24070c52ef68fa2c9314d5b'
+      wallet: '0xc38e6069cf20f345f24070c52ef68fa2c9314d5b',
+      walletInput: {}
     };
     this.handleNext = this.handleNext.bind(this);
     this.handleStep = this.handleStep.bind(this);
@@ -78,8 +79,8 @@ class Contribute extends Component {
     this.submit = this.submit.bind(this);
   }
 
-  componentWillMount() {
-    PoolService.get(this.props.match.params.poolId)
+  componentDidMount() {
+    PoolService.getById(this.props.match.params.poolId)
       .then(pool => {
         console.log('pool', pool);
         this.setState({
@@ -95,6 +96,7 @@ class Contribute extends Component {
           err,
         );
       });
+      console.log('this.walletInput', this.walletInput);
   }
 
   submitViaMetamask() {
@@ -211,8 +213,11 @@ class Contribute extends Component {
   }
 
   handleWalletDialogClose = value => {
-    console.log('value', value);
-    this.setState({ wallet: value, walletDialogOpen: false });
+    const newState = { walletDialogOpen: false };
+    if (!!value) {
+      newState.wallet = value;
+    }
+    this.setState(newState);
   };
 
   render() {
@@ -241,7 +246,7 @@ class Contribute extends Component {
                     this.state.activeStep === 0 &&
                     <div>
                       <Formik
-                        enableReinitialize="true"
+                        enableReinitialize={true}
                         initialValues={{
                           wallet: this.state.wallet,
                           amount: 16,
@@ -250,18 +255,18 @@ class Contribute extends Component {
                           { wallet, amount },
                           { setSubmitting, setErrors /* setValues and other goodies */ }
                         ) => {
-                          const contribution = new Contribution({ wallet, amount, poolAddress: this.state.pool.address });
+                          const contribution = new Contribution({ wallet, amount, pool: this.state.pool.id });
 
                           const result = await feathersClient
                             .service('contributions')
                             .create(contribution.toFeathers());
 
-                          const { poolAddress, txData, gasLimit } = result;
+                          const { pool, txData, gasLimit } = result;
 
                           this.setState({
                             deployData: {
                               wallet,
-                              toAddress: poolAddress,
+                              toAddress: pool.address,
                               amount,
                               txData,
                               gasLimit
@@ -290,8 +295,8 @@ class Contribute extends Component {
                           isSubmitting,
                         }) => (
                           <form onSubmit={handleSubmit}>
-                            <div class="row align-items-center">
-                              <div class="col">
+                            <div className="row align-items-center">
+                              <div className="col">
                                 <TextField
                                   id="wallet"
                                   name="wallet"
@@ -309,13 +314,13 @@ class Contribute extends Component {
                                 />
                               </div>
                               {
-                                this.props.currentUser && <div class="col-md-3">
+                                this.props.currentUser && <div className="col-md-3">
                                   <Button type="button" color="primary" size="small" onClick={this.handleChooseWalletClick}>
                                     Choose wallet
                                   </Button>
                                   <ChooseWalletDialog
                                     wallets={this.props.currentUser.wallets}
-                                    selectedValue={this.state.selectedValue}
+                                    selectedValue={values.wallet}
                                     open={this.state.walletDialogOpen}
                                     onClose={this.handleWalletDialogClose}
                                   />

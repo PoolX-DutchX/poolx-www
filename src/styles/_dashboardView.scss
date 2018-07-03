@@ -1,0 +1,69 @@
+#dashboard-view {
+  background-color: white;
+  .header {
+    background-color: #f8f9fa; //$header-background;
+    padding: 10px 0;
+  }
+  .main-wrap {
+    margin-top: 1rem;
+    padding-bottom: 200px;
+  }
+
+  .pool-list-item {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+    .role-badge {
+      position: absolute;
+      left: 90px;
+      top: 8px;
+      border: 1px solid;
+      border-radius: 5px;
+      padding: 0px 5px;
+      font-size: 14px;
+
+      &.admin {
+        background-color: #bbdefb;
+        border-color: #84ABE7;
+      }
+      &.creator {
+        background-color: #CFE6DF;
+        border-color: #A5EBD4;
+      }
+    }
+
+    h3, h4 {
+      margin-bottom: 0;
+    }
+    .date {
+      text-transform: uppercase;
+      width: 40px;
+      text-align: center;
+      .day {
+        color: grey;
+      }
+    }
+    .net-invested {
+      min-width: 125px;
+      .amount {
+        font-size: 22px;
+      }
+      .denomination {
+        font-size: 18px;
+      }
+    }
+    .pool-name {
+      min-width: 100px;
+    }
+    .status {
+      min-width: 100px;
+      text-align: center;
+    }
+    .action-button {
+      min-width: 140px;
+    }
+  }
+}

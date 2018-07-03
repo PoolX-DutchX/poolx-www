@@ -14,13 +14,39 @@ class PoolService {
    *
    * @param id   ID of the Pool to be retrieved
    */
-  static get(poolId) {
+  static getById(poolId) {
     return new Promise((resolve, reject) => {
       feathersClient
         .service('pools')
         .find(poolId)
         .then(resp => {
           resolve(new Pool(resp.data[0]));
+        })
+        .catch(reject);
+    });
+  }
+
+  /**
+   * Get a Pool defined by ID
+   *
+   * @param ownerId   ID of the Pool to be retrieved
+   */
+  static getByOwnerId(ownerId) {
+    return new Promise((resolve, reject) => {
+      feathersClient
+        .service('pools')
+        .find({
+          query: {
+            owner: ownerId,
+            // contributionCounts: true
+          }
+        })
+        .then(({ data: pools }) => {
+          resolve( pools.map(pool => {
+            console.log('pool', pool);
+            console.log('new Pool(pool)', new Pool(pool));
+            return new Pool(pool)
+          }));
         })
         .catch(reject);
     });
@@ -70,6 +96,23 @@ class PoolService {
         resp => onSuccess(resp.data.map(pool => new Pool(pool)).sort(Pool.compare)),
         onError,
       );
+  }
+
+  /**
+   * Get list of user's wallets that are in Pool whitelist
+   *
+   * @param userId Id of the user whose addressess will be checked if in whitelist
+   * @param poolId Id of the pool whose whitelist will be checked
+   *
+   */
+  static getWhitelistedAddressesByUser(poolId, userId) {
+    return feathersClient
+      .service('pools')
+      .get(poolId, {
+        query: {
+          userWhitelisted: userId,
+        },
+      });
   }
 
   /**

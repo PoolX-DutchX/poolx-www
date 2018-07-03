@@ -27,10 +27,10 @@ class ViewPool extends Component {
     const poolId = this.props.match.params.poolId;
     try {
       let contributions = [];
-      const pool = await PoolService.get(poolId);
+      const pool = await PoolService.getById(poolId);
       if (this.props.currentUser) {
         console.log('this.props.currentUser', this.props.currentUser);
-        const { data } = await ContributionService.getUserContributionsByPoolAddress(this.props.currentUser.id, pool.address);
+        const { data } = await ContributionService.getUserContributionsByPoolId(this.props.currentUser.id, poolId);
         contributions = data;
       }
       this.setState({ pool, contributions, isLoading: false });
@@ -87,6 +87,8 @@ class ViewPool extends Component {
           case 'continue':
             history.push(`/pools/contribute/${this.state.pool.id}`);
             break;
+          default:
+            break;
         }
       });
     } else {
@@ -106,7 +108,7 @@ class ViewPool extends Component {
 
     let poolProgress = 0;
     if (!isLoading) {
-      poolProgress = (pool.totalInvested / pool.cap) * 100;
+      poolProgress = (pool.netInvested / pool.cap) * 100;
     }
 
     return (
@@ -141,7 +143,7 @@ class ViewPool extends Component {
                 <h3><strong>{pool.status}</strong></h3>
                 <LinearProgress variant="determinate" value={poolProgress} />
                 <div className="total-invested-section">
-                  <h4 className="invested"><strong>{pool.totalInvested} ETH </strong></h4>
+                  <h4 className="invested"><strong>{pool.netInvested} ETH </strong></h4>
                   <div className="subheading">
                     of {pool.cap} ETH maximum
                   </div>

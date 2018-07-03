@@ -56,20 +56,19 @@ class ContributionService {
    * @param onSuccess   Callback function once response is obtained successfully
    * @param onError     Callback function if error is encountered
    */
-  static getUserContributions(userAddress, onSuccess, onError) {
+  static getUserContributions(ownerId, onSuccess, onError) {
     return feathersClient
       .service('contributions')
       .watch({ listStrategy: 'always' })
       .find({
         query: {
-          investorAddress: userAddress,
+          ownerId
         },
       })
       .subscribe(
-        resp =>
-          onSuccess(
-            resp.data.map(contribution => new Contribution(contribution)).sort(Contribution.compare),
-          ),
+        resp => onSuccess(
+          resp.data.map(contribution => new Contribution(contribution))
+        ),
         onError,
       );
   }
@@ -78,16 +77,16 @@ class ContributionService {
    * Get the user's Contributions made to a particular pool
    *
    * @param userId Id of user who made the contribution
-   * @param poolAddress Address of the pool whose contribution was made to
+   * @param pooId Id of the pool whose contribution was made to
    *
    */
-  static getUserContributionsByPoolAddress(userId, poolAddress) {
+  static getUserContributionsByPoolId(userId, poolId) {
     return feathersClient
       .service('contributions')
       .find({
         query: {
           ownerId: userId,
-          poolAddress
+          pool: poolId
         },
       });
   }
@@ -118,13 +117,8 @@ class ContributionService {
           etherScanUrl = network.etherscan;
 
           const { abi } = felixPoolArtifact;
-          const { amount, poolAddress } = contribution;
-          console.log('contribution', contribution);
-          console.log('abi', !!abi);
-          console.log('amount', amount);
-          console.log('poolAddress', poolAddress);
-          console.log('from', from);
-          const contract = new web3.eth.Contract(abi, poolAddress, { from });
+          const { amount, pool } = contribution;
+          const contract = new web3.eth.Contract(abi, pool.address, { from });
           contract.methods
             .deposit()
             .send({
