@@ -38,7 +38,7 @@ export const contributionStatusMap =  {
     displayText: 'Closed',
     actionText: '',
     action: null
-  },
+  }
 };
 
 export const poolStatusMap =  {

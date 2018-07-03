@@ -65,6 +65,7 @@ class Dashboard extends Component {
       const pools = await PoolService.getByOwnerId(this.props.currentUser.id);
 
       this.setState({ isLoading: false });
+      
       this.contributionObserver = ContributionService.getUserContributions(
         this.props.currentUser.id,
         contributions => {

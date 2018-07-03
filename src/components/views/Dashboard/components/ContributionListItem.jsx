@@ -27,6 +27,7 @@ class ContributionListItem extends React.Component {
     const month = createdAt.format('MMM');
     const day = createdAt.format('DD');
     const pool = contribution.pool;
+
     const {
       displayText: statusDisplayText,
       actionText: statusActionText,
