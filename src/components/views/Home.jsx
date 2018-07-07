@@ -32,9 +32,9 @@ class Home extends Component {
           <div className="container-fluid page-layout reduced-padding">
               <div className="light-blue-background heading">
                   <div className="table-margin flexcontainer"> 
-                        <ul className = "col-md-4 list-group"> 
+                        <ul className = "col-md-4 list-group clean-list"> 
                             <li><h3>Poolbase. An app your users will love</h3></li>                  
-                            <li><p>Poolbase subheading</p></li>                  
+                            <li><p>Poolbase is an app which allows its users to pool money together to invest in hot new ICOs</p></li>                  
                             <li><button className="button-style">Signup For Poolbase</button></li>                  
                             <li>Login with Github</li>                  
                         </ul>
