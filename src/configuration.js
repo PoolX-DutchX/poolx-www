@@ -10,7 +10,8 @@ const {
 const configurations = {
   localhost: {
     title: 'Ganache',
-    poolFactoryAddress: '0x1ce25E5Db192BB0804aA75D0cA3C7A4f2788Fe10',
+    poolFactoryAddress: '0x5904adeba7bc0550607c611e906e317338b8e6c2',
+    eventEmitterAddress: '0xd84e2462b412bba3fd81f95812823f7c6a72bab9',
     etherscan: 'https://etherscan.io/', // this won't work, only here so we can see links during development
     feathersConnection: 'http://localhost:3030',
     nodeConnection: 'ws://localhost:8545',
@@ -18,6 +19,7 @@ const configurations = {
   develop: {
     title: 'develop',
     poolFactoryAddress: '0x1ce25E5Db192BB0804aA75D0cA3C7A4f2788Fe10',
+    eventEmitterAddress: '0xd84e2462b412bba3fd81f95812823f7c6a72bab9',
     etherscan: 'https://rinkeby.etherscan.io/',
     feathersConnection: 'https://feathers.develop.giveth.io',
     nodeConnection: 'wss://rinkeby.giveth.io:8546',
@@ -25,6 +27,7 @@ const configurations = {
   production: {
     title: 'production',
     poolFactoryAddress: '0x1ce25E5Db192BB0804aA75D0cA3C7A4f2788Fe10',
+    eventEmitterAddress: '0xd84e2462b412bba3fd81f95812823f7c6a72bab9',
     etherscan: 'https://etherscan.io/',
     feathersConnection: 'https://feathers.mainnet.giveth.io',
     nodeConnection: 'wss://mew.giveth.io/ws',
