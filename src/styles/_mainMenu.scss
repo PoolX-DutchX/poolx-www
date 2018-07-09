@@ -1,6 +1,5 @@
 #main-menu {
-  // background-color: $header-background;
-  background-color: #3884FF;
+  background-color: $header-background;
   height: 80px;
 
   .mobile-wallet-lock {
@@ -92,6 +91,14 @@
       font-size: 1.2rem;
       font-weight: 300;
       padding: .05rem 1.5rem;
+    }
+  }
+
+  .is-homepage {
+    background-color: #3884FF;
+    color: white;
+    a {
+      color: white;
     }
   }
 }
