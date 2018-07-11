@@ -89,7 +89,7 @@ class PoolService {
       .watch({ listStrategy: 'always' })
       .find({
         query: {
-          ownerAddress: userAddress,
+          ownerWallet: userAddress,
         },
       })
       .subscribe(

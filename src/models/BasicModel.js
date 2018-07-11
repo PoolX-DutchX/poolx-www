@@ -1,7 +1,7 @@
 import Model from './Model';
 
 /**
- * The DAC, Milestone and Campaign base model containing basic common interface
+ * The Pool and Contribution base model containing basic common interface
  */
 class BasicModel extends Model {
   /**
@@ -22,31 +22,15 @@ class BasicModel extends Model {
 
   constructor({
     _id,
-    title = '',
-    description = '',
-    summary = '',
-    image = '',
     txHash,
     owner,
-    reviewer,
-    totalDonated = '0',
-    donationCount = 0,
-    peopleCount = 0,
   }) {
     super();
 
     this.id = _id;
-    this.title = title;
-    this.description = description;
-    this.summary = summary;
-    this.image = image;
-    this.newImage = false;
     this.txHash = txHash;
     this.owner = owner;
-    this.reviewer = reviewer;
-    this.totalDonated = totalDonated;
-    this.donationCount = donationCount;
-    this.peopleCount = peopleCount;
+    this.createdAt = data.createdAt || '';
     this.myOrder = -1;
   }
 
@@ -59,52 +43,6 @@ class BasicModel extends Model {
     this.myId = value;
   }
 
-  get title() {
-    return this.myTitle;
-  }
-
-  set title(value) {
-    this.checkType(value, ['string'], 'title');
-    this.myTitle = value;
-  }
-
-  get name() {
-    return this.myName;
-  }
-
-  set name(value) {
-    this.checkType(value, ['string'], 'name');
-    this.myName = value;
-  }
-
-  get description() {
-    return this.myDescription;
-  }
-
-  set description(value) {
-    this.checkType(value, ['string'], 'description');
-    this.myDescription = value;
-  }
-
-  get summary() {
-    return this.mySummary;
-  }
-
-  set summary(value) {
-    this.checkType(value, ['string'], 'summary');
-    this.mySummary = value;
-  }
-
-  get image() {
-    return this.myImage;
-  }
-
-  set image(value) {
-    this.checkType(value, ['string'], 'image');
-    this.newImage = true;
-    this.myImage = value;
-  }
-
   get txHash() {
     return this.myTxHash;
   }
@@ -112,6 +50,15 @@ class BasicModel extends Model {
   set txHash(value) {
     this.checkType(value, ['undefined', 'string'], 'txHash');
     this.myTxHash = value;
+  }
+
+  get ownerAddress() {
+    return this.myOwnerAddress;
+  }
+
+  set ownerAddress(value) {
+    this.checkType(value, ['undefined', 'string'], 'ownerAddress');
+    this.myOwnerAddress = value;
   }
 
   get owner() {
@@ -123,41 +70,15 @@ class BasicModel extends Model {
     this.myOwner = value;
   }
 
-  get reviewer() {
-    return this.myReviewer;
+  get createdAt() {
+    return this.myCreatedAt;
   }
 
-  set reviewer(value) {
-    this.checkType(value, ['undefined', 'object'], 'reviewer');
-    this.myReviewer = value;
+  set createdAt(value) {
+    this.checkType(value, ['undefined','string'], 'createdAt');
+    this.myCreatedAt = value;
   }
 
-  get totalDonated() {
-    return this.myTotalDonated;
-  }
-
-  set totalDonated(value) {
-    this.checkType(value, ['string'], 'totalDonated');
-    this.myTotalDonated = value;
-  }
-
-  get donationCount() {
-    return this.myDonationCount;
-  }
-
-  set donationCount(value) {
-    this.checkType(value, ['number'], 'donationCount');
-    this.myDonationCount = value;
-  }
-
-  get peopleCount() {
-    return this.myPeopleCount;
-  }
-
-  set peopleCount(value) {
-    this.checkType(value, ['number'], 'peopleCount');
-    this.myPeopleCount = value;
-  }
 }
 
 export default BasicModel;

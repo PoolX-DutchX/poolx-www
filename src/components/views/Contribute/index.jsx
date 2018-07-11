@@ -168,7 +168,7 @@ class Contribute extends Component {
     console.log('this.state.activeStep', this.state.activeStep);
     console.log('totalSteps()', totalSteps());
     if (this.state.activeStep === totalSteps() - 2 ) { //check validation
-      // TODO: Put new Contribution on Redis cache
+
     }
 
     this.setState({
@@ -255,7 +255,7 @@ class Contribute extends Component {
                           { wallet, amount },
                           { setSubmitting, setErrors /* setValues and other goodies */ }
                         ) => {
-                          const contribution = new Contribution({ wallet, amount, pool: this.state.pool.id });
+                          const contribution = new Contribution({ ownerWallet: wallet, amount, pool: this.state.pool.id });
 
                           const result = await feathersClient
                             .service('contributions')

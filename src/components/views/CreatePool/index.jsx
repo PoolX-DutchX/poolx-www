@@ -41,22 +41,22 @@ import User from '../../../models/User';
 import Pool from '../../../models/Pool';
 
 const poolData = {
-  name: 'IIOC',
-  wallet: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1',
-  cap: '200',
-  minContribution: '5',
-  maxContribution: '30',
+  maxAllocation: '200',
   fee: '0.25',
   feePayoutCurrency: 'ether',
-    adminAddresses: [
+  payoutAddress: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1' ,
+  payoutAddressTxData: '0Ab7BA78BA',
+  adminAddresses: [
     '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1',
     '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1',
     '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1',
     '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1'
   ],
-  destinationAddress: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1' ,
-  destinationData: '0Ab7BA78BA',
-  description: 'This is the best pool you could ever hope for.'
+  name: 'IIOC',
+  description: 'This is the best pool you could ever hope for.',
+  minContribution: '5',
+  maxContribution: '30',
+  ownerWallet: '0x36596eEBd695aDCd03B3e42260Aa2468885100dd',
 };
 
 function getSteps() {
@@ -279,7 +279,7 @@ class CreatePool extends Component {
         .create(this.state.pool.toFeathers())
 
       this.deployData = {
-        wallet: this.state.pool.wallet,
+        ownerWallet: this.state.pool.ownerWallet,
         toAddress: this.state.pool.address,
         amount: this.state.pool.amount,
         txData: 'txData',
@@ -344,11 +344,11 @@ class CreatePool extends Component {
                       this.state.activeStep === 0 &&
                       <div>
                         <TextField
-                          id="wallet"
+                          id="ownerWallet"
                           label="Wallet address"
-                          value={pool.wallet}
+                          value={pool.ownerWallet}
                           placeholder="Your wallet address"
-                          onChange={this.handlePoolChange('wallet')}
+                          onChange={this.handlePoolChange('ownerWallet')}
                           margin="normal"
                           fullWidth
                         />
@@ -359,13 +359,13 @@ class CreatePool extends Component {
                           <Grid item md={9} >
                               <div className='flex-wrap-between'>
                                 <TextField
-                                  id="cap"
-                                  label="Net pool cap"
+                                  id="maxAllocation"
+                                  label="Net pool allocation"
                                   inputProps={{style: {width:"100%"}}}
                                   className={formStyles.textField}
                                   placeholder="Ξther amount"
-                                  value={pool.cap}
-                                  onChange={this.handlePoolChange('cap')}
+                                  value={pool.maxAllocation}
+                                  onChange={this.handlePoolChange('maxAllocation')}
                                   min="0"
                                   type= "number"
                                   margin="normal"
@@ -484,20 +484,20 @@ class CreatePool extends Component {
                           <Grid item md={6}>
                             { this.state.lockDestination && <div>
                                 <TextField
-                                  id="destinationAddress"
+                                  id="payoutAddress"
                                   label="Destination Address"
                                   placeholder="0x..."
-                                  value={pool.destinationAddress}
-                                  onChange={this.handlePoolChange('destinationAddress')}
+                                  value={pool.payoutAddress}
+                                  onChange={this.handlePoolChange('payoutAddress')}
                                   type= "text"
                                   margin="normal"
                                   fullWidth
                                 />
                                 <TextField
-                                  id="destinationData"
+                                  id="payoutAddressTxData"
                                   label="Transaction data"
-                                  value={pool.destinationData}
-                                  onChange={this.handlePoolChange('destinationData')}
+                                  value={pool.payoutAddressTxData}
+                                  onChange={this.handlePoolChange('payoutAddressTxData')}
                                   type= "text"
                                   margin="normal"
                                   fullWidth
