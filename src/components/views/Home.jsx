@@ -1,21 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+
+import PillButton from '../PillButton.jsx';
+import TeamCard from '../TeamCard.jsx';
+import { teamList } from '../../constants';
 import User from '../../models/User';
-
-import HeroBanner from '../HeroBanner';
-
-import HomeViewCss from '../../styles/_homeView.scss'
-
-// const Home = ({ currentUser, history }) => (
-//   <div id="home-view-background">
-//     {/* <HeroBanner currentUser={currentUser} history={history} /> */}
-//     <div className="container-fluid page-layout reduced-padding">
-
-
-
-//     </div>
-//   </div>
-// );
 
 class Home extends Component {
   constructor(props) {
@@ -28,59 +18,90 @@ class Home extends Component {
   render() {
     return (
         <div id="home-view">
-        {/* <HeroBanner currentUser={currentUser} history={history} /> */}
           <div className="page-wrap">
-            <section className="section-1">
-              <div className="inner-wrap">
-                <div className="d-flex justify-content-center">
-                  <ul className="col-md-4 list-group clean-list">
-                    <li><h3>Poolbase. An app your users will love</h3></li>
-                    <li><p>Poolbase is an app which allows its users to pool money together to invest in hot new ICOs</p></li>
-                    <li><button className="button-style">Signup For Poolbase</button></li>
-                    <li>Login with Github</li>
-                  </ul>
-                    <img src="https://www.gitbook.com/public/images/adb1b3a77d092d0cb1bccc7a42b94625.png" alt="Signup Image" height ="310" width = "475"/>
-                </div>
-                <div className="bottom-banner reset-wrap">
-                  <div className="skew"></div>
-                  <div className="reset-wrap">
-                    <div className="container wallet-providers">
-                      <a className="wallet-logo" href="https://metamask.io/" target="_blank" rel="noopener noreferrer">
-                        <img src="/img/metamask-logo.svg" width="90px" alt="Metamask logo" />
-                      </a>
-                      <a className="wallet-logo" href="https://mycrypto.com/" target="_blank" rel="noopener noreferrer">
-                        <img src="/img/mycrypto-logo.png" width="90px" alt="My Crypto logo" />
-                      </a>
-                      <a className="wallet-logo" href="https://www.myetherwallet.com/" target="_blank" rel="noopener noreferrer">
-                        <img src="/img/myetherwallet-logo.png" width="90px" alt="My Ether Wallet logo" />
-                      </a>
+            <div className="skew top-section bg-color-light box-shadow">
+              <div className="skew-reset relative">
+                <div className="container">
+                  <div className="row">
+                    <div className="col-sm-5 ">
+                      <h1>Powered by the Ethereum blockchain!</h1>
+                      <p>Pool digital currency today with the security of smart contracts</p>
+                      <PillButton>
+                        Create a Pool
+                      </PillButton>
+                    </div>
+                    <div className="col-sm-7">
+                      <img className="pb-screenshot" src="/img/screenshots.png" alt="Poolbase Screenshot"/>
                     </div>
                   </div>
                 </div>
+                <div className="bottom-banner">
+                  <div className="skew2 cover-all bg-color-medium"></div>
+                    <div className="relative">
+                      <div className="container wallet-providers">
+                        <a className="wallet-logo" href="https://metamask.io/" target="_blank" rel="noopener noreferrer">
+                          <img src="/img/metamask-logo-white.png" height="60px" alt="Metamask logo" />
+                        </a>
+                        <a className="wallet-logo" href="https://mycrypto.com/" target="_blank" rel="noopener noreferrer">
+                          <img src="/img/mycrypto-logo-white.png" height="60px" alt="My Crypto logo" />
+                        </a>
+                        <a className="wallet-logo" href="https://www.myetherwallet.com/" target="_blank" rel="noopener noreferrer">
+                          <img src="/img/myetherwallet_logo_white.png" height="60px" alt="My Ether Wallet logo" />
+                        </a>
+                        <a className="wallet-logo" href="https://www.ethereum.org/" target="_blank" rel="noopener noreferrer">
+                          <img src="/img/ethereum-logo-white.png" height="70px" alt="Ethereum.org" />
+                        </a>
+                      </div>
+                    </div>
+                </div>
               </div>
-            </section>
-            <section className="section-2">
-              
-            </section>
-
-            <div className = "footer">
-                <ul className = "spaced-lists">
-                  <li>Poolbase</li>
-                  <li>Pricing</li>
-                  <li>About</li>
-                  <li>Documentation</li>
-                  <li>Terms</li>
-                </ul>
-                <ul>
-                  <li>Poolbase.com</li>
-                </ul>
             </div>
+            <div className="section-wrap">
+            </div>
+            <div className="relative">
+              <div className="skew cover-all bg-color-dark box-shadow"></div>
+              <div className="relative">
+                <div className="section-wrap"></div>
+              </div>
+            </div>
+            <div className="section-wrap team-section container">
+              <h2>The team</h2>
+              <div className="card-wrap">
+                {
+                  teamList.map((memberDetails, index) => <TeamCard key={index} {...memberDetails}/>)
+                }
+              </div>
+            </div>
+            <div className="relative">
+              <div className="skew cover-all bg-color-light box-shadow"></div>
+              <div className="relative">
+                <div className="section-wrap"></div>
+              </div>
+            </div>
+            <footer className="bottom-section">
+              <div className="relative">
+                <div className="skew cover-all bg-color-dark box-shadow bottom-skew"></div>
+                <div className="relative">
+                  <div className="section-wrap">
+                    <div className="container-fluid site-links">
+                       <span>
+                        <Link to="/">
+                          <img src="/img/logo_white.svg" width="140px" alt="Poolbase logo" />
+                        </Link>
+                      </span>
+                       <span>About</span>
+                       <span>Support</span>
+                       <span>Terms</span>
+                       <span>
+                        © PoolBase.com
+                       </span>
+                     </div>
+                  </div>
+                </div>
+              </div>
+            </footer>
           </div>
         </div>
-
-
-
-// {/* <div className="dark-blue-background"></div> */}
     )
   }
 }
