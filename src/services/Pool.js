@@ -37,8 +37,7 @@ class PoolService {
         .service('pools')
         .find({
           query: {
-            owner: ownerId,
-            // contributionCounts: true
+            owner: ownerId
           }
         })
         .then(({ data: pools }) => {

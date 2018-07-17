@@ -38,7 +38,7 @@ export const contributionStatusMap =  {
     displayText: 'Closed',
     actionText: '',
     action: null
-  },
+  }
 };
 
 export const poolStatusMap =  {
@@ -53,3 +53,27 @@ export const poolStatusMap =  {
     action: null
   }
 };
+
+
+export const teamList = [
+  {
+    imgUrl: '/img/team/finn_schaedlich.jpg',
+    name: 'Finn Schädlich',
+    title: 'Co-founder'
+  },
+  {
+    imgUrl: '/img/team/viktor_jamiolkowski.jpg',
+    name: 'Viktor Jamiolkowski',
+    title: 'Co-founder'
+  },
+  {
+    imgUrl: '/img/team/gustavo_guimaraes.jpg',
+    name: 'Gustavo Guimarães',
+    title: 'Co-founder'
+  },
+  {
+    imgUrl: '/img/team/michael_teixeira.jpg',
+    name: 'Michael Teixeira',
+    title: 'Co-founder'
+  }
+];

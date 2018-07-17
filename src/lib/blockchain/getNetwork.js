@@ -4,11 +4,11 @@ import config from '../../configuration';
 let network;
 
 export default () => {
-  if (network) return Promise.resolve(network);
+//   if (network) return Promise.resolve(network);
 
-  return getWeb3().then(web3 => {
-    network = Object.assign({}, config);
+//   return getWeb3().then(web3 => {
+//     // netawork = Object.assign({}, config);
 
     return network;
-  });
+  // });
 };

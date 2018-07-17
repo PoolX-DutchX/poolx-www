@@ -93,6 +93,16 @@
       padding: .05rem 1.5rem;
     }
   }
+
+
+  &.is-homepage {
+    background-color: #3884FF;
+    color: white;
+    position: relative;
+    a {
+      color: white;
+    }
+  }
 }
 
 @media (max-width: 991px) {

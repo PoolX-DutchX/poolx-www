@@ -27,6 +27,8 @@ class MainMenu extends Component {
 
   render() {
     const { showMobileMenu } = this.state;
+    const { location } = this.props;
+    const isHomePage = location.pathname === '/';
 
     return (
       <UserConsumer>
@@ -34,7 +36,7 @@ class MainMenu extends Component {
           <div>
             <nav
               id="main-menu"
-              className={`navbar navbar-expand-lg fixed-top ${showMobileMenu ? 'show' : ''} `}
+              className={`navbar navbar-expand-lg fixed-top ${showMobileMenu ? 'show' : ''} ${isHomePage && 'is-homepage'} `}
             >
               <button
                 className="navbar-toggler navbar-toggler-right"
@@ -46,7 +48,11 @@ class MainMenu extends Component {
                 />
               </button>
               <Link className="navbar-brand" to="/">
-                <img src="/img/poolbase_logo.png" width="140px" alt="Poolbase logo" />
+                {
+                  isHomePage ? <img src="/img/logo_white.svg" width="140px" alt="Poolbase logo" /> :
+                    <img src="/img/logo_blue.svg" width="140px" alt="Poolbase logo" />
+                }
+
               </Link>
 
               <div
@@ -54,13 +60,14 @@ class MainMenu extends Component {
                 id="navbarSupportedContent"
               >
                 <ul className="navbar-nav mr-auto">
+                  {/* 
                   <li className="nav-item">
                     <NavLink className="nav-link" to="/pools" activeClassName="active">
                       Pools
                     </NavLink>
                   </li>
 
-                  {/* state.currentUser && (
+                  state.currentUser && (
                     <li className="nav-item dropdown">
                       <NavLink
                         className="nav-link dropdown-toggle"
