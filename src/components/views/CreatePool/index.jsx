@@ -52,6 +52,7 @@ const poolData = {
     '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1',
     '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1'
   ],
+  adminPayoutAddress: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1',
   name: 'IIOC',
   description: 'This is the best pool you could ever hope for.',
   minContribution: '5',
@@ -470,6 +471,15 @@ class CreatePool extends Component {
                             }
                           </Grid>
                         </Grid>
+                        <TextField
+                          id="adminPayoutAddress"
+                          label="Admin fee payout wallet"
+                          value={pool.adminPayoutAddress}
+                          placeholder="Admin fee payout wallet address"
+                          onChange={this.handlePoolChange('adminPayoutAddress')}
+                          margin="normal"
+                          fullWidth
+                        />
                         <hr/>
                         <Grid container>
                           <Grid item md={6}>

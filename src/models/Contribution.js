@@ -106,6 +106,15 @@ class Contribution extends BasicModel {
     this.myPool = value;
   }
 
+  get poolAddress() {
+    return this.myPoolAddress;
+  }
+
+  set poolAddress(value) {
+    this.checkType(value, ['undefined', 'string'], 'poolAddress');
+    this.myPoolAddress = value;
+  }
+
   get ownerWallet() {
     return this.myOwnerWallet;
   }

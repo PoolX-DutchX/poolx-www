@@ -56,6 +56,7 @@ class Pool extends BasicModel {
     this.payoutAddress = data.payoutAddress || '';
     this.payoutAddressTxData = data.payoutAddressTxData || ''; // in case payout wallet is a contract
     this.adminAddresses = data.adminAddresses || [];
+    this.adminPayoutAddress = data.adminPayoutAddress || '';
 
     this.name = data.name || '';
     this.description = data.description || '';
@@ -81,6 +82,7 @@ class Pool extends BasicModel {
       feePayoutCurrency: this.feePayoutCurrency,
       payoutAddress: this.payoutAddress,
       payoutAddressTxData: this.payoutAddressTxData,
+      adminPayoutAddress: this.adminPayoutAddress,
       adminAddresses: this.adminAddresses,
 
       name: this.name,
@@ -265,6 +267,15 @@ class Pool extends BasicModel {
   set adminAddresses(value) {
     this.checkType(value, ['object', 'array'], 'adminAddresses');
     this.myAdminAddresses = value;
+  }
+
+  get adminPayoutAddress() {
+    return this.myAdminPayoutAddress;
+  }
+
+  set adminPayoutAddress(value) {
+    this.checkType(value, ['undefined', 'string'], 'adminPayoutAddress');
+    this.myAdminPayoutAddress = value;
   }
 
   get payoutAddress() {
