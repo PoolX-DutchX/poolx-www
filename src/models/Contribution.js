@@ -1,41 +1,39 @@
 import BasicModel from './BasicModel';
 import ContributionService from '../services/Contribution';
+
 import {
-  AWAITING_CONTRIBUTION_TX,
-  CONTRIBUTION_TX_PENDING,
-  CONTRIBUTION_COMPLETE,
-  AWAITING_CLAIM_TX,
-  CLAIM_TX_PENDING,
-  CLAIM_COMPLETE,
+  PENDING_CONFIRMATION,
+  CONFIRMED,
+  TOKENS_AVAILABLE,
+  PENDING_CLAIM_TOKENS,
+  TOKENS_CLAIMED,
 } from '../constants';
 
 class Contribution extends BasicModel {
-  static get AWAITING_CONTRIBUTION_TX() {
-    return AWAITING_CONTRIBUTION_TX;
+  static get PENDING_CONFIRMATION() {
+    return PENDING_CONFIRMATION;
   }
-  static get CONTRIBUTION_TX_PENDING() {
-    return CONTRIBUTION_TX_PENDING;
+  static get CONFIRMED() {
+    return CONFIRMED;
   }
-  static get CONTRIBUTION_COMPLETE() {
-    return CONTRIBUTION_COMPLETE;
+  static get TOKENS_AVAILABLE() {
+    return TOKENS_AVAILABLE;
   }
-  static get AWAITING_CLAIM_TX() {
-    return AWAITING_CLAIM_TX;
+  static get PENDING_CLAIM_TOKENS() {
+    return PENDING_CLAIM_TOKENS;
   }
-  static get CLAIM_TX_PENDING() {
-    return CLAIM_TX_PENDING;
-  }
-  static get CLAIM_COMPLETE() {
-    return CLAIM_COMPLETE;
+  static get TOKENS_CLAIMED() {
+    return TOKENS_CLAIMED;
   }
 
   constructor(data) {
     super(data);
 
     this.pool = data.pool || '';
-    this.wallet = data.wallet || '';
+    this.ownerWallet = data.ownerWallet || '';
+    this.ownerId = data.ownerId || '';
     this.amount = data.amount || 0; // in Ether
-    this.status = data.status || Contribution.AWAITING_CONTRIBUTION_TX;
+    this.status = data.status || Contribution.PENDING_CONFIRMATION;
     // ToDo: currency, ether by default for now
   }
 
@@ -43,18 +41,13 @@ class Contribution extends BasicModel {
     return {
       id: this.id,
       pool: this.pool,
-      wallet: this.wallet,
+      ownerWallet: this.ownerWallet,
       amount: this.amount,
       txHash: this.txHash,
       txTimestamp: this.txTimestamp,
       status: this.status,
     };
   }
-
-  get isActive() {
-    return this.status === Contribution.ACTIVE;
-  }
-
   /**
    * Save the campaign to feathers and blockchain if necessary
    *
@@ -82,12 +75,11 @@ class Contribution extends BasicModel {
 
   set status(value) {
     this.checkValue(value, [
-      Contribution.AWAITING_CONTRIBUTION_TX,
-      Contribution.CONTRIBUTION_TX_PENDING,
-      Contribution.CONTRIBUTION_COMPLETE,
-      Contribution.AWAITING_CLAIM_TX,
-      Contribution.CLAIM_TX_PENDING,
-      Contribution.CLAIM_COMPLETE
+      Contribution.PENDING_CONFIRMATION,
+      Contribution.CONFIRMED,
+      Contribution.TOKENS_AVAILABLE,
+      Contribution.PENDING_CLAIM_TOKENS,
+      Contribution.TOKENS_CLAIMED
     ], 'status');
     this.myStatus = value;
     // if (value === Contribution.PENDING) this.myOrder = 1;
@@ -114,13 +106,31 @@ class Contribution extends BasicModel {
     this.myPool = value;
   }
 
-  get wallet() {
-    return this.myWallet;
+  get poolAddress() {
+    return this.myPoolAddress;
   }
 
-  set wallet(value) {
-    this.checkType(value, ['undefined', 'string'], 'wallet');
-    this.myWallet = value;
+  set poolAddress(value) {
+    this.checkType(value, ['undefined', 'string'], 'poolAddress');
+    this.myPoolAddress = value;
+  }
+
+  get ownerWallet() {
+    return this.myOwnerWallet;
+  }
+
+  set ownerWallet(value) {
+    this.checkType(value, ['undefined', 'string'], 'ownerWallet');
+    this.myOwnerWallet = value;
+  }
+
+  get ownerId() {
+    return this.myOwnerId;
+  }
+
+  set ownerId(value) {
+    this.checkType(value, ['undefined', 'string'], 'ownerId');
+    this.myOwnerId = value;
   }
 
   get txTimestamp() {

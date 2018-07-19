@@ -1,43 +1,44 @@
 import BasicModel from './BasicModel';
 import PoolService from '../services/Pool';
-import { STATUS_OPEN, STATUS_CLOSED } from '../constants';
+import {
+  PENDING_DEPLOYMENT,
+  ACTIVE,
+  PENDING_CLOSE_POOL,
+  CLOSED,
+  PENDING_TOKEN_BATCH,
+  PAYOUT_ENABLED,
+  PENDING_ENABLE_REFUNDS,
+  REFUNDS_ENABLED,
+  PAUSED
+} from '../constants';
 
 class Pool extends BasicModel {
+  static get PENDING_DEPLOYMENT() {
+    return PENDING_DEPLOYMENT;
+  }
   static get ACTIVE() {
-    return 'Active';
+    return ACTIVE;
   }
-  static get PENDING() {
-   return 'Pending';
-  }
-  static get CANCELED() {
-    return 'Canceled';
-  }
-  static get AWAITING_DEPLOY_TX() {
-    return 'awaiting_deploy_tx';
-  }
-  static get POOL_DEPLOYED() {
-    return 'pool_deployed';
-  }
-  static get OPEN() {
-    return STATUS_OPEN;
+  static get PENDING_CLOSE_POOL() {
+    return PENDING_CLOSE_POOL;
   }
   static get CLOSED() {
-    return STATUS_CLOSED;
+    return CLOSED;
   }
-  static get AWAITING_SEND_FUNDS_TX() {
-    return 'awaiting_send_funds_tx';
+  static get PENDING_TOKEN_BATCH() {
+    return PENDING_TOKEN_BATCH;
   }
-  static get FUNDS_SENT() {
-    return 'funds_sent';
+  static get PAYOUT_ENABLED() {
+    return PAYOUT_ENABLED;
   }
-  static get TOKENS_RECEIPT_CONFIRMED() {
-    return 'tokens_receipt_confirmed';
+  static get PENDING_ENABLE_REFUNDS() {
+    return PENDING_ENABLE_REFUNDS;
   }
-  static get AWAITING_REFUND_TX() {
-    return 'awaiting_refund_tx';
+  static get REFUNDS_ENABLED() {
+    return REFUNDS_ENABLED;
   }
-  static get REFUNDED() {
-    return 'refunded';
+  static get PAUSED() {
+    return PAUSED;
   }
   static get CURRENCY_ETHER() {
     return 'ether';
@@ -48,46 +49,48 @@ class Pool extends BasicModel {
 
   constructor(data) {
     super(data);
-    this.wallet = data.wallet || '';
-    this.cap = data.cap || '';
-    this.createdAt = data.createdAt || '';
-    this.netInvested = data.netInvested || '';
-    this.grossInvested = data.grossInvested || '';
-    this.minContribution = data.minContribution || '';
-    this.maxContribution = data.maxContribution || '';
+
+    this.maxAllocation = data.maxAllocation || '';
     this.fee = data.fee || '0.0';
-    this.contributionCount = data.contributionCount || 0;
     this.feePayoutCurrency = data.feePayoutCurrency || Pool.CURRENCY_ETHER;
+    this.payoutAddress = data.payoutAddress || '';
+    this.payoutAddressTxData = data.payoutAddressTxData || ''; // in case payout wallet is a contract
     this.adminAddresses = data.adminAddresses || [];
-    this.destinationAddress = data.destinationAddress || '';
-    this.destinationData = data.destinationData || '';
+    this.adminPayoutAddress = data.adminPayoutAddress || '';
+
     this.name = data.name || '';
     this.description = data.description || '';
-    this.status = data.status || Pool.PENDING;
-    this.address = data.address || '';
+    this.status = data.status || Pool.PENDING_DEPLOYMENT;
+    this.minContribution = data.minContribution || '';
+    this.maxContribution = data.maxContribution || '';
     this.whitelist = data.whitelist || [];
+
+    this.contractAddress = data.contractAddress || '';
+    this.ownerWallet = data.ownerWallet || '';
+
+    this.netInvested = data.netInvested || '';
+    this.grossInvested = data.grossInvested || '';
+    this.contributionCount = data.contributionCount || 0;
+    this.tokenBalance = data.tokenBalance || '';
+
   }
 
   toFeathers() {
     return {
-      id: this.id,
-      wallet: this.wallet,
-      cap: this.cap,
-      netInvested: this.netInvested,
-      grossInvested: this.grossInvested,
-      minContribution: this.minContribution,
-      maxContribution: this.maxContribution,
+      maxAllocation: this.maxAllocation,
       fee: this.fee,
       feePayoutCurrency: this.feePayoutCurrency,
+      payoutAddress: this.payoutAddress,
+      payoutAddressTxData: this.payoutAddressTxData,
+      adminPayoutAddress: this.adminPayoutAddress,
       adminAddresses: this.adminAddresses,
-      destinationAddress: this.destinationAddress,
-      destinationData: this.destinationData,
+
       name: this.name,
       description: this.description,
-      status: this.status,
-      txHash: this.txHash,
-      address: this.address,
-      whitelist: this.whitelist
+      minContribution: this.minContribution,
+      maxContribution: this.maxContribution,
+      whitelist: this.whitelist,
+      //status, ownerWallet, contractAddress set on backend
     };
   }
 
@@ -104,66 +107,85 @@ class Pool extends BasicModel {
   save(afterCreate, afterMined) {
     PoolService.save(this, this.owner.address, afterCreate, afterMined);
   }
-
-  /**
-   * Cancel the campaign in feathers and blockchain
-   *
-   * @param from        Either the owner or reviewer. Whoever is canceling the campaign
-   * @param afterCreate Callback function once a transaction is created
-   * @param afterMined  Callback function once the transaction is mined and feathers updated
-   */
-  cancel(from, afterCreate, afterMined) {
-    PoolService.cancel(this, from, afterCreate, afterMined);
-  }
+  //
+  // /**
+  //  * Cancel the campaign in feathers and blockchain
+  //  *
+  //  * @param from        Either the owner or reviewer. Whoever is canceling the campaign
+  //  * @param afterCreate Callback function once a transaction is created
+  //  * @param afterMined  Callback function once the transaction is mined and feathers updated
+  //  */
+  // cancel(from, afterCreate, afterMined) {
+  //   PoolService.cancel(this, from, afterCreate, afterMined);
+  // }
 
   get status() {
     return this.myStatus;
   }
 
   set status(value) {
-    this.checkValue(value, [Pool.PENDING, Pool.OPEN, Pool.ACTIVE, Pool.CANCELED, Pool.CLOSED], 'status');
+    this.checkValue(value, [
+      Pool.PENDING_DEPLOYMENT,
+      Pool.ACTIVE,
+      Pool.PENDING_CLOSE_POOL,
+      Pool.CLOSED,
+      Pool.PENDING_TOKEN_BATCH,
+      Pool.PAYOUT_ENABLED,
+      Pool.PENDING_ENABLE_REFUNDS,
+      Pool.REFUNDS_ENABLED,
+      Pool.PAUSED
+    ], 'status');
     this.myStatus = value;
-    if (value === Pool.PENDING) this.myOrder = 1;
-    else if (value === Pool.OPEN) this.myOrder = 2;
-    else if (value === Pool.ACTIVE) this.myOrder = 3;
-    else if (value === Pool.CANCELED) this.myOrder = 4;
-    else this.myOrder = 5;
+    // if (value === Pool.PENDING) this.myOrder = 1;
+    // else if (value === Pool.ACTIVE) this.myOrder = 2;
+    // else if (value === Pool.CLOSED) this.myOrder = 3;
+    // else if (value === Pool.CANCELED) this.myOrder = 4;
+    // else this.myOrder = 5;
   }
 
-  get wallet() {
-    return this.myWallet;
+  get contractAddress() {
+    return this.myContractAddress;
   }
 
-  set wallet(value) {
-    this.checkType(value, ['undefined', 'string'], 'wallet');
-    this.myWallet = value;
+  set contractAddress(value) {
+    this.checkType(value, ['undefined', 'string'], 'contractAddress');
+    this.myContractAddress = value;
   }
 
-  get address() {
-    return this.myAddress;
+  get ownerWallet() {
+    return this.myOwnerWallet;
   }
 
-  set address(value) {
-    this.checkType(value, ['undefined', 'string'], 'address');
-    this.myAddress = value;
+  set ownerWallet(value) {
+    this.checkType(value, ['undefined', 'string'], 'ownerWallet');
+    this.myOwnerWallet = value;
   }
 
-  get cap() {
-    return this.myCap;
+  get name() {
+    return this.myName;
   }
 
-  set cap(value) {
-    this.checkType(value, ['undefined','string'], 'cap');
-    this.myCap = value;
+  set name(value) {
+    this.checkType(value, ['string'], 'name');
+    this.myName = value;
   }
 
-  get createdAt() {
-    return this.myCreatedAt;
+  get description() {
+    return this.myDescription;
   }
 
-  set createdAt(value) {
-    this.checkType(value, ['undefined','string'], 'createdAt');
-    this.myCreatedAt = value;
+  set description(value) {
+    this.checkType(value, ['string'], 'description');
+    this.myDescription = value;
+  }
+
+  get maxAllocation() {
+    return this.myMaxAllocation;
+  }
+
+  set maxAllocation(value) {
+    this.checkType(value, ['undefined','string'], 'maxAllocation');
+    this.myMaxAllocation = value;
   }
 
   get tokenBalance() {
@@ -247,22 +269,31 @@ class Pool extends BasicModel {
     this.myAdminAddresses = value;
   }
 
-  get destinationAddress() {
-    return this.myDestinationAddress;
+  get adminPayoutAddress() {
+    return this.myAdminPayoutAddress;
   }
 
-  set destinationAddress(value) {
-    this.checkType(value, ['undefined', 'string'], 'destinationAddress');
-    this.myDestinationAddress = value;
+  set adminPayoutAddress(value) {
+    this.checkType(value, ['undefined', 'string'], 'adminPayoutAddress');
+    this.myAdminPayoutAddress = value;
   }
 
-  get destinationData() {
-    return this.myDestinationData;
+  get payoutAddress() {
+    return this.myPayoutAddress;
   }
 
-  set destinationData(value) {
-    this.checkType(value, ['undefined', 'string'], 'destinationData');
-    this.myDestinationData = value;
+  set payoutAddress(value) {
+    this.checkType(value, ['undefined', 'string'], 'payoutAddress');
+    this.myPayoutAddress = value;
+  }
+
+  get payoutAddressTxData() {
+    return this.myPayoutAddressTxData;
+  }
+
+  set payoutAddressTxData(value) {
+    this.checkType(value, ['undefined', 'string'], 'payoutAddressTxData');
+    this.myPayoutAddressTxData = value;
   }
 
   get whitelist() {

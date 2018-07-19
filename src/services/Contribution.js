@@ -13,11 +13,11 @@ class ContributionService {
    *
    * @param id   ID of the Contribution to be retrieved
    */
-  static get(address) {
+  static get(ownerWallet) {
     return new Promise((resolve, reject) => {
       feathersClient
         .service('contributions')
-        .find({ query: { address } })
+        .find({ query: { ownerWallet: ownerWallet } })
         .then(resp => {
           resolve(new Contribution(resp.data[0]));
         })
