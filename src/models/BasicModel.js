@@ -22,15 +22,18 @@ class BasicModel extends Model {
 
   constructor({
     _id,
-    txHash,
     owner,
+    ownerAddress,
+    transactions,
+    createdAt,
   }) {
     super();
 
     this.id = _id;
-    this.txHash = txHash;
     this.owner = owner;
-    this.createdAt = data.createdAt || '';
+    this.ownerAddress = ownerAddress;
+    this.transactions = transactions || [];
+    this.createdAt = createdAt;
     this.myOrder = -1;
   }
 
@@ -43,13 +46,13 @@ class BasicModel extends Model {
     this.myId = value;
   }
 
-  get txHash() {
-    return this.myTxHash;
+  get owner() {
+    return this.myOwner;
   }
 
-  set txHash(value) {
-    this.checkType(value, ['undefined', 'string'], 'txHash');
-    this.myTxHash = value;
+  set owner(value) {
+    this.checkType(value, ['undefined', 'object'], 'owner');
+    this.myOwner = value;
   }
 
   get ownerAddress() {
@@ -61,13 +64,13 @@ class BasicModel extends Model {
     this.myOwnerAddress = value;
   }
 
-  get owner() {
-    return this.myOwner;
+  get transactions() {
+    return this.myTransactions;
   }
 
-  set owner(value) {
-    this.checkType(value, ['undefined', 'object'], 'owner');
-    this.myOwner = value;
+  set transactions(value) {
+    this.checkType(value, ['object', 'array'], 'transactions');
+    this.myTransactions = value;
   }
 
   get createdAt() {

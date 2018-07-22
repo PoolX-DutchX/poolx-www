@@ -30,22 +30,22 @@ class Contribution extends BasicModel {
     super(data);
 
     this.pool = data.pool || '';
-    this.ownerWallet = data.ownerWallet || '';
     this.ownerId = data.ownerId || '';
     this.amount = data.amount || 0; // in Ether
     this.status = data.status || Contribution.PENDING_CONFIRMATION;
+    this.amountClaimed =  data.amountClaimed || 0;
     // ToDo: currency, ether by default for now
+    // ToDo: network - or place in seperate DB ??
   }
 
   toFeathers() {
     return {
       id: this.id,
       pool: this.pool,
-      ownerWallet: this.ownerWallet,
       amount: this.amount,
-      txHash: this.txHash,
-      txTimestamp: this.txTimestamp,
       status: this.status,
+      owner: this.owner,
+      ownerAddress: this.ownerAddress
     };
   }
   /**
@@ -97,6 +97,15 @@ class Contribution extends BasicModel {
     this.myAmount = value;
   }
 
+  get amountClaimed() {
+    return this.myAmountClaimed;
+  }
+
+  set amountClaimed(value) {
+    this.checkType(value, ['number'], 'amountClaimed');
+    this.myAmountClaimed = value;
+  }
+
   get pool() {
     return this.myPool;
   }
@@ -115,15 +124,6 @@ class Contribution extends BasicModel {
     this.myPoolAddress = value;
   }
 
-  get ownerWallet() {
-    return this.myOwnerWallet;
-  }
-
-  set ownerWallet(value) {
-    this.checkType(value, ['undefined', 'string'], 'ownerWallet');
-    this.myOwnerWallet = value;
-  }
-
   get ownerId() {
     return this.myOwnerId;
   }
@@ -131,15 +131,6 @@ class Contribution extends BasicModel {
   set ownerId(value) {
     this.checkType(value, ['undefined', 'string'], 'ownerId');
     this.myOwnerId = value;
-  }
-
-  get txTimestamp() {
-    return this.myTxTimeStamp;
-  }
-
-  set txTimestamp(value) {
-    this.checkType(value, ['number'], 'txTimestamp');
-    this.myTxTimeStamp = value;
   }
 
   get closeDate() {

@@ -255,7 +255,7 @@ class Contribute extends Component {
                           { wallet, amount },
                           { setSubmitting, setErrors /* setValues and other goodies */ }
                         ) => {
-                          const contribution = new Contribution({ ownerWallet: wallet, amount, pool: this.state.pool.id });
+                          const contribution = new Contribution({ ownerAddress: wallet, amount, pool: this.state.pool.id });
 
                           const result = await feathersClient
                             .service('contributions')
