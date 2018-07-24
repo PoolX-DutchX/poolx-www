@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
 
-import WalletPanel from './WalletPanel';
+import WalletProviderPanel from './WalletProviderPanel';
 import DeployDataFields from './DeployDataFields';
 
 import GasPricePanel from '../../../../components/GasPricePanel';
@@ -103,7 +103,7 @@ class DeployStep extends React.Component {
         <Typography variant="subheading" gutterBottom>
           Transact by way of these popular wallet providers:
         </Typography>
-        <WalletPanel onClick={this.handleWalletProviderClick}/>
+        <WalletProviderPanel onClick={this.handleWalletProviderClick}/>
         <Typography variant="subheading" gutterBottom>
           Or do so manually with the following data:
         </Typography>

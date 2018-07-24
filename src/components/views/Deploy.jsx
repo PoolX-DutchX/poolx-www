@@ -3,18 +3,13 @@ import PropTypes from 'prop-types';
 
 import { utils } from 'web3';
 
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
+import WalletProviderPanel from './Contribute/components/WalletProviderPanel';
+import DeployDataFields from './Contribute/components/DeployDataFields';
 
-import WalletProviderPanel from './WalletProviderPanel';
-import DeployDataFields from './DeployDataFields';
-
-import { copyToClipboard } from '../../../../lib/helpers';
-import WithTooltip from '../../../../components/WithTooltip';
-import GasPricePanel from '../../../../components/GasPricePanel';
-
+import { copyToClipboard } from '../../lib/helpers';
+import WithTooltip from '../WithTooltip';
+import GasPricePanel from '../GasPricePanel';
+import CircleStep from '../CircleStep';
 
 // import getNetwork from '../lib/blockchain/getNetwork';
 // import { feathersClient } from '../lib/feathersClient';
@@ -26,32 +21,13 @@ import GasPricePanel from '../../../../components/GasPricePanel';
 
 // const felixPoolArtifact = require('../lib/blockchain/contracts/FelixPool.json');
 
-const getDeployData = ({ toAddress, amount, gasLimit, txData }) => {
-  return [
-    {
-      value: toAddress,
-      label: 'To Address'
-    },
-    {
-      value: amount,
-      label: 'Amount to Send'
-    },
-    {
-      value: gasLimit,
-      label: 'Gas Limit'
-    },
-    {
-      value: txData,
-      label: 'Transaction Data'
-    },
-  ];
-}
-class DeployStep extends React.Component {
+class Deploy extends React.Component {
   constructor(props) {
     super();
     const { amount } = props;
 
     //temporary
+    const wallet = '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1';
     const txData = '0x_transactionData';
     const gasLimit = '200000';
     const gasPrices = {}
@@ -61,6 +37,7 @@ class DeployStep extends React.Component {
       isSaving: false,
       toAddress: poolFactoryAddress,
       amount: amount || 0,
+      wallet,
       gasPrices,
       gasLimit,
       txData,
@@ -71,7 +48,9 @@ class DeployStep extends React.Component {
 
     this.handleWalletProviderClick = this.handleWalletProviderClick.bind(this);
   }
-
+  async componentWillMount() {
+    //get Contribution
+  }
   async componentDidMount() {
 
   // const { abi, bytecode } = felixPoolArtifact;
@@ -105,31 +84,76 @@ class DeployStep extends React.Component {
   }
 
   render() {
-    const { pool: { wallet } } = this.props;
-    const { toAddress, amount, gasLimit, txData, gasPrices } = this.state;
+    // const { pool: { wallet } } = this.props;
+    const { wallet, toAddress, amount, gasLimit, txData, gasPrices } = this.state;
 
-    return (<div>
-        <Typography variant="subheading" gutterBottom>
-          To perform this operation, you need to send a transaction from:
-        </Typography>
-        <div className="alert alert-info" role="alert">
-          {wallet}
+    return (<div className="container deploy-page">
+        <h1>
+          Congrats, you're almost there!
+        </h1>
+        <p className="sub-heading">
+          Perform your 'Claim token' transaction on the 'Nexo Pool'
+        </p>
+        <div className="row">
+          <h4 className="col-md-4">
+            <CircleStep step={1}/>
+            Your chosen wallet:
+          </h4>
+          <span className="col-md-8 alert alert-info required-wallet-alert" role="alert">
+            {wallet}
+          </span>
         </div>
-        <Typography variant="subheading" gutterBottom>
-          Transact by way of these popular wallet providers:
-        </Typography>
-        <WalletProviderPanel onClick={this.handleWalletProviderClick}/>
-        <Typography variant="subheading" gutterBottom>
-          Or do so manually with the following data:
-        </Typography>
-        <DeployDataFields  data={ getDeployData(this.state) }/>
-        <GasPricePanel/>
+        <hr/>
+        <div className="row">
+          <h4 className="col-md-4">
+            <CircleStep step={2}/>
+            Suggested gas prices:
+          </h4>
+          <div className="col-md-8">
+            <GasPricePanel/>
+          </div>
+        </div>
+        <hr/>
+        <div className="row">
+          <h4 className="col-md-4">
+            <CircleStep step={3}/>
+            Transact via provider:
+          </h4>
+          <div className="col-md-8">
+            <WalletProviderPanel onClick={this.handleWalletProviderClick}/>
+            <hr/>
+            <h5 className="manual-transaction-header">
+              Or, transact manually...
+            </h5>
+            <DeployDataFields  data={ getDeployData(this.state) }/>
+          </div>
+        </div>
       </div>)
   }
-
 }
 
-// DeployStep.propTypes = { };
-// DeployStep.defaultProps = { };
 
-export default DeployStep;
+export default Deploy;
+
+
+
+const getDeployData = ({ toAddress, amount, gasLimit, txData }) => {
+  return [
+    {
+      value: toAddress,
+      label: 'To Address'
+    },
+    {
+      value: amount,
+      label: 'Amount to Send'
+    },
+    {
+      value: gasLimit,
+      label: 'Gas Limit'
+    },
+    {
+      value: txData,
+      label: 'Transaction Data'
+    },
+  ];
+}

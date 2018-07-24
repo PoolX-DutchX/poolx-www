@@ -4,18 +4,22 @@ import PropTypes from 'prop-types';
 import Pool from '../../../../models/Pool';
 import { copyToClipboard } from '../../../../lib/helpers';
 
+import Paper from '@material-ui/core/Paper';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
-import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import { withStyles } from '@material-ui/core/styles';
 
-/**
- * Shows the statistics on DACs, Campaigns and milestonesCount
- *
- * TODO: Check the properties that are passed, sometimes they are number, sometimes strings...
- */
+const styles = {
+  root: {
+    margin: '0 1rem',
+  },
+  input: {
+    'text-align': 'right',
+  }
+};
+
 class DeployDataFields extends React.Component {
   constructor(props) {
     super(props);
@@ -29,37 +33,43 @@ class DeployDataFields extends React.Component {
     }
   }
   render() {
-    const { data } = this.props;
-
+    const { classes, data } = this.props;
+    console.log('data', data);
+    console.log('data.length', data.length);
     return (
-      <Grid container spacing={24} direction="column">
-        {
-          data.map(({label, value}, index) => {
-            return (<Grid container spacing={8} alignItems="flex-end" key={index}>
-               <Grid item sm={11}>
-                 <TextField
-                   label={label}
-                   value={value}
-                   inputRef={node => this._nodes[index] = node}
-                   fullWidth
-                 />
-               </Grid>
-               <Grid item sm={1}>
-                 <Button variant="contained" size="small" color="primary" onClick={this.handleClick(index)}>
-                   Copy
-                 </Button>
-               </Grid>
-             </Grid>)
-          })
-        }
-       </Grid>
-     );
+      <div id="deploy-data-fields">
+        <div>
+          {
+            data.map(({label, value}, index) => {
+              return (<div key={index} className="data-field">
+                <span className='label'>{label}</span>
+                <Input
+                className="input"
+                classes={{
+                  root: classes.root,
+                  input: classes.input
+                }}
+                value={value}
+                inputRef={node => this._nodes[index] = node}
+                inputProps={{
+                  spellcheck: "false"
+                }}
+                fullWidth
+                />
+                <Button variant="contained" size="small" color="primary" onClick={this.handleClick(index)}>
+                  Copy
+                </Button>
+              </div>)
+            })
+          }
+        </div>
+      </div>
+    );
   }
-
 }
 
 DeployDataFields.propTypes = {
   data: PropTypes.array.isRequired
 };
 
-export default DeployDataFields;
+export default withStyles(styles)(DeployDataFields);

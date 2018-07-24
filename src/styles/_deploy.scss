@@ -1,0 +1,77 @@
+.deploy-page {
+  padding-top: 3rem;
+  .row {
+    margin: 2rem 0;
+  }
+  .sub-heading {
+    margin-left: 1rem;
+    margin-top: -10px;
+    margin-bottom: 50px;
+  }
+
+  .manual-transaction-header {
+    margin: 2rem 0 1rem;
+  }
+}
+
+#deploy-data-fields {
+  // padding: 1rem;
+  // margin: 1rem 0;
+  // display: flex;
+  // flex-direction: column;
+  // align-items: center;
+
+  .data-field {
+    display: flex;
+    margin-bottom: 1rem;
+    .label {
+      min-width: 150px;
+      align-self: center;
+      font-weight: bold;
+    }
+  }
+}
+
+.required-wallet-alert {
+  text-align: center;
+}
+
+.gas-price-panel {
+  display: flex;
+  justify-content: space-evenly;
+  span {
+    width: 115px;
+    text-align: center;
+  }
+  .safe, .standard, .fast {
+    font-weight: bold;
+  }
+  .safe {
+    color: #00C29B;
+  }
+  .standard {
+    color: #03586A;
+  }
+  .fast {
+    color: red;
+  }
+}
+
+#wallet-provider-panel {
+  margin: '1rem 0';
+  padding: '1rem';
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  .provider-wrap {
+    width: 100%;
+    max-width: 670px;
+    display: flex;
+    justify-content: space-evenly;
+    .wallet-logo {
+      text-align: center;
+      width: 115px;
+    }
+  }
+}

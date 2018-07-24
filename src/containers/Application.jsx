@@ -21,6 +21,7 @@ import ViewPool from './../components/views/ViewPool';
 import CreatePool from './../components/views/CreatePool/';
 import Contribute from './../components/views/Contribute/';
 import Dashboard from './../components/views/Dashboard/';
+import Deploy from './../components/views/Deploy';
 
 import NotFound from './../components/views/NotFound';
 
@@ -117,6 +118,14 @@ class Application extends Component {
                             path="/pools/:poolId"
                             component={props => (
                               <ViewPool currentUser={currentUser} {...props} />
+                            )}
+                          />
+                          {/*path="/contributions/:contributionId/pendingTx"*/}
+                          <Route
+                            exact
+                            path="/contributions"
+                            component={props => (
+                              <Deploy currentUser={currentUser} {...props} />
                             )}
                           />
                           <Route

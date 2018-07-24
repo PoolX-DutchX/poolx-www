@@ -1,23 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import { withStyles } from '@material-ui/core/styles';
-
-const styles = theme => ({
-  paper: {
-    margin: '20px 0',
-  },
-  root: {
-    flexGrow: 1,
-  },
-  item: {
-    textAlign: 'center'
-  }
-});
-
 class GasPricePanel extends Component {
   constructor() {
     super();
@@ -46,24 +29,22 @@ class GasPricePanel extends Component {
 
     const { gasPrice: { safeLow, standard, fast }} = this.state;
 
-    return <Paper className={classes.paper}>
-      <Typography variant="title" gutterBottom>Recommended gas prices</Typography>
-      <Typography variant="subheading" gutterBottom>(based on current network conditions)</Typography>
-      <Grid container spacing={16} justify="space-between" className={classes.root} >
-        <Grid item md={4} className={classes.item}>
-          <Typography variant="subheading" gutterBottom>SafeLow(30m)</Typography>
-          <Typography variant="title" gutterBottom>{(safeLow)} gwei</Typography>
-        </Grid>
-        <Grid item md={4} className={classes.item}>
-        <Typography variant="subheading" gutterBottom>Standard(5m)</Typography>
-        <Typography variant="title" gutterBottom>{(standard)} gwei</Typography>
-        </Grid>
-        <Grid item md={4} className={classes.item}>
-        <Typography variant="subheading" gutterBottom>Fast(2m)</Typography>
-        <Typography variant="title" gutterBottom>{(fast)} gwei</Typography>
-        </Grid>
-      </Grid>
-    </Paper>
+    return (
+      <div className="gas-price-panel">
+        <span>
+          <div className="safe">SafeLow({'<'}30m)</div>
+          <div>{safeLow} gwei</div>
+        </span>
+        <span>
+          <div className="standard">Standard({'<'}5m)</div>
+          <div>{standard} gwei</div>
+        </span>
+        <span>
+          <div className="fast">Fast({'<'}2m)</div>
+          <div>{fast} gwei</div>
+        </span>
+      </div>
+    )
   }
 }
 
@@ -71,4 +52,4 @@ GasPricePanel.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(GasPricePanel);
+export default GasPricePanel;
