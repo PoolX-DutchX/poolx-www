@@ -1,6 +1,6 @@
 ![Poolbase](./public/img/poolbase_logo.png)
 
-## Set Up Development
+## Quick Setting Up Of Development
 
 * `yarn install`
 * `yarn start`

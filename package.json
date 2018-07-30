@@ -28,7 +28,7 @@
     "prop-types": "^15.5.10",
     "react": "16.3.1",
     "react-addons-shallow-compare": "^15.6.0",
-    "react-avatar": "^2.3.0",
+    "react-avatar": "^3.1.2",
     "react-cropper": "^1.0.1",
     "react-datepicker": "1.4.1",
     "react-dom": "16.3.1",
@@ -70,7 +70,8 @@
   },
   "scripts": {
     "build-css": "node-sass --include-path ./src --include-path ./node_modules src/ -o src/",
-    "watch-css": "npm run build-css && node-sass --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
+    "watch-css":
+      "npm run build-css && node-sass --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
     "build": "npm run build-css && react-scripts build",
@@ -81,11 +82,7 @@
     "prettify": "prettier --write 'src/**/*.js*'"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx}": [
-      "prettier --write",
-      "eslint --fix",
-      "git add"
-    ]
+    "src/**/*.{js,jsx}": ["prettier --write", "eslint --fix", "git add"]
   },
   "repository": {
     "type": "git",
