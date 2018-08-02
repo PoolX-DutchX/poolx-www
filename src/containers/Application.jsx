@@ -33,6 +33,7 @@ import NotFound from './../components/views/NotFound';
 import MainMenu from './../components/MainMenu';
 import Loader from './../components/Loader';
 import PrivateRoute from '../components/PrivateRoute';
+import CurrentUserProtectedRoute from '../components/CurrentUserProtectedRoute';
 
 // context providers
 import UserProvider, { Consumer as UserConsumer } from '../contextProviders/UserProvider';
@@ -172,9 +173,10 @@ class Application extends Component {
                               <Dashboard currentUser={currentUser} {...props} />
                             )}
                           />
-                          <Route
+                          <CurrentUserProtectedRoute
                             exact
                             path="/signin"
+                            currentUser={currentUser}
                             component={props => (
                               <SignIn
                                 onSignIn={onSignIn}
@@ -182,10 +184,11 @@ class Application extends Component {
                               />
                             )}
                           />
-                          <Route
+                          <CurrentUserProtectedRoute
                             exact
                             path="/signup"
-                            render={props => (
+                            currentUser={currentUser}
+                            component={props => (
                               <SignUp
                                 onSignIn={onSignIn}
                                 {...props}
