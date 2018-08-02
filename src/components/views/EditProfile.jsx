@@ -71,7 +71,7 @@ class EditProfile extends Component {
         ...user
       });
       console.log('user', user);
-      this.props.onSignIn(user.id);
+      this.props.onSignIn(user._id);
     } catch (err) {
       this.setState({ isSaving: false });
       ErrorPopup(

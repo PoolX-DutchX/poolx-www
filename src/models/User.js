@@ -17,7 +17,7 @@ class User extends Model {
     this.id = _id;
     this.name = name;
     this.email = email;
-    this.wallets = wallets;
+    this.wallets = wallets || [];
     this.avatar = avatar;
     this.linkedin = linkedin;
   }
