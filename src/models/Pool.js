@@ -50,23 +50,22 @@ class Pool extends BasicModel {
   constructor(data) {
     super(data);
 
-    this.maxAllocation = data.maxAllocation || '';
-    this.fee = data.fee || '0.0';
+    this.maxAllocation = data.maxAllocation || 0;
+    this.fee = data.fee || 0.0;
     this.feePayoutCurrency = data.feePayoutCurrency || Pool.CURRENCY_ETHER;
     this.payoutAddress = data.payoutAddress || '';
-    this.payoutAddressTxData = data.payoutAddressTxData || ''; // in case payout wallet is a contract
-    this.adminAddresses = data.adminAddresses || [];
+    this.payoutTxData = data.payoutTxData || ''; // in case payout wallet is a contract
+    this.admins = data.admins || [];
     this.adminPayoutAddress = data.adminPayoutAddress || '';
 
     this.name = data.name || '';
     this.description = data.description || '';
     this.status = data.status || Pool.PENDING_DEPLOYMENT;
-    this.minContribution = data.minContribution || '';
-    this.maxContribution = data.maxContribution || '';
+    this.minContribution = data.minContribution || 0;
+    this.maxContribution = data.maxContribution || 0;
     this.whitelist = data.whitelist || [];
 
     this.contractAddress = data.contractAddress || '';
-    this.ownerWallet = data.ownerWallet || '';
 
     this.netInvested = data.netInvested || '';
     this.grossInvested = data.grossInvested || '';
@@ -77,20 +76,21 @@ class Pool extends BasicModel {
 
   toFeathers() {
     return {
+      ...super.toFeathers(),
       maxAllocation: this.maxAllocation,
       fee: this.fee,
       feePayoutCurrency: this.feePayoutCurrency,
       payoutAddress: this.payoutAddress,
-      payoutAddressTxData: this.payoutAddressTxData,
+      payoutTxData: this.payoutTxData,
       adminPayoutAddress: this.adminPayoutAddress,
-      adminAddresses: this.adminAddresses,
+      admins: this.admins,
 
       name: this.name,
       description: this.description,
       minContribution: this.minContribution,
       maxContribution: this.maxContribution,
       whitelist: this.whitelist,
-      //status, ownerWallet, contractAddress set on backend
+      //status, contractAddress set on backend
     };
   }
 
@@ -101,11 +101,9 @@ class Pool extends BasicModel {
   /**
    * Save the campaign to feathers and blockchain if necessary
    *
-   * @param afterCreate Callback function once a transaction is created
-   * @param afterMined  Callback function once the transaction is mined and feathers updated
    */
-  save(afterCreate, afterMined) {
-    PoolService.save(this, this.owner.address, afterCreate, afterMined);
+  save() {
+    return PoolService.save(this);
   }
   //
   // /**
@@ -152,15 +150,6 @@ class Pool extends BasicModel {
     this.myContractAddress = value;
   }
 
-  get ownerWallet() {
-    return this.myOwnerWallet;
-  }
-
-  set ownerWallet(value) {
-    this.checkType(value, ['undefined', 'string'], 'ownerWallet');
-    this.myOwnerWallet = value;
-  }
-
   get name() {
     return this.myName;
   }
@@ -184,8 +173,35 @@ class Pool extends BasicModel {
   }
 
   set maxAllocation(value) {
-    this.checkType(value, ['undefined','string'], 'maxAllocation');
+    this.checkType(value, ['undefined','number'], 'maxAllocation');
     this.myMaxAllocation = value;
+  }
+
+  get minContribution() {
+    return this.myMinContribution;
+  }
+
+  set minContribution(value) {
+    this.checkType(value, ['undefined','number'], 'minContribution');
+    this.myMinContribution = value;
+  }
+
+  get maxContribution() {
+    return this.myMaxContribution;
+  }
+
+  set maxContribution(value) {
+    this.checkType(value, ['undefined','number'], 'maxContribution');
+    this.myMaxContribution = value;
+  }
+
+  get contributionCount() {
+    return this.myContributionCount;
+  }
+
+  set contributionCount(value) {
+    this.checkType(value, ['undefined','number'], 'contributionCount');
+    this.myContributionCount = value;
   }
 
   get tokenBalance() {
@@ -215,39 +231,12 @@ class Pool extends BasicModel {
     this.myGrossInvested = value;
   }
 
-  get minContribution() {
-    return this.myMinContribution;
-  }
-
-  set minContribution(value) {
-    this.checkType(value, ['undefined','string'], 'minContribution');
-    this.myMinContribution = value;
-  }
-
-  get maxContribution() {
-    return this.myMaxContribution;
-  }
-
-  set maxContribution(value) {
-    this.checkType(value, ['undefined','string'], 'maxContribution');
-    this.myMaxContribution = value;
-  }
-
-  get contributionCount() {
-    return this.myContributionCount;
-  }
-
-  set contributionCount(value) {
-    this.checkType(value, ['undefined','number'], 'contributionCount');
-    this.myContributionCount = value;
-  }
-
   get fee() {
     return this.myFee;
   }
 
   set fee(value) {
-    this.checkType(value, ['string'], 'fee');
+    this.checkType(value, ['undefined', 'number'], 'fee');
     this.myFee = value;
   }
 
@@ -260,13 +249,13 @@ class Pool extends BasicModel {
     this.myFeePayoutCurrency = value;
   }
 
-  get adminAddresses() {
-    return this.myAdminAddresses;
+  get admins() {
+    return this.myAdmins;
   }
 
-  set adminAddresses(value) {
-    this.checkType(value, ['object', 'array'], 'adminAddresses');
-    this.myAdminAddresses = value;
+  set admins(value) {
+    this.checkType(value, ['object', 'array'], 'admins');
+    this.myAdmins = value;
   }
 
   get adminPayoutAddress() {
@@ -287,13 +276,13 @@ class Pool extends BasicModel {
     this.myPayoutAddress = value;
   }
 
-  get payoutAddressTxData() {
-    return this.myPayoutAddressTxData;
+  get payoutTxData() {
+    return this.myPayoutTxData;
   }
 
-  set payoutAddressTxData(value) {
-    this.checkType(value, ['undefined', 'string'], 'payoutAddressTxData');
-    this.myPayoutAddressTxData = value;
+  set payoutTxData(value) {
+    this.checkType(value, ['undefined', 'string'], 'payoutTxData');
+    this.myPayoutTxData = value;
   }
 
   get whitelist() {

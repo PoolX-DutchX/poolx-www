@@ -37,6 +37,12 @@ class BasicModel extends Model {
     this.myOrder = -1;
   }
 
+  toFeathers() {
+    return {
+      ownerAddress: this.ownerAddress,
+    }
+  }
+
   get id() {
     return this.myId;
   }
