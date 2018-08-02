@@ -26,7 +26,7 @@ class Home extends Component {
                     <div className="col-sm-5 ">
                       <h1>Powered by the Ethereum blockchain!</h1>
                       <p>Pool digital currency today with the security of smart contracts</p>
-                      <PillButton>
+                      <PillButton onClick={()=> this.props.history.push('/pools/create')}>
                         Create a Pool
                       </PillButton>
                     </div>
