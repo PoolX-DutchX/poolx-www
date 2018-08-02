@@ -13,6 +13,7 @@
 @import 'dashboardView.scss';
 @import 'homeView.scss';
 @import 'deploy.scss';
+@import 'multiStepForm.scss';
 // components
 @import 'loader.scss';
 @import 'mainMenu.scss';
@@ -54,7 +55,6 @@ body,
     margin: 0;
     padding: 0;
     background-color: $page-background;
-
 }
 
 button:focus {outline:0;}
@@ -62,6 +62,50 @@ button:focus {outline:0;}
 .underline {
   text-decoration: underline;
 }
+.two-col-inner-padding  {
+  >:first-child {
+    margin-right:1rem;
+  }
+  >:last-child {
+    margin-left:1rem;
+  }
+}
+.list-icon-group {
+  width: 66px;
+  display: flex;
+  margin: auto 0 12px 10px;
+  justify-content: flex-end;
+}
+.list-remove-button {
+  position: absolute;
+  top: 7px;
+  right: 0px;
+}
+
+
+// .col,
+// [class*="col-"] {
+//   &:first-child {
+//     padding-left: 0px;
+//   }
+//   &:last-child {
+//     padding-right:0px;
+//   }
+// }
+
+// .row {
+//   &:not(:first-child) {
+//     margin-top: 1rem;
+//   }
+// }
+.radio-indent {
+  margin-top: -14px;
+  // margin-left: 10px;
+}
+// .col-inner-padding:not(:first-child,:last-child) {
+//   margin-right:1rem;
+//   margin-left:1rem;
+// }
 
 .full-height {
   height: 100%;

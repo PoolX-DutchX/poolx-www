@@ -1,6 +1,7 @@
 import { addValidationRule } from 'formsy-react';
 import moment from 'moment';
 import Web3 from 'web3';
+import { utils } from 'web3';
 
 // Formsy validations
 
@@ -23,3 +24,16 @@ addValidationRule('isMoment', (formValues, inputValue) => moment.isMoment(inputV
 addValidationRule('isEtherAddress', (formValues, inputValue, _value) =>
   Web3.utils.isAddress(inputValue),
 );
+
+
+// YUP validation test
+export function checkEthereumAddress(message) {
+  return this.test({
+      message,
+      name: 'ethereumAddress',
+      exclusive: true,
+      test(value) {
+        return (value == null) || utils.isAddress(value);
+      },
+    });
+};
