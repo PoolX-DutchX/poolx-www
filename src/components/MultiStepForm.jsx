@@ -6,7 +6,6 @@ import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
 import Button from '@material-ui/core/Button';
 
-import scrollSnapPolyfill from 'css-scroll-snap-polyfill'
 
 class MultiStepForm extends React.Component {
   static Step = ({ children }) => children;
@@ -19,11 +18,7 @@ class MultiStepForm extends React.Component {
       completed: {}
     };
   }
-
-  componentDidMount() {
-    scrollSnapPolyfill()
-  }
-
+  
   next = values =>
     this.setState(state => ({
       step: Math.min(state.step + 1, this.props.children.length - 1),
