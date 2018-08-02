@@ -14,91 +14,139 @@ import TableRow from '@material-ui/core/TableRow';
  *
  * TODO: Check the properties that are passed, sometimes they are number, sometimes strings...
  */
-const PoolReview = ({ pool }) => { return (
-  <Paper>
-    <Table>
-      <TableBody>
-        <TableRow>
-          <TableCell component="th" scope="row">
-            Pool Name
-          </TableCell>
-          <TableCell>{pool.name}</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell component="th" scope="row">
-            Wallet Address
-          </TableCell>
-          <TableCell>{pool.wallet}</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell component="th" scope="row">
-            Pool Cap
-          </TableCell>
-          <TableCell>{pool.cap} Ξ</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell component="th" scope="row">
-            Min/Max Contribution
-          </TableCell>
-          <TableCell>{pool.minContribution} Ξ / {pool.maxContribution} Ξ</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell component="th" scope="row">
-            Your fee
-          </TableCell>
-          <TableCell>{pool.fee}%</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell component="th" scope="row">
-            Fee payout currency
-          </TableCell>
-          <TableCell>{(pool.feePayoutCurrency === Pool.CURRENCY_ETHER) ? 'Ξther' : 'Token'} </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell component="th" scope="row">
-            Admin Addresses
-          </TableCell>
-          <TableCell>
-            {
-                !!pool.adminAddresses.length && pool.adminAddresses.map((address, index) => {
-                  return (
-                    <TableRow key={index}>
-                        <TableCell>{address}</TableCell>
-                    </TableRow>
-                  )
-                })
-            }
-          </TableCell>
-        </TableRow>
-        {
-          pool.destinationAddress && <TableRow>
+const PoolReview = ({ formik: { values } }) => {
+  const {
+    name,
+    description,
+    ownerAddress,
+    maxAllocation,
+    minContribution,
+    maxContribution,
+    fee,
+    feePayoutCurrency,
+    adminPayoutAddress,
+    admins,
+    lockDestination,
+    payoutAddress,
+    payoutTxData,
+    hasWhitelist,
+    whitelist
+  } = values;
+  return (
+    <Paper>
+      <Table>
+        <TableBody>
+          <TableRow>
             <TableCell component="th" scope="row">
-              Desintation Address
+              Pool Name
             </TableCell>
-            <TableCell>{pool.destinationAddress}</TableCell>
+            <TableCell>{name}</TableCell>
           </TableRow>
-        }
-        {
-          pool.destinationData && <TableRow>
+          <TableRow>
             <TableCell component="th" scope="row">
-              Destination Field Data
+              Pool Description
             </TableCell>
-            <TableCell>{pool.destinationData}</TableCell>
+            <TableCell>{description}</TableCell>
           </TableRow>
-        }
-        <TableRow>
-          <TableCell component="th" scope="row">
-            Pool Description
-          </TableCell>
-          <TableCell>{pool.description}</TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
-  </Paper>
+          <TableRow>
+            <TableCell component="th" scope="row">
+              Wallet Address
+            </TableCell>
+            <TableCell>{ownerAddress}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell component="th" scope="row">
+              Max allocation
+            </TableCell>
+            <TableCell>{maxAllocation} Ξ</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell component="th" scope="row">
+              Min/Max Contribution
+            </TableCell>
+            <TableCell>{minContribution} Ξ / {maxContribution} Ξ</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell component="th" scope="row">
+              Your fee
+            </TableCell>
+            <TableCell>{fee}%</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell component="th" scope="row">
+              Fee payout currency
+            </TableCell>
+            <TableCell>{(feePayoutCurrency === Pool.CURRENCY_ETHER) ? 'Ether' : 'Token'} </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell component="th" scope="row">
+              Admins
+            </TableCell>
+            <Table>
+              <TableBody>
+                {
+                    !!admins.length && admins.map(({address, name}, index) => {
+                      return (
+                        <TableRow key={index}>
+                            <TableCell>{address}</TableCell>
+                            <TableCell>{name}</TableCell>
+                        </TableRow>
+                      )
+                    })
+                }
+              </TableBody>
+            </Table>
+          </TableRow>
+          <TableRow>
+            <TableCell component="th" scope="row">
+              Lock destination
+            </TableCell>
+            <TableCell>{String(lockDestination)}</TableCell>
+          </TableRow>
+          {
+            lockDestination && payoutAddress && <TableRow>
+              <TableCell component="th" scope="row">
+                Desintation Address
+              </TableCell>
+              <TableCell>{payoutAddress}</TableCell>
+            </TableRow>
+          }
+          {
+            lockDestination && payoutTxData && <TableRow>
+              <TableCell component="th" scope="row">
+                Destination Tx Data
+              </TableCell>
+              <TableCell>{payoutTxData}</TableCell>
+            </TableRow>
+          }
+          {
+            hasWhitelist && !!whitelist.length && <TableRow>
+              <TableCell component="th" scope="row">
+                Whitelist
+              </TableCell>
+              <Table>
+                <TableBody>
+                  {
+                      whitelist.map(({address, name}, index) => {
+                        return (
+                          <TableRow key={index}>
+                              <TableCell>{address}</TableCell>
+                              <TableCell>{name}</TableCell>
+                          </TableRow>
+                        )
+                      })
+                  }
+                </TableBody>
+              </Table>
+            </TableRow>
+          }
+        </TableBody>
+      </Table>
+    </Paper>
 )};
-
-PoolReview.propTypes = {
-  pool: PropTypes.object.isRequired
-};
+//
+// PoolReview.propTypes = {
+//   pool: PropTypes.object.isRequired
+// };
 
 export default PoolReview;
