@@ -1,52 +1,60 @@
 ![Poolbase](./public/img/poolbase_logo.png)
 
+## Quick Setting Up Of Development
+
+* `yarn install`
+* `yarn start`
 
 ## Table of content
 
-- [Getting Started](#getting-started)
-    - [Install](#install)
-      - [OSX and Linux](#osx-and-linux)
-      - [Windows](#windows)
-    - [Run](#run)
-    - [Build](#build)
-    - [Configuration](#configuration)
-- [Contributing](#contributing)
-  - [Local Development](#local-development)
-  - [Development and PR Testing](#development-and-pr-testing)
-  - [Deployment Environments](#deploy-environments)
-  - [Release Process](#release-process)
-- [Help](#help)
+* [Getting Started](#getting-started)
+  * [Install](#install)
+    * [OSX and Linux](#osx-and-linux)
+    * [Windows](#windows)
+  * [Run](#run)
+  * [Build](#build)
+  * [Configuration](#configuration)
+* [Contributing](#contributing)
+  * [Local Development](#local-development)
+  * [Development and PR Testing](#development-and-pr-testing)
+  * [Deployment Environments](#deploy-environments)
+  * [Release Process](#release-process)
+* [Help](#help)
 
 ## Getting Started
+
 In the following sections you will learn all you need to know to run the Poolbase DApp locally.
 
 #### Prerequisities
-- You need to use Node > v6
-- You need to use npm 4.x, or npm >= 5.3, or yarn to correctly install the dependencies.
+
+* You need to use Node > v6
+* You need to use npm 4.x, or npm >= 5.3, or yarn to correctly install the dependencies.
 
 ### Install
 
 #### OSX and Linux
+
 1. From the desired directory you wish to copy the "poolbase-www" folder with source files to.
-    ```
-    git clone {paste your repo link here}
-    ```
-    NOTE: Please use `develop` branch for contributing.
-    ```
-    git clone -b develop {paste repo link here}
-    ```
+   ```
+   git clone {paste your repo link here}
+   ```
+   NOTE: Please use `develop` branch for contributing.
+   ```
+   git clone -b develop {paste repo link here}
+   ```
 2. Change directories to poolbase-www:
-    ```
-    cd poolbase-www
-    ```
+   ```
+   cd poolbase-www
+   ```
 3. Make sure you have [NodeJS](https://nodejs.org/) (v8.4.0 or higher) and [npm](https://www.npmjs.com/) (5.4.1 or higher) installed.
 4. Install dependencies from within poolbase-www directory:
-    ```
-    npm install
-    ```
-5. That is it, you are now ready to run the  poolbase dapp! Head to the [Run DApp](#run-dapp) section for further instructions.
+   ```
+   npm install
+   ```
+5. That is it, you are now ready to run the poolbase dapp! Head to the [Run DApp](#run-dapp) section for further instructions.
 
 #### Windows
+
 1. Make sure you have the LTS version of [64-bit NodeJS](https://nodejs.org/en/download/current) (v8.9.1)
 2. Run the node-v8.9.1-x64.msi installer and then continue through the installation as normal. Be sure to have the "Enable in PATH" option enabled before installing.
 3. Open the command line in administrator mode by right clicking on the cmd.exe application and selecting "Run as administrator"
@@ -63,9 +71,9 @@ In the following sections you will learn all you need to know to run the Poolbas
    npm install -g windows-build-tools
    ```
 7. Install dependencies from within poolbase-www directory:
-    ```
-    npm install
-    ```
+   ```
+   npm install
+   ```
 8. For some reason the npm node-sass package does not install correctly in windows when using the 'npm install' command, so you must rebuild the node-sass package with:
    ```
    npm rebuild node-sass
@@ -77,14 +85,16 @@ In the following sections you will learn all you need to know to run the Poolbas
 10. That is it, you are now ready to run the poolbase dapp! Head to the [Run dapp](#run-dapp) section for further instructions.
 
 ### Run
+
 1. The Poolbase dapp will need to connect to a poolbase-api feathers server. Follow the poolbase-api readme instructions to install and run server before proceeding further. Alternatively, you could change the configuration to connect to the `develop` environment, see the [Configuration](#configuration) section.
 2. Start the dapp.
-    ```
-    npm start
-    ```
+   ```
+   npm start
+   ```
 3. Once the dapp is up in your browser, click "Sign In" from the main menu.
 
 ### Build
+
 ```
 npm run build
 ```
@@ -95,6 +105,7 @@ To fix this:
 `cd /node_modules/giveth-react-scripts/config`
 open `webpack.config.prod.js`
 go to line 300, and add:
+
 ```
   mangle: {
     safari10: true,
@@ -104,17 +115,18 @@ go to line 300, and add:
 now the build will work in Safari
 
 ### Configuration
+
 The DApp has several node environment variables which can be used to alter the DApp behaviour without changing the code. You can set them through `.env` or `.env.local` files.
 
-Variable name | Default Value | Description |
----|---|---|
-PORT | 3010 | Port on which the DApp runs |
-REACT_APP_ENVIRONMENT | 'localhost' | To which feathers environment should the DApp connect. By default it connects to localhost feathers. Allowed values are: `localhost`, `develop`, `production`. See [Deployment Environments](#deploy-environments). |
-REACT_APP_DECIMALS | 8 | How many decimal should be shown for ETH values. Note that the calculations are still done with 18 decimals. |
-REACT_APP_FEATHERJS_CONNECTION_URL | Differs per REACT_APP_ENVIRONMENT | Overwrites the environment injected feathers connection URL. |
-REACT_APP_ETH_NODE_CONNECTION_URL | Differs per REACT_APP_ENVIRONMENT | Overwrites the ethereum node connection URL for making ethereum transactions. |
-REACT_APP_POOL_FACTORY_ADDRESS |  Differs per REACT_APP_ENVIRONMENT | Overwrites the Pool factory address. |
-REACT_APP_BLOCKEXPLORER | Differs per REACT_APP_ENVIRONMENT | Overwrites the block explorer base URL such as etherscan. The DApp assumes such blockexplorer api is `\<BLOCKEXPLORER\>/tx/\<TRANSACTION_HASH\>` |
+| Variable name                      | Default Value                     | Description                                                                                                                                                                                                         |
+| ---------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| PORT                               | 3010                              | Port on which the DApp runs                                                                                                                                                                                         |
+| REACT_APP_ENVIRONMENT              | 'localhost'                       | To which feathers environment should the DApp connect. By default it connects to localhost feathers. Allowed values are: `localhost`, `develop`, `production`. See [Deployment Environments](#deploy-environments). |
+| REACT_APP_DECIMALS                 | 8                                 | How many decimal should be shown for ETH values. Note that the calculations are still done with 18 decimals.                                                                                                        |
+| REACT_APP_FEATHERJS_CONNECTION_URL | Differs per REACT_APP_ENVIRONMENT | Overwrites the environment injected feathers connection URL.                                                                                                                                                        |
+| REACT_APP_ETH_NODE_CONNECTION_URL  | Differs per REACT_APP_ENVIRONMENT | Overwrites the ethereum node connection URL for making ethereum transactions.                                                                                                                                       |
+| REACT_APP_POOL_FACTORY_ADDRESS     | Differs per REACT_APP_ENVIRONMENT | Overwrites the Pool factory address.                                                                                                                                                                                |
+| REACT_APP_BLOCKEXPLORER            | Differs per REACT_APP_ENVIRONMENT | Overwrites the block explorer base URL such as etherscan. The DApp assumes such blockexplorer api is `\<BLOCKEXPLORER\>/tx/\<TRANSACTION_HASH\>`                                                                    |
 
 Example of `.env.local` file that makes the DApp run on port 8080, connects to the **develop** environment and uses custom blockexplorer:
 
