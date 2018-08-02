@@ -21,7 +21,7 @@ import ViewPool from './../components/views/ViewPool';
 import CreatePool from './../components/views/CreatePool/';
 import Contribute from './../components/views/Contribute/';
 import Dashboard from './../components/views/Dashboard/';
-import Deploy from './../components/views/Deploy';
+import Deploy from './../components/views/Deploy/';
 
 import NotFound from './../components/views/NotFound';
 

@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 
 import { utils } from 'web3';
 
-import WalletProviderPanel from './Contribute/components/WalletProviderPanel';
-import DeployDataFields from './Contribute/components/DeployDataFields';
+import WalletProviderPanel from './components/WalletProviderPanel';
+import DeployDataFields from './components/DeployDataFields';
 
-import { copyToClipboard } from '../../lib/helpers';
-import WithTooltip from '../WithTooltip';
-import GasPricePanel from '../GasPricePanel';
-import CircleStep from '../CircleStep';
+import { copyToClipboard } from '../../../lib/helpers';
+import WithTooltip from '../../WithTooltip';
+import GasPricePanel from '../../GasPricePanel';
+import CircleStep from '../../CircleStep';
 
 // import getNetwork from '../lib/blockchain/getNetwork';
 // import { feathersClient } from '../lib/feathersClient';
