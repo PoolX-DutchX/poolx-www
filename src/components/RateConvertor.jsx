@@ -42,7 +42,7 @@ class RateConvertor extends Component {
     this.changeSelectedFiat = this.changeSelectedFiat.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props
       .getEthConversion(this.state.date)
       .then(resp => this.setState({ conversionRate: resp }));

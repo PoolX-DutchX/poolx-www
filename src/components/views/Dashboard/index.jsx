@@ -56,16 +56,15 @@ class Dashboard extends Component {
   handleModeChange(event, mode) {
     this.setState({ mode });
   }
-  componentWillMount() {
-    isLoggedIn(this.props.currentUser);
-  }
+  
   async componentDidMount() {
+    isLoggedIn(this.props.currentUser);
     // console.log('this.props.currentUser.id', this.props.currentUser.id);
     try {
       const pools = await PoolService.getByOwnerId(this.props.currentUser.id);
 
       this.setState({ isLoading: false });
-      
+
       this.contributionObserver = ContributionService.getUserContributions(
         this.props.currentUser.id,
         contributions => {

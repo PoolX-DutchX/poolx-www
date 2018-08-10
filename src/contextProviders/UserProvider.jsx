@@ -34,7 +34,7 @@ class UserProvider extends Component {
 
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     try {
       const token = await feathersClient.passport.getJWT();
       if (token) {

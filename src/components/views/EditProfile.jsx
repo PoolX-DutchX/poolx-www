@@ -39,7 +39,7 @@ class EditProfile extends Component {
     this.togglePristine = this.togglePristine.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     isLoggedIn(this.props.currentUser)
       .then(() => this.setState({ isLoading: false }))
   }

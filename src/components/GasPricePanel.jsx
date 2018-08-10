@@ -48,8 +48,4 @@ class GasPricePanel extends Component {
   }
 }
 
-GasPricePanel.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
 export default GasPricePanel;
