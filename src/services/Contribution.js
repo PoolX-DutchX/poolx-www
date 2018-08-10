@@ -1,4 +1,3 @@
-import getNetwork from '../lib/blockchain/getNetwork';
 import getWeb3 from '../lib/blockchain/getWeb3';
 import { feathersClient } from '../lib/feathersClient';
 import { getGasPrice } from '../lib/helpers';
@@ -109,53 +108,53 @@ class ContributionService {
         .patch(contribution.id, contribution.toFeathers())
         .then(() => afterMined());
     } else {
-      let txHash;
-      let etherScanUrl;
-      Promise.all([getNetwork(), getWeb3(), getGasPrice()])
-        .then(([network, web3, gasPrice]) => {
-          // const { lppCampaignFactory } = network;
-          etherScanUrl = network.etherscan;
-
-          const { abi } = felixPoolArtifact;
-          const { amount, pool } = contribution;
-          const contract = new web3.eth.Contract(abi, pool.address, { from });
-          contract.methods
-            .deposit()
-            .send({
-              from,
-              gas: 1500000,
-              gasPrice,
-              value: amount,
-            })
-            .once('transactionHash', txHash => {
-              contribution.txHash = txHash;
-              afterCreate(`${etherScanUrl}tx/${txHash}`);
-
-              feathersClient
-                .service('contributions')
-                .create(contribution.toFeathers())
-                .then((result) => {
-                  contribution.id = result._id;
-                });
-            })
-            .once('confirmation', (confirmationNumber, receipt) => {
-              console.log('confirmationNumber', confirmationNumber);
-              afterMined(`${etherScanUrl}tx/${txHash}`)
-            })
-            .catch(err => {
-              console.log('err', err);
-              ErrorPopup(
-                'Something went wrong with the transaction. Is your wallet unlocked?',
-                `${etherScanUrl}tx/${txHash}`,
-              );
-            });
-        })
-        .catch(err => {
-          ErrorPopup(
-            'Something went wrong with the transaction. Is your wallet unlocked?',
-            `${etherScanUrl}tx/${txHash} => ${JSON.stringify(err, null, 2)}`,
-          );
-        });
+      // let txHash;
+      // let etherScanUrl;
+      // Promise.all([getNetwork(), getWeb3(), getGasPrice()])
+      //   .then(([network, web3, gasPrice]) => {
+      //     // const { lppCampaignFactory } = network;
+      //     etherScanUrl = network.etherscan;
+      //
+      //     const { abi } = felixPoolArtifact;
+      //     const { amount, pool } = contribution;
+      //     const contract = new web3.eth.Contract(abi, pool.address, { from });
+      //     contract.methods
+      //       .deposit()
+      //       .send({
+      //         from,
+      //         gas: 1500000,
+      //         gasPrice,
+      //         value: amount,
+      //       })
+      //       .once('transactionHash', txHash => {
+      //         contribution.txHash = txHash;
+      //         afterCreate(`${etherScanUrl}tx/${txHash}`);
+      //
+      //         feathersClient
+      //           .service('contributions')
+      //           .create(contribution.toFeathers())
+      //           .then((result) => {
+      //             contribution.id = result._id;
+      //           });
+      //       })
+      //       .once('confirmation', (confirmationNumber, receipt) => {
+      //         console.log('confirmationNumber', confirmationNumber);
+      //         afterMined(`${etherScanUrl}tx/${txHash}`)
+      //       })
+      //       .catch(err => {
+      //         console.log('err', err);
+      //         ErrorPopup(
+      //           'Something went wrong with the transaction. Is your wallet unlocked?',
+      //           `${etherScanUrl}tx/${txHash}`,
+      //         );
+      //       });
+      //   })
+      //   .catch(err => {
+      //     ErrorPopup(
+      //       'Something went wrong with the transaction. Is your wallet unlocked?',
+      //       `${etherScanUrl}tx/${txHash} => ${JSON.stringify(err, null, 2)}`,
+      //     );
+      //   });
     }
   }
 
@@ -169,43 +168,7 @@ class ContributionService {
    * @param afterMined  Callback to be triggered after the transaction is mined
    */
   static cancel(campaign, from, afterCreate = () => {}, afterMined = () => {}) {
-    // let txHash;
-    // let etherScanUrl;
-    // Promise.all([getNetwork(), getWeb3(), getGasPrice()])
-    //   .then(([network, web3, gasPrice]) => {
-    //     const lppCampaign = new LPPCampaign(web3, campaign.pluginAddress);
-    //     etherScanUrl = network.etherscan;
-    //
-    //     lppCampaign
-    //       .cancelCampaign({ from, gasPrice, $extraGas: 100000 })
-    //       .once('transactionHash', hash => {
-    //         txHash = hash;
-    //         feathersClient
-    //           .service('/campaigns')
-    //           .patch(campaign.id, {
-    //             status: Campaign.CANCELED,
-    //             mined: false,
-    //             txHash,
-    //           })
-    //           .then(afterCreate(`${etherScanUrl}tx/${txHash}`))
-    //           .catch(err => {
-    //             ErrorPopup('Something went wrong with updating campaign', err);
-    //           });
-    //       })
-    //       .then(() => afterMined(`${etherScanUrl}tx/${txHash}`))
-    //       .catch(err => {
-    //         ErrorPopup(
-    //           'Something went wrong with cancelling your campaign',
-    //           `${etherScanUrl}tx/${txHash} => ${JSON.stringify(err, null, 2)}`,
-    //         );
-    //       });
-    //   })
-    //   .catch(err => {
-    //     ErrorPopup(
-    //       'Something went wrong with cancelling your campaign',
-    //       `${etherScanUrl}tx/${txHash} => ${JSON.stringify(err, null, 2)}`,
-    //     );
-    //   });
+
   }
 }
 

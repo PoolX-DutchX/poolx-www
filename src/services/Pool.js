@@ -1,5 +1,3 @@
-// import { LPPCampaign } from 'lpp-campaign';
-import getNetwork from '../lib/blockchain/getNetwork';
 import getWeb3 from '../lib/blockchain/getWeb3';
 import { feathersClient } from '../lib/feathersClient';
 import { getGasPrice } from '../lib/helpers';
@@ -49,6 +47,17 @@ class PoolService {
         })
         .catch(reject);
     });
+  }
+
+  /**
+   * Patch pool
+   *
+   * @param id   ID of the Pool to be patched
+   */
+  static patch(poolId, data) {
+    return feathersClient
+      .service('pools')
+      .patch(poolId, data);
   }
 
   /**
@@ -146,43 +155,7 @@ class PoolService {
    * @param afterMined  Callback to be triggered after the transaction is mined
    */
   static cancel(campaign, from, afterCreate = () => {}, afterMined = () => {}) {
-    // let txHash;
-    // let etherScanUrl;
-    // Promise.all([getNetwork(), getWeb3(), getGasPrice()])
-    //   .then(([network, web3, gasPrice]) => {
-    //     const lppCampaign = new LPPCampaign(web3, campaign.pluginAddress);
-    //     etherScanUrl = network.etherscan;
-    //
-    //     lppCampaign
-    //       .cancelCampaign({ from, gasPrice, $extraGas: 100000 })
-    //       .once('transactionHash', hash => {
-    //         txHash = hash;
-    //         feathersClient
-    //           .service('/campaigns')
-    //           .patch(campaign.id, {
-    //             status: Campaign.CANCELED,
-    //             mined: false,
-    //             txHash,
-    //           })
-    //           .then(afterCreate(`${etherScanUrl}tx/${txHash}`))
-    //           .catch(err => {
-    //             ErrorPopup('Something went wrong with updating campaign', err);
-    //           });
-    //       })
-    //       .then(() => afterMined(`${etherScanUrl}tx/${txHash}`))
-    //       .catch(err => {
-    //         ErrorPopup(
-    //           'Something went wrong with cancelling your campaign',
-    //           `${etherScanUrl}tx/${txHash} => ${JSON.stringify(err, null, 2)}`,
-    //         );
-    //       });
-    //   })
-    //   .catch(err => {
-    //     ErrorPopup(
-    //       'Something went wrong with cancelling your campaign',
-    //       `${etherScanUrl}tx/${txHash} => ${JSON.stringify(err, null, 2)}`,
-    //     );
-    //   });
+
   }
 }
 
