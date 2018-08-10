@@ -1,5 +1,9 @@
+export const ENV_LOCALHOST = 'localhost';
+export const ENV_DEVELOP = 'develop';
+export const ENV_PRODUCTION = 'production';
+
 const {
-  REACT_APP_ENVIRONMENT = 'localhost', // optional
+  REACT_APP_ENVIRONMENT = ENV_LOCALHOST, // optional
   REACT_APP_DECIMALS = 8, // optional
   REACT_APP_FEATHERJS_CONNECTION_URL,
   REACT_APP_ETH_NODE_CONNECTION_URL,
@@ -8,26 +12,32 @@ const {
 } = process.env;
 
 const configurations = {
-  localhost: {
+  [ENV_LOCALHOST]: {
     title: 'Ganache',
     poolFactoryAddress: '0x5904adeba7bc0550607c611e906e317338b8e6c2',
     eventEmitterAddress: '0xd84e2462b412bba3fd81f95812823f7c6a72bab9',
+    networkName: 'ganache',
+    networkId: 123456789123456789,
     etherscan: 'https://etherscan.io/', // this won't work, only here so we can see links during development
     feathersConnection: 'http://localhost:3030',
     nodeConnection: 'ws://localhost:8545',
   },
-  develop: {
+  [ENV_DEVELOP]: {
     title: 'develop',
     poolFactoryAddress: '0x1ce25E5Db192BB0804aA75D0cA3C7A4f2788Fe10',
     eventEmitterAddress: '0xd84e2462b412bba3fd81f95812823f7c6a72bab9',
+    networkName: 'rinkeby',
+    networkId: 4,
     etherscan: 'https://rinkeby.etherscan.io/',
     feathersConnection: 'https://feathers.develop.giveth.io',
     nodeConnection: 'wss://rinkeby.giveth.io:8546',
   },
-  production: {
+  [ENV_PRODUCTION]: {
     title: 'production',
     poolFactoryAddress: '0x1ce25E5Db192BB0804aA75D0cA3C7A4f2788Fe10',
     eventEmitterAddress: '0xd84e2462b412bba3fd81f95812823f7c6a72bab9',
+    networkName: 'mainnet',
+    networkId: 1,
     etherscan: 'https://etherscan.io/',
     feathersConnection: 'https://feathers.mainnet.giveth.io',
     nodeConnection: 'wss://mew.giveth.io/ws',
@@ -51,6 +61,7 @@ config.feathersConnection = REACT_APP_FEATHERJS_CONNECTION_URL || config.feather
 config.nodeConnection = REACT_APP_ETH_NODE_CONNECTION_URL || config.nodeConnection;
 config.decimals = REACT_APP_DECIMALS;
 config.bugsEmail = REACT_APP_BUGS_EMAIL;
-config.sendErrors = ['develop', 'production'].includes(REACT_APP_ENVIRONMENT);
+config.sendErrors = [ENV_DEVELOP, ENV_PRODUCTION].includes(REACT_APP_ENVIRONMENT);
+config.env = REACT_APP_ENVIRONMENT;
 
 export default config;

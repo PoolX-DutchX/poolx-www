@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Avatar from 'react-avatar';
 
 import { feathersClient } from '../../lib/feathersClient';
-import getNetwork from '../../lib/blockchain/getNetwork';
+import { getNetwork } from '../../lib/blockchain/utils/';
 import GoBackButton from '../GoBackButton';
 import Loader from '../Loader';
 import { getUserName, getUserAvatar } from '../../lib/helpers';

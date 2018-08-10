@@ -4,6 +4,7 @@ import { utils } from 'web3';
 import { createBrowserHistory } from 'history';
 import moment from 'moment';
 import BigNumber from 'bignumber.js';
+import intersection from 'lodash.intersection';
 
 import { feathersClient } from './feathersClient';
 import DefaultAvatar from './../assets/defaultAvatar.svg';
@@ -206,4 +207,15 @@ export const copyToClipboard = (node) => {
       return;
     }
     navigator.clipboard.writeText(node.value);
+}
+
+export const isPoolAdmin = (pool, user) => {
+  const adminAddresses = pool.admins.map(({ address }) => address);
+  const userAddresses = user.wallets.map(({ address }) => address);
+  const intersectingAddresses = intersection(adminAddresses,userAddresses);
+  
+  return (
+    pool.owner._id === user._id ||
+    !!intersectingAddresses.length
+  );
 }
