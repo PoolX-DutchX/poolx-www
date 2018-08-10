@@ -113,7 +113,7 @@ class CreatePool extends Component {
               console.log('pool', pool);
               pool.save().then((newPool) => {
                 console.log('newPool', newPool);
-                history.push(`/pools/${newPool.id}/pendingTx`); // maybe ._id
+                history.push(`/pools/${newPool._id}/pendingTx`); // maybe ._id
                 //   actions.setSubmitting(false);
               }).catch((err) => {
                 console.log('err', err);
