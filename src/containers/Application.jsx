@@ -19,6 +19,7 @@ import Home from './../components/views/Home';
 
 import ViewPool from './../components/views/ViewPool';
 import CreatePool from './../components/views/CreatePool/';
+import ClosePool from './../components/views/ClosePool/';
 import Contribute from './../components/views/Contribute/';
 import Dashboard from './../components/views/Dashboard/';
 import Deploy from './../components/views/Deploy/';
@@ -120,12 +121,19 @@ class Application extends Component {
                               <ViewPool currentUser={currentUser} {...props} />
                             )}
                           />
+                          <Route
+                            exact
+                            path="/pools/:poolId/payout"
+                            component={props => (
+                              <ClosePool currentUser={currentUser} {...props} />
+                            )}
+                          />
                           {/*path="/contributions/:contributionId/pendingTx"*/}
                           <Route
                             exact
-                            path="/contributions"
+                            path="/pools/:resourceId/pendingTx"
                             component={props => (
-                              <Deploy currentUser={currentUser} {...props} />
+                              <Deploy service="pools" currentUser={currentUser} {...props} />
                             )}
                           />
                           <Route

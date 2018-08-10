@@ -71,7 +71,15 @@
     justify-content: space-evenly;
     .wallet-logo {
       text-align: center;
-      width: 115px;
+      width: 130px;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 19px;
+      -webkit-transition: background-color 0.5s; /* Safari */
+      transition: background-color 0.5s;
+      &:hover {
+        background-color: #E8E8E8;
+      }
     }
   }
 }
