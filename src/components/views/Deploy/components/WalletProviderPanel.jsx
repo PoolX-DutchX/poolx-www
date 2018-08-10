@@ -18,21 +18,21 @@ const styles = theme => ({
   }
 });
 
-const WalletProviderPanel = ({ classes, onClick }) => { return (
+const WalletProviderPanel = ({ classes, selectProvider }) => { return (
   <div id="wallet-provider-panel">
     <div className="provider-wrap">
-      <div className="wallet-logo">
+      <div className="wallet-logo" onClick={selectProvider('metamask')}>
         <img src="/img/metamask-logo.svg" width="90px" alt="Metamask logo" />
         <span><h6>MetaMask</h6></span>
       </div>
-      <a className="wallet-logo" href="">
+      <div className="wallet-logo" onClick={selectProvider('myCrypto')}>
         <img src="/img/mycrypto-logo.png" width="90px" alt="My Crypto logo" />
         <span><h6>MyCrypto</h6></span>
-      </a>
-      <a className="wallet-logo" href="">
+      </div>
+      <div className="wallet-logo" onClick={selectProvider('myEtherWallet')}>
         <img src="/img/myetherwallet-logo.png" width="90px" alt="My Ether Wallet logo" />
         <span><h6>MyEtherWallet</h6></span>
-      </a>
+      </div>
     </div>
   </div>
 )};

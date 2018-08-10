@@ -20,7 +20,7 @@ const styles = {
   }
 };
 
-class DeployDataFields extends React.Component {
+class PendingTxFields extends React.Component {
   constructor(props) {
     super(props);
     this._nodes = {};
@@ -33,14 +33,13 @@ class DeployDataFields extends React.Component {
     }
   }
   render() {
-    const { classes, data } = this.props;
-    console.log('data', data);
-    console.log('data.length', data.length);
+    const { classes, pendingTx } = this.props;
+
     return (
       <div id="deploy-data-fields">
         <div>
           {
-            data.map(({label, value}, index) => {
+            getFieldsArray(pendingTx).map(({label, value}, index) => {
               return (<div key={index} className="data-field">
                 <span className='label'>{label}</span>
                 <Input
@@ -52,7 +51,7 @@ class DeployDataFields extends React.Component {
                 value={value}
                 inputRef={node => this._nodes[index] = node}
                 inputProps={{
-                  spellcheck: "false"
+                  spellCheck: "false"
                 }}
                 fullWidth
                 />
@@ -68,8 +67,30 @@ class DeployDataFields extends React.Component {
   }
 }
 
-DeployDataFields.propTypes = {
-  data: PropTypes.array.isRequired
+PendingTxFields.propTypes = {
+  pendingTx: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(DeployDataFields);
+export default withStyles(styles)(PendingTxFields);
+
+
+const getFieldsArray = ({ toAddress, amount, gasLimit, data }) => {
+  return [
+    {
+      value: toAddress,
+      label: 'To Address'
+    },
+    {
+      value: amount,
+      label: 'Amount to Send'
+    },
+    {
+      value: gasLimit,
+      label: 'Gas Limit'
+    },
+    {
+      value: data,
+      label: 'Transaction Data'
+    },
+  ];
+}

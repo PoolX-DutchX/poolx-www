@@ -2,19 +2,27 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { utils } from 'web3';
+import { feathersClient } from '../../../lib/feathersClient';
 
 import WalletProviderPanel from './components/WalletProviderPanel';
-import DeployDataFields from './components/DeployDataFields';
+import PendingTxFields from './components/PendingTxFields';
+import MetamaskInfoModal from './components/MetamaskInfoModal';
+import PendingTxFieldsModal from './components/PendingTxFieldsModal';
 
 import { copyToClipboard } from '../../../lib/helpers';
 import WithTooltip from '../../WithTooltip';
 import GasPricePanel from '../../GasPricePanel';
 import CircleStep from '../../CircleStep';
 
-// import getNetwork from '../lib/blockchain/getNetwork';
+import Loader from '../../Loader';
+import getWeb3 from '../../../lib/blockchain/getWeb3';
+import { history } from '../../../lib/helpers';
+
+import config from '../../../configuration';
+
+import { getNetwork, isMetamaskInstalled } from '../../../lib/blockchain/utils';
 // import { feathersClient } from '../lib/feathersClient';
 // import { displayTransactionError, getGasPrice } from '../lib/helpers';
-// import getWeb3 from '../lib/blockchain/getWeb3';
 // import LoaderButton from './LoaderButton';
 // import Contribution from '../models/Contribution';
 // import ContributionService from '../services/Contribution';
@@ -24,34 +32,52 @@ import CircleStep from '../../CircleStep';
 class Deploy extends React.Component {
   constructor(props) {
     super();
-    const { amount } = props;
-
-    //temporary
-    const wallet = '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1';
-    const txData = '0x_transactionData';
-    const gasLimit = '200000';
-    const gasPrices = {}
-    const poolFactoryAddress = '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1';
-
     this.state = {
-      isSaving: false,
-      toAddress: poolFactoryAddress,
-      amount: amount || 0,
-      wallet,
-      gasPrices,
-      gasLimit,
-      txData,
-      myEtherWalletUrl: `https://www.myetherwallet.com/?to=${poolFactoryAddress.toUpperCase()}&gaslimit=${gasLimit}&data=${txData}&value=${amount}#send-transaction`,
-      myCryptoUrl: `https://www.mycrypto.com/?to=${poolFactoryAddress.toUpperCase()}&gasLimit=${gasLimit}&data=${txData}&value=${amount}#send-transaction`,
-
+      isLoading: true,
+      showModal: false,
+      pendingTx: {}
     };
-
     this.handleWalletProviderClick = this.handleWalletProviderClick.bind(this);
-  }
-  async componentWillMount() {
-    //get Contribution
+    this.transactWithMetamask = this.transactWithMetamask.bind(this);
+    this.metamaskModalRef = React.createRef();
+    this.pendingTxFieldsModalRef = React.createRef();
   }
   async componentDidMount() {
+
+    const { match: { params: { resourceId }}} = this.props;
+    try {
+      const resource = await feathersClient //either pool or contribution
+        .service(this.props.service)
+        .get(resourceId);
+
+      const { ownerAddress, pendingTx } = resource;
+
+      if (!pendingTx) {
+        if (this.props.service === 'pools') {
+          history.replace(`/pools/${resourceId}`);
+        }
+
+        if (this.props.service === 'contributions') {
+          history.replace(`/pools/${resource.poolId}`);
+        }
+
+      }
+      const { toAddress, amount, gasLimit, txData } = pendingTx;
+
+      this.myEtherWalletUrl = `https://www.myetherwallet.com/?to=${toAddress.toUpperCase()}&gaslimit=${gasLimit}&data=${txData}&value=${amount}#send-transaction`,
+      this.myCryptoUrl = `https://www.mycrypto.com/?to=${toAddress.toUpperCase()}&gasLimit=${gasLimit}&data=${txData}&value=${amount}#send-transaction`,
+
+      this.setState({
+        ownerAddress,
+        pendingTx,
+        isLoading: false
+      });
+
+    } catch(err) {
+      // oops something went wrong, try again later
+      console.log('err', err);
+    }
+  }
 
   // const { abi, bytecode } = felixPoolArtifact;
   // const {model: { poolAddress }} = this.props;
@@ -72,88 +98,137 @@ class Deploy extends React.Component {
   //   myEtherWalletUrl: `https://www.myetherwallet.com/?to=${poolAddress.toUpperCase()}&gaslimit=${gasLimit}&data=${txData}`,
   //   myCryptoUrl: `https://www.mycrypto.com/?to=${poolAddress.toUpperCase()}&gasLimit=${gasLimit}&data=${txData}`,
   // });
-}
 
-  handleWalletProviderClick(walletProvider) {
-    return (event) => {
-        console.log('walletProvider', walletProvider);
-        console.log('event', event);
+  async transactWithMetamask() {
+    const { ownerAddress } = this.state;
+    const web3 = await getWeb3();
+    const accounts = await web3.eth.getAccounts();
+    const currentNetwork = await getNetwork();
+
+    const metamaskInstalled = isMetamaskInstalled();
+    const metamaskUnlocked = !!accounts[0];
+    const isCorrectNetwork = (config.networkName === 'ganache') ? true : (currentNetwork.id === config.networkId);
+    const correctNetwork = await getNetwork(config.networkId);
+    const isCorrectWallet = (accounts[0] && accounts[0].toLowerCase() === ownerAddress.toLowerCase());
+
+    if (
+      !metamaskInstalled ||
+      !metamaskUnlocked ||
+      !isCorrectNetwork ||
+      !isCorrectWallet
+    ) {
+      this.metamaskModalRef.current.handleOpen({
+        metamask: {installed: metamaskInstalled, unlocked: metamaskUnlocked},
+        network:{selected: isCorrectNetwork, value: correctNetwork.name},
+        wallet: {selected: isCorrectWallet, value: ownerAddress},
+      });
+      return;
     }
-    // window.open(`${this.state.myEtherWalletUrl}&value=${amount}#send-transaction`, '_blank');
-    // window.open(`${this.state.myCryptoUrl}&value=${amount}#send-transaction`, '_blank');
+
+    this.pendingTxFieldsModalRef.current.handleOpen();
+
+    const { toAddress, amount, gasLimit, data } = this.state.pendingTx;
+    web3.eth.sendTransaction(
+      {
+        from: accounts[0],
+        to: toAddress,
+        gas: gasLimit,
+        value: amount,
+        data
+      }
+    )
+    .then((stuff) => {
+      console.log('stuff', stuff);
+    })
+    .catch(err => {
+      console.log('err', err);
+    });
+    // toast when transaction is confirmed etc. with etherscan link
+
+  }
+  handleWalletProviderClick(walletProvider) {
+    return () => {
+        switch (walletProvider) {
+          case 'metamask':
+            this.transactWithMetamask();
+            break;
+          case 'myCrypto':
+            this.pendingTxFieldsModalRef.current.handleOpen();
+            window.open(this.myCryptoUrl, '_blank');
+            break;
+          case 'myEtherWallet':
+            this.pendingTxFieldsModalRef.current.handleOpen();
+            window.open(this.myEtherWalletUrl, '_blank');
+            break;
+          default:
+            break;
+        }
+    }
   }
 
   render() {
-    // const { pool: { wallet } } = this.props;
-    const { wallet, toAddress, amount, gasLimit, txData, gasPrices } = this.state;
+    const { ownerAddress, pendingTx, isLoading, showModal } = this.state;
 
-    return (<div className="container deploy-page">
-        <h1>
-          Congrats, you're almost there!
-        </h1>
-        <p className="sub-heading">
-          Perform your 'Claim token' transaction on the 'Nexo Pool'
-        </p>
-        <div className="row">
-          <h4 className="col-md-4">
-            <CircleStep step={1}/>
-            Your chosen wallet:
-          </h4>
-          <span className="col-md-8 alert alert-info required-wallet-alert" role="alert">
-            {wallet}
-          </span>
-        </div>
-        <hr/>
-        <div className="row">
-          <h4 className="col-md-4">
-            <CircleStep step={2}/>
-            Suggested gas prices:
-          </h4>
-          <div className="col-md-8">
-            <GasPricePanel/>
-          </div>
-        </div>
-        <hr/>
-        <div className="row">
-          <h4 className="col-md-4">
-            <CircleStep step={3}/>
-            Transact via provider:
-          </h4>
-          <div className="col-md-8">
-            <WalletProviderPanel onClick={this.handleWalletProviderClick}/>
+    return (
+      <React.Fragment>
+        {isLoading && <Loader className="fixed" />}
+        <MetamaskInfoModal ref={this.metamaskModalRef} />
+        <PendingTxFieldsModal ref={this.pendingTxFieldsModalRef} pendingTx={pendingTx} wallet={ownerAddress}/>
+        { !isLoading &&
+          <div className="container deploy-page">
+            <h1>
+              Congrats, you're almost there!
+            </h1>
+            <p className="sub-heading">
+              Perform your 'Claim token' transaction on the 'Nexo Pool'
+            </p>
+            <div className="row">
+              <h4 className="col-md-4">
+                <CircleStep step={1}/>
+                Your chosen wallet:
+              </h4>
+              <span className="col-md-8 alert alert-info required-wallet-alert" role="alert">
+                {ownerAddress}
+              </span>
+            </div>
             <hr/>
-            <h5 className="manual-transaction-header">
-              Or, transact manually...
-            </h5>
-            <DeployDataFields  data={ getDeployData(this.state) }/>
+            <div className="row">
+              <h4 className="col-md-4">
+                <CircleStep step={2}/>
+                Suggested gas prices:
+              </h4>
+              <div className="col-md-8">
+                <GasPricePanel/>
+              </div>
+            </div>
+            <hr/>
+            <div className="row">
+              <h4 className="col-md-4">
+                <CircleStep step={3}/>
+                Transact via provider:
+              </h4>
+              <div className="col-md-8">
+                <WalletProviderPanel selectProvider={this.handleWalletProviderClick}/>
+                <hr/>
+                <h5 className="manual-transaction-header">
+                  Or, transact manually...
+                </h5>
+                <PendingTxFields  pendingTx={pendingTx}/>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>)
+        }
+      </React.Fragment>
+    )
   }
 }
 
+Deploy.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      userAddress: PropTypes.string,
+    }).isRequired,
+  }).isRequired,
+};
 
 export default Deploy;
-
-
-
-const getDeployData = ({ toAddress, amount, gasLimit, txData }) => {
-  return [
-    {
-      value: toAddress,
-      label: 'To Address'
-    },
-    {
-      value: amount,
-      label: 'Amount to Send'
-    },
-    {
-      value: gasLimit,
-      label: 'Gas Limit'
-    },
-    {
-      value: txData,
-      label: 'Transaction Data'
-    },
-  ];
-}
