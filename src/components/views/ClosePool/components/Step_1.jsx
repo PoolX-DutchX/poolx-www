@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 import TextField from '@material-ui/core/TextField';
 
 class StepOne extends Component {
-  constructor(props) {
-    super(props)
-  }
 
   render() {
-    const {formik, currentUser} = this.props; // *** formik props passed in from MultistepForm parent component
-    const {values, handleChange, handleBlur, touched, errors, setFieldValue} = formik;
+    const {formik} = this.props; // *** formik props passed in from MultistepForm parent component
+    const {values, handleChange, handleBlur, touched, errors} = formik;
     return(
       <div>
         <div className="row">
@@ -24,7 +20,8 @@ class StepOne extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
               error={touched.payoutAddress && !!errors.payoutAddress}
-              helperText={touched.payoutAddress && errors.payoutAddress}
+              helperText={values.lockPayoutAddress ? 'Destination address was locked on pool creation' : touched.payoutAddress && errors.payoutAddress}
+              disabled={values.lockPayoutAddress}
               autoComplete="Off"
               spellCheck="false"
               type= "text"
@@ -41,7 +38,7 @@ class StepOne extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
               error={touched.payoutTxData && !!errors.payoutTxData}
-              helperText={''}
+              helperText={touched.payoutTxData && errors.payoutTxData}
               autoComplete="Off"
               spellCheck="false"
               type= "text"

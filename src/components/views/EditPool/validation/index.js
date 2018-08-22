@@ -2,7 +2,10 @@ import * as Yup from 'yup';
 import Pool from '../../../../models/Pool';
 import { ethereumAddress, hexString } from '../../../../lib/validators';
 
-const stepOneSchema = Yup.object().shape({
+const validationSchema = Yup.object().shape({
+  name: Yup.string()
+    .required('Required'),
+  description: Yup.string(),
   ownerAddress: ethereumAddress()
     .required('Required'),
   maxAllocation: Yup.number()
@@ -22,10 +25,7 @@ const stepOneSchema = Yup.object().shape({
     .when('minContribution', (minContribution, schema) => {
       return minContribution ? schema.min(minContribution, 'Must be more than Minimum contribution') : schema;
     })
-    .required('Required')
-});
-
-const stepTwoSchema = Yup.object().shape({
+    .required('Required'),
   fee: Yup.number()
     .min(0, `Must be more than zero`)
     .max(100, `Must be less than 100`)
@@ -41,29 +41,11 @@ const stepTwoSchema = Yup.object().shape({
         .required('Required'),
       name: Yup.string()
     }))
-    .max(5)
-});
-
-const stepThreeSchema = Yup.object().shape({
+    .max(5),
   lockPayoutAddress: Yup.boolean()
     .required('Required'),
-  payoutAddress: Yup.string()
-    .when('lockPayoutAddress', {
-      is: true,
-      then: ethereumAddress()
-        .required('Required'),
-    }),
-  payoutTxData: Yup.string()
-    .when('lockPayoutAddress', {
-      is: true,
-      then: hexString()
-    })
+  payoutAddress: ethereumAddress(),
+  payoutTxData: hexString()
 });
 
-const stepFourSchema = Yup.object().shape({
-  name: Yup.string()
-    .required('Required'),
-  description: Yup.string(),
-});
-
-export default [stepOneSchema, stepTwoSchema, stepThreeSchema, stepFourSchema];
+export default validationSchema;

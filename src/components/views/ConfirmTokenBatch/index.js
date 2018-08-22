@@ -5,16 +5,18 @@ import User from '../../../models/User';
 import Pool from '../../../models/Pool';
 import PoolService from '../../../services/Pool';
 
+import * as Yup from 'yup';
+
 import MultiStepForm from '../../MultiStepForm';
 import StepOne from './components/Step_1';
-
-import validationSchemas from './validation/';
 
 import Loader from '../../Loader';
 import { history, isPoolAdmin } from '../../../lib/helpers';
 import { isAuthenticated } from '../../../lib/middleware';
+import { ethereumAddress } from '../../../lib/validators';
+
 /**
- * View flow to create a Contribution
+ * View flow to confirm a token batch
  *
  * @param id       URL parameter which is an id of a pool object
  */
@@ -22,12 +24,12 @@ import { isAuthenticated } from '../../../lib/middleware';
 const Header = () => {
  return (
    <div>
-     <h1 className="font-xl">Send Payout</h1>
+     <h1 className="font-xl">Confirm token batch</h1>
    </div>
  )
 }
 
-class ClosePool extends Component {
+class ConfirmTokenBatch extends Component {
   constructor(props) {
     super(props);
 
@@ -40,12 +42,10 @@ class ClosePool extends Component {
   async componentDidMount() {
     const { currentUser, match: { params: { poolId }}} = this.props
     try {
-      // await isAuthenticated(currentUser);
+      await isAuthenticated(currentUser);
 
       const pool = await PoolService.getById(poolId);
-      console.log('pool', pool);
-      console.log('currentUser', currentUser);
-
+      // check status of pool & redirect if not appropriate
       if (!isPoolAdmin(pool, currentUser)) {
        history.replace(`/pools/${pool._id}`);
       };
@@ -63,33 +63,31 @@ class ClosePool extends Component {
   }
 
   render() {
-    console.log('this.state.pool', this.state.pool);
-    const { isLoading, pool: { lockPayoutAddress, payoutAddress, payoutTxData}} = this.state;
-    console.log('lockPayoutAddress', lockPayoutAddress);
-    console.log('payoutAddress', payoutAddress);
-    console.log('payoutTxData', payoutTxData);
-    const initialValues = {
-      lockPayoutAddress: lockPayoutAddress,
-      payoutAddress: payoutAddress || '',
-      payoutTxData: payoutTxData || ''
-    };
+    const { isLoading, pool: { tokenAddress }} = this.state;
+
     return (
       <div>
         {isLoading && <Loader className="fixed" />}
         { !isLoading && <MultiStepForm
             header={<Header/>}
-            initialValues={initialValues}
-            stepLabels={['Destination & Data','Perform transaction']}
-            onSubmit={({ payoutAddress, payoutTxData}, actions) => {
+            initialValues={{
+              tokenAddress: tokenAddress || ''
+            }}
+            stepLabels={['Token address','Perform transaction']}
+            onSubmit={({ tokenAddress}, actions) => {
               PoolService.patch(this.state.pool._id, {
-                status: Pool.PENDING_CLOSE_POOL,
-                payoutAddress,
-                payoutTxData
+                status: Pool.PENDING_TOKEN_BATCH,
+                tokenAddress
               }).then(() => {
                 history.push(`/pools/${this.state.pool._id}/pendingTx`);
               });
             }}
-            validationSchemas={validationSchemas}
+            validationSchemas={[
+              Yup.object().shape({
+                tokenAddress: ethereumAddress()
+                  .required('Required')
+                })
+            ]}
           >
             <StepOne currentUser={this.props.currentUser}/>
           </MultiStepForm>
@@ -99,7 +97,7 @@ class ClosePool extends Component {
   }
 }
 
-ClosePool.propTypes = {
+ConfirmTokenBatch.propTypes = {
   currentUser: PropTypes.instanceOf(User),
   match: PropTypes.shape({
     params: PropTypes.shape({
@@ -108,4 +106,4 @@ ClosePool.propTypes = {
   }).isRequired,
 };
 
-export default ClosePool;
+export default ConfirmTokenBatch;

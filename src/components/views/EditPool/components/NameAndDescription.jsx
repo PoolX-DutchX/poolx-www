@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import TextField from '@material-ui/core/TextField';
 
-class StepFour extends Component {
+class NameAndDescription extends Component {
   render() {
     const {formik: { values, handleChange, handleBlur, touched, errors }} = this.props; // formik props passed in from Wizard
     return(
@@ -35,7 +35,6 @@ class StepFour extends Component {
               value={values.description}
               multiline
               rowsMax="7"
-              rows="4"
               autoComplete="Off"
               spellCheck="false"
               placeholder="Say a few words about your pool"
@@ -53,4 +52,4 @@ class StepFour extends Component {
   }
 }
 
-export default StepFour;
+export default NameAndDescription;

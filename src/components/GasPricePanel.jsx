@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 class GasPricePanel extends Component {
   constructor() {
@@ -25,7 +24,6 @@ class GasPricePanel extends Component {
   }
 
   render() {
-    const { classes } = this.props;
 
     const { gasPrice: { safeLow, standard, fast }} = this.state;
 

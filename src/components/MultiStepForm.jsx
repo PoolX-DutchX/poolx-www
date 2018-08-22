@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik, Field } from 'formik';
+import { Formik } from 'formik';
 
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -13,12 +13,12 @@ class MultiStepForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      step: 4,
+      step: 0,
       values: props.initialValues,
       completed: {}
     };
   }
-  
+
   next = values =>
     this.setState(state => ({
       step: Math.min(state.step + 1, this.props.children.length - 1),
@@ -55,7 +55,6 @@ class MultiStepForm extends React.Component {
     const { children, header, validationSchemas, stepLabels } = this.props;
     const { step, values } = this.state;
     const activeStep = React.Children.toArray(children)[step];
-    console.log('step', step);
     const isLastStep = step === React.Children.count(children) - 1;
 
     return (
@@ -77,8 +76,9 @@ class MultiStepForm extends React.Component {
                 validationSchema={validationSchemas[step]}
                 onSubmit={this.handleSubmit}
                 render={(formikProps) => {
+                  console.log('activeStep', activeStep);
                   const activeStepWithFormikProps = React.cloneElement(activeStep, {formik: formikProps});
-                  const { values, handleSubmit, isSubmitting, handleReset } = formikProps;
+                  const { handleSubmit, isSubmitting } = formikProps;
                   return (
                     <form onSubmit={handleSubmit} noValidate>
                       {activeStepWithFormikProps}
@@ -127,8 +127,3 @@ class MultiStepForm extends React.Component {
 
 
 export default MultiStepForm;
-
-// />
-// );
-// }
-// }

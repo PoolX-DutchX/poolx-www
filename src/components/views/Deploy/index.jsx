@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { utils } from 'web3';
 import { feathersClient } from '../../../lib/feathersClient';
 
 import WalletProviderPanel from './components/WalletProviderPanel';
@@ -9,8 +8,6 @@ import PendingTxFields from './components/PendingTxFields';
 import MetamaskInfoModal from './components/MetamaskInfoModal';
 import PendingTxFieldsModal from './components/PendingTxFieldsModal';
 
-import { copyToClipboard } from '../../../lib/helpers';
-import WithTooltip from '../../WithTooltip';
 import GasPricePanel from '../../GasPricePanel';
 import CircleStep from '../../CircleStep';
 
@@ -34,7 +31,6 @@ class Deploy extends React.Component {
     super();
     this.state = {
       isLoading: true,
-      showModal: false,
       pendingTx: {}
     };
     this.handleWalletProviderClick = this.handleWalletProviderClick.bind(this);
@@ -44,33 +40,36 @@ class Deploy extends React.Component {
   }
   async componentDidMount() {
 
-    const { match: { params: { resourceId }}} = this.props;
+    const { match: { params: { poolId, contributionId }}} = this.props;
+
+    const resourceId = poolId || contributionId;
+
+    const serviceName = poolId ? 'pools' : 'contributions';
+
     try {
       const resource = await feathersClient //either pool or contribution
-        .service(this.props.service)
+        .service(serviceName)
         .get(resourceId);
+
+      this.poolId = poolId ? poolId : resource.pool._id;
 
       const { ownerAddress, pendingTx } = resource;
 
       if (!pendingTx) {
-        if (this.props.service === 'pools') {
-          history.replace(`/pools/${resourceId}`);
-        }
-
-        if (this.props.service === 'contributions') {
-          history.replace(`/pools/${resource.poolId}`);
-        }
-
+        const redirectPath = poolId ? `/pools/${resourceId}` : `/pools/${resource.pool._id}`;
+        history.replace(redirectPath);
+        return;
       }
+
       const { toAddress, amount, gasLimit, txData } = pendingTx;
 
-      this.myEtherWalletUrl = `https://www.myetherwallet.com/?to=${toAddress.toUpperCase()}&gaslimit=${gasLimit}&data=${txData}&value=${amount}#send-transaction`,
-      this.myCryptoUrl = `https://www.mycrypto.com/?to=${toAddress.toUpperCase()}&gasLimit=${gasLimit}&data=${txData}&value=${amount}#send-transaction`,
+      this.myEtherWalletUrl = `https://www.myetherwallet.com/?to=${toAddress.toUpperCase()}&gaslimit=${gasLimit}&data=${txData}&value=${amount}#send-transaction`;
+      this.myCryptoUrl = `https://www.mycrypto.com/?to=${toAddress.toUpperCase()}&gasLimit=${gasLimit}&data=${txData}&value=${amount}#send-transaction`;
 
       this.setState({
         ownerAddress,
         pendingTx,
-        isLoading: false
+        isLoading: false,
       });
 
     } catch(err) {
@@ -167,13 +166,13 @@ class Deploy extends React.Component {
   }
 
   render() {
-    const { ownerAddress, pendingTx, isLoading, showModal } = this.state;
+    const { ownerAddress, pendingTx, isLoading } = this.state;
 
     return (
       <React.Fragment>
         {isLoading && <Loader className="fixed" />}
         <MetamaskInfoModal ref={this.metamaskModalRef} />
-        <PendingTxFieldsModal ref={this.pendingTxFieldsModalRef} pendingTx={pendingTx} wallet={ownerAddress}/>
+        <PendingTxFieldsModal ref={this.pendingTxFieldsModalRef} pendingTx={pendingTx} wallet={ownerAddress} poolId={this.poolId}/>
         { !isLoading &&
           <div className="container deploy-page">
             <h1>

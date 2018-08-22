@@ -54,15 +54,15 @@ class CreatePool extends Component {
     const { isLoading } = this.state;
 
     const poolData = {
-      ownerAddress: '0x14410fF4E1954e3a417A5aa2575157a72D2554c6',
+      ownerAddress: '0xad55d9b675539cf02e69d9845be95deccca8afce',
       maxAllocation: 200,
       fee: 0.25,
       feePayoutCurrency: 'ether',
-      lockDestination: true,
-      payoutAddress: '0x14410fF4E1954e3a417A5aa2575157a72D2554c6' ,
+      lockPayoutAddress: true,
+      payoutAddress: '0xad55d9b675539cf02e69d9845be95deccca8afce' ,
       payoutTxData: '0Ab7BA78BA',
       admins: [
-        {address: '0x14410fF4E1954e3a417A5aa2575157a72D2554c6', name:'Hootie'},
+        { address: '0xad55d9b675539cf02e69d9845be95deccca8afce', name: 'Hootie' },
         {address: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1', name:'Supports'},
         {address: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1', name:'Sooch'},
         {address: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1', name:'Norkie'},
@@ -70,7 +70,7 @@ class CreatePool extends Component {
       ],
       hasWhitelist: true,
       whitelist: [
-        { address: '0x14410fF4E1954e3a417A5aa2575157a72D2554c6', name: 'John' },
+        { address: '0xad55d9b675539cf02e69d9845be95deccca8afce', name: 'John' },
         { address: '0xb8844811b02e85fcd5b0a32079ab2a11d11b4d05', name: 'Mary' },
         { address: '0x5841043711276f5d02c30c14f4e2a2740f0587c2', name: 'Hooch' },
         { address: '0xf95052a6c661e9e83fdfb3d8bc42a8155d9482b9', name: 'Calibri' },
@@ -82,7 +82,7 @@ class CreatePool extends Component {
         { address: '0x38ec11e246eda8b215a0b24afd093bd7cd6c1ee1', name: 'Garchoff' },
         { address: '0x36596eEBd695aDCd03B3e42260Aa2468885100dd', name: 'Sickldor' }
       ],
-      adminPayoutAddress: '0x14410fF4E1954e3a417A5aa2575157a72D2554c6',
+      adminPayoutAddress: '0xad55d9b675539cf02e69d9845be95deccca8afce',
       name: 'IIOC',
       description: 'This is the best pool you could ever hope for.',
       minContribution: 5,
@@ -104,7 +104,7 @@ class CreatePool extends Component {
               // feePayoutCurrency: '',
               // adminPayoutAddress: '',
               // admins: [{address: '', name:''}],
-              // lockDestination: false,
+              // lockPayoutAddress: false,
             }}
             stepLabels={['Wallet & Limits', 'Fees & Admins', 'Destination & Whitelist', 'Name & Description', 'Review']}
             onSubmit={(values, actions) => {

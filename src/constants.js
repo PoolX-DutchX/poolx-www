@@ -1,3 +1,6 @@
+import { history } from './lib/helpers';
+import PoolService from './services/Pool';
+
 //Contribution Statuses
 export const PENDING_CONFIRMATION = 'pending_confirmation';
 export const CONFIRMED = 'confirmed';
@@ -48,42 +51,56 @@ export const poolStatusMap =  {
   [PENDING_DEPLOYMENT]: {
     displayText: 'Pending',
     actionText: 'View TX Data',
-    action: () => {}
+    action: (pool) => () => {
+      history.push(`pools/${pool.id}/pendingTx`);
+    }
   },
   [ACTIVE]: {
     displayText: 'Active',
     actionText: 'Send Funds',
-    action: null
+    action: (pool) => () => {
+      history.push(`pools/${pool.id}/payout`);
+    }
   },
   [PENDING_CLOSE_POOL]: {
     displayText: 'Pending Send',
     actionText: 'View TX Data',
-    action: () => {}
+    action: (pool) => () => {
+      history.push(`pools/${pool.id}/pendingTx`);
+    }
   },
   [CLOSED]: {
     displayText: 'Funds Sent',
     actionText: 'Confirm Token',
-    action: null
+    action: (pool) => () => {
+      history.push(`pools/${pool.id}/confirmTokenBatch`);
+    }
   },
   [PENDING_TOKEN_BATCH]: {
     displayText: 'Pending Token Confirmation',
     actionText: 'View TX Data',
-    action: () => {}
+    action: (pool) => () => {
+      history.push(`pools/${pool.id}/pendingTx`);
+    }
   },
   [PAYOUT_ENABLED]: {
     displayText: 'Token Confirmed',
     actionText: 'Add Token Batch',
-    action: () => {}
+    action: (pool) => () => {
+      history.push(`pools/${pool.id}/confirmTokenBatch`);
+    }
   },
   [PENDING_ENABLE_REFUNDS]: {
     displayText: 'Pending Enable Refunds',
     actionText: 'View TX Data',
-    action: null
+    action: (pool) => () => {
+      history.push(`pools/${pool.id}/pendingTx`);
+    }
   },
   [REFUNDS_ENABLED]: {
     displayText: 'Refunds Enabled',
     actionText: '',
-    action: () => {}
+    action: null
   },
   [PAUSED]: {
     displayText: 'Paused',

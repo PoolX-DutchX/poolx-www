@@ -1,23 +1,14 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 import { FieldArray } from 'formik';
 
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Switch from '@material-ui/core/Switch';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormLabel from '@material-ui/core/FormLabel';
-import FormGroup from '@material-ui/core/FormGroup';
 import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import Divider from '@material-ui/core/Divider';
-import AddIcon from '@material-ui/icons/AddCircle';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
@@ -26,7 +17,6 @@ import IconButton from '@material-ui/core/IconButton';
 
 import Pool from '../../../../models/Pool';
 
-import ChooseWalletDialog from '../../../ChooseWalletDialog';
 import PlusIcon from '../../../PlusIcon';
 import AdminListItem from './AdminListItem';
 
@@ -51,7 +41,7 @@ class StepTwo extends Component {
     this.setState({ walletDialogOpen: false });
   }
   render() {
-    const {formik, currentUser} = this.props; // *** formik props passed in from MultistepForm parent component
+    const {formik, disabledFields = {}} = this.props; // *** formik props passed in from MultistepForm parent component
     const {values, handleChange, handleBlur, touched, errors} = formik;
     return(
       <div>
@@ -75,19 +65,18 @@ class StepTwo extends Component {
                 </span>
               }
               placeholder="% 0.0"
-              inputProps={{
-                min:"0",
-                max:"100",
-                step:"0.1",
-              }}
               InputProps={
                 (values.fee || values.fee === 0) ? {
                   startAdornment: <InputAdornment position="start">% </InputAdornment>,
+                  min:"0",
+                  max:"100",
+                  step:"0.1",
                 } : {}
               }
               type= "number"
               margin="normal"
               style={{ whiteSpace: "nowrap"}}
+              disabled={disabledFields.fee}
               fullWidth
             />
           </div>
@@ -101,6 +90,7 @@ class StepTwo extends Component {
               <Select
                 value={values.feePayoutCurrency}
                 onChange={handleChange}
+                disabled={disabledFields.feePayoutCurrency}
                 input={
                   <Input
                     name="feePayoutCurrency"
@@ -132,6 +122,7 @@ class StepTwo extends Component {
               spellCheck="false"
               type= "text"
               margin="normal"
+              disabled={disabledFields.adminPayoutAddress}
               fullWidth
             />
           </div>
@@ -144,7 +135,7 @@ class StepTwo extends Component {
                   <div className="d-flex align-items-center">
                     <FormLabel >Admins</FormLabel>
                     {
-                      !values.admins.length &&
+                      !disabledFields.admins && values.admins && !values.admins.length &&
                         <Tooltip title="Add">
                           <div>
                             <IconButton aria-label="Add admin"
@@ -159,13 +150,14 @@ class StepTwo extends Component {
                     }
                   </div>
                   {
-                    values.admins.map((admin, index) => {
+                    values.admins && values.admins.map((admin, index) => {
                       return <AdminListItem
                         key={index}
                         admin={admin}
                         index={index}
                         formik={formik}
                         fieldArrayHelpers={fieldArrayHelpers}
+                        disabledFields={disabledFields}
                       />
                     })
                   }

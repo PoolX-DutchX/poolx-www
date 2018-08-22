@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Pool from '../../../../models/Pool';
 
@@ -24,9 +23,8 @@ const PoolReview = ({ formik: { values } }) => {
     maxContribution,
     fee,
     feePayoutCurrency,
-    adminPayoutAddress,
     admins,
-    lockDestination,
+    lockPayoutAddress,
     payoutAddress,
     payoutTxData,
     hasWhitelist,
@@ -101,10 +99,10 @@ const PoolReview = ({ formik: { values } }) => {
             <TableCell component="th" scope="row">
               Lock destination
             </TableCell>
-            <TableCell>{String(lockDestination)}</TableCell>
+            <TableCell>{String(lockPayoutAddress)}</TableCell>
           </TableRow>
           {
-            lockDestination && payoutAddress && <TableRow>
+            lockPayoutAddress && payoutAddress && <TableRow>
               <TableCell component="th" scope="row">
                 Desintation Address
               </TableCell>
@@ -112,7 +110,7 @@ const PoolReview = ({ formik: { values } }) => {
             </TableRow>
           }
           {
-            lockDestination && payoutTxData && <TableRow>
+            lockPayoutAddress && payoutTxData && <TableRow>
               <TableCell component="th" scope="row">
                 Destination Tx Data
               </TableCell>

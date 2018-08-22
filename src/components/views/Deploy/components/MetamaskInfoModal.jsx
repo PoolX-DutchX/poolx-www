@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import withMobileDialog from '@material-ui/core/withMobileDialog';
 import CheckIcon from '@material-ui/icons/CheckCircle';
 
 import CircleStep from '../../../CircleStep';
@@ -41,7 +38,7 @@ class MetamaskInfoModal extends Component {
     return [
       {
         checked: metamask.installed,
-        itemText: <span>Install <a href="https://metamask.io/" target="_blank">Metamask Chrome Plugin</a></span>
+        itemText: <span>Install <a href="https://metamask.io/" target="_blank" rel="noopener noreferrer">Metamask Chrome Plugin</a></span>
       },
       {
         checked: metamask.unlocked,

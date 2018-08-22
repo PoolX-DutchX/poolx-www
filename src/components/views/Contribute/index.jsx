@@ -1,17 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 
 import User from '../../../models/User';
+import Contribution from '../../../models/Contribution';
+import ContributionService from '../../../services/Contribution';
+import PoolService from '../../../services/Pool';
 
 import MultiStepForm from '../../MultiStepForm';
-import StepOne from './components/StepOne';
+import StepOne from './components/Step_1';
 
 import Loader from '../../Loader';
 
-import { checkEthereumAddress } from '../../../lib/validators';
+import { history } from '../../../lib/helpers';
+import { feathersClient } from '../../../lib/feathersClient';
+import { isAuthenticated } from '../../../lib/middleware';
+import { isWhitelistedAddress, ethereumAddress } from '../../../lib/validators';
+
 /**
  * View flow to create a Contribution
  *
@@ -33,20 +39,41 @@ class Contribute extends Component {
 
     this.state = {
       isLoading: true,
-      pool: {
-        address: '0xc38e6069cf20f345f24070c52ef68fa2c9314d5b',
-        minContribution: 40,
-        maxContribution: 200},
+      pool: {},
     };
-    Yup.addMethod(Yup.string, 'ethereumAddress', checkEthereumAddress)
+
+    // Yup.addMethod(Yup.string, 'whitelisted', isWhitelistedAddress);
+
   }
 
-  componentDidMount() {
-    const poolId = this.props.match.params.id;
-    //ToDo: getPoolById
-    this.setState({
-      isLoading: false
-    });
+  async componentDidMount() {
+    const { currentUser, match: { params: { poolId }}} = this.props
+    try {
+      await isAuthenticated(currentUser);
+
+      const pool = await PoolService.getById(poolId);
+      // const pools = await feathersClient.service('pools').find({
+      //   query: {
+      //     whitelist: {
+      //       $elemMatch: {
+      //         address:'0x48bb011dcd25d9fb58e3117da48626f4910d7f24'
+      //       }
+      //     }
+      //   }
+      // });
+      // console.log('pools', pools);
+      // const pool = pools[0];
+
+      this.setState({
+        isLoading: false,
+        pool
+      });
+
+    } catch(err) {
+      console.log('err', err);
+      //oops something wrong
+    }
+
   }
 
   render() {
@@ -58,23 +85,37 @@ class Contribute extends Component {
         { !isLoading && <MultiStepForm
             header={<Header/>}
             initialValues={{
-              wallet: '',
+              ownerAddress: '',
               amount: '',
             }}
             stepLabels={['Contribution Details', 'Perform transaction']}
-            onSubmit={(values, actions) => {
-              console.log('submitting values', values);
-              //   actions.setSubmitting(false);
+            onSubmit={({ownerAddress, amount}, actions) => {
+              console.log('this.state.pool.id', this.state.pool.id);
+              console.log('ownerAddress', ownerAddress);
+              console.log('amount', amount);
+              feathersClient.service('contributions').create({
+                ownerAddress,
+                amount,
+                pool: this.state.pool.id
+              }).then((contribution) => {
+                history.push(`/contributions/${contribution._id}/pendingTx`);
+              })
+              .catch((err) => {
+                console.log('Oops something went wrong', err);
+              });
+                // actions.setSubmitting(false);
             }}
-            validationSchema={ Yup.object().shape({
-              wallet: Yup.string()
-                .ethereumAddress('Invalid ethereum address')
-                .required('Required'),
-              amount: Yup.number()
-                .min(minContribution, `Must be more than Pool minimum contribution of ${minContribution}`)
-                .max(maxContribution, `Must be less than Pool Maximum contribution of ${maxContribution}`)
-                .required('Required')
-              })}
+            validationSchemas={ [
+              Yup.object().shape({
+                ownerAddress: ethereumAddress()
+                  // .whitelisted(this.state.pool, 'The address provided is not on pool whitelist. Please contract pool admin')
+                  .required('Required'),
+                amount: Yup.number()
+                  .min(minContribution, `Must be more than Pool minimum contribution of ${minContribution} Ether`)
+                  .max(maxContribution, `Must be less than Pool Maximum contribution of ${maxContribution} Ether`)
+                  .required('Required')
+                })
+              ] }
           >
             <StepOne
               currentUser={this.props.currentUser}

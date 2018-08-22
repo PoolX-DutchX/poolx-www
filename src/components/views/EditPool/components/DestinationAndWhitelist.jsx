@@ -4,9 +4,11 @@ import { utils } from 'web3';
 import TextField from '@material-ui/core/TextField';
 import Switch from '@material-ui/core/Switch';
 import FormLabel from '@material-ui/core/FormLabel';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import CSVReader from '../../../CSVReader';
 import WhitelistTable from '../../../WhitelistTable';
+import PoolModel from '../../../../models/Pool';
 
 
 class StepThree extends Component {
@@ -14,49 +16,69 @@ class StepThree extends Component {
     super(props)
     const{ formik: { values: { hasWhitelist, whitelist}}} = this.props;
 
-
     this.state = {
-      whitelist: hasWhitelist && !!whitelist.length ? whitelist : [],
+      whitelist: hasWhitelist ? whitelist : [],
       invalidItemNumbers: []
     }
   }
 
+  handleHasWhitelistChange = (handleChange) => (...eventProps) => {
+    this.setState({
+      whitelist: []
+    });
+    handleChange(...eventProps);
+
+  }
+
   render() {
-    const {formik} = this.props; // *** formik props passed in from MultistepForm parent component
+    const {formik, pool} = this.props; // *** formik props passed in from MultistepForm parent component
     const {values, handleChange, handleBlur, touched, errors, setFieldValue} = formik;
+    const poolClosed = pool.status !== PoolModel.ACTIVE && pool.status !== PoolModel.PENDING_CLOSE_POOL;
     return(
       <div>
         <div className="row">
-          <div className="col-md-4" style={{paddingTop: "27px"}}>
-            <FormLabel>Lock Destination</FormLabel>
-            <Switch
-            id="lockPayoutAddress"
-            name="lockPayoutAddress"
-            checked={values.lockPayoutAddress}
-            onChange={handleChange}
-            value="lockPayoutAddress"
-            color="primary"
-            />
-          </div>
-          { !!values.lockPayoutAddress &&
-            <div className="col-md-8">
+          {
+            values.lockPayoutAddress &&
+            <div className="col-md-4" style={{paddingTop: "27px"}}>
+              <Tooltip title="Destination locked at pool deploy cannot be undone"  placement="bottom-start">
+                <div>
+                  <FormLabel>Lock Destination</FormLabel>
+                  <Switch
+                  id="lockPayoutAddress"
+                  name="lockPayoutAddress"
+                  checked={values.lockPayoutAddress}
+                  onChange={handleChange}
+                  value="lockPayoutAddress"
+                  color="primary"
+                  disabled="true"
+                  />
+                </div>
+              </Tooltip>
+            </div>
+          }
+          <div className={values.lockPayoutAddress ? "col-md-8" : "col-md-12" }>
+            <Tooltip title="Destination locked at pool deploy cannot be undone"
+              placement="bottom-start"
+              disableHoverListener={!values.lockPayoutAddress || poolClosed}>
               <TextField
-              id="payoutAddress"
-              name="payoutAddress"
-              label="Destination Address"
-              placeholder="0x..."
-              value={values.payoutAddress}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.payoutAddress && !!errors.payoutAddress}
-              helperText={touched.payoutAddress && errors.payoutAddress}
-              autoComplete="Off"
-              spellCheck="false"
-              type= "text"
-              margin="normal"
-              fullWidth
+                id="payoutAddress"
+                name="payoutAddress"
+                label="Destination Address"
+                placeholder="0x..."
+                value={values.payoutAddress}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.payoutAddress && !!errors.payoutAddress}
+                helperText={touched.payoutAddress && errors.payoutAddress}
+                autoComplete="Off"
+                spellCheck="false"
+                type= "text"
+                margin="normal"
+                disabled={values.lockPayoutAddress || poolClosed}
+                fullWidth
               />
-              <TextField
+            </Tooltip>
+            <TextField
               id="payoutTxData"
               name="payoutTxData"
               label="Transaction data"
@@ -71,21 +93,21 @@ class StepThree extends Component {
               spellCheck="false"
               type= "text"
               margin="normal"
+              disable={poolClosed}
               fullWidth
-              />
-            </div>
-          }
+            />
+          </div>
         </div>
         <div className="row" style={{marginTop: "27px"}}>
           <div className="col-md-4">
             <FormLabel>Whitelist</FormLabel>
             <Switch
-            id="hasWhitelist"
-            name="hasWhitelist"
-            checked={values.hasWhitelist}
-            onChange={handleChange}
-            value="hasWhitelist"
-            color="primary"
+              id="hasWhitelist"
+              name="hasWhitelist"
+              checked={values.hasWhitelist}
+              onChange={this.handleHasWhitelistChange(handleChange)}
+              value="hasWhitelist"
+              color="primary"
             />
           </div>
           { !!values.hasWhitelist &&

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import Button from '@material-ui/core/Button';
-import { utils } from 'web3';
 import { contributionStatusMap } from '../../../../constants';
 
 import Contribution from '../../../../models/Contribution';
@@ -22,7 +21,7 @@ class ContributionListItem extends React.Component {
     return (amountInvested / poolNetInvested) * tokenBalance;
   }
   render() {
-    const { contribution, currentUser: { wallets } } = this.props;
+    const { contribution } = this.props; //currentUser: { wallets }
     const createdAt = new moment(contribution.createdAt);
     const month = createdAt.format('MMM');
     const day = createdAt.format('DD');

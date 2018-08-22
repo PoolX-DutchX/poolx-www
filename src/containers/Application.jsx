@@ -19,10 +19,13 @@ import Home from './../components/views/Home';
 
 import ViewPool from './../components/views/ViewPool';
 import CreatePool from './../components/views/CreatePool/';
+import EditPool from './../components/views/EditPool/';
+import Update from './../components/views/Update/';
 import ClosePool from './../components/views/ClosePool/';
 import Contribute from './../components/views/Contribute/';
 import Dashboard from './../components/views/Dashboard/';
 import Deploy from './../components/views/Deploy/';
+import ConfirmTokenBatch from './../components/views/ConfirmTokenBatch/';
 
 import NotFound from './../components/views/NotFound';
 
@@ -109,16 +112,23 @@ class Application extends Component {
                           />
                           <Route
                             exact
-                            path="/pools/contribute/:poolId"
+                            path="/pools/:poolId"
                             component={props => (
-                              <Contribute currentUser={currentUser} {...props} />
+                              <ViewPool currentUser={currentUser} {...props} />
                             )}
                           />
                           <Route
                             exact
-                            path="/pools/:poolId"
+                            path="/pools/:poolId/edit"
                             component={props => (
-                              <ViewPool currentUser={currentUser} {...props} />
+                              <EditPool currentUser={currentUser} {...props} />
+                            )}
+                          />
+                          <Route
+                            exact
+                            path="/pools/:poolId/update"
+                            component={props => (
+                              <Update currentUser={currentUser} {...props} />
                             )}
                           />
                           <Route
@@ -128,12 +138,32 @@ class Application extends Component {
                               <ClosePool currentUser={currentUser} {...props} />
                             )}
                           />
-                          {/*path="/contributions/:contributionId/pendingTx"*/}
                           <Route
                             exact
-                            path="/pools/:resourceId/pendingTx"
+                            path="/pools/:poolId/contribute"
                             component={props => (
-                              <Deploy service="pools" currentUser={currentUser} {...props} />
+                              <Contribute currentUser={currentUser} {...props} />
+                            )}
+                          />
+                          <Route
+                            exact
+                            path="/pools/:poolId/confirmTokenBatch"
+                            component={props => (
+                              <ConfirmTokenBatch currentUser={currentUser} {...props} />
+                            )}
+                          />
+                          <Route
+                            exact
+                            path="/pools/:poolId/pendingTx"
+                            component={props => (
+                              <Deploy currentUser={currentUser} {...props} />
+                            )}
+                          />
+                          <Route
+                            exact
+                            path="/contributions/:contributionId/pendingTx"
+                            component={props => (
+                              <Deploy currentUser={currentUser} {...props} />
                             )}
                           />
                           <Route

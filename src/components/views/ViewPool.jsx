@@ -8,7 +8,10 @@ import WithTooltip from '../WithTooltip';
 
 import User from '../../models/User';
 import PoolService from '../../services/Pool';
+import PoolModel from '../../models/Pool';
 import ContributionService from '../../services/Contribution';
+import { feathersClient } from '../../lib/feathersClient';
+
 
 import ErrorPopup from '../ErrorPopup';
 
@@ -25,9 +28,17 @@ class ViewPool extends Component {
 
   async componentDidMount() {
     const poolId = this.props.match.params.poolId;
+    console.log('poolId', poolId);
     try {
+      // const updatedPool = await feathersClient.service('pools').patch(poolId,{
+      //   status: 'pending_close_pool',
+      //   payoutTxData: '0x5aa26c0ede1f5fc31fe8e266bdcdc1b8a6ac47d7'
+      // });
+      // console.log('updatedPool', updatedPool);
+
       let contributions = [];
       const pool = await PoolService.getById(poolId);
+      console.log('pool', pool);
       if (this.props.currentUser) {
         console.log('this.props.currentUser', this.props.currentUser);
         const { data } = await ContributionService.getUserContributionsByPoolId(this.props.currentUser.id, poolId);
@@ -35,6 +46,7 @@ class ViewPool extends Component {
       }
       this.setState({ pool, contributions, isLoading: false });
     } catch (err) {
+      console.log('err', err);
       ErrorPopup('Something went wrong loading pool. Please try refresh the page.', err);
       this.setState({ isLoading: false });
     }
@@ -85,14 +97,14 @@ class ViewPool extends Component {
             history.push('/signup');
             break;
           case 'continue':
-            history.push(`/pools/contribute/${this.state.pool.id}`);
+            history.push(`/pools/${this.state.pool.id}/contribute`);
             break;
           default:
             break;
         }
       });
     } else {
-      history.push(`/pools/contribute/${this.state.pool.id}`)
+      history.push(`/pools/${this.state.pool.id}/contribute`)
     }
   }
 
@@ -108,7 +120,7 @@ class ViewPool extends Component {
 
     let poolProgress = 0;
     if (!isLoading) {
-      poolProgress = (pool.netInvested / pool.cap) * 100;
+      poolProgress = (pool.netInvested / pool.maxAllocation) * 100;
     }
 
     return (
@@ -145,7 +157,7 @@ class ViewPool extends Component {
                 <div className="total-invested-section">
                   <h4 className="invested"><strong>{pool.netInvested} ETH </strong></h4>
                   <div className="subheading">
-                    of {pool.cap} ETH maximum
+                    of {pool.maxAllocation} ETH maximum
                   </div>
                 </div>
                 <div className="min-max-section">
@@ -158,7 +170,11 @@ class ViewPool extends Component {
                     <div className="subheading">Max. Contribution</div>
                   </span>
                 </div>
-                <Button variant="contained" color="primary" fullWidth onClick={this.contribute}>
+                <Button variant="contained"
+                  color="primary"
+                  fullWidth
+                  onClick={this.contribute}
+                  disabled={pool.status !== PoolModel.ACTIVE}>
                   Contribute to Pool
                 </Button>
                 <div className="row margin-top-bottom">
@@ -201,7 +217,7 @@ ViewPool.propTypes = {
   currentUser: PropTypes.instanceOf(User),
   match: PropTypes.shape({
     params: PropTypes.shape({
-      id: PropTypes.string,
+      poolId: PropTypes.string,
     }).isRequired,
   }).isRequired,
 };

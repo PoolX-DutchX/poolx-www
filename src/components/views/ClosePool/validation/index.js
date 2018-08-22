@@ -1,14 +1,10 @@
 import * as Yup from 'yup';
-import Pool from '../../../../models/Pool';
-import { checkEthereumAddress } from '../../../../lib/validators';
-
-Yup.addMethod(Yup.string, 'ethereumAddress', checkEthereumAddress);
+import { ethereumAddress, hexString } from '../../../../lib/validators';
 
 const stepOneSchema = Yup.object().shape({
-  payoutAddress: Yup.string()
-    .ethereumAddress('Invalid ethereum address')
+  payoutAddress: ethereumAddress()
     .required('Required'),
-  payoutTxData: Yup.string()
+  payoutTxData: hexString()
 });
 
 export default [stepOneSchema];

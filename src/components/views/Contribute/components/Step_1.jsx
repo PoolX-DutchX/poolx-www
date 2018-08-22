@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -22,7 +21,7 @@ class StepOne extends Component {
   }
   handleWalletDialogClose(value){
     if (!!value) {
-      this.props.formik.setFieldValue('wallet', value);
+      this.props.formik.setFieldValue('ownerAddress', value);
     }
     this.setState({ walletDialogOpen: false });
   }
@@ -33,17 +32,17 @@ class StepOne extends Component {
         <div className="row align-items-center">
           <div className="col">
             <TextField
-              id="wallet"
-              name="wallet"
+              id="ownerAddress"
+              name="ownerAddress"
               label="Wallet address"
-              value={values.wallet}
+              value={values.ownerAddress}
               autoComplete="Off"
               spellCheck="false"
               placeholder="Your wallet address"
               onChange={handleChange}
               onBlur={handleBlur}
-              error={touched.wallet && !!errors.wallet}
-              helperText={touched.wallet && errors.wallet}
+              error={touched.ownerAddress && !!errors.ownerAddress}
+              helperText={touched.ownerAddress && errors.ownerAddress}
               margin="normal"
               fullWidth
             />
@@ -55,7 +54,7 @@ class StepOne extends Component {
               </Button>
               <ChooseWalletDialog
                 wallets={currentUser.wallets}
-                selectedValue={values.wallet}
+                selectedValue={values.ownerAddress}
                 open={this.state.walletDialogOpen}
                 onClose={this.handleWalletDialogClose}
               />
@@ -74,8 +73,10 @@ class StepOne extends Component {
           onBlur={handleBlur}
           error={touched.amount && !!errors.amount}
           helperText={touched.amount && errors.amount}
-          min="0"
-          type= "number"
+          inputProps={{
+            min: this.props.minContribution,
+            type: "number"
+          }}
           fullWidth
         />
       </div>

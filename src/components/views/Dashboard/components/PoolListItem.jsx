@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import Button from '@material-ui/core/Button';
 import { utils } from 'web3';
@@ -7,17 +8,13 @@ import { poolStatusMap } from '../../../../constants';
 
 import Pool from '../../../../models/Pool';
 import User from '../../../../models/User';
+import { isPoolCreator, isPoolAdmin } from '../../../../lib/helpers';
 
 class PoolListItem extends React.Component {
   render() {
-    const { pool, currentUser: { wallets } } = this.props;
-    const userWalletAddresses = wallets.map(({ address })=> utils.toChecksumAddress(address));
-    const isCreator = userWalletAddresses.includes(utils.toChecksumAddress(pool.ownerAddress));
-    const poolAdminAddresses = pool.adminAddresses.map(adminAddress => utils.toChecksumAddress(adminAddress));
-    let isAdmin;
-    userWalletAddresses.forEach((wallet) => {
-      isAdmin = poolAdminAddresses.includes(wallet);
-    });
+    const { pool, currentUser } = this.props;
+    const isCreator = isPoolCreator(pool, currentUser);
+    const isAdmin = isPoolAdmin(pool, currentUser);
     console.log('isCreator', isCreator);
     console.log('isAdmin', isAdmin);
     const createdAt = new moment(pool.createdAt);
@@ -34,16 +31,18 @@ class PoolListItem extends React.Component {
 
     return (
       <div className="pool-list-item">
-        { isAdmin ? <div className="role-badge admin">Admin</div> : isCreator && <div className="role-badge creator">Creator</div> }
+        { isCreator ? <div className="role-badge creator">Creator</div> : isAdmin && <div className="role-badge admin">Admin</div> }
         <div className="date">
           <div>{month}</div>
           <h4 className="day">{day}</h4>
         </div>
-        <div className="pool-name">
-          <h3>{pool.name}</h3>
-        </div>
+        <Link to={`/pools/${pool.id}`}>
+          <div className="pool-name">
+            <h3>{pool.name}</h3>
+          </div>
+        </Link>
         <div className="net-invested">
-          <span className="amount">{pool.netInvested}/{pool.cap}</span>&nbsp;<span className="denomination">ETH</span>
+          <span className="amount">{pool.netInvested || '0'}/{pool.maxAllocation}</span>&nbsp;<span className="denomination">ETH</span>
         </div>
         <div>
           {pool.contributionCount} Contributions
@@ -53,7 +52,7 @@ class PoolListItem extends React.Component {
         </div>
         <div className="action-button">
           {
-            !!statusNextAction && <Button variant="outlined" color="primary" onClick={statusNextAction}> {statusActionText} </Button>
+            !!statusNextAction && <Button variant="outlined" color="primary" onClick={statusNextAction(pool)}> {statusActionText} </Button>
           }
         </div>
       </div>
