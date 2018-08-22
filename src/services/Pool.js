@@ -1,10 +1,5 @@
-import getWeb3 from '../lib/blockchain/getWeb3';
 import { feathersClient } from '../lib/feathersClient';
-import { getGasPrice } from '../lib/helpers';
 import Pool from '../models/Pool';
-import ErrorPopup from '../components/ErrorPopup';
-
-const felixPoolArtifact = require('../lib/blockchain/contracts/FelixPool.json');
 
 class PoolService {
   /**
@@ -13,15 +8,14 @@ class PoolService {
    * @param id   ID of the Pool to be retrieved
    */
   static getById(poolId) {
-    return new Promise((resolve, reject) => {
-      feathersClient
+
+    return  feathersClient
         .service('pools')
-        .find(poolId)
-        .then(resp => {
-          resolve(new Pool(resp.data[0]));
-        })
-        .catch(reject);
-    });
+        .get(poolId)
+        .then(pool => {
+          console.log('pool response', pool);
+          return new Pool(pool);
+        });
   }
 
   /**

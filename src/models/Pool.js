@@ -53,6 +53,7 @@ class Pool extends BasicModel {
     this.maxAllocation = data.maxAllocation || 0;
     this.fee = data.fee || 0.0;
     this.feePayoutCurrency = data.feePayoutCurrency || Pool.CURRENCY_ETHER;
+    this.lockPayoutAddress = data.lockPayoutAddress || false;
     this.payoutAddress = data.payoutAddress || '';
     this.payoutTxData = data.payoutTxData || ''; // in case payout wallet is a contract
     this.admins = data.admins || [];
@@ -67,7 +68,7 @@ class Pool extends BasicModel {
 
     this.contractAddress = data.contractAddress || '';
 
-    this.netInvested = data.netInvested || '';
+    this.netInvested = data.netInvested || 0;
     this.grossInvested = data.grossInvested || '';
     this.contributionCount = data.contributionCount || 0;
     this.tokenBalance = data.tokenBalance || '';
@@ -80,6 +81,7 @@ class Pool extends BasicModel {
       maxAllocation: this.maxAllocation,
       fee: this.fee,
       feePayoutCurrency: this.feePayoutCurrency,
+      lockPayoutAddress: this.lockPayoutAddress,
       payoutAddress: this.payoutAddress,
       payoutTxData: this.payoutTxData,
       adminPayoutAddress: this.adminPayoutAddress,
@@ -218,7 +220,7 @@ class Pool extends BasicModel {
   }
 
   set netInvested(value) {
-    this.checkType(value, ['undefined','string'], 'netInvested');
+    this.checkType(value, ['undefined','number'], 'netInvested');
     this.myNetInvested = value;
   }
 
@@ -265,6 +267,15 @@ class Pool extends BasicModel {
   set adminPayoutAddress(value) {
     this.checkType(value, ['undefined', 'string'], 'adminPayoutAddress');
     this.myAdminPayoutAddress = value;
+  }
+
+  get lockPayoutAddress() {
+    return this.myLockPayoutAddress;
+  }
+
+  set lockPayoutAddress(value) {
+    this.checkType(value, ['undefined', 'boolean'], 'lockPayoutAddress');
+    this.myLockPayoutAddress = value;
   }
 
   get payoutAddress() {

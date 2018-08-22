@@ -209,13 +209,19 @@ export const copyToClipboard = (node) => {
     navigator.clipboard.writeText(node.value);
 }
 
+export const isPoolCreator = (pool, user) => {
+  console.log('pool', pool);
+  console.log('user', user);
+  return pool.owner._id === user.id;
+}
+
 export const isPoolAdmin = (pool, user) => {
   const adminAddresses = pool.admins.map(({ address }) => address);
   const userAddresses = user.wallets.map(({ address }) => address);
   const intersectingAddresses = intersection(adminAddresses,userAddresses);
-  
+
   return (
-    pool.owner._id === user._id ||
+    pool.owner._id === user.id ||
     !!intersectingAddresses.length
   );
 }
