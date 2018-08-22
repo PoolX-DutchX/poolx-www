@@ -6,8 +6,6 @@ import Button from '@material-ui/core/Button';
 // const PapaParse = require('papaparse/papaparse.min.js');
 
 const CSVReader = ({ cssClass = 'csv-reader-input', label, onFileLoaded, onError, inputId = null }) => {
-  let fileContent = undefined;
-
   const handleChangeFile = e => {
     let reader = new FileReader();
     const filename = e.target.files[0].name;

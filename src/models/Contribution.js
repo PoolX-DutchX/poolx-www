@@ -48,15 +48,6 @@ class Contribution extends BasicModel {
       ownerAddress: this.ownerAddress
     };
   }
-  /**
-   * Save the campaign to feathers and blockchain if necessary
-   *
-   * @param afterCreate Callback function once a transaction is created
-   * @param afterMined  Callback function once the transaction is mined and feathers updated
-   */
-  save(afterCreate, afterMined) {
-    ContributionService.save(this, this.owner.address, afterCreate, afterMined);
-  }
 
   /**
    * Cancel the campaign in feathers and blockchain
