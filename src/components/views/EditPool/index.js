@@ -39,7 +39,7 @@ class EditPool extends Component {
   }
 
   render() {
-    const { isLoading, pool } = this.state;
+    const { isLoading, pool} = this.state;
     console.log('pool', pool);
     return (
       <div id="create-pool-view" className="container">

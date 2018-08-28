@@ -62,9 +62,7 @@ class Dashboard extends Component {
     // console.log('this.props.currentUser.id', this.props.currentUser.id);
     try {
       const pools = await PoolService.getByOwnerId(this.props.currentUser.id);
-
       this.setState({ isLoading: false });
-
       this.contributionObserver = ContributionService.getUserContributions(
         this.props.currentUser.id,
         contributions => {
@@ -80,8 +78,8 @@ class Dashboard extends Component {
         }
       );
     } catch(err) {
-      this.setState({ isLoading: false });
       console.log('err', err);
+      this.setState({ isLoading: false });
     }
   }
 

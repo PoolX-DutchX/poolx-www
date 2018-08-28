@@ -26,13 +26,11 @@ class ContributionListItem extends React.Component {
     const month = createdAt.format('MMM');
     const day = createdAt.format('DD');
     const pool = contribution.pool;
-
     const {
       displayText: statusDisplayText,
       actionText: statusActionText,
       action: statusNextAction
     }  = contributionStatusMap[contribution.status];
-
     return (
       <div className="pool-list-item">
         <div className="date">
@@ -55,7 +53,7 @@ class ContributionListItem extends React.Component {
         </div>
         <div className="action-button">
           {
-            !!statusNextAction && <Button variant="outlined" color="primary" onClick={statusNextAction}> {statusActionText} </Button>
+            !!statusNextAction && <Button variant="outlined" color="primary" onClick={statusNextAction(contribution)}> {statusActionText} </Button>
           }
         </div>
       </div>

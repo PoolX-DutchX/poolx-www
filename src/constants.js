@@ -23,7 +23,9 @@ export const contributionStatusMap =  {
   [PENDING_CONFIRMATION]: {
     displayText: 'Pending',
     actionText: 'View TX Data',
-    action: () => {}
+    action: (contribution) => () => {
+      history.push(`contributions/${contribution.id}/pendingTx`);
+    }
   },
   [CONFIRMED]: {
     displayText: 'Confirmed',

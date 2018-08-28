@@ -21,7 +21,8 @@ class ViewPool extends Component {
 
     this.state = {
       isLoading: true,
-      contributions: [],
+      myContributions: [],
+      myContributionTotal: 0,
     };
     this.contribute = this.contribute.bind(this);
   }
@@ -36,15 +37,15 @@ class ViewPool extends Component {
       // });
       // console.log('updatedPool', updatedPool);
 
-      let contributions = [];
-      const pool = await PoolService.getById(poolId);
-      console.log('pool', pool);
-      if (this.props.currentUser) {
-        console.log('this.props.currentUser', this.props.currentUser);
-        const { data } = await ContributionService.getUserContributionsByPoolId(this.props.currentUser.id, poolId);
-        contributions = data;
-      }
-      this.setState({ pool, contributions, isLoading: false });
+        let myContributions = this.state.myContributions;
+        let myContributionTotal;
+        const pool = await PoolService.getById(poolId);
+        if (this.props.currentUser) {
+          const { data } = await ContributionService.getUserContributionsByPoolId(this.props.currentUser.id, poolId);
+          myContributions = data;
+          myContributionTotal = myContributions.reduce((total, { amount }) => total + amount, 0);
+        }
+        this.setState({ pool, myContributions, myContributionTotal, isLoading: false });
     } catch (err) {
       console.log('err', err);
       ErrorPopup('Something went wrong loading pool. Please try refresh the page.', err);
@@ -123,6 +124,9 @@ class ViewPool extends Component {
       poolProgress = (pool.netInvested / pool.maxAllocation) * 100;
     }
 
+
+
+
     return (
       <div id="view-pool-view" className="container">
         {isLoading && <Loader className="fixed" />}
@@ -134,16 +138,16 @@ class ViewPool extends Component {
                 <h1><strong>{pool.name}</strong></h1>
                 <div className="pool-creator">Pool Creator Verified <img src={"/img/telegram_logo.png"} width="20" alt="Telegram logo"/> KYC</div>
                 {
-                  !!this.state.contributions.length &&
+                  !!this.state.myContributions.length &&
                   <div className="alert alert-success row my-contributions-panel" role="alert">
                     <div className="col-md-4 ">
                       <h6><WithTooltip title="Sum total of all your contributions for this pool">My Contribution</WithTooltip></h6>
-                      <h2>20 Eth</h2>
+                      <h2>{this.state.myContributionTotal} Eth</h2>
                     </div>
                     <div className="col-md-8 ">
                       <h6>My Transactions</h6>
                       {
-                        this.state.contributions.map((contribution, index) => <div key={index}>Deposit {contribution.amount} Eth</div> )
+                        this.state.myContributions.map((contribution, index) => <div key={index}>Deposit {contribution.amount} Eth</div> )
                       }
                     </div>
                   </div>

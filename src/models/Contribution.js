@@ -28,12 +28,12 @@ class Contribution extends BasicModel {
 
   constructor(data) {
     super(data);
-
     this.pool = data.pool || '';
-    this.ownerId = data.ownerId || '';
+    this.poolAddress = data.poolAddress || '';
     this.amount = data.amount || 0; // in Ether
     this.status = data.status || Contribution.PENDING_CONFIRMATION;
     this.amountClaimed =  data.amountClaimed || 0;
+    this.owner = data.owner || '';
     // ToDo: currency, ether by default for now
     // ToDo: network - or place in seperate DB ??
   }
@@ -42,6 +42,7 @@ class Contribution extends BasicModel {
     return {
       id: this.id,
       pool: this.pool,
+      poolAddress: this.poolAddress,
       amount: this.amount,
       status: this.status,
       owner: this.owner,
@@ -111,17 +112,8 @@ class Contribution extends BasicModel {
   }
 
   set poolAddress(value) {
-    this.checkType(value, ['undefined', 'string'], 'poolAddress');
+    this.checkType(value, ['string'], 'poolAddress');
     this.myPoolAddress = value;
-  }
-
-  get ownerId() {
-    return this.myOwnerId;
-  }
-
-  set ownerId(value) {
-    this.checkType(value, ['undefined', 'string'], 'ownerId');
-    this.myOwnerId = value;
   }
 
   get closeDate() {

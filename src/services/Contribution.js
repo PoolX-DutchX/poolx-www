@@ -56,13 +56,14 @@ class ContributionService {
       .watch({ listStrategy: 'always' })
       .find({
         query: {
-          ownerId
+          owner: ownerId
         },
       })
       .subscribe(
-        resp => onSuccess(
-          resp.data.map(contribution => new Contribution(contribution))
-        ),
+        resp => {
+          const contributions = resp.data.map(contribution => new Contribution(contribution))
+          onSuccess(contributions)
+        },
         onError,
       );
   }
@@ -79,8 +80,9 @@ class ContributionService {
       .service('contributions')
       .find({
         query: {
-          ownerId: userId,
-          pool: poolId
+          owner: userId,
+          pool: poolId,
+          $not: { status: Contribution.PENDING_CONFIRMATION }
         },
       });
   }

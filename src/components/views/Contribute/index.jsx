@@ -90,13 +90,15 @@ class Contribute extends Component {
             }}
             stepLabels={['Contribution Details', 'Perform transaction']}
             onSubmit={({ownerAddress, amount}, actions) => {
+              const { pool } = this.state;
               console.log('this.state.pool.id', this.state.pool.id);
               console.log('ownerAddress', ownerAddress);
               console.log('amount', amount);
               feathersClient.service('contributions').create({
                 ownerAddress,
                 amount,
-                pool: this.state.pool.id
+                pool: pool.id,
+                poolAddress: pool.contractAddress
               }).then((contribution) => {
                 history.push(`/contributions/${contribution._id}/pendingTx`);
               })
