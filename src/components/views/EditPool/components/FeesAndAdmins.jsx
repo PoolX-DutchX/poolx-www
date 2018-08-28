@@ -64,8 +64,8 @@ class StepTwo extends Component {
                     !(touched.feePayoutCurrency && errors.feePayoutCurrency) &&
                     <span>
                       <span>Your fee <span className="underline">{values.fee || 0}%</span> + </span>
-                      <span>PB fee <span className="underline">0.4%</span>  = </span>
-                      <span><strong><span className="underline">{(parseFloat(values.fee || 0) + 0.4).toFixed(2)}%</span> Total</strong></span>
+                      <span>PB fee <span className="underline">{pool.poolbaseFee}%</span>  = </span>
+                      <span><strong><span className="underline">{(parseFloat(values.fee || 0) + pool.poolbaseFee).toFixed(2)}%</span> Total</strong></span>
                     </span>
                   }
                   placeholder="% 0.0"

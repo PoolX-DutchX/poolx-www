@@ -41,7 +41,7 @@ class StepTwo extends Component {
     this.setState({ walletDialogOpen: false });
   }
   render() {
-    const {formik, disabledFields = {}} = this.props; // *** formik props passed in from MultistepForm parent component
+    const {formik, disabledFields = {}, poolbaseFee} = this.props; // *** formik props passed in from MultistepForm parent component
     const {values, handleChange, handleBlur, touched, errors} = formik;
     return(
       <div>
@@ -60,8 +60,8 @@ class StepTwo extends Component {
                 !(touched.feePayoutCurrency && errors.feePayoutCurrency) &&
                 <span>
                   <span>Your fee <span className="underline">{values.fee || 0}%</span> + </span>
-                  <span>PB fee <span className="underline">0.4%</span>  = </span>
-                  <span><strong><span className="underline">{(parseFloat(values.fee || 0) + 0.4).toFixed(2)}%</span> Total</strong></span>
+                  <span>PB fee <span className="underline">{poolbaseFee}%</span>  = </span>
+                  <span><strong><span className="underline">{(parseFloat(values.fee || 0) + poolbaseFee).toFixed(2)}%</span> Total</strong></span>
                 </span>
               }
               placeholder="% 0.0"

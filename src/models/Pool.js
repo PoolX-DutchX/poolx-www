@@ -65,6 +65,7 @@ class Pool extends BasicModel {
     this.minContribution = data.minContribution || 0;
     this.maxContribution = data.maxContribution || 0;
     this.whitelist = data.whitelist || [];
+    this.poolbaseFee = data.poolbaseFee || 0;
 
     this.contractAddress = data.contractAddress || '';
 
@@ -86,7 +87,7 @@ class Pool extends BasicModel {
       payoutTxData: this.payoutTxData,
       adminPayoutAddress: this.adminPayoutAddress,
       admins: this.admins,
-
+      poolbaseFee: this.poolbaseFee,
       name: this.name,
       description: this.description,
       minContribution: this.minContribution,
@@ -229,7 +230,7 @@ class Pool extends BasicModel {
   }
 
   set grossInvested(value) {
-    this.checkType(value, ['undefined','string'], 'grossInvested');
+    this.checkType(value, ['undefined','number'], 'grossInvested');
     this.myGrossInvested = value;
   }
 
@@ -294,6 +295,15 @@ class Pool extends BasicModel {
   set payoutTxData(value) {
     this.checkType(value, ['undefined', 'string'], 'payoutTxData');
     this.myPayoutTxData = value;
+  }
+
+  get poolbaseFee() {
+    return this.myPoolbaseFee;
+  }
+
+  set poolbaseFee(value) {
+    this.checkType(value, ['undefined', 'number'], 'poolbaseFee');
+    this.myPoolbaseFee = value;
   }
 
   get whitelist() {

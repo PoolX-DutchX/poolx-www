@@ -15,6 +15,7 @@ import validationSchemas from './validation/';
 
 import Loader from '../../Loader';
 import { history } from '../../../lib/helpers';
+import { feathersClient } from '../../../lib/feathersClient';
 /**
  * View flow to create a Contribution
  *
@@ -39,8 +40,13 @@ class CreatePool extends Component {
     };
   }
 
-  componentDidMount() {
-    this.setState({ isLoading: false });
+  async componentDidMount() {
+    this.setState({ isLoading: true });
+    const { percent: percentFee } = await feathersClient.service('fees').get(1);
+    this.setState({
+      poolbaseFee: percentFee,
+      isLoading: false
+    });
     // isAuthenticated(this.props.currentUser)
     //   .then(() => {
     //       this.setState({ isLoading: false });
@@ -51,7 +57,7 @@ class CreatePool extends Component {
   }
 
   render() {
-    const { isLoading } = this.state;
+    const { isLoading, poolbaseFee } = this.state;
 
     const poolData = {
       ownerAddress: '0xad55d9b675539cf02e69d9845be95deccca8afce',
@@ -60,7 +66,7 @@ class CreatePool extends Component {
       feePayoutCurrency: 'ether',
       lockPayoutAddress: true,
       payoutAddress: '0xad55d9b675539cf02e69d9845be95deccca8afce' ,
-      payoutTxData: '0Ab7BA78BA',
+      payoutTxData: '0xAA',
       admins: [
         { address: '0xad55d9b675539cf02e69d9845be95deccca8afce', name: 'Hootie' },
         {address: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1', name:'Supports'},
@@ -123,7 +129,7 @@ class CreatePool extends Component {
           >
             <StepOne
               currentUser={this.props.currentUser}/>
-            <StepTwo/>
+            <StepTwo poolbaseFee={poolbaseFee}/>
             <StepThree/>
             <StepFour/>
             <PoolReview/>
