@@ -81,12 +81,14 @@ class ClosePool extends Component {
             initialValues={initialValues}
             stepLabels={['Destination & Data','Perform transaction']}
             onSubmit={({ payoutAddress, payoutTxData}, actions) => {
-              PoolService.patch(this.state.pool._id, {
+              console.log('payoutAddress', payoutAddress);
+              console.log('payoutTxData', payoutTxData);
+              PoolService.patch(this.state.pool.id, {
                 status: Pool.PENDING_CLOSE_POOL,
                 payoutAddress,
                 payoutTxData
               }).then(() => {
-                history.push(`/pools/${this.state.pool._id}/pendingTx`);
+                history.push(`/pools/${this.state.pool.id}/pendingTx`);
               });
             }}
             validationSchemas={validationSchemas}

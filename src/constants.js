@@ -1,5 +1,6 @@
 import { history } from './lib/helpers';
 import PoolService from './services/Pool';
+import ContributionService from './services/Contribution';
 
 //Contribution Statuses
 export const PENDING_CONFIRMATION = 'pending_confirmation';
@@ -7,6 +8,8 @@ export const CONFIRMED = 'confirmed';
 export const TOKENS_AVAILABLE = 'tokens_available';
 export const PENDING_CLAIM_TOKENS = 'pending_claim_tokens';
 export const TOKENS_CLAIMED = 'tokens_claimed';
+export const PENDING_REFUND = 'pending_refund';
+export const REFUND_RECEIVED = 'refund_received';
 
 //Pool Statuses
 export const PENDING_DEPLOYMENT = 'pending_deployment';
@@ -35,18 +38,37 @@ export const contributionStatusMap =  {
   [TOKENS_AVAILABLE]: {
     displayText: 'Tokens Available',
     actionText: 'Claim Token',
-    action: () => {}
+    action: ({id: contributionId, poolAddress, ownerAddress}) => async () => {
+      await ContributionService.patch(contributionId, {
+        status: PENDING_CLAIM_TOKENS,
+        poolAddress,
+        ownerAddress,
+      });
+      history.push(`contributions/${contributionId}/pendingTx`);
+    }
   },
   [PENDING_CLAIM_TOKENS]: {
     displayText: 'Pending Claim',
     actionText: 'View TX Data',
-    action: () => {}
+    action: (contribution) => () => {
+      history.push(`contributions/${contribution.id}/pendingTx`);
+    }
   },
   [TOKENS_CLAIMED]: {
     displayText: 'Tokens Claimed',
     actionText: '',
     action: null
   }
+  // [PENDING_REFUND]: {
+  //   displayText: 'Tokens Claimed',
+  //   actionText: '',
+  //   action: null
+  // }
+  // [REFUND_RECEIVED]: {
+  //   displayText: 'Tokens Claimed',
+  //   actionText: '',
+  //   action: null
+  // }
 };
 
 export const poolStatusMap =  {
@@ -89,7 +111,7 @@ export const poolStatusMap =  {
     displayText: 'Token Confirmed',
     actionText: 'Add Token Batch',
     action: (pool) => () => {
-      history.push(`pools/${pool.id}/confirmTokenBatch`);
+      history.push(`pools/${pool.id}/confirmTokenBatch`); //token address needs to be disabled, without needing
     }
   },
   [PENDING_ENABLE_REFUNDS]: {

@@ -47,7 +47,7 @@ class ConfirmTokenBatch extends Component {
       const pool = await PoolService.getById(poolId);
       // check status of pool & redirect if not appropriate
       if (!isPoolAdmin(pool, currentUser)) {
-       history.replace(`/pools/${pool._id}`);
+       history.replace(`/pools/${pool.id}`);
       };
 
       this.setState({
@@ -75,11 +75,11 @@ class ConfirmTokenBatch extends Component {
             }}
             stepLabels={['Token address','Perform transaction']}
             onSubmit={({ tokenAddress}, actions) => {
-              PoolService.patch(this.state.pool._id, {
+              PoolService.patch(this.state.pool.id, {
                 status: Pool.PENDING_TOKEN_BATCH,
                 tokenAddress
               }).then(() => {
-                history.push(`/pools/${this.state.pool._id}/pendingTx`);
+                history.push(`/pools/${this.state.pool.id}/pendingTx`);
               });
             }}
             validationSchemas={[

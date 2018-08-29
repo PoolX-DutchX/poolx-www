@@ -46,6 +46,7 @@ function checkHexPrefix(message) {
       name: 'hexPrefix',
       exclusive: true,
       test(value) {
+        console.log('hasPrefix value', value);
         return !value || (value.slice(0, 2) === '0x');
       },
     });
@@ -63,9 +64,10 @@ function checkHexValidity(message) {
       name: 'checkHexValidity',
       exclusive: true,
       test(value) {
+        console.log('checkHexValidity value', value);
         const hasPrefix = value.slice(0, 2) === '0x';
         const hexString = hasPrefix ? value.slice(2) : value;
-        return (value == null) || isHex(hexString);
+        return !value || isHex(hexString);
       },
     });
 }
@@ -73,9 +75,10 @@ function checkHexValidity(message) {
 Yup.addMethod(Yup.string, 'hexPrefix', checkHexPrefix);
 Yup.addMethod(Yup.string, 'hexValidity', checkHexValidity);
 export const hexString = () => Yup.string()
-  .strict(true)
+  .ensure()
   .hexPrefix('Hexidecimal data must begin with 0x')
-  .hexValidity('Invalid hexidecimal data');
+  .hexValidity('Invalid hexidecimal data')
+
 
 
 export function isWhitelistedAddress(pool, message) {

@@ -88,6 +88,20 @@ class ContributionService {
   }
 
   /**
+   * Update user's Contribution status for a particular contribution
+   *
+   * @param contributionId Id of contribution being updated
+   * @param new status to update the contribution with
+   *
+   */
+  static patch(contributionId, payload) {
+    console.log('contributionId', contributionId);
+    return feathersClient
+      .service('contributions')
+      .patch(contributionId, payload);
+  }
+
+  /**
    * Cancel Campaign in the blockchain and update it in feathers
    * TODO: Handle error states properly
    *
