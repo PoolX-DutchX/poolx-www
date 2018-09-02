@@ -1,4 +1,5 @@
 import { history } from './lib/helpers';
+import config from './configuration';
 import PoolService from './services/Pool';
 import ContributionService from './services/Contribution';
 
@@ -133,7 +134,6 @@ export const poolStatusMap =  {
   }
 };
 
-
 export const teamList = [
   {
     imgUrl: '/img/team/finn_schaedlich.jpg',
@@ -156,3 +156,8 @@ export const teamList = [
     title: 'Co-founder'
   }
 ];
+
+
+export const getEtherscanTxLink = (txHash) => {
+  return `${config.etherscan}/tx/${txHash}`
+}

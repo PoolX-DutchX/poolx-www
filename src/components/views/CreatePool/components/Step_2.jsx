@@ -41,7 +41,7 @@ class StepTwo extends Component {
     this.setState({ walletDialogOpen: false });
   }
   render() {
-    const {formik, disabledFields = {}, poolbaseFee} = this.props; // *** formik props passed in from MultistepForm parent component
+    const {formik, poolbaseFee} = this.props; // *** formik props passed in from MultistepForm parent component
     const {values, handleChange, handleBlur, touched, errors} = formik;
     return(
       <div>
@@ -68,36 +68,35 @@ class StepTwo extends Component {
               InputProps={
                 (values.fee || values.fee === 0) ? {
                   startAdornment: <InputAdornment position="start">% </InputAdornment>,
+                } : {}
+              }
+              inputProps={
+                {
                   min:"0",
                   max:"100",
                   step:"0.1",
-                } : {}
+                }
               }
               type= "number"
               margin="normal"
               style={{ whiteSpace: "nowrap"}}
-              disabled={disabledFields.fee}
               fullWidth
             />
           </div>
           <div className="col-md-2">
             <FormControl fullWidth margin="normal">
               <InputLabel
-                htmlFor="name-disabled"
+                htmlFor="feePayoutCurrency"
+                shrink={!!values.feePayoutCurrency}
                 error={touched.feePayoutCurrency && !!errors.feePayoutCurrency}>
                   Currency
               </InputLabel>
               <Select
                 value={values.feePayoutCurrency}
                 onChange={handleChange}
-                disabled={disabledFields.feePayoutCurrency}
-                input={
-                  <Input
-                    name="feePayoutCurrency"
-                    id="name-disabled"
-                    error={touched.feePayoutCurrency && !!errors.feePayoutCurrency}
-                  />
-                }>
+                name="feePayoutCurrency"
+                id="feePayoutCurrency"
+                >
                 <MenuItem value={Pool.CURRENCY_ETHER}>Ether</MenuItem>
                 <MenuItem value={Pool.CURRENCY_TOKEN}>Token</MenuItem>
               </Select>
@@ -122,7 +121,6 @@ class StepTwo extends Component {
               spellCheck="false"
               type= "text"
               margin="normal"
-              disabled={disabledFields.adminPayoutAddress}
               fullWidth
             />
           </div>
@@ -134,20 +132,17 @@ class StepTwo extends Component {
                 <div className="spacer-top-40">
                   <div className="d-flex align-items-center">
                     <FormLabel >Admins</FormLabel>
-                    {
-                      !disabledFields.admins && values.admins && !values.admins.length &&
-                        <Tooltip title="Add">
-                          <div>
-                            <IconButton aria-label="Add admin"
-                              onClick={() => {
-                                fieldArrayHelpers.push({address:'', name:''});
-                              }}
-                              disableRipple>
-                                <PlusIcon color="#3f51b5" />
-                            </IconButton>
-                          </div>
-                        </Tooltip>
-                    }
+                    <Tooltip title="Add">
+                      <div>
+                        <IconButton aria-label="Add admin"
+                          onClick={() => {
+                            fieldArrayHelpers.push({address:'', name:''});
+                          }}
+                          disableRipple>
+                            <PlusIcon color="#3f51b5" />
+                        </IconButton>
+                      </div>
+                    </Tooltip>
                   </div>
                   {
                     values.admins && values.admins.map((admin, index) => {
@@ -157,7 +152,6 @@ class StepTwo extends Component {
                         index={index}
                         formik={formik}
                         fieldArrayHelpers={fieldArrayHelpers}
-                        disabledFields={disabledFields}
                       />
                     })
                   }

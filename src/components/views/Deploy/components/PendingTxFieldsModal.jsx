@@ -34,7 +34,7 @@ class PendingTxFieldsModal extends Component {
     return (
       <Dialog
         open={this.state.open}
-        onClose={this.handleClose}
+        onClose={this.handleClose(() => {})}
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title">Your transaction data</DialogTitle>

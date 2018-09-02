@@ -16,15 +16,8 @@ import getWeb3 from '../../../lib/blockchain/getWeb3';
 import { history } from '../../../lib/helpers';
 
 import config from '../../../configuration';
-
+import {getEtherscanTxLink} from '../../../constants';
 import { getNetwork, isMetamaskInstalled } from '../../../lib/blockchain/utils';
-// import { feathersClient } from '../lib/feathersClient';
-// import { displayTransactionError, getGasPrice } from '../lib/helpers';
-// import LoaderButton from './LoaderButton';
-// import Contribution from '../models/Contribution';
-// import ContributionService from '../services/Contribution';
-
-// const felixPoolArtifact = require('../lib/blockchain/contracts/FelixPool.json');
 
 class Deploy extends React.Component {
   constructor(props) {
@@ -78,26 +71,6 @@ class Deploy extends React.Component {
     }
   }
 
-  // const { abi, bytecode } = felixPoolArtifact;
-  // const {model: { poolAddress }} = this.props;
-  //
-  // const web3 = await getWeb3();
-  // const contract = new web3.eth.Contract(abi, poolAddress);
-  // const deposit = contract.methods.deposit();
-  //
-  // const txData = deposit.encodeABI();
-  // const gasLimit = await deposit.estimateGas({
-  //     from: '0x0000000000000000000000000000000000000000',
-  //     value: 1,
-  //   });
-  //
-  // this.setState({
-  //   gasLimit,
-  //   txData,
-  //   myEtherWalletUrl: `https://www.myetherwallet.com/?to=${poolAddress.toUpperCase()}&gaslimit=${gasLimit}&data=${txData}`,
-  //   myCryptoUrl: `https://www.mycrypto.com/?to=${poolAddress.toUpperCase()}&gasLimit=${gasLimit}&data=${txData}`,
-  // });
-
   async transactWithMetamask() {
     const { ownerAddress } = this.state;
     const web3 = await getWeb3();
@@ -136,13 +109,43 @@ class Deploy extends React.Component {
         data
       }
     )
-    .then((stuff) => {
-      console.log('stuff', stuff);
+    .on('transactionHash', (txHash) => {
+      React.toast.success(
+        <p>
+          Your MetaMask transaction submitted! <br />
+          <a href={getEtherscanTxLink(txHash)} target="_blank" rel="noopener noreferrer">View on etherscan</a>
+        </p>,
+      );
+      history.push(`/pools/${this.poolId}`);
+    })
+    .on('confirmation', (confirmationNumber, receipt ) => {
+      if (confirmationNumber === 5) {
+        React.toast.success(
+          <p>
+            Your transaction has been mined! <br />
+            <a href={getEtherscanTxLink(receipt.transactionHash)} target="_blank" rel="noopener noreferrer">View on etherscan</a>
+          </p>,
+        );
+      }
+    })
+    .on('error', (err, receipt) => {
+      React.toast.error(
+        <p>
+          Oops something went wrong! <br />
+          {
+            receipt &&
+            <span>
+              It Looks like you've ran out of gas,
+              <a href={getEtherscanTxLink(receipt.transactionHash)} target="_blank" rel="noopener noreferrer">view on etherscan</a>
+              and try again.
+            </span>
+          }
+        </p>,
+      );
     })
     .catch(err => {
       console.log('err', err);
     });
-    // toast when transaction is confirmed etc. with etherscan link
 
   }
   handleWalletProviderClick(walletProvider) {

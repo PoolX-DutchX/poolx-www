@@ -71,11 +71,15 @@ class StepTwo extends Component {
                   placeholder="% 0.0"
                   InputProps={
                     (values.fee || values.fee === 0) ? {
-                      startAdornment: <InputAdornment position="start">% </InputAdornment>,
+                      startAdornment: <InputAdornment position="start">% </InputAdornment>
+                    } : {}
+                  }
+                  inputProps={
+                    {
                       min:"0",
                       max:"100",
                       step:"0.1",
-                    } : {}
+                    }
                   }
                   type= "number"
                   margin="normal"

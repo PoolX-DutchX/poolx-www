@@ -34,8 +34,7 @@ class StepFour extends Component {
               label="Pool description"
               value={values.description}
               multiline
-              rowsMax="7"
-              rows="4"
+              rowsMax="14"
               autoComplete="Off"
               spellCheck="false"
               placeholder="Say a few words about your pool"

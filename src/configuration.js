@@ -1,5 +1,5 @@
 export const ENV_LOCALHOST = 'localhost';
-export const ENV_DEVELOP = 'develop';
+export const ENV_STAGING = 'staging';
 export const ENV_PRODUCTION = 'production';
 
 const {
@@ -22,15 +22,15 @@ const configurations = {
     feathersConnection: 'http://localhost:3030',
     nodeConnection: 'ws://localhost:8545',
   },
-  [ENV_DEVELOP]: {
-    title: 'develop',
+  [ENV_STAGING]: {
+    title: 'staging',
     poolFactoryAddress: '0x1ce25E5Db192BB0804aA75D0cA3C7A4f2788Fe10',
     eventEmitterAddress: '0xd84e2462b412bba3fd81f95812823f7c6a72bab9',
     networkName: 'rinkeby',
     networkId: 4,
     etherscan: 'https://rinkeby.etherscan.io/',
-    feathersConnection: 'https://feathers.develop.giveth.io',
-    nodeConnection: 'wss://rinkeby.giveth.io:8546',
+    feathersConnection: 'https://poolbase-api.herokuapp.com/',
+    nodeConnection: 'wss://rinkeby.infura.io/ws',
   },
   [ENV_PRODUCTION]: {
     title: 'production',
@@ -61,7 +61,7 @@ config.feathersConnection = REACT_APP_FEATHERJS_CONNECTION_URL || config.feather
 config.nodeConnection = REACT_APP_ETH_NODE_CONNECTION_URL || config.nodeConnection;
 config.decimals = REACT_APP_DECIMALS;
 config.bugsEmail = REACT_APP_BUGS_EMAIL;
-config.sendErrors = [ENV_DEVELOP, ENV_PRODUCTION].includes(REACT_APP_ENVIRONMENT);
+config.sendErrors = [ENV_STAGING, ENV_PRODUCTION].includes(REACT_APP_ENVIRONMENT);
 config.env = REACT_APP_ENVIRONMENT;
 
 export default config;
