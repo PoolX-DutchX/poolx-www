@@ -42,7 +42,8 @@ class CreatePool extends Component {
 
   async componentDidMount() {
     this.setState({ isLoading: true });
-    const { percent: percentFee } = await feathersClient.service('fees').get(1);
+    const { data: [{ percent: percentFee }] } = await feathersClient.service('fees').find({query: {type: 'standard'}});
+    
     this.setState({
       poolbaseFee: percentFee,
       isLoading: false
