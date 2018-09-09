@@ -9,8 +9,10 @@ export const CONFIRMED = 'confirmed';
 export const TOKENS_AVAILABLE = 'tokens_available';
 export const PENDING_CLAIM_TOKENS = 'pending_claim_tokens';
 export const TOKENS_CLAIMED = 'tokens_claimed';
+export const REFUND_AVAILABLE = 'refund_available';
 export const PENDING_REFUND = 'pending_refund';
 export const REFUND_RECEIVED = 'refund_received';
+// export const PAUSED = 'paused';
 
 //Pool Statuses
 export const PENDING_DEPLOYMENT = 'pending_deployment';
@@ -59,17 +61,22 @@ export const contributionStatusMap =  {
     displayText: 'Tokens Claimed',
     actionText: '',
     action: null
+  },
+  [REFUND_AVAILABLE]: {
+    displayText: 'Refund enabled',
+    actionText: '',
+    action: null
+  },
+  [PENDING_REFUND]: {
+    displayText: 'Pending Refund',
+    actionText: '',
+    action: null
+  },
+  [REFUND_RECEIVED]: {
+    displayText: 'Refunded',
+    actionText: '',
+    action: null
   }
-  // [PENDING_REFUND]: {
-  //   displayText: 'Tokens Claimed',
-  //   actionText: '',
-  //   action: null
-  // }
-  // [REFUND_RECEIVED]: {
-  //   displayText: 'Tokens Claimed',
-  //   actionText: '',
-  //   action: null
-  // }
 };
 
 export const poolStatusMap =  {

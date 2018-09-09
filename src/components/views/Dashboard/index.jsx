@@ -112,10 +112,10 @@ class Dashboard extends Component {
                   <div className="col-md-2 align-self-center">
                     {
                       this.state.mode === CREATOR_MODE ?
-                        <Button type="button" size="small" variant="contained" color="primary" onClick={() => history.push('/pools/create')}>
+                        <Button fullWidth type="button" size="small" variant="contained" color="primary" onClick={() => history.push('/pools/create')}>
                           Create Pool
                         </Button> :
-                        <Button type="button" size="small" variant="contained" color="primary" onClick={() => history.push('/pools/create')}>
+                        <Button fullWidth type="button" size="small" variant="contained" color="primary" onClick={() => history.push('/pools/create')}>
                           How to contribute
                         </Button>
                     }

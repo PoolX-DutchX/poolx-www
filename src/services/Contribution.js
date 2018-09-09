@@ -82,7 +82,9 @@ class ContributionService {
         query: {
           owner: userId,
           pool: poolId,
-          $not: { status: Contribution.PENDING_CONFIRMATION }
+          status: {
+            $ne: Contribution.PENDING_CONFIRMATION
+          }
         },
       });
   }
