@@ -7,6 +7,10 @@ import {
   TOKENS_AVAILABLE,
   PENDING_CLAIM_TOKENS,
   TOKENS_CLAIMED,
+  REFUND_AVAILABLE,
+  PENDING_REFUND,
+  REFUND_RECEIVED,
+  PAUSED
 } from '../constants';
 
 class Contribution extends BasicModel {
@@ -25,6 +29,18 @@ class Contribution extends BasicModel {
   static get TOKENS_CLAIMED() {
     return TOKENS_CLAIMED;
   }
+  static get REFUND_AVAILABLE() {
+    return REFUND_AVAILABLE;
+  }
+  static get PENDING_REFUND() {
+    return PENDING_REFUND;
+  }
+  static get REFUND_RECEIVED() {
+    return REFUND_RECEIVED;
+  }
+  static get PAUSED() {
+    return PAUSED;
+  }
 
   constructor(data) {
     super(data);
@@ -32,7 +48,7 @@ class Contribution extends BasicModel {
     this.poolAddress = data.poolAddress || '';
     this.amount = data.amount || 0; // in Ether
     this.status = data.status || Contribution.PENDING_CONFIRMATION;
-    this.amountClaimed =  data.amountClaimed || 0;
+    this.tokenAmountClaimed =  data.tokenAmountClaimed || 0;
     this.owner = data.owner || '';
     // ToDo: currency, ether by default for now
     // ToDo: network - or place in seperate DB ??
@@ -71,7 +87,11 @@ class Contribution extends BasicModel {
       Contribution.CONFIRMED,
       Contribution.TOKENS_AVAILABLE,
       Contribution.PENDING_CLAIM_TOKENS,
-      Contribution.TOKENS_CLAIMED
+      Contribution.TOKENS_CLAIMED,
+      Contribution.REFUND_AVAILABLE,
+      Contribution.PENDING_REFUND,
+      Contribution.REFUND_RECEIVED,
+      Contribution.PAUSED
     ], 'status');
     this.myStatus = value;
     // if (value === Contribution.PENDING) this.myOrder = 1;
@@ -89,13 +109,13 @@ class Contribution extends BasicModel {
     this.myAmount = value;
   }
 
-  get amountClaimed() {
-    return this.myAmountClaimed;
+  get tokenAmountClaimed() {
+    return this.myTokenAmountClaimed;
   }
 
-  set amountClaimed(value) {
-    this.checkType(value, ['number'], 'amountClaimed');
-    this.myAmountClaimed = value;
+  set tokenAmountClaimed(value) {
+    this.checkType(value, ['number'], 'tokenAmountClaimed');
+    this.myTokenAmountClaimed = value;
   }
 
   get pool() {
@@ -114,15 +134,6 @@ class Contribution extends BasicModel {
   set poolAddress(value) {
     this.checkType(value, ['string'], 'poolAddress');
     this.myPoolAddress = value;
-  }
-
-  get closeDate() {
-    return this.myCloseDate;
-  }
-
-  set closeDate(value) {
-    this.checkType(value, ['number'], 'closeDate');
-    this.myCloseDate = value;
   }
 }
 
