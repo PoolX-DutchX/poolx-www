@@ -32,7 +32,7 @@ class Deploy extends React.Component {
     this.pendingTxFieldsModalRef = React.createRef();
   }
   async componentDidMount() {
-
+    window.scrollTo(0, 0);
     const { match: { params: { poolId, contributionId }}} = this.props;
 
     const resourceId = poolId || contributionId;

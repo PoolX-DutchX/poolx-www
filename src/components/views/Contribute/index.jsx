@@ -47,6 +47,7 @@ class Contribute extends Component {
   }
 
   async componentDidMount() {
+    window.scrollTo(0, 0);
     const { currentUser, match: { params: { poolId }}} = this.props
     try {
       await isAuthenticated(currentUser);

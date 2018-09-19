@@ -28,6 +28,7 @@ class ViewPool extends Component {
   }
 
   async componentDidMount() {
+    window.scrollTo(0, 0);
     const poolId = this.props.match.params.poolId;
     console.log('poolId', poolId);
     try {
@@ -159,7 +160,7 @@ class ViewPool extends Component {
                 <h3><strong>{pool.status}</strong></h3>
                 <LinearProgress variant="determinate" value={poolProgress} />
                 <div className="total-invested-section">
-                  <h4 className="invested"><strong>{pool.netInvested} ETH </strong></h4>
+                  <h4 className="invested"><strong>{pool.netInvested.toFixed(2)} ETH </strong></h4>
                   <div className="subheading">
                     of {pool.maxAllocation} ETH maximum
                   </div>

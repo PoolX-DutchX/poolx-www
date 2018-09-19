@@ -18,12 +18,17 @@ class MultiStepForm extends React.Component {
       completed: {}
     };
   }
+  componentDidMount() {
+    window.scrollTo(0, 0);
+  }
 
-  next = values =>
+  next = values => {
+    window.scrollTo(0, 0);
     this.setState(state => ({
       step: Math.min(state.step + 1, this.props.children.length - 1),
       values,
     }));
+  }
 
   handleStep = (step) => {
     return () => {
@@ -31,11 +36,13 @@ class MultiStepForm extends React.Component {
     };
   };
 
-  previous = () =>
+  previous = () => {
+    window.scrollTo(0, 0);
     this.setState(state => ({
       step: Math.max(state.step - 1, 0),
     }));
-
+  }
+  
   handleSubmit = (values, bag) => {
     const { children, onSubmit } = this.props;
     const { step } = this.state;
