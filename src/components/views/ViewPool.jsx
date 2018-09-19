@@ -31,38 +31,37 @@ class ViewPool extends Component {
     window.scrollTo(0, 0);
     const poolId = this.props.match.params.poolId;
     console.log('poolId', poolId);
-    try {
-      // const updatedPool = await feathersClient.service('pools').patch(poolId,{
-      //   status: 'pending_close_pool',
-      //   payoutTxData: '0x5aa26c0ede1f5fc31fe8e266bdcdc1b8a6ac47d7'
-      // });
-      // console.log('updatedPool', updatedPool);
 
-        let myContributions = this.state.myContributions;
-        let myContributionTotal;
-        const pool = await PoolService.getById(poolId);
-        if (this.props.currentUser) {
-          const { data } = await ContributionService.getUserContributionsByPoolId(this.props.currentUser.id, poolId);
-          myContributions = data;
-          myContributionTotal = myContributions.reduce((total, { amount }) => total + amount, 0);
+    PoolService.subscribeById(
+      poolId,
+      pool => {
+        this.setState({
+          pool,
+          isLoading: false
+        })
+      },
+      err => {
+        console.log('err getting pool', err);
+        ErrorPopup('Something went wrong loading pool. Please try refresh the page.', err);
+        this.setState({ isLoading: false });
+      }
+    );
+    if (this.props.currentUser) {
+      console.log('this.props.currentUser', this.props.currentUser);
+      ContributionService.subscribeUserContributionsByPoolId(
+        this.props.currentUser.id,
+        poolId,
+        contributions => {
+          const myContributions = contributions || [];
+          const myContributionTotal = myContributions.reduce((total, { amount }) => total + amount, 0);
+          this.setState({ myContributions, myContributionTotal});
+        },
+        err => {
+          console.log('err getting user contributions', err);
         }
-        this.setState({ pool, myContributions, myContributionTotal, isLoading: false });
-    } catch (err) {
-      console.log('err', err);
-      ErrorPopup('Something went wrong loading pool. Please try refresh the page.', err);
-      this.setState({ isLoading: false });
+      );
     }
 
-    // Lazy load contributions
-    // this.contributionObserver = PoolService.subscribeContributions(
-    //   poolId,
-    //   contributions =>
-    //     this.setState({
-    //       contributions,
-    //       isLoadingDonations: false,
-    //     }),
-    //   () => this.setState({ isLoadingContributions: false }),
-    // );
   }
 
   contribute() {

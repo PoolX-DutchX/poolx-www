@@ -21,6 +21,23 @@ class PoolService {
   /**
    * Get a Pool defined by ID
    *
+   * @param id   ID of the Pool to be retrieved
+   */
+  static subscribeById(poolId, onSuccess, onError) {
+
+    return  feathersClient
+        .service('pools')
+        .watch({ listStrategy: 'always' })
+        .get(poolId)
+        .subscribe(
+          pool => onSuccess(new Pool(pool)),
+          onError,
+        );
+  }
+
+  /**
+   * Get a Pool defined by ID
+   *
    * @param ownerId   ID of the Pool to be retrieved
    */
   static getByOwnerId(ownerId) {

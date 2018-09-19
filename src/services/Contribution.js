@@ -75,6 +75,34 @@ class ContributionService {
    * @param pooId Id of the pool whose contribution was made to
    *
    */
+  static subscribeUserContributionsByPoolId(userId, poolId, onSuccess, onError) {
+    return feathersClient
+      .service('contributions')
+      .watch({ listStrategy: 'always' })
+      .find({
+        query: {
+          owner: userId,
+          pool: poolId,
+          status: {
+            $ne: Contribution.PENDING_CONFIRMATION
+          }
+        },
+      })
+      .subscribe(
+        resp => {
+          const contributions = resp.data.map(contribution => new Contribution(contribution))
+          onSuccess(contributions)
+        },
+        onError,
+      );
+  }
+  /**
+   * Get the user's Contributions made to a particular pool
+   *
+   * @param userId Id of user who made the contribution
+   * @param pooId Id of the pool whose contribution was made to
+   *
+   */
   static getUserContributionsByPoolId(userId, poolId) {
     return feathersClient
       .service('contributions')
