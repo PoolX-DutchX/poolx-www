@@ -9,6 +9,8 @@ import WalletAndLimits from './components/WalletAndLimits';
 import FeesAndAdmins from './components/FeesAndAdmins';
 import DestinationAndWhitelist from './components/DestinationAndWhitelist';
 import NameAndDescription from './components/NameAndDescription';
+import ErrorPopup from '../../ErrorPopup';
+import { history } from '../../../lib/helpers';
 
 import validationSchema from './validation/';
 
@@ -32,9 +34,24 @@ class EditPool extends Component {
 
   }
 
-  handleSubmit = (stuff) => {
-    console.log('handleSubmit stuff', stuff);
+  handleSubmit = (pool) => {
 
+    delete pool.fee
+    delete pool.adminPayoutAddress
+    delete pool.maxAllocation
+    delete pool.admins
+
+    PoolService.patch(this.state.pool.id, pool).then(() => {
+      React.toast.success(
+        <p>
+          Your pool was updated! <br />
+        </p>,
+      );
+      history.push(`/pools/${this.state.pool.id}`);
+    }).catch((err) => {
+      console.log('err saving pool', err);
+      ErrorPopup('Something went wrong saving your pool. Please try refresh the page.', err);
+    })
     //check hasWhitelist
   }
 
