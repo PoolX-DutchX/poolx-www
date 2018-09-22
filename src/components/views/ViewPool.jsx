@@ -12,6 +12,7 @@ import PoolModel from '../../models/Pool';
 import ContributionService from '../../services/Contribution';
 import { feathersClient } from '../../lib/feathersClient';
 
+import { statusDisplayMap } from '../../constants';
 
 import ErrorPopup from '../ErrorPopup';
 
@@ -156,7 +157,7 @@ class ViewPool extends Component {
                 <p>{pool.description}</p>
               </div>
               <div className="col-md-5 pool-action-panel">
-                <h3><strong>{pool.status}</strong></h3>
+                <h3><strong>{statusDisplayMap[pool.status]}</strong></h3>
                 <LinearProgress variant="determinate" value={poolProgress} />
                 <div className="total-invested-section">
                   <h4 className="invested"><strong>{pool.netInvested.toFixed(2)} ETH </strong></h4>

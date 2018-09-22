@@ -81,61 +81,61 @@ export const contributionStatusMap =  {
 
 export const poolStatusMap =  {
   [PENDING_DEPLOYMENT]: {
-    displayText: 'Pending',
+    displayText: statusDisplayMap[PENDING_DEPLOYMENT],
     actionText: 'View TX Data',
     action: (pool) => () => {
       history.push(`pools/${pool.id}/pendingTx`);
     }
   },
   [ACTIVE]: {
-    displayText: 'Active',
+    displayText: statusDisplayMap[ACTIVE],
     actionText: 'Send Funds',
     action: (pool) => () => {
       history.push(`pools/${pool.id}/payout`);
     }
   },
   [PENDING_CLOSE_POOL]: {
-    displayText: 'Pending Send',
+    displayText: statusDisplayMap[PENDING_CLOSE_POOL],
     actionText: 'View TX Data',
     action: (pool) => () => {
       history.push(`pools/${pool.id}/pendingTx`);
     }
   },
   [CLOSED]: {
-    displayText: 'Funds Sent',
+    displayText: statusDisplayMap[CLOSED],
     actionText: 'Confirm Token',
     action: (pool) => () => {
       history.push(`pools/${pool.id}/confirmTokenBatch`);
     }
   },
   [PENDING_TOKEN_BATCH]: {
-    displayText: 'Pending Token Confirmation',
+    displayText: statusDisplayMap[PENDING_TOKEN_BATCH],
     actionText: 'View TX Data',
     action: (pool) => () => {
       history.push(`pools/${pool.id}/pendingTx`);
     }
   },
   [PAYOUT_ENABLED]: {
-    displayText: 'Token Confirmed',
+    displayText: statusDisplayMap[PAYOUT_ENABLED],
     actionText: 'Add Token Batch',
     action: (pool) => () => {
       history.push(`pools/${pool.id}/confirmTokenBatch`); //token address needs to be disabled, without needing
     }
   },
   [PENDING_ENABLE_REFUNDS]: {
-    displayText: 'Pending Enable Refunds',
+    displayText: statusDisplayMap[PENDING_ENABLE_REFUNDS],
     actionText: 'View TX Data',
     action: (pool) => () => {
       history.push(`pools/${pool.id}/pendingTx`);
     }
   },
   [REFUNDS_ENABLED]: {
-    displayText: 'Refunds Enabled',
+    displayText: statusDisplayMap[REFUNDS_ENABLED],
     actionText: '',
     action: null
   },
   [PAUSED]: {
-    displayText: 'Paused',
+    displayText: statusDisplayMap[PAUSED],
     actionText: 'Unpause',
     action: null
   }
@@ -164,7 +164,27 @@ export const teamList = [
   }
 ];
 
-
+export const statusDisplayMap = {
+  //Contributions
+  [PENDING_CONFIRMATION]: 'Pending Confirmation',
+  [CONFIRMED]: 'Confirmed',
+  [TOKENS_AVAILABLE]: 'Tokens Available',
+  [PENDING_CLAIM_TOKENS]: 'Pending Claim',
+  [TOKENS_CLAIMED]: 'Tokens Claimed',
+  [REFUND_AVAILABLE]: 'Refund Available',
+  [PENDING_REFUND]: 'Pending Refund',
+  [REFUND_RECEIVED]: 'Refunded',
+  //Pools
+  [PENDING_DEPLOYMENT]: 'Pending Deploy',
+  [ACTIVE]: 'Active' ,
+  [PENDING_CLOSE_POOL]: 'Pending Send Funds',
+  [CLOSED]: 'Funds Sent' ,
+  [PENDING_TOKEN_BATCH]: 'Pending Add Token Batch',
+  [PAYOUT_ENABLED]: 'Payout Enabled',
+  [PENDING_ENABLE_REFUNDS]: 'Pending Enable Refunds',
+  [REFUNDS_ENABLED]: 'Refunds Enabled',
+  [PAUSED]: 'Paused',
+}
 export const getEtherscanTxLink = (txHash) => {
   return `${config.etherscan}/tx/${txHash}`
 }
