@@ -25,6 +25,28 @@ export const PENDING_ENABLE_REFUNDS = 'pending_enable_refunds';
 export const REFUNDS_ENABLED = 'refunds_enabled';
 export const PAUSED = 'paused';
 
+export const statusDisplayMap = {
+  //Contributions
+  [PENDING_CONFIRMATION]: 'Pending Confirmation',
+  [CONFIRMED]: 'Confirmed',
+  [TOKENS_AVAILABLE]: 'Tokens Available',
+  [PENDING_CLAIM_TOKENS]: 'Pending Claim',
+  [TOKENS_CLAIMED]: 'Tokens Claimed',
+  [REFUND_AVAILABLE]: 'Refund Available',
+  [PENDING_REFUND]: 'Pending Refund',
+  [REFUND_RECEIVED]: 'Refunded',
+  //Pools
+  [PENDING_DEPLOYMENT]: 'Pending Deploy',
+  [ACTIVE]: 'Active' ,
+  [PENDING_CLOSE_POOL]: 'Pending Send Funds',
+  [CLOSED]: 'Funds Sent' ,
+  [PENDING_TOKEN_BATCH]: 'Pending Add Token Batch',
+  [PAYOUT_ENABLED]: 'Payout Enabled',
+  [PENDING_ENABLE_REFUNDS]: 'Pending Enable Refunds',
+  [REFUNDS_ENABLED]: 'Refunds Enabled',
+  [PAUSED]: 'Paused',
+}
+
 export const contributionStatusMap =  {
   [PENDING_CONFIRMATION]: {
     displayText: 'Pending',
@@ -164,27 +186,6 @@ export const teamList = [
   }
 ];
 
-export const statusDisplayMap = {
-  //Contributions
-  [PENDING_CONFIRMATION]: 'Pending Confirmation',
-  [CONFIRMED]: 'Confirmed',
-  [TOKENS_AVAILABLE]: 'Tokens Available',
-  [PENDING_CLAIM_TOKENS]: 'Pending Claim',
-  [TOKENS_CLAIMED]: 'Tokens Claimed',
-  [REFUND_AVAILABLE]: 'Refund Available',
-  [PENDING_REFUND]: 'Pending Refund',
-  [REFUND_RECEIVED]: 'Refunded',
-  //Pools
-  [PENDING_DEPLOYMENT]: 'Pending Deploy',
-  [ACTIVE]: 'Active' ,
-  [PENDING_CLOSE_POOL]: 'Pending Send Funds',
-  [CLOSED]: 'Funds Sent' ,
-  [PENDING_TOKEN_BATCH]: 'Pending Add Token Batch',
-  [PAYOUT_ENABLED]: 'Payout Enabled',
-  [PENDING_ENABLE_REFUNDS]: 'Pending Enable Refunds',
-  [REFUNDS_ENABLED]: 'Refunds Enabled',
-  [PAUSED]: 'Paused',
-}
 export const getEtherscanTxLink = (txHash) => {
   return `${config.etherscan}/tx/${txHash}`
 }
