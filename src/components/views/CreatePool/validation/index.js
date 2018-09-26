@@ -63,8 +63,7 @@ const stepThreeSchema = Yup.object().shape({
 const stepFourSchema = Yup.object().shape({
   name: Yup.string()
     .required('Required'),
-  description: Yup.string()
-    .required('Required'),
+  description: Yup.string(),
 });
 
 export default [stepOneSchema, stepTwoSchema, stepThreeSchema, stepFourSchema];
