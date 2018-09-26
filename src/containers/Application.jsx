@@ -90,7 +90,6 @@ class Application extends Component {
             }) => (
               <div className="full-height">
                 {isLoading && <Loader className="fixed" />}
-
                 {!isLoading &&
                   !hasError && (
                     <div className="full-height">

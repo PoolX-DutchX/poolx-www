@@ -40,14 +40,14 @@ class UserProvider extends Component {
       if (token) {
         const tokenPayload = await feathersClient.passport.verifyJWT(token);
         const { userId } = tokenPayload;
-        const user = userId && await UserProvider.getUserProfile(userId);
 
-        if (!user) {
+        if( userId ) {
+          await feathersClient.authenticate();
+          const user = await UserProvider.getUserProfile(userId);
+          this.setState({ isLoading: false, hasError: false, currentUser: new User(user)});
+        } else {
           feathersClient.logout();
           this.setState({ isLoading: false, hasError: false });
-        } else {
-          await feathersClient.authenticate();
-          this.setState({ isLoading: false, hasError: false, currentUser: new User(user)});
         }
       } else {
         this.setState({ isLoading: false, hasError: false });
