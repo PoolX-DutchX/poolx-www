@@ -3,16 +3,17 @@ import PropTypes from 'prop-types';
 
 function TeamCard({imgUrl, name, title}){
   return (
-    <div className="team-card">
-      <div className="picture">
-        <img src={imgUrl} height="220px" width="170px" alt={name} />
-      </div>
+    <div className="col-sm-6 col-md-3 team-card">
+      <img src={imgUrl} alt={name} />
       <div className="name">
         {name}
       </div>
       <div className="title">
         {title}
       </div>
+      <a href="">
+        <i className="fa fa-fw fa-linkedin" />
+      </a>
     </div>
   );
 }

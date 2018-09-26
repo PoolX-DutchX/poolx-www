@@ -1,134 +1,406 @@
+/*
+I tried to import bootstrap breakpoints by the following:
+@import '../../node_modules/bootstrap/scss/mixins/_breakpoints.scss';
+
+When I did this, the variables became undefined.
+ - $gitbook-blue-light
+ - $gitbook-blue-medium
+ - $gitbook-blue-dark
+
+That's why I created '$breakpoint-' variables here.
+*/
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+
+
 #home-view {
-    .page-wrap {
-      background-color: white;
-      color: white;
-      width: 100%;
-    }
-    .section-wrap {
-      padding: 90px 0 48px;
-    }
-    .skew-wrap {
-      display: block;
-      margin: 0px;
-      padding: 0px;
-      position: relative;
-    }
-    .cover-all {
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      right: 0px;
-      bottom: 0px;
-    }
-    .relative {
-      position: relative;
-    }
-    .bg-color-light {
-      background-color: $gitbook-blue-light;
-    }
-    .bg-color-medium {
-      background-color: $gitbook-blue-medium;
-    }
-    .bg-color-dark {
-      background-color: $gitbook-blue-dark;
-    }
-    .box-shadow {
-      box-shadow: 0 2px 244px 0 rgba(56,132,255,0.4);
-    }
-    .skew {
-      transform: skewY(-2deg);
-    }
-    .skew-reset {
-      transform: skewY(2deg);
-    }
-    .skew2 {
-      transform: skewY(-4.5deg);
-    }
+  .page-wrap {
+    background-color: white;
+    color: white;
+    width: 100%;
+  }
+  .section-wrap {
+    padding: 90px 0 48px;
+  }
+  .skew-wrap {
+    display: block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+  .cover-all {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  .relative {
+    position: relative;
+  }
+  .bg-color-light {
+    background-color: $gitbook-blue-light;
+  }
+  .bg-color-medium {
+    background-color: $gitbook-blue-medium;
+  }
+  .bg-color-dark {
+    background-color: $gitbook-blue-dark;
+  }
+  .box-shadow {
+    box-shadow: 0 2px 244px 0 rgba(56,132,255,0.4);
+  }
+  .skew {
+    transform: skewY(-2deg);
+  }
+  .skew-reset {
+    transform: skewY(2deg);
+  }
+  .skew2 {
+    transform: skewY(-4.5deg);
+  }
 
-    .pb-screenshot {
-      margin-bottom: -20%;
-      width: 100%;
-    }
+  .pb-screenshot {
+    margin-bottom: -20%;
+    width: 100%;
+  }
 
-    .top-section {
-      overflow: hidden;
-      padding-top: 480px;
-      margin-top: -480px;
-      .fabButton {
-        // background-color: blue;
-        line-height: 40px;
-        max-width: 320px;
-        width: 100%;
-        // margin: auto;
-        color: $gitbook-blue-light;
-        text-align: center;
-        font-size: 16px;
-        font-weight: 500;
-        border-radius: 99999px;
-        background: #FFFFFF;
+
+  section {
+    padding: 45px 0;
+    @media (min-width: $breakpoint-md) {
+      padding: 60px 0;
+    }
+    h2 {
+      margin-bottom: 2rem;
+      text-align: center;
+      text-transform: capitalize;
+    }
+  }
+
+
+  .four-columns {
+    .row > div {
+      margin-bottom: 30px;
+      &:last-child { margin-bottom: 0; }
+      @media (min-width: $breakpoint-sm) {
+        &:nth-child(3) { margin-bottom: 0; }
       }
+      @media (min-width: $breakpoint-md) {
+        margin-bottom: 0;
+      }
+    }
+  }
 
-      .bottom-banner {
-        position: relative;
-        .wallet-providers {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: space-evenly;
-          align-items: center;
-          padding-top: 4rem;
-          padding-bottom: 6rem;
-          margin-bottom: -4rem;
+
+  .top-section {
+    overflow: hidden;
+    padding-top: 480px;
+    margin-top: -480px;
+    .fabButton {
+      line-height: 40px;
+      max-width: 320px;
+      width: 100%;
+      color: #3884FF;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 500;
+      border-radius: 99999px;
+      background: #FFFFFF;
+    }
+
+    .bottom-banner {
+      position: relative;
+      .wallet-providers {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-direction: column;
+        padding-top: 4rem;
+        padding-bottom: 6rem;
+        margin-bottom: -4rem;
+        a {
+          margin-bottom: 15px;
+          &:last-child { margin-bottom: 0; }
+        }
+        @media (min-width: $breakpoint-md) {
+          flex-direction: row;
+          a { margin: 0; }
         }
       }
     }
+  }
 
-    .bottom-section {
-      display: block;
-      margin: 0px;
-      padding: 0px;
-      overflow: hidden;
-      margin-bottom: -48px;
-      padding-top: 48px;
-      margin-top: -48px;
 
-      .bottom-skew {
-        margin-bottom: -22px;
+  .workflow-section {
+    text-align: center;
+    color: #2c2e2f;
+    .switch {
+      user-select: none;
+      span {
+        display: inline-block;
+        margin: 0 25px;
+        line-height: 2;
+        text-transform: capitalize;
+        color: #007bff;
+        cursor: pointer;
+        &.active {
+          color: #2c2e2f;
+          border-bottom: 1px solid #2c2e2f;
+        }
       }
-      .site-links {
-        list-style-type: none;
-        display: flex;
-        justify-content: flex-start;
-        color: #9DAAB6;
-        span {
-          margin-right: 1rem;
-          &:last-child {
-            margin-left: auto;
+    }
+    .steps {
+      padding-top: 30px;
+      padding-bottom: 30px;
+      @media (min-width: $breakpoint-md) {
+        padding-top: 45px;
+        padding-bottom: 45px;
+      }
+      .row {
+        & > div {
+          margin-bottom: 30px;
+          &:last-child { margin-bottom: 0; }
+          @media (min-width: $breakpoint-md) {
+            margin-bottom: 0;
+          }
+          .arrow {
+            display: none;
+            position: absolute;
+            right: -6px;
+            top: 62px;
+            width: 30px;
+            height: 30px;
+            border-top: 1px solid #d4d9dc;
+            border-right: 1px solid #d4d9dc;
+            transform: rotate(45deg);
+            @media (min-width: $breakpoint-md) {
+              display: block;
+            }
+          }
+          img {
+            display: block;
+            margin: 0 auto;
+            width: 196px;
+            height: 173px;
+          }
+          .content {
+            .circle {
+              float: left;
+              margin-right: 15px;
+              width: 36px;
+              height: 36px;
+              line-height: 34px;
+              border: 1px solid silver;
+              border-radius: 50%;
+              @media (min-width: $breakpoint-md) {
+                width: 42px;
+                height: 42px;
+                line-height: 40px;
+              }
+              @media (min-width: $breakpoint-lg) {
+                margin-right: 20px;
+                width: 48px;
+                height: 48px;
+                line-height: 46px;
+              }
+            }
+            p {
+              overflow: hidden;
+              text-align: left;
+              font-size: 0.9rem;
+              &:last-child { margin-bottom: 0; }
+            }
           }
         }
+      }
+    }
+    .learn-more {
+      a {
+        display: inline-block;
+        padding: 0 50px;
+        line-height: 51px;
+        margin: 0 auto;
+        border: 1px solid #0070ba;
+        border-radius: 25px;
+        text-decoration: none;
+        &:hover {
+          color: white;
+          background: #0070ba;
+        }
+      }
+    }
+  }
 
-      }
-    }
 
-    .team-card {
-      margin: 1rem;
-      .picture {
-        margin-bottom: 16px;
-        border-radius: 3px;
-        box-shadow: 0 3px 8px 0 rgba(56,132,255,0.1);
-        overflow: hidden;
-      }
-      .title {
-        font-weight: 400;
-        color: #9DAAB6
+  .advantages-section {
+    background: #004094;
+    background: -moz-linear-gradient(top, #004094 0%, #008bd1 100%);
+    background: -webkit-gradient(left top, left bottom, color-stop(0%, #004094), color-stop(100%, #008bd1));
+    background: -webkit-linear-gradient(top, #004094 0%, #008bd1 100%);
+    background: -o-linear-gradient(top, #004094 0%, #008bd1 100%);
+    background: -ms-linear-gradient(top, #004094 0%, #008bd1 100%);
+    background: linear-gradient(to bottom, #004094 0%, #008bd1 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#004094', endColorstr='#008bd1', GradientType=0 );
+    h2 { color: white; }
+    h4 {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    a {
+      color: white;
+      text-decoration: underline;
+    }
+    p { color: #d1d1d1; }
+  }
+
+
+  .team-section {
+    color: #242A31;
+    margin-bottom: -1px; // Hide a white bottom line, that appears in Chrome.
+    background: #0089cd;
+    background: -moz-radial-gradient(center, ellipse cover, #0089cd 0%, #1f65d6 100%);
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, #0089cd), color-stop(100%, #1f65d6));
+    background: -webkit-radial-gradient(center, ellipse cover, #0089cd 0%, #1f65d6 100%);
+    background: -o-radial-gradient(center, ellipse cover, #0089cd 0%, #1f65d6 100%);
+    background: -ms-radial-gradient(center, ellipse cover, #0089cd 0%, #1f65d6 100%);
+    background: radial-gradient(ellipse at center, #0089cd 0%, #1f65d6 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0089cd', endColorstr='#1f65d6', GradientType=1 );
+    h2 { color: white; }
+  }
+  .team-card {
+    text-align: center;
+    color: white;
+    img {
+      display: block;
+      width: 100%;
+      max-width: 240px;
+      margin: 0 auto 18px;
+      @media (min-width: $breakpoint-md) {
+        max-width: none;
       }
     }
-    .team-section {
-      color: #242A31;
-      .card-wrap {
-        display: flex;
-        justify-content: space-evenly;
-        flex-wrap: wrap;
-        margin: 3rem 0;
+    .name {
+      font-size: 1.15rem;
+      line-height: 1.4;
+      margin-bottom: 4px;
+      @media (min-width: $breakpoint-md) {
+        margin-bottom: 3px;
       }
     }
+    .title {
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+    }
+    a {
+      i {
+        font-size: 1.2rem;
+        opacity: 0.5;
+        color: white;
+      }
+      &:hover i {
+        opacity: 1;
+      }
+    }
+  }
+
+
+
+  #footer {
+    padding: 45px 15px 0;
+    background: #07152c;
+    a {
+      display: inline-block;
+      color: #74869b;
+      text-decoration: none;
+      &:hover {
+        color: white;
+      }
+    }
+    .menu {
+      margin-bottom: 30px;
+      .row {
+        & > div {
+          h4 {
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-transform: capitalize;
+          }
+          ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            li {
+              font-size: 0.9rem;
+              line-height: 30px;
+            }
+          }
+          ol {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            max-width: 50%;
+            li {
+              float: left;
+              width: 25%;
+              line-height: 40px;
+              a {
+                i {
+                  font-size: 1.2rem;
+                  color: #74869b;
+                }
+                &:hover i { color: white; }
+              }
+            }
+          }
+        }
+      }
+    }
+    .divider {
+      margin: 0 15px;
+      border-top: 1px solid #3a4553;
+    }
+    .bottom-line {
+      position: relative;
+      padding-top: 30px;
+      padding-bottom: 30px;
+      font-size: 0.9rem;
+      .links, .copyright {
+        line-height: 24px;
+      }
+      .links a {
+        margin-right: 9px;
+      }
+      .copyright {
+        color: #ccc;
+      }
+    }
+    @media (min-width: $breakpoint-sm) {
+      .bottom-line {
+        .links, .copyright {
+          line-height: 30px;
+        }
+        .copyright {
+          text-align: right;
+        }
+      }
+    }
+    @media (min-width: $breakpoint-md) {
+      padding-top: 60px;
+      .menu {
+        margin-bottom: 45px;
+        ol { max-width: none !important; }
+      }
+      .bottom-line {
+        font-size: 0.8rem;
+      }
+    }
+    @media (min-width: $breakpoint-lg) {
+      padding-left: 45px;
+      padding-right: 45px;
+    }
+  }
+
 }
