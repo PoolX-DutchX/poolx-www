@@ -60,7 +60,7 @@ class MainMenu extends Component {
                 id="navbarSupportedContent"
               >
                 <ul className="navbar-nav mr-auto">
-                  {/* 
+                  {/*
                   <li className="nav-item">
                     <NavLink className="nav-link" to="/pools" activeClassName="active">
                       Pools
@@ -131,6 +131,9 @@ class MainMenu extends Component {
                         className={`dropdown-menu dropdown-profile ${showMobileMenu ? 'show' : ''}`}
                         aria-labelledby="navbarDropdownYou"
                       >
+                        <NavLink className="dropdown-item" to="/dashboard">
+                          Dashboard
+                        </NavLink>
                         <NavLink className="dropdown-item" to="/profile">
                           Profile
                         </NavLink>

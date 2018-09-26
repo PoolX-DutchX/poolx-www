@@ -78,7 +78,9 @@ class StepOne extends Component {
               onBlur={handleBlur}
               error={touched.maxAllocation && !!errors.maxAllocation}
               helperText={touched.maxAllocation && errors.maxAllocation}
-              min="0"
+              inputProps={{
+                min: values.maxContribution || 0.01,
+              }}
               type= "number"
               margin="normal"
               disabled={disabledFields.ownerAddress}
@@ -94,7 +96,10 @@ class StepOne extends Component {
                 onBlur={handleBlur}
                 error={touched.minContribution && !!errors.minContribution}
                 helperText={touched.minContribution && errors.minContribution}
-                min="0"
+                inputProps={{
+                  min: 0.01,
+                  max: values.maxAllocation
+                }}
                 type= "number"
                 margin="normal"
                 fullWidth
@@ -108,7 +113,10 @@ class StepOne extends Component {
                 onBlur={handleBlur}
                 error={touched.maxContribution && !!errors.maxContribution}
                 helperText={touched.maxContribution && errors.maxContribution}
-                min="0"
+                inputProps={{
+                  min: values.minContribution || 0.01,
+                  max: values.maxAllocation
+                }}
                 type= "number"
                 margin="normal"
                 fullWidth

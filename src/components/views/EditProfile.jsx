@@ -9,6 +9,7 @@ import { isLoggedIn } from '../../lib/middleware';
 import LoaderButton from '../../components/LoaderButton';
 import User from '../../models/User';
 import ErrorPopup from '../ErrorPopup';
+import { history } from '../../lib/helpers';
 
 /**
  * The edit user profile view mapped to /profile/
@@ -70,8 +71,9 @@ class EditProfile extends Component {
         isSaving: false,
         ...user
       });
-      console.log('user', user);
       this.props.onSignIn(user._id);
+      history.push('/');
+
     } catch (err) {
       this.setState({ isSaving: false });
       ErrorPopup(
