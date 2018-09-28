@@ -70,10 +70,9 @@ class Pool extends BasicModel {
     this.contractAddress = data.contractAddress || '';
 
     this.netInvested = data.netInvested || 0;
-    this.grossInvested = data.grossInvested || '';
+    this.grossInvested = data.grossInvested || 0;
     this.contributionCount = data.contributionCount || 0;
     this.tokenBalance = data.tokenBalance || '';
-
   }
 
   toFeathers() {
