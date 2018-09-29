@@ -22,7 +22,6 @@ class User extends Model {
     this.linkedin = linkedin;
   }
 
-
   get id() {
     return this.myId;
   }

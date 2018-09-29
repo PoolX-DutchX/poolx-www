@@ -7,27 +7,30 @@ import ChooseWalletDialog from '../../../ChooseWalletDialog';
 
 class StepOne extends Component {
   constructor(props) {
-    super(props)
-    this.state= {
-      walletDialogOpen: false
+    super(props);
+    this.state = {
+      walletDialogOpen: false,
     };
     this.handleChooseWalletClick = this.handleChooseWalletClick.bind(this);
     this.handleWalletDialogClose = this.handleWalletDialogClose.bind(this);
   }
-  handleChooseWalletClick(){
+  handleChooseWalletClick() {
     this.setState({
-      walletDialogOpen: true
+      walletDialogOpen: true,
     });
   }
-  handleWalletDialogClose(value){
+  handleWalletDialogClose(value) {
     if (!!value) {
       this.props.formik.setFieldValue('ownerAddress', value);
     }
     this.setState({ walletDialogOpen: false });
   }
   render() {
-    const {formik: { values, handleChange, handleBlur, touched, errors }, currentUser} = this.props; // formik props passed in from Wizard
-    return(
+    const {
+      formik: { values, handleChange, handleBlur, touched, errors },
+      currentUser,
+    } = this.props; // formik props passed in from Wizard
+    return (
       <div>
         <div className="row align-items-center">
           <div className="col">
@@ -47,9 +50,14 @@ class StepOne extends Component {
               fullWidth
             />
           </div>
-          {
-            this.props.currentUser && <div className="col-md-3">
-              <Button type="button" color="primary" size="small" onClick={this.handleChooseWalletClick}>
+          {this.props.currentUser && (
+            <div className="col-md-3">
+              <Button
+                type="button"
+                color="primary"
+                size="small"
+                onClick={this.handleChooseWalletClick}
+              >
                 Choose wallet
               </Button>
               <ChooseWalletDialog
@@ -59,7 +67,7 @@ class StepOne extends Component {
                 onClose={this.handleWalletDialogClose}
               />
             </div>
-          }
+          )}
         </div>
         <TextField
           id="amount"
@@ -75,12 +83,12 @@ class StepOne extends Component {
           helperText={touched.amount && errors.amount}
           inputProps={{
             min: this.props.minContribution,
-            type: "number"
+            type: 'number',
           }}
           fullWidth
         />
       </div>
-    )
+    );
   }
 }
 

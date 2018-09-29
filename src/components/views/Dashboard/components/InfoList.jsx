@@ -16,7 +16,7 @@ const styles = {
   },
   primary: {
     overflow: 'hidden',
-  }
+  },
 };
 
 class WalletList extends React.Component {
@@ -24,16 +24,15 @@ class WalletList extends React.Component {
     const { items = [], classes } = this.props;
     return (
       <List>
-        {!!items.length && items.map(({icon, text, action}, index) => (
-          <ListItem button key={index} onClick={action}>
-            <ListItemAvatar>
-              <Avatar className={classes.avatar}>
-                {icon}
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={text} className={classes.primary} />
-          </ListItem>
-        ))}
+        {!!items.length &&
+          items.map(({ icon, text, action }, index) => (
+            <ListItem button key={index} onClick={action}>
+              <ListItemAvatar>
+                <Avatar className={classes.avatar}>{icon}</Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={text} className={classes.primary} />
+            </ListItem>
+          ))}
       </List>
     );
   }
@@ -41,7 +40,7 @@ class WalletList extends React.Component {
 
 WalletList.propTypes = {
   classes: PropTypes.object.isRequired,
-  items: PropTypes.array
+  items: PropTypes.array,
 };
 
 export default withStyles(styles)(WalletList);

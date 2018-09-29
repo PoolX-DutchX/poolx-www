@@ -6,7 +6,6 @@ import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
 import Button from '@material-ui/core/Button';
 
-
 class MultiStepForm extends React.Component {
   static Step = ({ children }) => children;
 
@@ -15,7 +14,7 @@ class MultiStepForm extends React.Component {
     this.state = {
       step: 0,
       values: props.initialValues,
-      completed: {}
+      completed: {},
     };
   }
   componentDidMount() {
@@ -28,9 +27,9 @@ class MultiStepForm extends React.Component {
       step: Math.min(state.step + 1, this.props.children.length - 1),
       values,
     }));
-  }
+  };
 
-  handleStep = (step) => {
+  handleStep = step => {
     return () => {
       console.log('step', step);
     };
@@ -41,8 +40,8 @@ class MultiStepForm extends React.Component {
     this.setState(state => ({
       step: Math.max(state.step - 1, 0),
     }));
-  }
-  
+  };
+
   handleSubmit = (values, bag) => {
     const { children, onSubmit } = this.props;
     const { step } = this.state;
@@ -53,7 +52,7 @@ class MultiStepForm extends React.Component {
       return onSubmit(values);
     } else {
       this.next(values);
-      bag.resetForm()
+      bag.resetForm();
       // bag.setSubmitting(false);
     }
   };
@@ -68,9 +67,7 @@ class MultiStepForm extends React.Component {
       <div id="multi-step-form">
         <div className="header">
           <div className="row">
-            <section className="col-8 offset-2">
-              {header}
-            </section>
+            <section className="col-8 offset-2">{header}</section>
           </div>
         </div>
         {/*ToDo: need to conjoin all schemas on last step*/}
@@ -82,34 +79,48 @@ class MultiStepForm extends React.Component {
                 enableReinitialize={false}
                 validationSchema={validationSchemas[step]}
                 onSubmit={this.handleSubmit}
-                render={(formikProps) => {
+                render={formikProps => {
                   console.log('activeStep', activeStep);
-                  const activeStepWithFormikProps = React.cloneElement(activeStep, {formik: formikProps});
+                  const activeStepWithFormikProps = React.cloneElement(activeStep, {
+                    formik: formikProps,
+                  });
                   const { handleSubmit, isSubmitting } = formikProps;
                   return (
                     <form onSubmit={handleSubmit} noValidate>
                       {activeStepWithFormikProps}
                       <div className="d-flex justify-content-between spacer-top-50 spacer-bottom-50">
-                        { step > 0 && (
+                        {step > 0 && (
                           <div className="flex-start">
-                            <Button type="button" variant="outlined" size="large" onClick={this.previous}>
+                            <Button
+                              type="button"
+                              variant="outlined"
+                              size="large"
+                              onClick={this.previous}
+                            >
                               Back
                             </Button>
                           </div>
                         )}
                         <div className="ml-auto">
-                          <Button type="submit" variant="contained" size="large" color="primary" disabled={isSubmitting}>
+                          <Button
+                            type="submit"
+                            variant="contained"
+                            size="large"
+                            color="primary"
+                            disabled={isSubmitting}
+                          >
                             {isLastStep ? 'Submit' : 'Continue'}
                           </Button>
                         </div>
                       </div>
                     </form>
-                  )}
-                } />
+                  );
+                }}
+              />
             </div>
             <div className="col-md-3">
               <div className="steps-panel shadow-box">
-                <Stepper activeStep={step} orientation="vertical" >
+                <Stepper activeStep={step} orientation="vertical">
                   {stepLabels.map((label, index) => {
                     return (
                       <Step key={index}>
@@ -131,6 +142,5 @@ class MultiStepForm extends React.Component {
     );
   }
 }
-
 
 export default MultiStepForm;

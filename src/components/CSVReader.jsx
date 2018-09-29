@@ -5,7 +5,13 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Button from '@material-ui/core/Button';
 // const PapaParse = require('papaparse/papaparse.min.js');
 
-const CSVReader = ({ cssClass = 'csv-reader-input', label, onFileLoaded, onError, inputId = null }) => {
+const CSVReader = ({
+  cssClass = 'csv-reader-input',
+  label,
+  onFileLoaded,
+  onError,
+  inputId = null,
+}) => {
   const handleChangeFile = e => {
     let reader = new FileReader();
     const filename = e.target.files[0].name;
@@ -13,7 +19,7 @@ const CSVReader = ({ cssClass = 'csv-reader-input', label, onFileLoaded, onError
     reader.onload = event => {
       const csvData = PapaParse.parse(event.target.result, {
         error: onError,
-        header: true
+        header: true,
       });
       console.log('csvData', csvData);
       onFileLoaded(csvData.data, csvData.meta, filename);
@@ -24,32 +30,34 @@ const CSVReader = ({ cssClass = 'csv-reader-input', label, onFileLoaded, onError
 
   return (
     <div className={cssClass}>
-        {label && <FormLabel htmlFor={inputId}>{label}</FormLabel>}
-        <input
-           id={inputId}
-           type="file"
-           onChange={e => handleChangeFile(e)}
-           accept="text/csv"
-           style={{
-             width: 0,
-             height: 0,
-             opacity: 0,
-             overflow: 'hidden',
-             position: 'absolute',
-             zIndex: 1,
-           }}
-         />
-        <Button component="label"
-          variant="outlined"
-          size="small"
-          color="primary"
-          htmlFor={inputId}
-          disableRipple={true}
-          style={{
-            marginLeft: '1rem'
-          }}>
-            Choose file
-        </Button>
+      {label && <FormLabel htmlFor={inputId}>{label}</FormLabel>}
+      <input
+        id={inputId}
+        type="file"
+        onChange={e => handleChangeFile(e)}
+        accept="text/csv"
+        style={{
+          width: 0,
+          height: 0,
+          opacity: 0,
+          overflow: 'hidden',
+          position: 'absolute',
+          zIndex: 1,
+        }}
+      />
+      <Button
+        component="label"
+        variant="outlined"
+        size="small"
+        color="primary"
+        htmlFor={inputId}
+        disableRipple={true}
+        style={{
+          marginLeft: '1rem',
+        }}
+      >
+        Choose file
+      </Button>
     </div>
   );
 };
@@ -59,7 +67,7 @@ CSVReader.propTypes = {
   label: oneOfType([string, element]),
   onFileLoaded: func,
   onError: func,
-  inputId: string
+  inputId: string,
 };
 
 export default CSVReader;

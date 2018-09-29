@@ -23,27 +23,27 @@ import updateComponents from './components/';
  */
 
 const Header = ({ text }) => {
- return (
-   <div>
-     <h1 className="font-xl">{text}</h1>
-   </div>
- )
-}
+  return (
+    <div>
+      <h1 className="font-xl">{text}</h1>
+    </div>
+  );
+};
 
 const textMap = {
   maxAllocation: {
     stepLabel: 'Max allocation',
-    header: 'Set Max allocation for Pool'
+    header: 'Set Max allocation for Pool',
   },
   fee: {
     stepLabel: 'Admin fee',
-    header:  'Set your Admin Fee'
+    header: 'Set your Admin Fee',
   },
   adminPayoutAddress: {
     stepLabel: 'Admin payout wallet',
-    header: 'Set your Admin payout wallet'
+    header: 'Set your Admin payout wallet',
   },
-}
+};
 
 class Update extends Component {
   constructor(props) {
@@ -52,12 +52,12 @@ class Update extends Component {
     this.state = {
       isLoading: true,
       pool: {},
-      formProps: {}
+      formProps: {},
     };
   }
 
   async componentDidMount() {
-    const { currentUser, match: { params: { poolId }}, location: { hash }} = this.props
+    const { currentUser, match: { params: { poolId } }, location: { hash } } = this.props;
 
     const updateProperty = hash && hash.substr(1);
 
@@ -67,20 +67,20 @@ class Update extends Component {
       const pool = await PoolService.getById(poolId);
       // check status of pool & redirect if not appropriate
       if (!isPoolAdmin(pool, currentUser) || !updateProperty) {
-       history.replace(`/pools/${pool._id}`);
-      };
+        history.replace(`/pools/${pool._id}`);
+      }
 
       let formProps = {};
-      if (['maxAllocation', 'fee', 'adminPayoutAddress'].includes(updateProperty)){
+      if (['maxAllocation', 'fee', 'adminPayoutAddress'].includes(updateProperty)) {
         formProps = {
-          validationSchema : validationSchemas[updateProperty](pool),
+          validationSchema: validationSchemas[updateProperty](pool),
           initialValues: {
-            [updateProperty] : pool[updateProperty]
+            [updateProperty]: pool[updateProperty],
           },
-          UpdateComponent : updateComponents[updateProperty],
-          stepLabel : textMap[updateProperty].stepLabel,
-          headerText : textMap[updateProperty].header,
-        }
+          UpdateComponent: updateComponents[updateProperty],
+          stepLabel: textMap[updateProperty].stepLabel,
+          headerText: textMap[updateProperty].header,
+        };
       } else {
         return history.replace(`/pools/${pool._id}`);
       }
@@ -89,42 +89,43 @@ class Update extends Component {
         isLoading: false,
         pool,
         formProps,
-        updateProperty
+        updateProperty,
       });
-
-    } catch(err) {
+    } catch (err) {
       console.log('err', err);
       //oops something wrong
     }
-
   }
 
   render() {
-    const { isLoading, pool, formProps: {initialValues, UpdateComponent, validationSchema, stepLabel, headerText}} = this.state;
+    const {
+      isLoading,
+      pool,
+      formProps: { initialValues, UpdateComponent, validationSchema, stepLabel, headerText },
+    } = this.state;
 
     return (
       <div>
         {isLoading && <Loader className="fixed" />}
-        { !isLoading && <MultiStepForm
-            header={<Header text={headerText}/>}
+        {!isLoading && (
+          <MultiStepForm
+            header={<Header text={headerText} />}
             initialValues={initialValues}
-            stepLabels={[stepLabel,'Perform transaction']}
+            stepLabels={[stepLabel, 'Perform transaction']}
             onSubmit={(values, actions) => {
               const { updateProperty } = this.state;
               console.log('updateProperty', updateProperty);
               PoolService.patch(this.state.pool.id, {
-                [updateProperty]: values[updateProperty]
+                [updateProperty]: values[updateProperty],
               }).then(() => {
                 history.push(`/pools/${this.state.pool.id}/pendingTx`);
               });
             }}
-            validationSchemas={[
-              validationSchema
-            ]}
+            validationSchemas={[validationSchema]}
           >
-            <UpdateComponent/>
+            <UpdateComponent />
           </MultiStepForm>
-        }
+        )}
       </div>
     );
   }

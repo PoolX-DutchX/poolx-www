@@ -37,155 +37,155 @@ export const statusDisplayMap = {
   [REFUND_RECEIVED]: 'Refunded',
   //Pools
   [PENDING_DEPLOYMENT]: 'Pending Deploy',
-  [ACTIVE]: 'Active' ,
+  [ACTIVE]: 'Active',
   [PENDING_CLOSE_POOL]: 'Pending Send Funds',
-  [CLOSED]: 'Funds Sent' ,
+  [CLOSED]: 'Funds Sent',
   [PENDING_TOKEN_BATCH]: 'Pending Add Token Batch',
   [PAYOUT_ENABLED]: 'Payout Enabled',
   [PENDING_ENABLE_REFUNDS]: 'Pending Enable Refunds',
   [REFUNDS_ENABLED]: 'Refunds Enabled',
   [PAUSED]: 'Paused',
-}
+};
 
-export const contributionStatusMap =  {
+export const contributionStatusMap = {
   [PENDING_CONFIRMATION]: {
     displayText: 'Pending',
     actionText: 'View TX Data',
-    action: (contribution) => () => {
+    action: contribution => () => {
       history.push(`contributions/${contribution.id}/pendingTx`);
-    }
+    },
   },
   [CONFIRMED]: {
     displayText: 'Confirmed',
     actionText: 'Withdraw',
-    action: null
+    action: null,
   },
   [TOKENS_AVAILABLE]: {
     displayText: 'Tokens Available',
     actionText: 'Claim Token',
-    action: ({id: contributionId, poolAddress, ownerAddress}) => async () => {
+    action: ({ id: contributionId, poolAddress, ownerAddress }) => async () => {
       await ContributionService.patch(contributionId, {
         status: PENDING_CLAIM_TOKENS,
         poolAddress,
         ownerAddress,
       });
       history.push(`contributions/${contributionId}/pendingTx`);
-    }
+    },
   },
   [PENDING_CLAIM_TOKENS]: {
     displayText: 'Pending Claim',
     actionText: 'View TX Data',
-    action: (contribution) => () => {
+    action: contribution => () => {
       history.push(`contributions/${contribution.id}/pendingTx`);
-    }
+    },
   },
   [TOKENS_CLAIMED]: {
     displayText: 'Tokens Claimed',
     actionText: '',
-    action: null
+    action: null,
   },
   [REFUND_AVAILABLE]: {
     displayText: 'Refund enabled',
     actionText: '',
-    action: null
+    action: null,
   },
   [PENDING_REFUND]: {
     displayText: 'Pending Refund',
     actionText: '',
-    action: null
+    action: null,
   },
   [REFUND_RECEIVED]: {
     displayText: 'Refunded',
     actionText: '',
-    action: null
-  }
+    action: null,
+  },
 };
 
-export const poolStatusMap =  {
+export const poolStatusMap = {
   [PENDING_DEPLOYMENT]: {
     displayText: statusDisplayMap[PENDING_DEPLOYMENT],
     actionText: 'View TX Data',
-    action: (pool) => () => {
+    action: pool => () => {
       history.push(`pools/${pool.id}/pendingTx`);
-    }
+    },
   },
   [ACTIVE]: {
     displayText: statusDisplayMap[ACTIVE],
     actionText: 'Send Funds',
-    action: (pool) => () => {
+    action: pool => () => {
       history.push(`pools/${pool.id}/payout`);
-    }
+    },
   },
   [PENDING_CLOSE_POOL]: {
     displayText: statusDisplayMap[PENDING_CLOSE_POOL],
     actionText: 'View TX Data',
-    action: (pool) => () => {
+    action: pool => () => {
       history.push(`pools/${pool.id}/pendingTx`);
-    }
+    },
   },
   [CLOSED]: {
     displayText: statusDisplayMap[CLOSED],
     actionText: 'Confirm Token',
-    action: (pool) => () => {
+    action: pool => () => {
       history.push(`pools/${pool.id}/confirmTokenBatch`);
-    }
+    },
   },
   [PENDING_TOKEN_BATCH]: {
     displayText: statusDisplayMap[PENDING_TOKEN_BATCH],
     actionText: 'View TX Data',
-    action: (pool) => () => {
+    action: pool => () => {
       history.push(`pools/${pool.id}/pendingTx`);
-    }
+    },
   },
   [PAYOUT_ENABLED]: {
     displayText: statusDisplayMap[PAYOUT_ENABLED],
     actionText: 'Add Token Batch',
-    action: (pool) => () => {
+    action: pool => () => {
       history.push(`pools/${pool.id}/confirmTokenBatch`); //token address needs to be disabled, without needing
-    }
+    },
   },
   [PENDING_ENABLE_REFUNDS]: {
     displayText: statusDisplayMap[PENDING_ENABLE_REFUNDS],
     actionText: 'View TX Data',
-    action: (pool) => () => {
+    action: pool => () => {
       history.push(`pools/${pool.id}/pendingTx`);
-    }
+    },
   },
   [REFUNDS_ENABLED]: {
     displayText: statusDisplayMap[REFUNDS_ENABLED],
     actionText: '',
-    action: null
+    action: null,
   },
   [PAUSED]: {
     displayText: statusDisplayMap[PAUSED],
     actionText: 'Unpause',
-    action: null
-  }
+    action: null,
+  },
 };
 
 export const teamList = [
   {
     imgUrl: '/img/team/finn_schaedlich.jpg',
     name: 'Finn Schädlich',
-    title: 'Co-founder'
+    title: 'Co-founder',
   },
   {
     imgUrl: '/img/team/viktor_jamiolkowski.jpg',
     name: 'Viktor Jamiolkowski',
-    title: 'Co-founder'
+    title: 'Co-founder',
   },
   {
     imgUrl: '/img/team/gustavo_guimaraes.jpg',
     name: 'Gustavo Guimarães',
-    title: 'Co-founder'
+    title: 'Co-founder',
   },
   {
     imgUrl: '/img/team/michael_teixeira.jpg',
     name: 'Michael Teixeira',
-    title: 'Co-founder'
-  }
+    title: 'Co-founder',
+  },
 ];
 
-export const getEtherscanTxLink = (txHash) => {
-  return `${config.etherscan}/tx/${txHash}`
-}
+export const getEtherscanTxLink = txHash => {
+  return `${config.etherscan}/tx/${txHash}`;
+};

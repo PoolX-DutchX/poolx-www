@@ -56,16 +56,13 @@ class ContributionService {
       .watch({ listStrategy: 'always' })
       .find({
         query: {
-          owner: ownerId
+          owner: ownerId,
         },
       })
-      .subscribe(
-        resp => {
-          const contributions = resp.data.map(contribution => new Contribution(contribution))
-          onSuccess(contributions)
-        },
-        onError,
-      );
+      .subscribe(resp => {
+        const contributions = resp.data.map(contribution => new Contribution(contribution));
+        onSuccess(contributions);
+      }, onError);
   }
 
   /**
@@ -84,17 +81,14 @@ class ContributionService {
           owner: userId,
           pool: poolId,
           status: {
-            $ne: Contribution.PENDING_CONFIRMATION
-          }
+            $ne: Contribution.PENDING_CONFIRMATION,
+          },
         },
       })
-      .subscribe(
-        resp => {
-          const contributions = resp.data.map(contribution => new Contribution(contribution))
-          onSuccess(contributions)
-        },
-        onError,
-      );
+      .subscribe(resp => {
+        const contributions = resp.data.map(contribution => new Contribution(contribution));
+        onSuccess(contributions);
+      }, onError);
   }
   /**
    * Get the user's Contributions made to a particular pool
@@ -104,17 +98,15 @@ class ContributionService {
    *
    */
   static getUserContributionsByPoolId(userId, poolId) {
-    return feathersClient
-      .service('contributions')
-      .find({
-        query: {
-          owner: userId,
-          pool: poolId,
-          status: {
-            $ne: Contribution.PENDING_CONFIRMATION
-          }
+    return feathersClient.service('contributions').find({
+      query: {
+        owner: userId,
+        pool: poolId,
+        status: {
+          $ne: Contribution.PENDING_CONFIRMATION,
         },
-      });
+      },
+    });
   }
 
   /**
@@ -126,9 +118,7 @@ class ContributionService {
    */
   static patch(contributionId, payload) {
     console.log('contributionId', contributionId);
-    return feathersClient
-      .service('contributions')
-      .patch(contributionId, payload);
+    return feathersClient.service('contributions').patch(contributionId, payload);
   }
 
   /**
@@ -140,9 +130,7 @@ class ContributionService {
    * @param afterCreate Callback to be triggered after the Campaign is cancelled in feathers
    * @param afterMined  Callback to be triggered after the transaction is mined
    */
-  static cancel(campaign, from, afterCreate = () => {}, afterMined = () => {}) {
-
-  }
+  static cancel(campaign, from, afterCreate = () => {}, afterMined = () => {}) {}
 }
 
 export default ContributionService;

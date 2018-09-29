@@ -20,12 +20,12 @@ import { isAuthenticated } from '../../../lib/middleware';
  */
 
 const Header = () => {
- return (
-   <div>
-     <h1 className="font-xl">Send Payout</h1>
-   </div>
- )
-}
+  return (
+    <div>
+      <h1 className="font-xl">Send Payout</h1>
+    </div>
+  );
+};
 
 class ClosePool extends Component {
   constructor(props) {
@@ -33,12 +33,12 @@ class ClosePool extends Component {
 
     this.state = {
       isLoading: true,
-      pool: {}
+      pool: {},
     };
   }
 
   async componentDidMount() {
-    const { currentUser, match: { params: { poolId }}} = this.props
+    const { currentUser, match: { params: { poolId } } } = this.props;
     try {
       // await isAuthenticated(currentUser);
 
@@ -47,55 +47,54 @@ class ClosePool extends Component {
       console.log('currentUser', currentUser);
 
       if (!isPoolAdmin(pool, currentUser)) {
-       history.replace(`/pools/${pool._id}`);
-      };
+        history.replace(`/pools/${pool._id}`);
+      }
 
       this.setState({
         isLoading: false,
-        pool
+        pool,
       });
-
-    } catch(err) {
+    } catch (err) {
       console.log('err', err);
       //oops something wrong
     }
-
   }
 
   render() {
     console.log('this.state.pool', this.state.pool);
-    const { isLoading, pool: { lockPayoutAddress, payoutAddress, payoutTxData}} = this.state;
+    const { isLoading, pool: { lockPayoutAddress, payoutAddress, payoutTxData } } = this.state;
     console.log('lockPayoutAddress', lockPayoutAddress);
     console.log('payoutAddress', payoutAddress);
     console.log('payoutTxData', payoutTxData);
     const initialValues = {
       lockPayoutAddress: lockPayoutAddress,
       payoutAddress: payoutAddress || '',
-      payoutTxData: payoutTxData || ''
+      payoutTxData: payoutTxData || '',
     };
     return (
       <div>
         {isLoading && <Loader className="fixed" />}
-        { !isLoading && <MultiStepForm
-            header={<Header/>}
+        {!isLoading && (
+          <MultiStepForm
+            header={<Header />}
             initialValues={initialValues}
-            stepLabels={['Destination & Data','Perform transaction']}
-            onSubmit={({ payoutAddress, payoutTxData}, actions) => {
+            stepLabels={['Destination & Data', 'Perform transaction']}
+            onSubmit={({ payoutAddress, payoutTxData }, actions) => {
               console.log('payoutAddress', payoutAddress);
               console.log('payoutTxData', payoutTxData);
               PoolService.patch(this.state.pool.id, {
                 status: Pool.PENDING_CLOSE_POOL,
                 payoutAddress,
-                payoutTxData
+                payoutTxData,
               }).then(() => {
                 history.push(`/pools/${this.state.pool.id}/pendingTx`);
               });
             }}
             validationSchemas={validationSchemas}
           >
-            <StepOne currentUser={this.props.currentUser}/>
+            <StepOne currentUser={this.props.currentUser} />
           </MultiStepForm>
-        }
+        )}
       </div>
     );
   }

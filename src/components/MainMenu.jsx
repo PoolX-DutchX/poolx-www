@@ -36,7 +36,9 @@ class MainMenu extends Component {
           <div>
             <nav
               id="main-menu"
-              className={`navbar navbar-expand-lg fixed-top ${showMobileMenu ? 'show' : ''} ${isHomePage && 'is-homepage'} `}
+              className={`navbar navbar-expand-lg fixed-top ${
+                showMobileMenu ? 'show' : ''
+              } ${isHomePage && 'is-homepage'} `}
             >
               <button
                 className="navbar-toggler navbar-toggler-right"
@@ -48,11 +50,11 @@ class MainMenu extends Component {
                 />
               </button>
               <Link className="navbar-brand" to="/">
-                {
-                  isHomePage ? <img src="/img/logo_white.svg" width="140px" alt="Poolbase logo" /> :
-                    <img src="/img/logo_blue.svg" width="140px" alt="Poolbase logo" />
-                }
-
+                {isHomePage ? (
+                  <img src="/img/logo_white.svg" width="140px" alt="Poolbase logo" />
+                ) : (
+                  <img src="/img/logo_blue.svg" width="140px" alt="Poolbase logo" />
+                )}
               </Link>
 
               <div

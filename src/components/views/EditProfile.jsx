@@ -41,8 +41,7 @@ class EditProfile extends Component {
   }
 
   componentDidMount() {
-    isLoggedIn(this.props.currentUser)
-      .then(() => this.setState({ isLoading: false }))
+    isLoggedIn(this.props.currentUser).then(() => this.setState({ isLoading: false }));
   }
 
   setImage(image) {
@@ -64,16 +63,17 @@ class EditProfile extends Component {
         constructedModel.avatar = url;
       }
 
-      const user = await feathersClient.service('/users').patch(this.props.currentUser.id, constructedModel);
+      const user = await feathersClient
+        .service('/users')
+        .patch(this.props.currentUser.id, constructedModel);
 
       React.toast.success('Your profile has been updated.');
       this.setState({
         isSaving: false,
-        ...user
+        ...user,
       });
       this.props.onSignIn(user._id);
       history.push('/');
-
     } catch (err) {
       this.setState({ isSaving: false });
       ErrorPopup(

@@ -41,8 +41,8 @@ class SignIn extends Component {
             return feathersClient.passport.verifyJWT(token);
           })
           .then(tokenPayload => {
-            const {userId} = tokenPayload;
-            this.setState({isSigningIn: false});
+            const { userId } = tokenPayload;
+            this.setState({ isSigningIn: false });
             this.props.onSignIn(userId);
             React.toast.success(
               <p>
@@ -53,11 +53,12 @@ class SignIn extends Component {
           })
           .catch(err => {
             this.setState({
-              error: 'There was a problem signing into your account. Please refresh the page and try again.',
+              error:
+                'There was a problem signing into your account. Please refresh the page and try again.',
               isSigningIn: false,
             });
           });
-      }
+      },
     );
   }
 
@@ -81,9 +82,7 @@ class SignIn extends Component {
                 <center>
                   <div>
                     <h1>SignIn</h1>
-                    <p>
-                      Please provide a username and password to sign in
-                    </p>
+                    <p>Please provide a username and password to sign in</p>
 
                     {error && <div className="alert alert-danger">{error}</div>}
 

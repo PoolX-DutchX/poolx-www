@@ -16,20 +16,20 @@ class MetamaskInfoModal extends Component {
       open: false,
       metamask: {},
       wallet: {},
-      network: {}
-    }
+      network: {},
+    };
   }
-  handleOpen = ({metamask, wallet, network}) => {
+  handleOpen = ({ metamask, wallet, network }) => {
     this.setState({
       open: true,
       metamask,
       wallet,
-      network
+      network,
     });
-  }
+  };
   handleClose = () => {
     this.setState({
-      open: false
+      open: false,
     });
   };
 
@@ -38,26 +38,34 @@ class MetamaskInfoModal extends Component {
     return [
       {
         checked: metamask.installed,
-        itemText: <span>Install <a href="https://metamask.io/" target="_blank" rel="noopener noreferrer">Metamask Chrome Plugin</a></span>
+        itemText: (
+          <span>
+            Install{' '}
+            <a href="https://metamask.io/" target="_blank" rel="noopener noreferrer">
+              Metamask Chrome Plugin
+            </a>
+          </span>
+        ),
       },
       {
         checked: metamask.unlocked,
-        itemText: <span>Unlock Metamask</span>
+        itemText: <span>Unlock Metamask</span>,
       },
       {
         checked: network.selected,
-        itemText: <span>Point Metamask to {network.value}</span>
+        itemText: <span>Point Metamask to {network.value}</span>,
       },
       {
         checked: wallet.selected,
-        itemText: (<span>Select your chosen wallet for this transaction:
-          <div className="alert alert-info">
-            {wallet.value}
-          </div>
-        </span>)
+        itemText: (
+          <span>
+            Select your chosen wallet for this transaction:
+            <div className="alert alert-info">{wallet.value}</div>
+          </span>
+        ),
       },
     ];
-  }
+  };
 
   render() {
     return (
@@ -68,24 +76,23 @@ class MetamaskInfoModal extends Component {
       >
         <DialogTitle id="responsive-dialog-title">Your Metamask checklist</DialogTitle>
         <DialogContent>
-          {
-            this.getChecklist().map(({itemText, checked}, index) => {
-              return  (
-                <div className="row" key={index}>
-                  <div className="col">
-                    <CircleStep step={index+1}/>
-                    <span style={{verticalAlign: "text-bottom"}}>{itemText}</span>
-                  </div>
-                  <div className="col-1">
-                    {
-                      checked ? <CheckIcon style={{color: "green"}}/> :
-                        <CheckIcon style={{color: "rgba(128, 128, 128, 0.5)"}}/>
-                    }
-                  </div>
+          {this.getChecklist().map(({ itemText, checked }, index) => {
+            return (
+              <div className="row" key={index}>
+                <div className="col">
+                  <CircleStep step={index + 1} />
+                  <span style={{ verticalAlign: 'text-bottom' }}>{itemText}</span>
                 </div>
-              );
-            })
-          }
+                <div className="col-1">
+                  {checked ? (
+                    <CheckIcon style={{ color: 'green' }} />
+                  ) : (
+                    <CheckIcon style={{ color: 'rgba(128, 128, 128, 0.5)' }} />
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </DialogContent>
         <DialogActions>
           <Button onClick={this.handleClose} color="primary" autoFocus>

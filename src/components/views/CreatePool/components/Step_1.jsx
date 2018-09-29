@@ -8,27 +8,31 @@ import ChooseWalletDialog from '../../../ChooseWalletDialog';
 
 class StepOne extends Component {
   constructor(props) {
-    super(props)
-    this.state= {
-      walletDialogOpen: false
+    super(props);
+    this.state = {
+      walletDialogOpen: false,
     };
     this.handleChooseWalletClick = this.handleChooseWalletClick.bind(this);
     this.handleWalletDialogClose = this.handleWalletDialogClose.bind(this);
   }
-  handleChooseWalletClick(){
+  handleChooseWalletClick() {
     this.setState({
-      walletDialogOpen: true
+      walletDialogOpen: true,
     });
   }
-  handleWalletDialogClose(value){
+  handleWalletDialogClose(value) {
     if (!!value) {
       this.props.formik.setFieldValue('ownerAddress', value);
     }
     this.setState({ walletDialogOpen: false });
   }
   render() {
-    const {formik: { values, handleChange, handleBlur, touched, errors }, currentUser, disabledFields = {}} = this.props; // formik props passed in from Wizard
-    return(
+    const {
+      formik: { values, handleChange, handleBlur, touched, errors },
+      currentUser,
+      disabledFields = {},
+    } = this.props; // formik props passed in from Wizard
+    return (
       <div>
         <div className="row align-items-center">
           <div className="col">
@@ -49,29 +53,35 @@ class StepOne extends Component {
               fullWidth
             />
           </div>
-          {
-            this.props.currentUser && !disabledFields.ownerAddress && <div className="col-md-3">
-              <Button type="button" color="primary" size="small" onClick={this.handleChooseWalletClick}>
-                Choose wallet
-              </Button>
-              <ChooseWalletDialog
-                wallets={currentUser.wallets}
-                selectedValue={values.ownerAddress}
-                open={this.state.walletDialogOpen}
-                onClose={this.handleWalletDialogClose}
-              />
-            </div>
-          }
+          {this.props.currentUser &&
+            !disabledFields.ownerAddress && (
+              <div className="col-md-3">
+                <Button
+                  type="button"
+                  color="primary"
+                  size="small"
+                  onClick={this.handleChooseWalletClick}
+                >
+                  Choose wallet
+                </Button>
+                <ChooseWalletDialog
+                  wallets={currentUser.wallets}
+                  selectedValue={values.ownerAddress}
+                  open={this.state.walletDialogOpen}
+                  onClose={this.handleWalletDialogClose}
+                />
+              </div>
+            )}
         </div>
         <div className="row">
           <div className="col-md-3">
-            <FormLabel className='spacer-top-40'>Limits</FormLabel>
+            <FormLabel className="spacer-top-40">Limits</FormLabel>
           </div>
           <div className="col-md-9">
             <TextField
               id="maxAllocation"
               label="Net max pool allocation"
-              inputProps={{style: {width:"100%"}}}
+              inputProps={{ style: { width: '100%' } }}
               placeholder="Ξther amount"
               value={values.maxAllocation}
               onChange={handleChange}
@@ -81,7 +91,7 @@ class StepOne extends Component {
               inputProps={{
                 min: values.maxContribution || 0.01,
               }}
-              type= "number"
+              type="number"
               margin="normal"
               disabled={disabledFields.ownerAddress}
               fullWidth
@@ -98,9 +108,9 @@ class StepOne extends Component {
                 helperText={touched.minContribution && errors.minContribution}
                 inputProps={{
                   min: 0.01,
-                  max: values.maxAllocation
+                  max: values.maxAllocation,
                 }}
-                type= "number"
+                type="number"
                 margin="normal"
                 fullWidth
               />
@@ -115,9 +125,9 @@ class StepOne extends Component {
                 helperText={touched.maxContribution && errors.maxContribution}
                 inputProps={{
                   min: values.minContribution || 0.01,
-                  max: values.maxAllocation
+                  max: values.maxAllocation,
                 }}
-                type= "number"
+                type="number"
                 margin="normal"
                 fullWidth
               />
@@ -125,7 +135,7 @@ class StepOne extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 

@@ -28,7 +28,7 @@ const PoolReview = ({ formik: { values } }) => {
     payoutAddress,
     payoutTxData,
     hasWhitelist,
-    whitelist
+    whitelist,
   } = values;
   return (
     <Paper>
@@ -62,7 +62,9 @@ const PoolReview = ({ formik: { values } }) => {
             <TableCell component="th" scope="row">
               Min/Max Contribution
             </TableCell>
-            <TableCell>{minContribution} Ξ / {maxContribution} Ξ</TableCell>
+            <TableCell>
+              {minContribution} Ξ / {maxContribution} Ξ
+            </TableCell>
           </TableRow>
           <TableRow>
             <TableCell component="th" scope="row">
@@ -74,7 +76,7 @@ const PoolReview = ({ formik: { values } }) => {
             <TableCell component="th" scope="row">
               Fee payout currency
             </TableCell>
-            <TableCell>{(feePayoutCurrency === Pool.CURRENCY_ETHER) ? 'Ether' : 'Token'} </TableCell>
+            <TableCell>{feePayoutCurrency === Pool.CURRENCY_ETHER ? 'Ether' : 'Token'} </TableCell>
           </TableRow>
           <TableRow>
             <TableCell component="th" scope="row">
@@ -82,16 +84,15 @@ const PoolReview = ({ formik: { values } }) => {
             </TableCell>
             <Table>
               <TableBody>
-                {
-                    !!admins.length && admins.map(({address, name}, index) => {
-                      return (
-                        <TableRow key={index}>
-                            <TableCell>{address}</TableCell>
-                            <TableCell>{name}</TableCell>
-                        </TableRow>
-                      )
-                    })
-                }
+                {!!admins.length &&
+                  admins.map(({ address, name }, index) => {
+                    return (
+                      <TableRow key={index}>
+                        <TableCell>{address}</TableCell>
+                        <TableCell>{name}</TableCell>
+                      </TableRow>
+                    );
+                  })}
               </TableBody>
             </Table>
           </TableRow>
@@ -101,47 +102,49 @@ const PoolReview = ({ formik: { values } }) => {
             </TableCell>
             <TableCell>{String(lockPayoutAddress)}</TableCell>
           </TableRow>
-          {
-            lockPayoutAddress && payoutAddress && <TableRow>
-              <TableCell component="th" scope="row">
-                Desintation Address
-              </TableCell>
-              <TableCell>{payoutAddress}</TableCell>
-            </TableRow>
-          }
-          {
-            lockPayoutAddress && payoutTxData && <TableRow>
-              <TableCell component="th" scope="row">
-                Destination Tx Data
-              </TableCell>
-              <TableCell>{payoutTxData}</TableCell>
-            </TableRow>
-          }
-          {
-            hasWhitelist && !!whitelist.length && <TableRow>
-              <TableCell component="th" scope="row">
-                Whitelist
-              </TableCell>
-              <Table>
-                <TableBody>
-                  {
-                      whitelist.map(({address, name}, index) => {
-                        return (
-                          <TableRow key={index}>
-                              <TableCell>{address}</TableCell>
-                              <TableCell>{name}</TableCell>
-                          </TableRow>
-                        )
-                      })
-                  }
-                </TableBody>
-              </Table>
-            </TableRow>
-          }
+          {lockPayoutAddress &&
+            payoutAddress && (
+              <TableRow>
+                <TableCell component="th" scope="row">
+                  Desintation Address
+                </TableCell>
+                <TableCell>{payoutAddress}</TableCell>
+              </TableRow>
+            )}
+          {lockPayoutAddress &&
+            payoutTxData && (
+              <TableRow>
+                <TableCell component="th" scope="row">
+                  Destination Tx Data
+                </TableCell>
+                <TableCell>{payoutTxData}</TableCell>
+              </TableRow>
+            )}
+          {hasWhitelist &&
+            !!whitelist.length && (
+              <TableRow>
+                <TableCell component="th" scope="row">
+                  Whitelist
+                </TableCell>
+                <Table>
+                  <TableBody>
+                    {whitelist.map(({ address, name }, index) => {
+                      return (
+                        <TableRow key={index}>
+                          <TableCell>{address}</TableCell>
+                          <TableCell>{name}</TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableRow>
+            )}
         </TableBody>
       </Table>
     </Paper>
-)};
+  );
+};
 //
 // PoolReview.propTypes = {
 //   pool: PropTypes.object.isRequired

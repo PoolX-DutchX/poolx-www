@@ -19,9 +19,11 @@ const styles = theme => ({
 function PillButton(props) {
   console.log('props', props);
   const { classes, children, ...rest } = props;
-  return <Button variant="extendedFab" aria-label="delete" className={classes.button} {...rest}>
-    {children}
+  return (
+    <Button variant="extendedFab" aria-label="delete" className={classes.button} {...rest}>
+      {children}
     </Button>
+  );
 }
 
 PillButton.propTypes = {

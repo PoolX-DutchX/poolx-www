@@ -20,13 +20,7 @@ class BasicModel extends Model {
     return 0;
   }
 
-  constructor({
-    _id,
-    owner,
-    ownerAddress,
-    transactions,
-    createdAt,
-  }) {
+  constructor({ _id, owner, ownerAddress, transactions, createdAt }) {
     super();
 
     this.id = _id;
@@ -40,7 +34,7 @@ class BasicModel extends Model {
   toFeathers() {
     return {
       ownerAddress: this.ownerAddress,
-    }
+    };
   }
 
   get id() {
@@ -84,10 +78,9 @@ class BasicModel extends Model {
   }
 
   set createdAt(value) {
-    this.checkType(value, ['undefined','string'], 'createdAt');
+    this.checkType(value, ['undefined', 'string'], 'createdAt');
     this.myCreatedAt = value;
   }
-
 }
 
 export default BasicModel;

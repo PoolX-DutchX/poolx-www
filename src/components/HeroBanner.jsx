@@ -20,8 +20,8 @@ class HeroBanner extends Component {
         title: "You're almost there...",
         content: React.swal.msg(
           <p>
-            It&#8217;s great to see that you want to start a pool. To get started, please
-            sign up (or sign in) first.
+            It&#8217;s great to see that you want to start a pool. To get started, please sign up
+            (or sign in) first.
           </p>,
         ),
         icon: 'info',
@@ -56,7 +56,7 @@ HeroBanner.propTypes = {
     goBack: PropTypes.func.isRequired,
     push: PropTypes.func.isRequired,
   }).isRequired,
-  currentUser: PropTypes.instanceOf(User)
+  currentUser: PropTypes.instanceOf(User),
 };
 
 HeroBanner.defaultProps = {

@@ -10,7 +10,7 @@ import {
   REFUND_AVAILABLE,
   PENDING_REFUND,
   REFUND_RECEIVED,
-  PAUSED
+  PAUSED,
 } from '../constants';
 
 class Contribution extends BasicModel {
@@ -48,7 +48,7 @@ class Contribution extends BasicModel {
     this.poolAddress = data.poolAddress || '';
     this.amount = data.amount || 0; // in Ether
     this.status = data.status || Contribution.PENDING_CONFIRMATION;
-    this.tokenAmountClaimed =  data.tokenAmountClaimed || 0;
+    this.tokenAmountClaimed = data.tokenAmountClaimed || 0;
     this.owner = data.owner || '';
     // ToDo: currency, ether by default for now
     // ToDo: network - or place in seperate DB ??
@@ -62,7 +62,7 @@ class Contribution extends BasicModel {
       amount: this.amount,
       status: this.status,
       owner: this.owner,
-      ownerAddress: this.ownerAddress
+      ownerAddress: this.ownerAddress,
     };
   }
 
@@ -82,17 +82,21 @@ class Contribution extends BasicModel {
   }
 
   set status(value) {
-    this.checkValue(value, [
-      Contribution.PENDING_CONFIRMATION,
-      Contribution.CONFIRMED,
-      Contribution.TOKENS_AVAILABLE,
-      Contribution.PENDING_CLAIM_TOKENS,
-      Contribution.TOKENS_CLAIMED,
-      Contribution.REFUND_AVAILABLE,
-      Contribution.PENDING_REFUND,
-      Contribution.REFUND_RECEIVED,
-      Contribution.PAUSED
-    ], 'status');
+    this.checkValue(
+      value,
+      [
+        Contribution.PENDING_CONFIRMATION,
+        Contribution.CONFIRMED,
+        Contribution.TOKENS_AVAILABLE,
+        Contribution.PENDING_CLAIM_TOKENS,
+        Contribution.TOKENS_CLAIMED,
+        Contribution.REFUND_AVAILABLE,
+        Contribution.PENDING_REFUND,
+        Contribution.REFUND_RECEIVED,
+        Contribution.PAUSED,
+      ],
+      'status',
+    );
     this.myStatus = value;
     // if (value === Contribution.PENDING) this.myOrder = 1;
     // else if (value === Contribution.ACTIVE) this.myOrder = 2;

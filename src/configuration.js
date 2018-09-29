@@ -41,7 +41,7 @@ const configurations = {
     etherscan: 'https://etherscan.io/',
     feathersConnection: 'https://feathers.mainnet.giveth.io',
     nodeConnection: 'wss://mew.giveth.io/ws',
-  }
+  },
 };
 
 // Unknown environment

@@ -14,19 +14,22 @@ class PendingTxFieldsModal extends Component {
 
     this.state = {
       open: false,
-    }
+    };
   }
   handleOpen = () => {
     this.setState({
       open: true,
     });
-  }
+  };
   handleClose = redirect => () => {
-    this.setState({
-      open: false
-    }, () => {
-      redirect();
-    });
+    this.setState(
+      {
+        open: false,
+      },
+      () => {
+        redirect();
+      },
+    );
   };
 
   render() {
@@ -39,16 +42,26 @@ class PendingTxFieldsModal extends Component {
       >
         <DialogTitle id="responsive-dialog-title">Your transaction data</DialogTitle>
         <DialogContent>
-          <div className="alert alert-info">
-            {wallet}
-          </div>
-          <PendingTxFields pendingTx={pendingTx}/>
+          <div className="alert alert-info">{wallet}</div>
+          <PendingTxFields pendingTx={pendingTx} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose(() => { history.push('/dashboard')})} color="primary" autoFocus>
+          <Button
+            onClick={this.handleClose(() => {
+              history.push('/dashboard');
+            })}
+            color="primary"
+            autoFocus
+          >
             View Dashboard
           </Button>
-          <Button onClick={this.handleClose(() => { history.push(`/pools/${poolId}`)})} color="primary" autoFocus>
+          <Button
+            onClick={this.handleClose(() => {
+              history.push(`/pools/${poolId}`);
+            })}
+            color="primary"
+            autoFocus
+          >
             View pool
           </Button>
         </DialogActions>

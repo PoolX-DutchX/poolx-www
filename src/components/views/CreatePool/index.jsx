@@ -23,13 +23,13 @@ import { feathersClient } from '../../../lib/feathersClient';
  */
 
 const Header = () => {
- return (
-   <div>
-     <h1 className="font-xl">Create Pool</h1>
-     <p className="font-m">...And get that money!</p>
-   </div>
- )
-}
+  return (
+    <div>
+      <h1 className="font-xl">Create Pool</h1>
+      <p className="font-m">...And get that money!</p>
+    </div>
+  );
+};
 
 class CreatePool extends Component {
   constructor(props) {
@@ -42,11 +42,13 @@ class CreatePool extends Component {
 
   async componentDidMount() {
     this.setState({ isLoading: true });
-    const { data: [{ percent: percentFee }] } = await feathersClient.service('fees').find({query: {type: 'standard'}});
-    
+    const { data: [{ percent: percentFee }] } = await feathersClient
+      .service('fees')
+      .find({ query: { type: 'standard' } });
+
     this.setState({
       poolbaseFee: percentFee,
-      isLoading: false
+      isLoading: false,
     });
     // isAuthenticated(this.props.currentUser)
     //   .then(() => {
@@ -63,35 +65,44 @@ class CreatePool extends Component {
     return (
       <div>
         {isLoading && <Loader className="fixed" />}
-        { !isLoading && <MultiStepForm
-            header={<Header/>}
+        {!isLoading && (
+          <MultiStepForm
+            header={<Header />}
             initialValues={{
-              ...initialPoolData
+              ...initialPoolData,
               // ...samplePoolData
             }}
-            stepLabels={['Wallet & Limits', 'Fees & Admins', 'Destination & Whitelist', 'Name & Description', 'Review']}
+            stepLabels={[
+              'Wallet & Limits',
+              'Fees & Admins',
+              'Destination & Whitelist',
+              'Name & Description',
+              'Review',
+            ]}
             onSubmit={(values, actions) => {
               console.log('submitting values', values);
               const pool = new Pool(values);
               console.log('pool', pool);
-              pool.save().then((newPool) => {
-                console.log('newPool', newPool);
-                history.push(`/pools/${newPool._id}/pendingTx`); // maybe ._id
-                // actions.setSubmitting(false);
-              }).catch((err) => {
-                console.log('err', err);
-              });
+              pool
+                .save()
+                .then(newPool => {
+                  console.log('newPool', newPool);
+                  history.push(`/pools/${newPool._id}/pendingTx`); // maybe ._id
+                  // actions.setSubmitting(false);
+                })
+                .catch(err => {
+                  console.log('err', err);
+                });
             }}
             validationSchemas={validationSchemas}
           >
-            <StepOne
-              currentUser={this.props.currentUser}/>
-            <StepTwo poolbaseFee={poolbaseFee}/>
-            <StepThree/>
-            <StepFour/>
-            <PoolReview/>
+            <StepOne currentUser={this.props.currentUser} />
+            <StepTwo poolbaseFee={poolbaseFee} />
+            <StepThree />
+            <StepFour />
+            <PoolReview />
           </MultiStepForm>
-        }
+        )}
       </div>
     );
   }
@@ -108,14 +119,13 @@ CreatePool.propTypes = {
 
 export default CreatePool;
 
-
 const initialPoolData = {
   ownerAddress: '',
   maxAllocation: '',
   fee: '',
   feePayoutCurrency: '',
   lockPayoutAddress: false,
-  payoutAddress: '' ,
+  payoutAddress: '',
   payoutTxData: '',
   admins: [],
   hasWhitelist: false,
@@ -132,14 +142,14 @@ const samplePoolData = {
   fee: 0.25,
   feePayoutCurrency: 'ether',
   lockPayoutAddress: true,
-  payoutAddress: '0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1' ,
+  payoutAddress: '0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
   payoutTxData: '0xAA',
   admins: [
     { address: '0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1', name: 'Hootie' },
-    {address: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1', name:'Supports'},
-    {address: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1', name:'Sooch'},
-    {address: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1', name:'Norkie'},
-    {address: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1', name:'Lovely'},
+    { address: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1', name: 'Supports' },
+    { address: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1', name: 'Sooch' },
+    { address: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1', name: 'Norkie' },
+    { address: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1', name: 'Lovely' },
   ],
   hasWhitelist: true,
   whitelist: [
@@ -153,7 +163,7 @@ const samplePoolData = {
     { address: '0x84f5bc98b064a9897116496a4e18caf3627cfd43', name: 'Storeee' },
     { address: '0x02013a01a66122b3e7b1ed80c092250a3f9fe02d', name: 'hoomplee' },
     { address: '0x38ec11e246eda8b215a0b24afd093bd7cd6c1ee1', name: 'Garchoff' },
-    { address: '0x36596eEBd695aDCd03B3e42260Aa2468885100dd', name: 'Sickldor' }
+    { address: '0x36596eEBd695aDCd03B3e42260Aa2468885100dd', name: 'Sickldor' },
   ],
   adminPayoutAddress: '0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
   name: 'IIOC',

@@ -22,12 +22,12 @@ import { ethereumAddress } from '../../../lib/validators';
  */
 
 const Header = () => {
- return (
-   <div>
-     <h1 className="font-xl">Confirm token batch</h1>
-   </div>
- )
-}
+  return (
+    <div>
+      <h1 className="font-xl">Confirm token batch</h1>
+    </div>
+  );
+};
 
 class ConfirmTokenBatch extends Component {
   constructor(props) {
@@ -35,63 +35,61 @@ class ConfirmTokenBatch extends Component {
 
     this.state = {
       isLoading: true,
-      pool: {}
+      pool: {},
     };
   }
 
   async componentDidMount() {
-    const { currentUser, match: { params: { poolId }}} = this.props
+    const { currentUser, match: { params: { poolId } } } = this.props;
     try {
       await isAuthenticated(currentUser);
 
       const pool = await PoolService.getById(poolId);
       // check status of pool & redirect if not appropriate
       if (!isPoolAdmin(pool, currentUser)) {
-       history.replace(`/pools/${pool.id}`);
-      };
+        history.replace(`/pools/${pool.id}`);
+      }
 
       this.setState({
         isLoading: false,
-        pool
+        pool,
       });
-
-    } catch(err) {
+    } catch (err) {
       console.log('err', err);
       //oops something wrong
     }
-
   }
 
   render() {
-    const { isLoading, pool: { tokenAddress }} = this.state;
+    const { isLoading, pool: { tokenAddress } } = this.state;
 
     return (
       <div>
         {isLoading && <Loader className="fixed" />}
-        { !isLoading && <MultiStepForm
-            header={<Header/>}
+        {!isLoading && (
+          <MultiStepForm
+            header={<Header />}
             initialValues={{
-              tokenAddress: tokenAddress || ''
+              tokenAddress: tokenAddress || '',
             }}
-            stepLabels={['Token address','Perform transaction']}
-            onSubmit={({ tokenAddress}, actions) => {
+            stepLabels={['Token address', 'Perform transaction']}
+            onSubmit={({ tokenAddress }, actions) => {
               PoolService.patch(this.state.pool.id, {
                 status: Pool.PENDING_TOKEN_BATCH,
-                tokenAddress
+                tokenAddress,
               }).then(() => {
                 history.push(`/pools/${this.state.pool.id}/pendingTx`);
               });
             }}
             validationSchemas={[
               Yup.object().shape({
-                tokenAddress: ethereumAddress()
-                  .required('Required')
-                })
+                tokenAddress: ethereumAddress().required('Required'),
+              }),
             ]}
           >
-            <StepOne currentUser={this.props.currentUser}/>
+            <StepOne currentUser={this.props.currentUser} />
           </MultiStepForm>
-        }
+        )}
       </div>
     );
   }

@@ -45,23 +45,22 @@ export const authenticateUser = ({ email, password }) => {
     password,
   };
 
-  return feathersClient.authenticate(authData)
+  return feathersClient
+    .authenticate(authData)
     .then(response => {
       console.log('response', response);
-      return response.accessToken
+      return response.accessToken;
     })
     .catch(err => {
       console.log('AuthenticateUser response error', err);
       return err;
     });
-
-}
+};
 
 export const authenticateAddress = address => {
-
   const authData = {
-    strategy: 'web3'
-  }
+    strategy: 'web3',
+  };
 
   return new Promise((resolve, reject) => {
     getWeb3().then(web3 => {
@@ -75,36 +74,35 @@ export const authenticateAddress = address => {
           console.log('msg', msg);
 
           console.log('web3.currentProvider.', web3.currentProvider);
-          const msgParams = [
-            { type: 'string', name: 'Message', value: msg }
-          ];
-          return web3.currentProvider.sendAsync({
+          const msgParams = [{ type: 'string', name: 'Message', value: msg }];
+          return web3.currentProvider.sendAsync(
+            {
               method: 'eth_signTypedData',
-              params: [
-                msgParams,
-                authData.address,
-              ],
+              params: [msgParams, authData.address],
               from: authData.address,
-            }, (err, { result }) => {
+            },
+            (err, { result }) => {
               console.log('err', err);
               console.log('result', result);
               authData.signature = result;
-              authData.msgParams = msgParams
+              authData.msgParams = msgParams;
 
               resolve();
-            })
+            },
+          );
         }
         return reject(response);
       });
-    })
+    });
   })
-  .then(() => feathersClient.authenticate(authData))
-  .then(response => {
-    console.log('response', response);
-    return response.accessToken
-  }).catch((err) => {
-    console.log('err', err);
-  });
+    .then(() => feathersClient.authenticate(authData))
+    .then(response => {
+      console.log('response', response);
+      return response.accessToken;
+    })
+    .catch(err => {
+      console.log('err', err);
+    });
 };
 
 export const getTruncatedText = (text, maxLength) => {
@@ -182,7 +180,7 @@ export const addToArray = (array, element) => {
   if (!array.includes(element)) {
     return [...array, element];
   } else {
-    return array
+    return array;
   }
 };
 
@@ -200,28 +198,25 @@ export const convertEthHelper = amount => {
   return eth;
 };
 
-export const copyToClipboard = (node) => {
-    if (!navigator.clipboard) {
-      node.select();
-      document.execCommand('copy');
-      return;
-    }
-    navigator.clipboard.writeText(node.value);
-}
+export const copyToClipboard = node => {
+  if (!navigator.clipboard) {
+    node.select();
+    document.execCommand('copy');
+    return;
+  }
+  navigator.clipboard.writeText(node.value);
+};
 
 export const isPoolCreator = (pool, user) => {
   console.log('pool', pool);
   console.log('user', user);
   return pool.owner._id === user.id;
-}
+};
 
 export const isPoolAdmin = (pool, user) => {
   const adminAddresses = pool.admins.map(({ address }) => address);
   const userAddresses = user.wallets.map(({ address }) => address);
-  const intersectingAddresses = intersection(adminAddresses,userAddresses);
+  const intersectingAddresses = intersection(adminAddresses, userAddresses);
 
-  return (
-    pool.owner._id === user.id ||
-    !!intersectingAddresses.length
-  );
-}
+  return pool.owner._id === user.id || !!intersectingAddresses.length;
+};

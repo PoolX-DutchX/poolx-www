@@ -4,28 +4,26 @@ class GasPricePanel extends Component {
   constructor() {
     super();
     this.state = {
-      gasPrice: {}
-
+      gasPrice: {},
     };
   }
 
   componentDidMount() {
-    fetch("https://ethgasstation.info/json/ethgasAPI.json")
-      .then((resp) => resp.json()) // Transform the data into json
-      .then(({safeLow, average: standard, fast}) => {
+    fetch('https://ethgasstation.info/json/ethgasAPI.json')
+      .then(resp => resp.json()) // Transform the data into json
+      .then(({ safeLow, average: standard, fast }) => {
         this.setState({
           gasPrice: {
-            safeLow: safeLow/10,
-            standard: standard/10,
-            fast: fast/10
-          }
+            safeLow: safeLow / 10,
+            standard: standard / 10,
+            fast: fast / 10,
+          },
         });
       });
   }
 
   render() {
-
-    const { gasPrice: { safeLow, standard, fast }} = this.state;
+    const { gasPrice: { safeLow, standard, fast } } = this.state;
 
     return (
       <div className="gas-price-panel">
@@ -42,7 +40,7 @@ class GasPricePanel extends Component {
           <div>{fast} gwei</div>
         </span>
       </div>
-    )
+    );
   }
 }
 
