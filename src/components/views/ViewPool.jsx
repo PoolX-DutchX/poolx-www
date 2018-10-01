@@ -148,12 +148,12 @@ class ViewPool extends Component {
                           My Contribution
                         </WithTooltip>
                       </h6>
-                      <h2>{this.state.myContributionTotal} Eth</h2>
+                      <h2>{this.state.myContributionTotal.toFixed(2)} Eth</h2>
                     </div>
                     <div className="col-md-8 ">
                       <h6>My Transactions</h6>
                       {this.state.myContributions.map((contribution, index) => (
-                        <div key={index}>Deposit {contribution.amount} Eth</div>
+                        <div key={index}>Deposit {contribution.amount.toFixed(2)} Eth</div>
                       ))}
                     </div>
                   </div>
