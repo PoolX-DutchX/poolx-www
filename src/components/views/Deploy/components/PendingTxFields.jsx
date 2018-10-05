@@ -13,7 +13,7 @@ const styles = {
   },
   input: {
     'text-align': 'right',
-  }
+  },
 };
 
 class PendingTxFields extends React.Component {
@@ -24,9 +24,9 @@ class PendingTxFields extends React.Component {
   }
 
   handleClick(index) {
-    return  () => {
-        copyToClipboard(this._nodes[index]);
-    }
+    return () => {
+      copyToClipboard(this._nodes[index]);
+    };
   }
   render() {
     const { classes, pendingTx } = this.props;
@@ -34,29 +34,34 @@ class PendingTxFields extends React.Component {
     return (
       <div id="deploy-data-fields">
         <div>
-          {
-            getFieldsArray(pendingTx).map(({label, value}, index) => {
-              return (<div key={index} className="data-field">
-                <span className='label'>{label}</span>
+          {getFieldsArray(pendingTx).map(({ label, value }, index) => {
+            return (
+              <div key={index} className="data-field">
+                <span className="label">{label}</span>
                 <Input
-                className="input"
-                classes={{
-                  root: classes.root,
-                  input: classes.input
-                }}
-                value={value}
-                inputRef={node => this._nodes[index] = node}
-                inputProps={{
-                  spellCheck: "false"
-                }}
-                fullWidth
+                  className="input"
+                  classes={{
+                    root: classes.root,
+                    input: classes.input,
+                  }}
+                  value={value}
+                  inputRef={node => (this._nodes[index] = node)}
+                  inputProps={{
+                    spellCheck: 'false',
+                  }}
+                  fullWidth
                 />
-                <Button variant="contained" size="small" color="primary" onClick={this.handleClick(index)}>
+                <Button
+                  variant="contained"
+                  size="small"
+                  color="primary"
+                  onClick={this.handleClick(index)}
+                >
                   Copy
                 </Button>
-              </div>)
-            })
-          }
+              </div>
+            );
+          })}
         </div>
       </div>
     );
@@ -64,29 +69,28 @@ class PendingTxFields extends React.Component {
 }
 
 PendingTxFields.propTypes = {
-  pendingTx: PropTypes.object.isRequired
+  pendingTx: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(PendingTxFields);
-
 
 const getFieldsArray = ({ toAddress, amount, gasLimit, data }) => {
   return [
     {
       value: toAddress,
-      label: 'To Address'
+      label: 'To Address',
     },
     {
       value: amount,
-      label: 'Amount to Send'
+      label: 'Amount to Send',
     },
     {
       value: gasLimit,
-      label: 'Gas Limit'
+      label: 'Gas Limit',
     },
     {
       value: data,
-      label: 'Transaction Data'
+      label: 'Transaction Data',
     },
   ];
-}
+};

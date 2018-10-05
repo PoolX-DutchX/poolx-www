@@ -8,24 +8,22 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-
 const styles = theme => ({
   root: {
     width: '100%',
     marginTop: theme.spacing.unit * 3,
     overflowX: 'auto',
-    display: 'block'
-  }
+    display: 'block',
+  },
 });
 
-
-const WhitelistTable = ({whitelist, classes}) => {
+const WhitelistTable = ({ whitelist, classes }) => {
   return (
     <Paper className={classes.root}>
-      <Table fixedheader="false" style={{ width: "auto", tableLayout: "auto" }}>
+      <Table fixedheader="false" style={{ width: 'auto', tableLayout: 'auto' }}>
         <TableHead>
           <TableRow>
-          <TableCell>Whitelisted Address</TableCell>
+            <TableCell>Whitelisted Address</TableCell>
             <TableCell>Name</TableCell>
           </TableRow>
         </TableHead>
@@ -34,16 +32,14 @@ const WhitelistTable = ({whitelist, classes}) => {
             return (
               <TableRow key={index}>
                 <TableCell padding="dense">{n.address}</TableCell>
-                <TableCell padding="dense">
-                {n.name}
-                </TableCell>
+                <TableCell padding="dense">{n.name}</TableCell>
               </TableRow>
             );
           })}
         </TableBody>
       </Table>
     </Paper>
-  )
-}
+  );
+};
 
-export default  withStyles(styles)(WhitelistTable);
+export default withStyles(styles)(WhitelistTable);

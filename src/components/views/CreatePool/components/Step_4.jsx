@@ -4,8 +4,8 @@ import TextField from '@material-ui/core/TextField';
 
 class StepFour extends Component {
   render() {
-    const {formik: { values, handleChange, handleBlur, touched, errors }} = this.props; // formik props passed in from Wizard
-    return(
+    const { formik: { values, handleChange, handleBlur, touched, errors } } = this.props; // formik props passed in from Wizard
+    return (
       <div>
         <div className="row">
           <div className="col">
@@ -48,7 +48,7 @@ class StepFour extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 

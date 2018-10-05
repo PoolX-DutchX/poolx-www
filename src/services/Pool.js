@@ -8,14 +8,13 @@ class PoolService {
    * @param id   ID of the Pool to be retrieved
    */
   static getById(poolId) {
-
-    return  feathersClient
-        .service('pools')
-        .get(poolId)
-        .then(pool => {
-          console.log('pool response', pool);
-          return new Pool(pool);
-        });
+    return feathersClient
+      .service('pools')
+      .get(poolId)
+      .then(pool => {
+        console.log('pool response', pool);
+        return new Pool(pool);
+      });
   }
 
   /**
@@ -24,15 +23,11 @@ class PoolService {
    * @param id   ID of the Pool to be retrieved
    */
   static subscribeById(poolId, onSuccess, onError) {
-
-    return  feathersClient
-        .service('pools')
-        .watch({ listStrategy: 'always' })
-        .get(poolId)
-        .subscribe(
-          pool => onSuccess(new Pool(pool)),
-          onError,
-        );
+    return feathersClient
+      .service('pools')
+      .watch({ listStrategy: 'always' })
+      .get(poolId)
+      .subscribe(pool => onSuccess(new Pool(pool)), onError);
   }
 
   /**
@@ -46,15 +41,17 @@ class PoolService {
         .service('pools')
         .find({
           query: {
-            owner: ownerId
-          }
+            owner: ownerId,
+          },
         })
         .then(({ data: pools }) => {
-          resolve( pools.map(pool => {
-            console.log('pool', pool);
-            console.log('new Pool(pool)', new Pool(pool));
-            return new Pool(pool)
-          }));
+          resolve(
+            pools.map(pool => {
+              console.log('pool', pool);
+              console.log('new Pool(pool)', new Pool(pool));
+              return new Pool(pool);
+            }),
+          );
         })
         .catch(reject);
     });
@@ -66,9 +63,7 @@ class PoolService {
    * @param id   ID of the Pool to be patched
    */
   static patch(poolId, data) {
-    return feathersClient
-      .service('pools')
-      .patch(poolId, data);
+    return feathersClient.service('pools').patch(poolId, data);
   }
 
   /**
@@ -125,13 +120,11 @@ class PoolService {
    *
    */
   static getWhitelistedAddressesByUser(poolId, userId) {
-    return feathersClient
-      .service('pools')
-      .get(poolId, {
-        query: {
-          userWhitelisted: userId,
-        },
-      });
+    return feathersClient.service('pools').get(poolId, {
+      query: {
+        userWhitelisted: userId,
+      },
+    });
   }
 
   /**
@@ -146,13 +139,9 @@ class PoolService {
   static save(pool) {
     console.log('pool.toFeathers()', pool.toFeathers());
     if (pool.id) {
-      return feathersClient
-        .service('pools')
-        .patch(pool.id, pool.toFeathers())
+      return feathersClient.service('pools').patch(pool.id, pool.toFeathers());
     } else {
-      return feathersClient
-        .service('pools')
-        .create(pool.toFeathers())
+      return feathersClient.service('pools').create(pool.toFeathers());
     }
   }
 
@@ -165,9 +154,7 @@ class PoolService {
    * @param afterCreate Callback to be triggered after the Campaign is cancelled in feathers
    * @param afterMined  Callback to be triggered after the transaction is mined
    */
-  static cancel(campaign, from, afterCreate = () => {}, afterMined = () => {}) {
-
-  }
+  static cancel(campaign, from, afterCreate = () => {}, afterMined = () => {}) {}
 }
 
 export default PoolService;

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 
-const PrivateRoute = ({ currentUser, component, ...rest }) => (
+const CurrentUserProtectedRoute = ({ currentUser, component, ...rest }) => (
   <Route
     {...rest}
     render={props => {
-      return currentUser ? (
+      return !currentUser ? (
         component(props)
       ) : (
         <Redirect
@@ -19,4 +19,4 @@ const PrivateRoute = ({ currentUser, component, ...rest }) => (
   />
 );
 
-export default PrivateRoute;
+export default CurrentUserProtectedRoute;

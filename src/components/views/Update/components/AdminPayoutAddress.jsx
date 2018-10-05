@@ -3,11 +3,10 @@ import React, { Component } from 'react';
 import TextField from '@material-ui/core/TextField';
 
 class AdminPayoutAddress extends Component {
-
   render() {
-    const {formik} = this.props; // *** formik props passed in from MultistepForm parent component
-    const {values, handleChange, handleBlur, touched, errors} = formik;
-    return(
+    const { formik } = this.props; // *** formik props passed in from MultistepForm parent component
+    const { values, handleChange, handleBlur, touched, errors } = formik;
+    return (
       <div>
         <div className="row">
           <div className="col">
@@ -23,14 +22,14 @@ class AdminPayoutAddress extends Component {
               placeholder="Admin fee payout address"
               autoComplete="Off"
               spellCheck="false"
-              type= "text"
+              type="text"
               margin="normal"
               fullWidth
             />
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 

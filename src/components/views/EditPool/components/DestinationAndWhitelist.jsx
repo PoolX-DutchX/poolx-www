@@ -10,56 +10,59 @@ import CSVReader from '../../../CSVReader';
 import WhitelistTable from '../../../WhitelistTable';
 import PoolModel from '../../../../models/Pool';
 
-
 class StepThree extends Component {
   constructor(props) {
-    super(props)
-    const{ formik: { values: { hasWhitelist, whitelist}}} = this.props;
+    super(props);
+    const { formik: { values: { hasWhitelist, whitelist } } } = this.props;
 
     this.state = {
       whitelist: hasWhitelist ? whitelist : [],
-      invalidItemNumbers: []
-    }
+      invalidItemNumbers: [],
+    };
   }
 
-  handleHasWhitelistChange = (handleChange) => (...eventProps) => {
+  handleHasWhitelistChange = handleChange => (...eventProps) => {
     this.setState({
-      whitelist: []
+      whitelist: [],
     });
     handleChange(...eventProps);
-
-  }
+  };
 
   render() {
-    const {formik, pool} = this.props; // *** formik props passed in from MultistepForm parent component
-    const {values, handleChange, handleBlur, touched, errors, setFieldValue} = formik;
-    const poolClosed = pool.status !== PoolModel.ACTIVE && pool.status !== PoolModel.PENDING_CLOSE_POOL;
-    return(
+    const { formik, pool } = this.props; // *** formik props passed in from MultistepForm parent component
+    const { values, handleChange, handleBlur, touched, errors, setFieldValue } = formik;
+    const poolClosed =
+      pool.status !== PoolModel.ACTIVE && pool.status !== PoolModel.PENDING_CLOSE_POOL;
+    return (
       <div>
         <div className="row">
-          {
-            values.lockPayoutAddress &&
-            <div className="col-md-4" style={{paddingTop: "27px"}}>
-              <Tooltip title="Destination locked at pool deploy cannot be undone"  placement="bottom-start">
+          {values.lockPayoutAddress && (
+            <div className="col-md-4" style={{ paddingTop: '27px' }}>
+              <Tooltip
+                title="Destination locked at pool deploy cannot be undone"
+                placement="bottom-start"
+              >
                 <div>
                   <FormLabel>Lock Destination</FormLabel>
                   <Switch
-                  id="lockPayoutAddress"
-                  name="lockPayoutAddress"
-                  checked={values.lockPayoutAddress}
-                  onChange={handleChange}
-                  value="lockPayoutAddress"
-                  color="primary"
-                  disabled="true"
+                    id="lockPayoutAddress"
+                    name="lockPayoutAddress"
+                    checked={values.lockPayoutAddress}
+                    onChange={handleChange}
+                    value="lockPayoutAddress"
+                    color="primary"
+                    disabled="true"
                   />
                 </div>
               </Tooltip>
             </div>
-          }
-          <div className={values.lockPayoutAddress ? "col-md-8" : "col-md-12" }>
-            <Tooltip title="Destination locked at pool deploy cannot be undone"
+          )}
+          <div className={values.lockPayoutAddress ? 'col-md-8' : 'col-md-12'}>
+            <Tooltip
+              title="Destination locked at pool deploy cannot be undone"
               placement="bottom-start"
-              disableHoverListener={!values.lockPayoutAddress || poolClosed}>
+              disableHoverListener={!values.lockPayoutAddress || poolClosed}
+            >
               <TextField
                 id="payoutAddress"
                 name="payoutAddress"
@@ -72,7 +75,7 @@ class StepThree extends Component {
                 helperText={touched.payoutAddress && errors.payoutAddress}
                 autoComplete="Off"
                 spellCheck="false"
-                type= "text"
+                type="text"
                 margin="normal"
                 disabled={values.lockPayoutAddress || poolClosed}
                 fullWidth
@@ -91,14 +94,14 @@ class StepThree extends Component {
               helperText={touched.payoutTxData && errors.payoutTxData}
               autoComplete="Off"
               spellCheck="false"
-              type= "text"
+              type="text"
               margin="normal"
               disable={poolClosed}
               fullWidth
             />
           </div>
         </div>
-        <div className="row" style={{marginTop: "27px"}}>
+        <div className="row" style={{ marginTop: '27px' }}>
           <div className="col-md-4">
             <FormLabel>Whitelist</FormLabel>
             <Switch
@@ -110,12 +113,13 @@ class StepThree extends Component {
               color="primary"
             />
           </div>
-          { !!values.hasWhitelist &&
-            <div className="col-md-8"  style={{paddingTop: "9px"}}>
+          {!!values.hasWhitelist && (
+            <div className="col-md-8" style={{ paddingTop: '9px' }}>
               <CSVReader
                 label="Whitelist CSV (address, name)"
                 onFileLoaded={(data, meta) => {
-                  const csvIncludesHeader = meta.fields.includes('address') && meta.fields.includes('name');
+                  const csvIncludesHeader =
+                    meta.fields.includes('address') && meta.fields.includes('name');
                   const invalidItemNumbers = [];
                   const validItems = data.filter((item, index) => {
                     const itemNumber = csvIncludesHeader ? index + 2 : index + 1;
@@ -137,34 +141,35 @@ class StepThree extends Component {
 
                   this.setState({
                     whitelist: validItems,
-                    invalidItemNumbers: invalidItemNumbers
+                    invalidItemNumbers: invalidItemNumbers,
                   });
                 }}
-                onError={(error) => {
+                onError={error => {
                   // oops something went wrong, check your file is properly formatted
                   console.log('error', error);
                 }}
                 inputId="some-input-id"
               />
-              { !!this.state.invalidItemNumbers.length &&
-                <div className="alert alert-warning alert-dismissible fade show" role="alert" style={{marginTop: "1rem"}}>
+              {!!this.state.invalidItemNumbers.length && (
+                <div
+                  className="alert alert-warning alert-dismissible fade show"
+                  role="alert"
+                  style={{ marginTop: '1rem' }}
+                >
                   <button type="button" className="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
-                  {
-                    `The following CSV rows contained invalid ethereum addresses: ${this.state.invalidItemNumbers.join(", ")}.`
-                  }
+                  {`The following CSV rows contained invalid ethereum addresses: ${this.state.invalidItemNumbers.join(
+                    ', ',
+                  )}.`}
                 </div>
-              }
-              {
-                !!this.state.whitelist.length &&
-                  <WhitelistTable whitelist={this.state.whitelist}/>
-              }
+              )}
+              {!!this.state.whitelist.length && <WhitelistTable whitelist={this.state.whitelist} />}
             </div>
-          }
+          )}
         </div>
       </div>
-    )
+    );
   }
 }
 

@@ -37,16 +37,17 @@ class ChooseWalletDialog extends React.Component {
         <DialogTitle id="simple-dialog-title">Choose a wallet</DialogTitle>
         <div>
           <List>
-            {!!wallets.length && wallets.map(({address, name}) => (
-              <ListItem button onClick={() => this.handleListItemClick(address)} key={address}>
-                <ListItemAvatar>
-                  <Avatar className={classes.avatar}>
-                    <WalletIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary={address} secondary={name} />
-              </ListItem>
-            ))}
+            {!!wallets.length &&
+              wallets.map(({ address, name }) => (
+                <ListItem button onClick={() => this.handleListItemClick(address)} key={address}>
+                  <ListItemAvatar>
+                    <Avatar className={classes.avatar}>
+                      <WalletIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary={address} secondary={name} />
+                </ListItem>
+              ))}
             <ListItem button onClick={() => this.handleListItemClick('addAccount')}>
               <ListItemAvatar>
                 <Avatar>

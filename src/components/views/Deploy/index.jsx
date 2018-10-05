@@ -16,7 +16,7 @@ import getWeb3 from '../../../lib/blockchain/getWeb3';
 import { history } from '../../../lib/helpers';
 
 import config from '../../../configuration';
-import {getEtherscanTxLink} from '../../../constants';
+import { getEtherscanTxLink } from '../../../constants';
 import { getNetwork, isMetamaskInstalled } from '../../../lib/blockchain/utils';
 
 class Deploy extends React.Component {
@@ -24,7 +24,7 @@ class Deploy extends React.Component {
     super();
     this.state = {
       isLoading: true,
-      pendingTx: {}
+      pendingTx: {},
     };
     this.handleWalletProviderClick = this.handleWalletProviderClick.bind(this);
     this.transactWithMetamask = this.transactWithMetamask.bind(this);
@@ -33,7 +33,7 @@ class Deploy extends React.Component {
   }
   async componentDidMount() {
     window.scrollTo(0, 0);
-    const { match: { params: { poolId, contributionId }}} = this.props;
+    const { match: { params: { poolId, contributionId } } } = this.props;
 
     const resourceId = poolId || contributionId;
 
@@ -64,8 +64,7 @@ class Deploy extends React.Component {
         pendingTx,
         isLoading: false,
       });
-
-    } catch(err) {
+    } catch (err) {
       // oops something went wrong, try again later
       console.log('err', err);
     }
@@ -79,20 +78,16 @@ class Deploy extends React.Component {
 
     const metamaskInstalled = isMetamaskInstalled();
     const metamaskUnlocked = !!accounts[0];
-    const isCorrectNetwork = (config.networkName === 'ganache') ? true : (currentNetwork.id === config.networkId);
+    const isCorrectNetwork =
+      config.networkName === 'ganache' ? true : currentNetwork.id === config.networkId;
     const correctNetwork = await getNetwork(config.networkId);
-    const isCorrectWallet = (accounts[0] && accounts[0].toLowerCase() === ownerAddress.toLowerCase());
+    const isCorrectWallet = accounts[0] && accounts[0].toLowerCase() === ownerAddress.toLowerCase();
 
-    if (
-      !metamaskInstalled ||
-      !metamaskUnlocked ||
-      !isCorrectNetwork ||
-      !isCorrectWallet
-    ) {
+    if (!metamaskInstalled || !metamaskUnlocked || !isCorrectNetwork || !isCorrectWallet) {
       this.metamaskModalRef.current.handleOpen({
-        metamask: {installed: metamaskInstalled, unlocked: metamaskUnlocked},
-        network:{selected: isCorrectNetwork, value: correctNetwork.name},
-        wallet: {selected: isCorrectWallet, value: ownerAddress},
+        metamask: { installed: metamaskInstalled, unlocked: metamaskUnlocked },
+        network: { selected: isCorrectNetwork, value: correctNetwork.name },
+        wallet: { selected: isCorrectWallet, value: ownerAddress },
       });
       return;
     }
@@ -100,72 +95,83 @@ class Deploy extends React.Component {
     this.pendingTxFieldsModalRef.current.handleOpen();
 
     const { toAddress, amount, gasLimit, data } = this.state.pendingTx;
-    web3.eth.sendTransaction(
-      {
+    web3.eth
+      .sendTransaction({
         from: accounts[0],
         to: toAddress,
         gas: gasLimit,
         value: amount,
-        data
-      }
-    )
-    .on('transactionHash', (txHash) => {
-      React.toast.success(
-        <p>
-          Your MetaMask transaction submitted! <br />
-          <a href={getEtherscanTxLink(txHash)} target="_blank" rel="noopener noreferrer">View on etherscan</a>
-        </p>,
-      );
-      history.push(`/pools/${this.poolId}`);
-    })
-    .on('confirmation', (confirmationNumber, receipt ) => {
-      if (confirmationNumber === 5) {
+        data,
+      })
+      .on('transactionHash', txHash => {
         React.toast.success(
           <p>
-            Your transaction has been mined! <br />
-            <a href={getEtherscanTxLink(receipt.transactionHash)} target="_blank" rel="noopener noreferrer">View on etherscan</a>
+            Your MetaMask transaction submitted! <br />
+            <a href={getEtherscanTxLink(txHash)} target="_blank" rel="noopener noreferrer">
+              View on etherscan
+            </a>
           </p>,
         );
-      }
-    })
-    .on('error', (err, receipt) => {
-      React.toast.error(
-        <p>
-          Oops something went wrong! <br />
-          {
-            receipt &&
-            <span>
-              It Looks like you've ran out of gas,
-              <a href={getEtherscanTxLink(receipt.transactionHash)} target="_blank" rel="noopener noreferrer">view on etherscan</a>
-              and try again.
-            </span>
-          }
-        </p>,
-      );
-    })
-    .catch(err => {
-      console.log('err', err);
-    });
-
+        history.push(`/pools/${this.poolId}`);
+      })
+      .on('confirmation', (confirmationNumber, receipt) => {
+        if (confirmationNumber === 5) {
+          React.toast.success(
+            <p>
+              Your transaction has been mined! <br />
+              <a
+                href={getEtherscanTxLink(receipt.transactionHash)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View on etherscan
+              </a>
+            </p>,
+          );
+        }
+      })
+      .on('error', (err, receipt) => {
+        React.toast.error(
+          <p>
+            Oops something went wrong! <br />
+            {receipt && (
+              <span>
+                It Looks like you've ran out of gas,
+                <a
+                  href={getEtherscanTxLink(receipt.transactionHash)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  view on etherscan
+                </a>
+                and try again.
+              </span>
+            )}
+          </p>,
+        );
+      })
+      .catch(err => {
+        console.log('err', err);
+      });
   }
   handleWalletProviderClick(walletProvider) {
     return () => {
-        switch (walletProvider) {
-          case 'metamask':
-            this.transactWithMetamask();
-            break;
-          case 'myCrypto':
-            this.pendingTxFieldsModalRef.current.handleOpen();
-            window.open(this.myCryptoUrl, '_blank');
-            break;
-          case 'myEtherWallet':
-            this.pendingTxFieldsModalRef.current.handleOpen();
-            window.open(this.myEtherWalletUrl, '_blank');
-            break;
-          default:
-            break;
-        }
-    }
+      switch (walletProvider) {
+        case 'metamask':
+          this.transactWithMetamask();
+          break;
+        case 'myCrypto':
+          this.pendingTxFieldsModalRef.current.handleOpen();
+          window.open(this.myCryptoUrl, '_blank');
+          break;
+        case 'myEtherWallet':
+          this.pendingTxFieldsModalRef.current.handleOpen();
+          window.open(this.myEtherWalletUrl, '_blank');
+          break;
+        default:
+          break;
+      }
+    };
   }
 
   render() {
@@ -175,53 +181,52 @@ class Deploy extends React.Component {
       <React.Fragment>
         {isLoading && <Loader className="fixed" />}
         <MetamaskInfoModal ref={this.metamaskModalRef} />
-        <PendingTxFieldsModal ref={this.pendingTxFieldsModalRef} pendingTx={pendingTx} wallet={ownerAddress} poolId={this.poolId}/>
-        { !isLoading &&
+        <PendingTxFieldsModal
+          ref={this.pendingTxFieldsModalRef}
+          pendingTx={pendingTx}
+          wallet={ownerAddress}
+          poolId={this.poolId}
+        />
+        {!isLoading && (
           <div className="container deploy-page">
-            <h1>
-              Congrats, you're almost there!
-            </h1>
-            <p className="sub-heading">
-              Perform your 'Claim token' transaction on the 'Nexo Pool'
-            </p>
+            <h1>Congrats, you're almost there!</h1>
+            <p className="sub-heading">Perform your 'Claim token' transaction on the 'Nexo Pool'</p>
             <div className="row">
               <h4 className="col-md-4">
-                <CircleStep step={1}/>
+                <CircleStep step={1} />
                 Your chosen wallet:
               </h4>
               <span className="col-md-8 alert alert-info required-wallet-alert" role="alert">
                 {ownerAddress}
               </span>
             </div>
-            <hr/>
+            <hr />
             <div className="row">
               <h4 className="col-md-4">
-                <CircleStep step={2}/>
+                <CircleStep step={2} />
                 Suggested gas prices:
               </h4>
               <div className="col-md-8">
-                <GasPricePanel/>
+                <GasPricePanel />
               </div>
             </div>
-            <hr/>
+            <hr />
             <div className="row">
               <h4 className="col-md-4">
-                <CircleStep step={3}/>
+                <CircleStep step={3} />
                 Transact via provider:
               </h4>
               <div className="col-md-8">
-                <WalletProviderPanel selectProvider={this.handleWalletProviderClick}/>
-                <hr/>
-                <h5 className="manual-transaction-header">
-                  Or, transact manually...
-                </h5>
-                <PendingTxFields  pendingTx={pendingTx}/>
+                <WalletProviderPanel selectProvider={this.handleWalletProviderClick} />
+                <hr />
+                <h5 className="manual-transaction-header">Or, transact manually...</h5>
+                <PendingTxFields pendingTx={pendingTx} />
               </div>
             </div>
           </div>
-        }
+        )}
       </React.Fragment>
-    )
+    );
   }
 }
 

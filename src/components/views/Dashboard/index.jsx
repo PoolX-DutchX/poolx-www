@@ -33,21 +33,27 @@ class Dashboard extends Component {
       pools: [],
       infoListItems: [
         {
-          icon: <WalletIcon/>,
+          icon: <WalletIcon />,
           text: 'Currently invested 6 Eth',
-          action: () => { console.log('actioned')}
+          action: () => {
+            console.log('actioned');
+          },
         },
         {
-          icon: <WalletIcon/>,
+          icon: <WalletIcon />,
           text: 'Claim your token from Nexo',
-          action: () => { console.log('actioned')}
+          action: () => {
+            console.log('actioned');
+          },
         },
         {
-          icon: <WalletIcon/>,
+          icon: <WalletIcon />,
           text: 'Knowledgebase Contact Support',
-          action: () => { console.log('actioned')}
+          action: () => {
+            console.log('actioned');
+          },
         },
-      ]
+      ],
     };
 
     this.handleModeChange = this.handleModeChange.bind(this);
@@ -71,20 +77,20 @@ class Dashboard extends Component {
             contributions,
             pools,
             isLoading: false,
-          })
+          });
         },
         err => {
           console.log('err', err);
-        }
+        },
       );
-    } catch(err) {
+    } catch (err) {
       console.log('err', err);
       this.setState({ isLoading: false });
     }
   }
 
   componentWillUnMount() {
-    if (this.contributionObserver) this.contributionObserver.unsubscribe()
+    if (this.contributionObserver) this.contributionObserver.unsubscribe();
   }
 
   render() {
@@ -105,20 +111,34 @@ class Dashboard extends Component {
                       textColor="primary"
                       centered
                     >
-                      <Tab label="Contributor" value={CONTRIBUTOR_MODE}/>
-                      <Tab label="Creator" value={CREATOR_MODE}/>
+                      <Tab label="Contributor" value={CONTRIBUTOR_MODE} />
+                      <Tab label="Creator" value={CREATOR_MODE} />
                     </Tabs>
                   </div>
                   <div className="col-md-2 align-self-center">
-                    {
-                      this.state.mode === CREATOR_MODE ?
-                        <Button fullWidth type="button" size="small" variant="contained" color="primary" onClick={() => history.push('/pools/create')}>
-                          Create Pool
-                        </Button> :
-                        <Button fullWidth type="button" size="small" variant="contained" color="primary" onClick={() => history.push('/pools/create')}>
-                          How to contribute
-                        </Button>
-                    }
+                    {this.state.mode === CREATOR_MODE ? (
+                      <Button
+                        fullWidth
+                        type="button"
+                        size="small"
+                        variant="contained"
+                        color="primary"
+                        onClick={() => history.push('/pools/create')}
+                      >
+                        Create Pool
+                      </Button>
+                    ) : (
+                      <Button
+                        fullWidth
+                        type="button"
+                        size="small"
+                        variant="contained"
+                        color="primary"
+                        onClick={() => history.push('/pools/create')}
+                      >
+                        How to contribute
+                      </Button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -127,19 +147,22 @@ class Dashboard extends Component {
               <div className="row">
                 <div className="col-md-4">
                   <Paper>
-                    <InfoList items={this.state.infoListItems}/>
+                    <InfoList items={this.state.infoListItems} />
                   </Paper>
                   <Paper className="mt-4">
-                    <WalletList wallets={this.props.currentUser.wallets}/>
+                    <WalletList wallets={this.props.currentUser.wallets} />
                   </Paper>
                 </div>
                 <div className="col-md-8">
                   <Paper>
-                  {
-                    this.state.mode === CREATOR_MODE ?
-                      <PoolList pools={this.state.pools} currentUser={this.props.currentUser}/> :
-                      <ContributionList contributions={this.state.contributions} currentUser={this.props.currentUser}/>
-                  }
+                    {this.state.mode === CREATOR_MODE ? (
+                      <PoolList pools={this.state.pools} currentUser={this.props.currentUser} />
+                    ) : (
+                      <ContributionList
+                        contributions={this.state.contributions}
+                        currentUser={this.props.currentUser}
+                      />
+                    )}
                   </Paper>
                 </div>
               </div>
@@ -149,11 +172,10 @@ class Dashboard extends Component {
       </div>
     );
   }
-};
-
+}
 
 Dashboard.propTypes = {
-  currentUser: PropTypes.instanceOf(User)
+  currentUser: PropTypes.instanceOf(User),
 };
 
 export default Dashboard;

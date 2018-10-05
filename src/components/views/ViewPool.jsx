@@ -38,14 +38,14 @@ class ViewPool extends Component {
       pool => {
         this.setState({
           pool,
-          isLoading: false
-        })
+          isLoading: false,
+        });
       },
       err => {
         console.log('err getting pool', err);
         ErrorPopup('Something went wrong loading pool. Please try refresh the page.', err);
         this.setState({ isLoading: false });
-      }
+      },
     );
     if (this.props.currentUser) {
       console.log('this.props.currentUser', this.props.currentUser);
@@ -54,15 +54,17 @@ class ViewPool extends Component {
         poolId,
         contributions => {
           const myContributions = contributions || [];
-          const myContributionTotal = myContributions.reduce((total, { amount }) => total + amount, 0);
-          this.setState({ myContributions, myContributionTotal});
+          const myContributionTotal = myContributions.reduce(
+            (total, { amount }) => total + amount,
+            0,
+          );
+          this.setState({ myContributions, myContributionTotal });
         },
         err => {
           console.log('err getting user contributions', err);
-        }
+        },
       );
     }
-
   }
 
   contribute() {
@@ -72,7 +74,9 @@ class ViewPool extends Component {
         title: "You're almost there...",
         content: React.swal.msg(
           <p>
-            It&#8217;s great to see that you want to contribute, however, if you first sign in or sign up, you'll get the benefit of tracking your contributions after they're made. <br />
+            It&#8217;s great to see that you want to contribute, however, if you first sign in or
+            sign up, you'll get the benefit of tracking your contributions after they're made.{' '}
+            <br />
             <br />
             You can also continue anonymously.
           </p>,
@@ -80,18 +84,17 @@ class ViewPool extends Component {
         icon: 'info',
         buttons: {
           signin: {
-            text: 'Signin'
+            text: 'Signin',
           },
           signup: {
-            text: 'Signup'
+            text: 'Signup',
           },
           continue: {
-            text: 'Continue'
-          }
-
+            text: 'Continue',
+          },
         },
       }).then(value => {
-        switch(value) {
+        switch (value) {
           case 'signin':
             history.push('/signin');
             break;
@@ -106,7 +109,7 @@ class ViewPool extends Component {
         }
       });
     } else {
-      history.push(`/pools/${this.state.pool.id}/contribute`)
+      history.push(`/pools/${this.state.pool.id}/contribute`);
     }
   }
 
@@ -115,18 +118,12 @@ class ViewPool extends Component {
   }
 
   render() {
-    const {
-      isLoading,
-      pool
-    } = this.state;
+    const { isLoading, pool } = this.state;
 
     let poolProgress = 0;
     if (!isLoading) {
-      poolProgress = (pool.netInvested / pool.maxAllocation) * 100;
+      poolProgress = pool.netInvested / pool.maxAllocation * 100;
     }
-
-
-
 
     return (
       <div id="view-pool-view" className="container">
@@ -136,50 +133,68 @@ class ViewPool extends Component {
           <div>
             <div className="row justify-content-between">
               <div className="col-md-6 ">
-                <h1><strong>{pool.name}</strong></h1>
-                <div className="pool-creator">Pool Creator Verified <img src={"/img/telegram_logo.png"} width="20" alt="Telegram logo"/> KYC</div>
-                {
-                  !!this.state.myContributions.length &&
+                <h1>
+                  <strong>{pool.name}</strong>
+                </h1>
+                <div className="pool-creator">
+                  Pool Creator Verified{' '}
+                  <img src={'/img/telegram_logo.png'} width="20" alt="Telegram logo" /> KYC
+                </div>
+                {!!this.state.myContributions.length && (
                   <div className="alert alert-success row my-contributions-panel" role="alert">
                     <div className="col-md-4 ">
-                      <h6><WithTooltip title="Sum total of all your contributions for this pool">My Contribution</WithTooltip></h6>
-                      <h2>{this.state.myContributionTotal} Eth</h2>
+                      <h6>
+                        <WithTooltip title="Sum total of all your contributions for this pool">
+                          My Contribution
+                        </WithTooltip>
+                      </h6>
+                      <h2>{this.state.myContributionTotal.toFixed(2)} Eth</h2>
                     </div>
                     <div className="col-md-8 ">
                       <h6>My Transactions</h6>
-                      {
-                        this.state.myContributions.map((contribution, index) => <div key={index}>Deposit {contribution.amount} Eth</div> )
-                      }
+                      {this.state.myContributions.map((contribution, index) => (
+                        <div key={index}>Deposit {contribution.amount.toFixed(2)} Eth</div>
+                      ))}
                     </div>
                   </div>
-                }
-                <p className="info-disclaimer">The following information is provided by the pool creator</p>
+                )}
+                <p className="info-disclaimer">
+                  The following information is provided by the pool creator
+                </p>
                 <p>{pool.description}</p>
               </div>
               <div className="col-md-5 pool-action-panel">
-                <h3><strong>{statusDisplayMap[pool.status]}</strong></h3>
+                <h3>
+                  <strong>{statusDisplayMap[pool.status]}</strong>
+                </h3>
                 <LinearProgress variant="determinate" value={poolProgress} />
                 <div className="total-invested-section">
-                  <h4 className="invested"><strong>{pool.netInvested.toFixed(2)} ETH </strong></h4>
-                  <div className="subheading">
-                    of {pool.maxAllocation} ETH maximum
-                  </div>
+                  <h4 className="invested">
+                    <strong>{pool.netInvested.toFixed(2)} ETH </strong>
+                  </h4>
+                  <div className="subheading">of {pool.maxAllocation} ETH maximum</div>
                 </div>
                 <div className="min-max-section">
                   <span>
-                    <h4><strong>{pool.minContribution} ETH </strong></h4>
+                    <h4>
+                      <strong>{pool.minContribution} ETH </strong>
+                    </h4>
                     <div className="subheading">Min. Contribution</div>
                   </span>
                   <span>
-                    <h4><strong>{pool.maxContribution} ETH </strong></h4>
+                    <h4>
+                      <strong>{pool.maxContribution} ETH </strong>
+                    </h4>
                     <div className="subheading">Max. Contribution</div>
                   </span>
                 </div>
-                <Button variant="contained"
+                <Button
+                  variant="contained"
                   color="primary"
                   fullWidth
                   onClick={this.contribute}
-                  disabled={pool.status !== PoolModel.ACTIVE}>
+                  disabled={pool.status !== PoolModel.ACTIVE}
+                >
                   Contribute to Pool
                 </Button>
                 <div className="row margin-top-bottom">

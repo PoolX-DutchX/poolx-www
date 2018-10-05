@@ -36,9 +36,9 @@ class SignUp extends Component {
         isSaving: true,
         error: undefined,
         email,
-        password
+        password,
       },
-      this.createAccount
+      this.createAccount,
     );
   }
 
@@ -48,14 +48,14 @@ class SignUp extends Component {
       .service('/users')
       .create({ email, password })
       .then(user => {
-        return authenticateUser({ email, password })
+        return authenticateUser({ email, password });
       })
       .then(token => {
         return feathersClient.passport.verifyJWT(token);
       })
       .then(tokenPayload => {
-        const {userId} = tokenPayload;
-        this.setState({isSaving: false});
+        const { userId } = tokenPayload;
+        this.setState({ isSaving: false });
         this.props.onSignIn(userId);
         React.toast.success(
           <p>
@@ -68,12 +68,11 @@ class SignUp extends Component {
         console.log('createAccount err', err);
         this.setState({
           isSaving: false,
-          error: 'There has been a problem creating your account. Please refresh the page and try again.'
+          error:
+            'There has been a problem creating your account. Please refresh the page and try again.',
         });
       });
   }
-
-
 
   toggleFormValid(state) {
     this.setState({ formIsValid: state });
@@ -91,9 +90,7 @@ class SignUp extends Component {
                 <center>
                   <div>
                     <h1>SignUp</h1>
-                    <p>
-                      Please provide a username and password to create your account
-                    </p>
+                    <p>Please provide a username and password to create your account</p>
 
                     {error && <div className="alert alert-danger">{error}</div>}
 

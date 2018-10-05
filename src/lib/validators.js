@@ -29,70 +29,70 @@ addValidationRule('isEtherAddress', (formValues, inputValue, _value) =>
 // YUP validation tests
 function checkEthereumAddress(message) {
   return this.test({
-      message,
-      name: 'ethereumAddress',
-      exclusive: true,
-      test(value) {
-        return (value == null) || utils.isAddress(value);
-      },
-    });
-};
+    message,
+    name: 'ethereumAddress',
+    exclusive: true,
+    test(value) {
+      return value == null || utils.isAddress(value);
+    },
+  });
+}
 Yup.addMethod(Yup.string, 'ethereumAddress', checkEthereumAddress);
-export const ethereumAddress = () => Yup.string().strict(true).ethereumAddress('Invalid ethereum address');
+export const ethereumAddress = () =>
+  Yup.string()
+    .strict(true)
+    .ethereumAddress('Invalid ethereum address');
 
 function checkHexPrefix(message) {
   return this.test({
-      message,
-      name: 'hexPrefix',
-      exclusive: true,
-      test(value) {
-        console.log('hasPrefix value', value);
-        return !value || (value.slice(0, 2) === '0x');
-      },
-    });
+    message,
+    name: 'hexPrefix',
+    exclusive: true,
+    test(value) {
+      console.log('hasPrefix value', value);
+      return !value || value.slice(0, 2) === '0x';
+    },
+  });
 }
 
 function isHex(h) {
-  var a = parseInt(h,16);
-  return (a.toString(16) === h.toLowerCase())
+  var a = parseInt(h, 16);
+  return a.toString(16) === h.toLowerCase();
 }
-
 
 function checkHexValidity(message) {
   return this.test({
-      message,
-      name: 'checkHexValidity',
-      exclusive: true,
-      test(value) {
-        console.log('checkHexValidity value', value);
-        const hasPrefix = value.slice(0, 2) === '0x';
-        const hexString = hasPrefix ? value.slice(2) : value;
-        return !value || isHex(hexString);
-      },
-    });
+    message,
+    name: 'checkHexValidity',
+    exclusive: true,
+    test(value) {
+      console.log('checkHexValidity value', value);
+      const hasPrefix = value.slice(0, 2) === '0x';
+      const hexString = hasPrefix ? value.slice(2) : value;
+      return !value || isHex(hexString);
+    },
+  });
 }
 
 Yup.addMethod(Yup.string, 'hexPrefix', checkHexPrefix);
 Yup.addMethod(Yup.string, 'hexValidity', checkHexValidity);
-export const hexString = () => Yup.string()
-  .ensure()
-  .hexPrefix('Hexidecimal data must begin with 0x')
-  .hexValidity('Invalid hexidecimal data')
-
-
+export const hexString = () =>
+  Yup.string()
+    .ensure()
+    .hexPrefix('Hexidecimal data must begin with 0x')
+    .hexValidity('Invalid hexidecimal data');
 
 export function isWhitelistedAddress(pool, message) {
   return this.test({
-      message,
-      name: 'whitelisted',
-      exclusive: true,
-      test(value) {
+    message,
+    name: 'whitelisted',
+    exclusive: true,
+    test(value) {
+      // if (pool.hasWhitelist) {
+      //   return WhitelistService
+      // }
 
-        // if (pool.hasWhitelist) {
-        //   return WhitelistService
-        // }
-
-        return true;
-      },
-    });
-};
+      return true;
+    },
+  });
+}

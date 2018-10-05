@@ -6,4 +6,4 @@ export default {
   fee: Fee,
   adminPayoutAddress: AdminPayoutAddress,
   maxAllocation: MaxAllocation,
-}
+};

@@ -18,8 +18,8 @@ class EditPool extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true
-    }
+      isLoading: true,
+    };
   }
 
   async componentDidMount() {
@@ -31,32 +31,32 @@ class EditPool extends Component {
       console.log('err', err);
       this.setState({ isLoading: false });
     }
-
   }
 
-  handleSubmit = (pool) => {
+  handleSubmit = pool => {
+    delete pool.fee;
+    delete pool.adminPayoutAddress;
+    delete pool.maxAllocation;
+    delete pool.admins;
 
-    delete pool.fee
-    delete pool.adminPayoutAddress
-    delete pool.maxAllocation
-    delete pool.admins
-
-    PoolService.patch(this.state.pool.id, pool).then(() => {
-      React.toast.success(
-        <p>
-          Your pool was updated! <br />
-        </p>,
-      );
-      history.push(`/pools/${this.state.pool.id}`);
-    }).catch((err) => {
-      console.log('err saving pool', err);
-      ErrorPopup('Something went wrong saving your pool. Please try refresh the page.', err);
-    })
+    PoolService.patch(this.state.pool.id, pool)
+      .then(() => {
+        React.toast.success(
+          <p>
+            Your pool was updated! <br />
+          </p>,
+        );
+        history.push(`/pools/${this.state.pool.id}`);
+      })
+      .catch(err => {
+        console.log('err saving pool', err);
+        ErrorPopup('Something went wrong saving your pool. Please try refresh the page.', err);
+      });
     //check hasWhitelist
-  }
+  };
 
   render() {
-    const { isLoading, pool} = this.state;
+    const { isLoading, pool } = this.state;
     console.log('pool', pool);
     return (
       <div id="create-pool-view" className="container">
@@ -64,61 +64,71 @@ class EditPool extends Component {
 
         {!isLoading && (
           <div>
-          <Formik
-            initialValues={{
-              ...pool.toFeathers(),
-              hasWhitelist: !!pool.whitelist.length
-            }}
-            enableReinitialize={false}
-            validationSchema={validationSchema}
-            onSubmit={this.handleSubmit}
-            render={(formikProps) => {
-              const { handleSubmit, isSubmitting } = formikProps;
-              return (
-                <form onSubmit={handleSubmit} noValidate>
-                  <h2 className="spacer-top-50">Name & Description</h2>
-                  <NameAndDescription formik={formikProps} currentUser={this.props.currentUser}/>
-                  <h2 className="spacer-top-50">Wallet & Limits</h2>
-                  <WalletAndLimits formik={formikProps}
-                    currentUser={this.props.currentUser}
-                    disabledFields={{
-                      ownerAddress: true,
-                      maxAllocation: true
-                    }}
-                    pool={pool}
-                  />
-                  <h2 className="spacer-top-50">Fees & Admins</h2>
-                  <FeesAndAdmins formik={formikProps}
-                    currentUser={this.props.currentUser}
-                    disabledFields={{
-                      fee: true,
-                      feePayoutCurrency: true,
-                      adminPayoutAddress: true,
-                      admins: true
-                    }}
-                    pool={pool}
-                  />
-                  <h2 className="spacer-top-50">Destination & Whitelist</h2>
-                  <DestinationAndWhitelist formik={formikProps} currentUser={this.props.currentUser} pool={pool}/>
-                  <div className="d-flex justify-content-between spacer-top-50 spacer-bottom-50">
-                    <div className="ml-auto">
-                      <Button type="submit" variant="contained" size="large" color="primary" disabled={isSubmitting}>
-                        Save
-                      </Button>
+            <Formik
+              initialValues={{
+                ...pool.toFeathers(),
+                hasWhitelist: !!pool.whitelist.length,
+              }}
+              enableReinitialize={false}
+              validationSchema={validationSchema}
+              onSubmit={this.handleSubmit}
+              render={formikProps => {
+                const { handleSubmit, isSubmitting } = formikProps;
+                return (
+                  <form onSubmit={handleSubmit} noValidate>
+                    <h2 className="spacer-top-50">Name & Description</h2>
+                    <NameAndDescription formik={formikProps} currentUser={this.props.currentUser} />
+                    <h2 className="spacer-top-50">Wallet & Limits</h2>
+                    <WalletAndLimits
+                      formik={formikProps}
+                      currentUser={this.props.currentUser}
+                      disabledFields={{
+                        ownerAddress: true,
+                        maxAllocation: true,
+                      }}
+                      pool={pool}
+                    />
+                    <h2 className="spacer-top-50">Fees & Admins</h2>
+                    <FeesAndAdmins
+                      formik={formikProps}
+                      currentUser={this.props.currentUser}
+                      disabledFields={{
+                        fee: true,
+                        feePayoutCurrency: true,
+                        adminPayoutAddress: true,
+                        admins: true,
+                      }}
+                      pool={pool}
+                    />
+                    <h2 className="spacer-top-50">Destination & Whitelist</h2>
+                    <DestinationAndWhitelist
+                      formik={formikProps}
+                      currentUser={this.props.currentUser}
+                      pool={pool}
+                    />
+                    <div className="d-flex justify-content-between spacer-top-50 spacer-bottom-50">
+                      <div className="ml-auto">
+                        <Button
+                          type="submit"
+                          variant="contained"
+                          size="large"
+                          color="primary"
+                          disabled={isSubmitting}
+                        >
+                          Save
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                </form>
-              )}
-            } />
-
+                  </form>
+                );
+              }}
+            />
           </div>
         )}
       </div>
-    )
-
+    );
   }
 }
-
 
 EditPool.propTypes = {
   history: PropTypes.shape({

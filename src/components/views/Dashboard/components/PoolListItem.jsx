@@ -26,12 +26,16 @@ class PoolListItem extends React.Component {
     const {
       displayText: statusDisplayText,
       actionText: statusActionText,
-      action: statusNextAction
-    }  = poolStatusMap[pool.status];
+      action: statusNextAction,
+    } = poolStatusMap[pool.status];
 
     return (
       <div className="pool-list-item">
-        { isCreator ? <div className="role-badge creator">Creator</div> : isAdmin && <div className="role-badge admin">Admin</div> }
+        {isCreator ? (
+          <div className="role-badge creator">Creator</div>
+        ) : (
+          isAdmin && <div className="role-badge admin">Admin</div>
+        )}
         <div className="date">
           <div>{month}</div>
           <h4 className="day">{day}</h4>
@@ -42,18 +46,21 @@ class PoolListItem extends React.Component {
           </div>
         </Link>
         <div className="net-invested">
-          <span className="amount">{pool.netInvested.toFixed(2) || '0'}/{pool.maxAllocation}</span>&nbsp;<span className="denomination">ETH</span>
+          <span className="amount">
+            {pool.netInvested.toFixed(2) || '0'}/{pool.maxAllocation}
+          </span>&nbsp;<span className="denomination">ETH</span>
         </div>
-        <div>
-          {pool.contributionCount} Contributions
-        </div>
+        <div>{pool.contributionCount} Contributions</div>
         <div className="status">
           <h3>{statusDisplayText}</h3>
         </div>
         <div className="action-button">
-          {
-            !!statusNextAction && <Button variant="outlined" color="primary" onClick={statusNextAction(pool)}> {statusActionText} </Button>
-          }
+          {!!statusNextAction && (
+            <Button variant="outlined" color="primary" onClick={statusNextAction(pool)}>
+              {' '}
+              {statusActionText}{' '}
+            </Button>
+          )}
         </div>
       </div>
     );
@@ -62,7 +69,7 @@ class PoolListItem extends React.Component {
 
 PoolListItem.propTypes = {
   pool: PropTypes.instanceOf(Pool),
-  currentUser: PropTypes.instanceOf(User)
+  currentUser: PropTypes.instanceOf(User),
 };
 
 export default PoolListItem;

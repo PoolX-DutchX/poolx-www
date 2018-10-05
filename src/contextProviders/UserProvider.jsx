@@ -31,7 +31,6 @@ class UserProvider extends Component {
 
     this.onSignOut = this.onSignOut.bind(this);
     this.onSignIn = this.onSignIn.bind(this);
-
   }
 
   async componentDidMount() {
@@ -41,10 +40,10 @@ class UserProvider extends Component {
         const tokenPayload = await feathersClient.passport.verifyJWT(token);
         const { userId } = tokenPayload;
 
-        if( userId ) {
+        if (userId) {
           await feathersClient.authenticate();
           const user = await UserProvider.getUserProfile(userId);
-          this.setState({ isLoading: false, hasError: false, currentUser: new User(user)});
+          this.setState({ isLoading: false, hasError: false, currentUser: new User(user) });
         } else {
           feathersClient.logout();
           this.setState({ isLoading: false, hasError: false });
@@ -52,8 +51,7 @@ class UserProvider extends Component {
       } else {
         this.setState({ isLoading: false, hasError: false });
       }
-
-    }  catch (err) {
+    } catch (err) {
       console.log('Passport err:', err);
       this.setState({ isLoading: false, hasError: false });
       history.push(`/`);
@@ -102,16 +100,9 @@ class UserProvider extends Component {
   }
 
   render() {
-    const {
-      currentUser,
-      isLoading,
-      hasError,
-    } = this.state;
+    const { currentUser, isLoading, hasError } = this.state;
 
-    const {
-      onSignIn,
-      onSignOut,
-    } = this;
+    const { onSignIn, onSignOut } = this;
 
     return (
       <Provider

@@ -14,11 +14,16 @@ class ContributionListItem extends React.Component {
   }
   getTokenEntitlement() {
     console.log('here');
-    const { contribution: { pool: { tokenBalance, netInvested: poolNetInvested }, amount: amountInvested}} = this.props;
+    const {
+      contribution: {
+        pool: { tokenBalance, netInvested: poolNetInvested },
+        amount: amountInvested,
+      },
+    } = this.props;
     console.log('amountInvested', amountInvested);
     console.log('poolNetInvested', poolNetInvested);
     console.log('tokenBalance', tokenBalance);
-    return (amountInvested / poolNetInvested) * tokenBalance;
+    return amountInvested / poolNetInvested * tokenBalance;
   }
   render() {
     const { contribution } = this.props; //currentUser: { wallets }
@@ -29,8 +34,8 @@ class ContributionListItem extends React.Component {
     const {
       displayText: statusDisplayText,
       actionText: statusActionText,
-      action: statusNextAction
-    }  = contributionStatusMap[contribution.status];
+      action: statusNextAction,
+    } = contributionStatusMap[contribution.status];
     return (
       <div className="pool-list-item">
         <div className="date">
@@ -47,14 +52,19 @@ class ContributionListItem extends React.Component {
           <h3>{statusDisplayText}</h3>
         </div>
         <div className="contribution-token-entitlement">
-          {
-            !!pool.tokenBalance && <h3>{this.getTokenEntitlement()} {pool.tokenName.toUpperCase()}</h3>
-          }
+          {!!pool.tokenBalance && (
+            <h3>
+              {this.getTokenEntitlement()} {pool.tokenName.toUpperCase()}
+            </h3>
+          )}
         </div>
         <div className="action-button">
-          {
-            !!statusNextAction && <Button variant="outlined" color="primary" onClick={statusNextAction(contribution)}> {statusActionText} </Button>
-          }
+          {!!statusNextAction && (
+            <Button variant="outlined" color="primary" onClick={statusNextAction(contribution)}>
+              {' '}
+              {statusActionText}{' '}
+            </Button>
+          )}
         </div>
       </div>
     );
@@ -63,7 +73,7 @@ class ContributionListItem extends React.Component {
 
 ContributionListItem.propTypes = {
   contribution: PropTypes.instanceOf(Contribution),
-  currentUser: PropTypes.instanceOf(User)
+  currentUser: PropTypes.instanceOf(User),
 };
 
 export default ContributionListItem;

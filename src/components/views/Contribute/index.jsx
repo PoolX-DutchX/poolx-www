@@ -30,8 +30,8 @@ const Header = () => {
       <h1 className="font-xl">Contribute</h1>
       <p className="font-m">...And get in on some of the action</p>
     </div>
-  )
-}
+  );
+};
 
 class Contribute extends Component {
   constructor(props) {
@@ -43,12 +43,11 @@ class Contribute extends Component {
     };
 
     // Yup.addMethod(Yup.string, 'whitelisted', isWhitelistedAddress);
-
   }
 
   async componentDidMount() {
     window.scrollTo(0, 0);
-    const { currentUser, match: { params: { poolId }}} = this.props
+    const { currentUser, match: { params: { poolId } } } = this.props;
     try {
       await isAuthenticated(currentUser);
 
@@ -67,58 +66,66 @@ class Contribute extends Component {
 
       this.setState({
         isLoading: false,
-        pool
+        pool,
       });
-
-    } catch(err) {
+    } catch (err) {
       console.log('err', err);
       //oops something wrong
     }
-
   }
 
   render() {
-    const { isLoading, pool: { minContribution, maxContribution }  } = this.state;
+    const { isLoading, pool: { minContribution, maxContribution } } = this.state;
 
     return (
       <div>
         {isLoading && <Loader className="fixed" />}
-        { !isLoading && <MultiStepForm
-            header={<Header/>}
+        {!isLoading && (
+          <MultiStepForm
+            header={<Header />}
             initialValues={{
               ownerAddress: '',
               amount: '',
             }}
             stepLabels={['Contribution Details', 'Perform transaction']}
-            onSubmit={({ownerAddress, amount}, actions) => {
+            onSubmit={({ ownerAddress, amount }, actions) => {
               const { pool } = this.state;
               console.log('this.state.pool.id', this.state.pool.id);
               console.log('ownerAddress', ownerAddress);
               console.log('amount', amount);
-              feathersClient.service('contributions').create({
-                ownerAddress,
-                amount,
-                pool: pool.id,
-                poolAddress: pool.contractAddress
-              }).then((contribution) => {
-                history.push(`/contributions/${contribution._id}/pendingTx`);
-              })
-              .catch((err) => {
-                console.log('Oops something went wrong', err);
-              });
-                // actions.setSubmitting(false);
+              feathersClient
+                .service('contributions')
+                .create({
+                  ownerAddress,
+                  amount,
+                  pool: pool.id,
+                  poolAddress: pool.contractAddress,
+                })
+                .then(contribution => {
+                  history.push(`/contributions/${contribution._id}/pendingTx`);
+                })
+                .catch(err => {
+                  console.log('Oops something went wrong', err);
+                });
+              // actions.setSubmitting(false);
             }}
-            validationSchemas={ [
+            validationSchemas={[
               Yup.object().shape({
                 ownerAddress: ethereumAddress()
                   // .whitelisted(this.state.pool, 'The address provided is not on pool whitelist. Please contract pool admin')
                   .required('Required'),
                 amount: Yup.number()
-                  .min(minContribution, `Must be more than Pool minimum contribution of ${minContribution} Ether`)
-                  .max(maxContribution, `Must be less than Pool Maximum contribution of ${maxContribution} Ether`)
-                  .required('Required')
-                })
-              ] }
+                  .min(
+                    minContribution,
+                    `Must be more than Pool minimum contribution of ${minContribution} Ether`,
+                  )
+                  .max(
+                    maxContribution,
+                    `Must be less than Pool Maximum contribution of ${maxContribution} Ether`,
+                  )
+                  .required('Required'),
+              }),
+            ]}
           >
             <StepOne
               currentUser={this.props.currentUser}
@@ -126,7 +133,7 @@ class Contribute extends Component {
               maxContribution={maxContribution}
             />
           </MultiStepForm>
-        }
+        )}
       </div>
     );
   }

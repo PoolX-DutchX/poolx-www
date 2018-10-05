@@ -9,7 +9,7 @@ import {
   PAYOUT_ENABLED,
   PENDING_ENABLE_REFUNDS,
   REFUNDS_ENABLED,
-  PAUSED
+  PAUSED,
 } from '../constants';
 
 class Pool extends BasicModel {
@@ -124,17 +124,21 @@ class Pool extends BasicModel {
   }
 
   set status(value) {
-    this.checkValue(value, [
-      Pool.PENDING_DEPLOYMENT,
-      Pool.ACTIVE,
-      Pool.PENDING_CLOSE_POOL,
-      Pool.CLOSED,
-      Pool.PENDING_TOKEN_BATCH,
-      Pool.PAYOUT_ENABLED,
-      Pool.PENDING_ENABLE_REFUNDS,
-      Pool.REFUNDS_ENABLED,
-      Pool.PAUSED
-    ], 'status');
+    this.checkValue(
+      value,
+      [
+        Pool.PENDING_DEPLOYMENT,
+        Pool.ACTIVE,
+        Pool.PENDING_CLOSE_POOL,
+        Pool.CLOSED,
+        Pool.PENDING_TOKEN_BATCH,
+        Pool.PAYOUT_ENABLED,
+        Pool.PENDING_ENABLE_REFUNDS,
+        Pool.REFUNDS_ENABLED,
+        Pool.PAUSED,
+      ],
+      'status',
+    );
     this.myStatus = value;
     // if (value === Pool.PENDING) this.myOrder = 1;
     // else if (value === Pool.ACTIVE) this.myOrder = 2;
@@ -175,7 +179,7 @@ class Pool extends BasicModel {
   }
 
   set maxAllocation(value) {
-    this.checkType(value, ['undefined','number'], 'maxAllocation');
+    this.checkType(value, ['undefined', 'number'], 'maxAllocation');
     this.myMaxAllocation = value;
   }
 
@@ -184,7 +188,7 @@ class Pool extends BasicModel {
   }
 
   set minContribution(value) {
-    this.checkType(value, ['undefined','number'], 'minContribution');
+    this.checkType(value, ['undefined', 'number'], 'minContribution');
     this.myMinContribution = value;
   }
 
@@ -193,7 +197,7 @@ class Pool extends BasicModel {
   }
 
   set maxContribution(value) {
-    this.checkType(value, ['undefined','number'], 'maxContribution');
+    this.checkType(value, ['undefined', 'number'], 'maxContribution');
     this.myMaxContribution = value;
   }
 
@@ -202,7 +206,7 @@ class Pool extends BasicModel {
   }
 
   set contributionCount(value) {
-    this.checkType(value, ['undefined','number'], 'contributionCount');
+    this.checkType(value, ['undefined', 'number'], 'contributionCount');
     this.myContributionCount = value;
   }
 
@@ -211,7 +215,7 @@ class Pool extends BasicModel {
   }
 
   set tokenBalance(value) {
-    this.checkType(value, ['undefined','string'], 'tokenBalance');
+    this.checkType(value, ['undefined', 'string'], 'tokenBalance');
     this.myTokenBalance = value;
   }
 
@@ -220,7 +224,7 @@ class Pool extends BasicModel {
   }
 
   set netInvested(value) {
-    this.checkType(value, ['undefined','number'], 'netInvested');
+    this.checkType(value, ['undefined', 'number'], 'netInvested');
     this.myNetInvested = value;
   }
 
@@ -229,7 +233,7 @@ class Pool extends BasicModel {
   }
 
   set grossInvested(value) {
-    this.checkType(value, ['undefined','number'], 'grossInvested');
+    this.checkType(value, ['undefined', 'number'], 'grossInvested');
     this.myGrossInvested = value;
   }
 
