@@ -76,6 +76,7 @@ class EditProfile extends Component {
       history.push('/');
     } catch (err) {
       this.setState({ isSaving: false });
+      React.toast.error(err.message);
       ErrorPopup(
         'There has been a problem updating your user profile. Please refresh the page and try again.',
         err,

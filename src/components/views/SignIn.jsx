@@ -27,9 +27,6 @@ class SignIn extends Component {
   }
 
   submit({ email, password }) {
-    console.log('email', email);
-    console.log('password', password);
-
     this.setState(
       {
         isSigningIn: true,
@@ -37,9 +34,7 @@ class SignIn extends Component {
       },
       () => {
         authenticateUser({ email, password })
-          .then(token => {
-            return feathersClient.passport.verifyJWT(token);
-          })
+          .then(token => feathersClient.passport.verifyJWT(token))
           .then(tokenPayload => {
             const { userId } = tokenPayload;
             this.setState({ isSigningIn: false });
@@ -51,12 +46,8 @@ class SignIn extends Component {
             );
             this.props.history.goBack();
           })
-          .catch(err => {
-            this.setState({
-              error:
-                'There was a problem signing into your account. Please refresh the page and try again.',
-              isSigningIn: false,
-            });
+          .catch(() => {
+            this.setState({ error: 'Invalid Login', isSigningIn: false });
           });
       },
     );
