@@ -52,6 +52,7 @@ export const authenticateUser = ({ email, password }) => {
       return response.accessToken;
     })
     .catch(err => {
+      React.toast.error(err.message);
       console.log('AuthenticateUser response error', err);
       return err;
     });
@@ -171,17 +172,14 @@ export const getGasPrice = () =>
 
 export const history = createBrowserHistory();
 
-export const removeFromArray = (array, element) => {
-  return array.filter(e => e !== element);
-};
+export const removeFromArray = (array, element) => array.filter(e => e !== element);
 
 export const addToArray = (array, element) => {
   console.log('array.includes(element)', array.includes(element));
   if (!array.includes(element)) {
     return [...array, element];
-  } else {
-    return array;
   }
+  return array;
 };
 
 // Get start of the day in UTC for a given date or start of current day in UTC

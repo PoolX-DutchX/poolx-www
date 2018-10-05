@@ -43,6 +43,7 @@ class ViewPool extends Component {
       },
       err => {
         console.log('err getting pool', err);
+        React.toast.error(err.message);
         ErrorPopup('Something went wrong loading pool. Please try refresh the page.', err);
         this.setState({ isLoading: false });
       },
@@ -61,6 +62,7 @@ class ViewPool extends Component {
           this.setState({ myContributions, myContributionTotal });
         },
         err => {
+          React.toast.error(err.message);
           console.log('err getting user contributions', err);
         },
       );
@@ -138,7 +140,7 @@ class ViewPool extends Component {
                 </h1>
                 <div className="pool-creator">
                   Pool Creator Verified{' '}
-                  <img src={'/img/telegram_logo.png'} width="20" alt="Telegram logo" /> KYC
+                  <img src="/img/telegram_logo.png" width="20" alt="Telegram logo" /> KYC
                 </div>
                 {!!this.state.myContributions.length && (
                   <div className="alert alert-success row my-contributions-panel" role="alert">

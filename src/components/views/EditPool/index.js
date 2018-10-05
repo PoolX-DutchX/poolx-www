@@ -49,7 +49,7 @@ class EditPool extends Component {
         history.push(`/pools/${this.state.pool.id}`);
       })
       .catch(err => {
-        console.log('err saving pool', err);
+        React.toast.error(err.message);
         ErrorPopup('Something went wrong saving your pool. Please try refresh the page.', err);
       });
     //check hasWhitelist

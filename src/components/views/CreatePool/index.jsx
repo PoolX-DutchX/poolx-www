@@ -22,14 +22,12 @@ import { feathersClient } from '../../../lib/feathersClient';
  * @param id       URL parameter which is an id of a pool object
  */
 
-const Header = () => {
-  return (
-    <div>
-      <h1 className="font-xl">Create Pool</h1>
-      <p className="font-m">...And get that money!</p>
-    </div>
-  );
-};
+const Header = () => (
+  <div>
+    <h1 className="font-xl">Create Pool</h1>
+    <p className="font-m">...And get that money!</p>
+  </div>
+);
 
 class CreatePool extends Component {
   constructor(props) {
@@ -92,6 +90,14 @@ class CreatePool extends Component {
                 })
                 .catch(err => {
                   console.log('err', err);
+                  React.toast.error(
+                    <p>
+                      {err.message} <br />
+                      <p>
+                        Please sign up to create a pool<br />
+                      </p>
+                    </p>,
+                  );
                 });
             }}
             validationSchemas={validationSchemas}

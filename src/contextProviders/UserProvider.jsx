@@ -80,6 +80,7 @@ class UserProvider extends Component {
       .then(user => user)
       .catch(err => {
         console.log('err on getUserProfile', err);
+        React.toast.error(err.message);
         ErrorPopup(
           'Something went wrong with getting user profile. Please try again after refresh.',
           err,

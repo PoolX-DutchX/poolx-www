@@ -29,8 +29,6 @@ class SignUp extends Component {
   }
 
   submit({ email, password }) {
-    console.log('email', email);
-    console.log('password', password);
     this.setState(
       {
         isSaving: true,
@@ -47,12 +45,8 @@ class SignUp extends Component {
     feathersClient
       .service('/users')
       .create({ email, password })
-      .then(user => {
-        return authenticateUser({ email, password });
-      })
-      .then(token => {
-        return feathersClient.passport.verifyJWT(token);
-      })
+      .then(() => authenticateUser({ email, password }))
+      .then(token => feathersClient.passport.verifyJWT(token))
       .then(tokenPayload => {
         const { userId } = tokenPayload;
         this.setState({ isSaving: false });
@@ -66,10 +60,10 @@ class SignUp extends Component {
       })
       .catch(err => {
         console.log('createAccount err', err);
+        React.toast.error(err.message);
         this.setState({
           isSaving: false,
-          error:
-            'There has been a problem creating your account. Please refresh the page and try again.',
+          error: err.message,
         });
       });
   }
