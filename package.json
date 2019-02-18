@@ -50,11 +50,11 @@
     "sweetalert": "^2.0",
     "truffle-contract": "^3.0.5",
     "underscore": "^1.8.3",
-    "web3": "1.0.0-beta.33",
+    "web3": "^1.0.0-beta.33",
     "web3-eth-accounts": "^1.0.0-beta.18",
     "web3-provider-engine": "^13.3.3",
     "whatwg-fetch": "^2.0.3",
-    "yup": "^0.25.1"
+    "yup": "^0.26.10"
   },
   "devDependencies": {
     "eslint": "^4.10.0",
