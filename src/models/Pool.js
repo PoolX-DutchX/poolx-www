@@ -1,5 +1,5 @@
-import BasicModel from './BasicModel';
-import PoolService from '../services/Pool';
+import BasicModel from './BasicModel'
+import PoolService from '../services/Pool'
 import {
   PENDING_DEPLOYMENT,
   ACTIVE,
@@ -10,69 +10,69 @@ import {
   PENDING_ENABLE_REFUNDS,
   REFUNDS_ENABLED,
   PAUSED,
-} from '../constants';
+} from '../constants'
 
 class Pool extends BasicModel {
   static get PENDING_DEPLOYMENT() {
-    return PENDING_DEPLOYMENT;
+    return PENDING_DEPLOYMENT
   }
   static get ACTIVE() {
-    return ACTIVE;
+    return ACTIVE
   }
   static get PENDING_CLOSE_POOL() {
-    return PENDING_CLOSE_POOL;
+    return PENDING_CLOSE_POOL
   }
   static get CLOSED() {
-    return CLOSED;
+    return CLOSED
   }
   static get PENDING_TOKEN_BATCH() {
-    return PENDING_TOKEN_BATCH;
+    return PENDING_TOKEN_BATCH
   }
   static get PAYOUT_ENABLED() {
-    return PAYOUT_ENABLED;
+    return PAYOUT_ENABLED
   }
   static get PENDING_ENABLE_REFUNDS() {
-    return PENDING_ENABLE_REFUNDS;
+    return PENDING_ENABLE_REFUNDS
   }
   static get REFUNDS_ENABLED() {
-    return REFUNDS_ENABLED;
+    return REFUNDS_ENABLED
   }
   static get PAUSED() {
-    return PAUSED;
+    return PAUSED
   }
   static get CURRENCY_ETHER() {
-    return 'ether';
+    return 'ether'
   }
   static get CURRENCY_TOKEN() {
-    return 'token';
+    return 'token'
   }
 
   constructor(data) {
-    super(data);
+    super(data)
 
-    this.maxAllocation = data.maxAllocation || 0;
-    this.fee = data.fee || 0.0;
-    this.feePayoutCurrency = data.feePayoutCurrency || Pool.CURRENCY_ETHER;
-    this.lockPayoutAddress = data.lockPayoutAddress || false;
-    this.payoutAddress = data.payoutAddress || '';
-    this.payoutTxData = data.payoutTxData || ''; // in case payout wallet is a contract
-    this.admins = data.admins || [];
-    this.adminPayoutAddress = data.adminPayoutAddress || '';
+    this.maxAllocation = data.maxAllocation || 0
+    this.fee = data.fee || 0.0
+    this.feePayoutCurrency = data.feePayoutCurrency || Pool.CURRENCY_ETHER
+    this.lockPayoutAddress = data.lockPayoutAddress || false
+    this.payoutAddress = data.payoutAddress || ''
+    this.payoutTxData = data.payoutTxData || '' // in case payout wallet is a contract
+    this.admins = data.admins || []
+    this.adminPayoutAddress = data.adminPayoutAddress || ''
 
-    this.name = data.name || '';
-    this.description = data.description || '';
-    this.status = data.status || Pool.PENDING_DEPLOYMENT;
-    this.minContribution = data.minContribution || 0;
-    this.maxContribution = data.maxContribution || 0;
-    this.whitelist = data.whitelist || [];
-    this.poolbaseFee = data.poolbaseFee || 0;
+    this.name = data.name || ''
+    this.description = data.description || ''
+    this.status = data.status || Pool.PENDING_DEPLOYMENT
+    this.minContribution = data.minContribution || 0
+    this.maxContribution = data.maxContribution || 0
+    this.whitelist = data.whitelist || []
+    this.poolbaseFee = data.poolbaseFee || 0
 
-    this.contractAddress = data.contractAddress || '';
+    this.contractAddress = data.contractAddress || ''
 
-    this.netInvested = data.netInvested || 0;
-    this.grossInvested = data.grossInvested || 0;
-    this.contributionCount = data.contributionCount || 0;
-    this.tokenBalance = data.tokenBalance || '';
+    this.netInvested = data.netInvested || 0
+    this.grossInvested = data.grossInvested || 0
+    this.contributionCount = data.contributionCount || 0
+    this.tokenBalance = data.tokenBalance || ''
   }
 
   toFeathers() {
@@ -93,11 +93,11 @@ class Pool extends BasicModel {
       maxContribution: this.maxContribution,
       whitelist: this.whitelist,
       //status, contractAddress set on backend
-    };
+    }
   }
 
   get isActive() {
-    return this.status === Pool.ACTIVE;
+    return this.status === Pool.ACTIVE
   }
 
   /**
@@ -105,7 +105,7 @@ class Pool extends BasicModel {
    *
    */
   save() {
-    return PoolService.save(this);
+    return PoolService.save(this)
   }
   //
   // /**
@@ -120,7 +120,7 @@ class Pool extends BasicModel {
   // }
 
   get status() {
-    return this.myStatus;
+    return this.myStatus
   }
 
   set status(value) {
@@ -137,9 +137,9 @@ class Pool extends BasicModel {
         Pool.REFUNDS_ENABLED,
         Pool.PAUSED,
       ],
-      'status',
-    );
-    this.myStatus = value;
+      'status'
+    )
+    this.myStatus = value
     // if (value === Pool.PENDING) this.myOrder = 1;
     // else if (value === Pool.ACTIVE) this.myOrder = 2;
     // else if (value === Pool.CLOSED) this.myOrder = 3;
@@ -148,175 +148,179 @@ class Pool extends BasicModel {
   }
 
   get contractAddress() {
-    return this.myContractAddress;
+    return this.myContractAddress
   }
 
   set contractAddress(value) {
-    this.checkType(value, ['undefined', 'string'], 'contractAddress');
-    this.myContractAddress = value;
+    this.checkType(value, ['undefined', 'string'], 'contractAddress')
+    this.myContractAddress = value
   }
 
   get name() {
-    return this.myName;
+    return this.myName
   }
 
   set name(value) {
-    this.checkType(value, ['string'], 'name');
-    this.myName = value;
+    this.checkType(value, ['string'], 'name')
+    this.myName = value
   }
 
   get description() {
-    return this.myDescription;
+    return this.myDescription
   }
 
   set description(value) {
-    this.checkType(value, ['string'], 'description');
-    this.myDescription = value;
+    this.checkType(value, ['string'], 'description')
+    this.myDescription = value
   }
 
   get maxAllocation() {
-    return this.myMaxAllocation;
+    return this.myMaxAllocation
   }
 
   set maxAllocation(value) {
-    this.checkType(value, ['undefined', 'number'], 'maxAllocation');
-    this.myMaxAllocation = value;
+    this.checkType(value, ['undefined', 'number'], 'maxAllocation')
+    this.myMaxAllocation = value
   }
 
   get minContribution() {
-    return this.myMinContribution;
+    return this.myMinContribution
   }
 
   set minContribution(value) {
-    this.checkType(value, ['undefined', 'number'], 'minContribution');
-    this.myMinContribution = value;
+    this.checkType(value, ['undefined', 'number'], 'minContribution')
+    this.myMinContribution = value
   }
 
   get maxContribution() {
-    return this.myMaxContribution;
+    return this.myMaxContribution
   }
 
   set maxContribution(value) {
-    this.checkType(value, ['undefined', 'number'], 'maxContribution');
-    this.myMaxContribution = value;
+    this.checkType(value, ['undefined', 'number'], 'maxContribution')
+    this.myMaxContribution = value
   }
 
   get contributionCount() {
-    return this.myContributionCount;
+    return this.myContributionCount
   }
 
   set contributionCount(value) {
-    this.checkType(value, ['undefined', 'number'], 'contributionCount');
-    this.myContributionCount = value;
+    this.checkType(value, ['undefined', 'number'], 'contributionCount')
+    this.myContributionCount = value
   }
 
   get tokenBalance() {
-    return this.myTokenBalance;
+    return this.myTokenBalance
   }
 
   set tokenBalance(value) {
-    this.checkType(value, ['undefined', 'string'], 'tokenBalance');
-    this.myTokenBalance = value;
+    this.checkType(value, ['undefined', 'string'], 'tokenBalance')
+    this.myTokenBalance = value
   }
 
   get netInvested() {
-    return this.myNetInvested;
+    return this.myNetInvested
   }
 
   set netInvested(value) {
-    this.checkType(value, ['undefined', 'number'], 'netInvested');
-    this.myNetInvested = value;
+    this.checkType(value, ['undefined', 'number'], 'netInvested')
+    this.myNetInvested = value
   }
 
   get grossInvested() {
-    return this.myGrossInvested;
+    return this.myGrossInvested
   }
 
   set grossInvested(value) {
-    this.checkType(value, ['undefined', 'number'], 'grossInvested');
-    this.myGrossInvested = value;
+    this.checkType(value, ['undefined', 'number'], 'grossInvested')
+    this.myGrossInvested = value
   }
 
   get fee() {
-    return this.myFee;
+    return this.myFee
   }
 
   set fee(value) {
-    this.checkType(value, ['undefined', 'number'], 'fee');
-    this.myFee = value;
+    this.checkType(value, ['undefined', 'number'], 'fee')
+    this.myFee = value
   }
 
   get feePayoutCurrency() {
-    return this.myFeePayoutCurrency;
+    return this.myFeePayoutCurrency
   }
 
   set feePayoutCurrency(value) {
-    this.checkValue(value, [Pool.CURRENCY_ETHER, Pool.CURRENCY_TOKEN], 'feePayoutCurrency');
-    this.myFeePayoutCurrency = value;
+    this.checkValue(
+      value,
+      [Pool.CURRENCY_ETHER, Pool.CURRENCY_TOKEN],
+      'feePayoutCurrency'
+    )
+    this.myFeePayoutCurrency = value
   }
 
   get admins() {
-    return this.myAdmins;
+    return this.myAdmins
   }
 
   set admins(value) {
-    this.checkType(value, ['object', 'array'], 'admins');
-    this.myAdmins = value;
+    this.checkType(value, ['object', 'array'], 'admins')
+    this.myAdmins = value
   }
 
   get adminPayoutAddress() {
-    return this.myAdminPayoutAddress;
+    return this.myAdminPayoutAddress
   }
 
   set adminPayoutAddress(value) {
-    this.checkType(value, ['undefined', 'string'], 'adminPayoutAddress');
-    this.myAdminPayoutAddress = value;
+    this.checkType(value, ['undefined', 'string'], 'adminPayoutAddress')
+    this.myAdminPayoutAddress = value
   }
 
   get lockPayoutAddress() {
-    return this.myLockPayoutAddress;
+    return this.myLockPayoutAddress
   }
 
   set lockPayoutAddress(value) {
-    this.checkType(value, ['undefined', 'boolean'], 'lockPayoutAddress');
-    this.myLockPayoutAddress = value;
+    this.checkType(value, ['undefined', 'boolean'], 'lockPayoutAddress')
+    this.myLockPayoutAddress = value
   }
 
   get payoutAddress() {
-    return this.myPayoutAddress;
+    return this.myPayoutAddress
   }
 
   set payoutAddress(value) {
-    this.checkType(value, ['undefined', 'string'], 'payoutAddress');
-    this.myPayoutAddress = value;
+    this.checkType(value, ['undefined', 'string'], 'payoutAddress')
+    this.myPayoutAddress = value
   }
 
   get payoutTxData() {
-    return this.myPayoutTxData;
+    return this.myPayoutTxData
   }
 
   set payoutTxData(value) {
-    this.checkType(value, ['undefined', 'string'], 'payoutTxData');
-    this.myPayoutTxData = value;
+    this.checkType(value, ['undefined', 'string'], 'payoutTxData')
+    this.myPayoutTxData = value
   }
 
   get poolbaseFee() {
-    return this.myPoolbaseFee;
+    return this.myPoolbaseFee
   }
 
   set poolbaseFee(value) {
-    this.checkType(value, ['undefined', 'number'], 'poolbaseFee');
-    this.myPoolbaseFee = value;
+    this.checkType(value, ['undefined', 'number'], 'poolbaseFee')
+    this.myPoolbaseFee = value
   }
 
   get whitelist() {
-    return this.myWhitelist;
+    return this.myWhitelist
   }
 
   set whitelist(value) {
-    this.checkType(value, ['object', 'array'], 'whitelist');
-    this.myWhitelist = value;
+    this.checkType(value, ['object', 'array'], 'whitelist')
+    this.myWhitelist = value
   }
 }
 
-export default Pool;
+export default Pool

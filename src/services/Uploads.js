@@ -1,9 +1,9 @@
-import { feathersRest } from '../lib/feathersClient';
+import { feathersRest } from '../lib/feathersClient'
 
 class UploadsService {
   static save(file) {
-    return feathersRest.service('uploads').create({ uri: file });
+    return feathersRest.service('uploads').create({ uri: file })
   }
 }
 
-export default UploadsService;
+export default UploadsService

@@ -1,20 +1,20 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
-import User from '../../../models/User';
-import Pool from '../../../models/Pool';
-import PoolService from '../../../services/Pool';
+import User from '../../../models/User'
+import Pool from '../../../models/Pool'
+import PoolService from '../../../services/Pool'
 
-import * as Yup from 'yup';
+import * as Yup from 'yup'
 
-import MultiStepForm from '../../MultiStepForm';
+import MultiStepForm from '../../MultiStepForm'
 
-import Loader from '../../Loader';
-import { history, isPoolAdmin } from '../../../lib/helpers';
-import { isAuthenticated } from '../../../lib/middleware';
-import { ethereumAddress } from '../../../lib/validators';
-import validationSchemas from './validation/';
-import updateComponents from './components/';
+import Loader from '../../Loader'
+import { history, isPoolAdmin } from '../../../lib/helpers'
+import { isAuthenticated } from '../../../lib/middleware'
+import { ethereumAddress } from '../../../lib/validators'
+import validationSchemas from './validation/'
+import updateComponents from './components/'
 
 /**
  * View flow to confirm a token batch
@@ -27,8 +27,8 @@ const Header = ({ text }) => {
     <div>
       <h1 className="font-xl">{text}</h1>
     </div>
-  );
-};
+  )
+}
 
 const textMap = {
   maxAllocation: {
@@ -43,35 +43,43 @@ const textMap = {
     stepLabel: 'Admin payout wallet',
     header: 'Set your Admin payout wallet',
   },
-};
+}
 
 class Update extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       isLoading: true,
       pool: {},
       formProps: {},
-    };
+    }
   }
 
   async componentDidMount() {
-    const { currentUser, match: { params: { poolId } }, location: { hash } } = this.props;
+    const {
+      currentUser,
+      match: {
+        params: { poolId },
+      },
+      location: { hash },
+    } = this.props
 
-    const updateProperty = hash && hash.substr(1);
+    const updateProperty = hash && hash.substr(1)
 
     try {
-      await isAuthenticated(currentUser);
+      await isAuthenticated(currentUser)
 
-      const pool = await PoolService.getById(poolId);
+      const pool = await PoolService.getById(poolId)
       // check status of pool & redirect if not appropriate
       if (!isPoolAdmin(pool, currentUser) || !updateProperty) {
-        history.replace(`/pools/${pool._id}`);
+        history.replace(`/pools/${pool._id}`)
       }
 
-      let formProps = {};
-      if (['maxAllocation', 'fee', 'adminPayoutAddress'].includes(updateProperty)) {
+      let formProps = {}
+      if (
+        ['maxAllocation', 'fee', 'adminPayoutAddress'].includes(updateProperty)
+      ) {
         formProps = {
           validationSchema: validationSchemas[updateProperty](pool),
           initialValues: {
@@ -80,9 +88,9 @@ class Update extends Component {
           UpdateComponent: updateComponents[updateProperty],
           stepLabel: textMap[updateProperty].stepLabel,
           headerText: textMap[updateProperty].header,
-        };
+        }
       } else {
-        return history.replace(`/pools/${pool._id}`);
+        return history.replace(`/pools/${pool._id}`)
       }
 
       this.setState({
@@ -90,9 +98,9 @@ class Update extends Component {
         pool,
         formProps,
         updateProperty,
-      });
+      })
     } catch (err) {
-      console.log('err', err);
+      console.log('err', err)
       //oops something wrong
     }
   }
@@ -101,8 +109,14 @@ class Update extends Component {
     const {
       isLoading,
       pool,
-      formProps: { initialValues, UpdateComponent, validationSchema, stepLabel, headerText },
-    } = this.state;
+      formProps: {
+        initialValues,
+        UpdateComponent,
+        validationSchema,
+        stepLabel,
+        headerText,
+      },
+    } = this.state
 
     return (
       <div>
@@ -113,13 +127,13 @@ class Update extends Component {
             initialValues={initialValues}
             stepLabels={[stepLabel, 'Perform transaction']}
             onSubmit={(values, actions) => {
-              const { updateProperty } = this.state;
-              console.log('updateProperty', updateProperty);
+              const { updateProperty } = this.state
+              console.log('updateProperty', updateProperty)
               PoolService.patch(this.state.pool.id, {
                 [updateProperty]: values[updateProperty],
               }).then(() => {
-                history.push(`/pools/${this.state.pool.id}/pendingTx`);
-              });
+                history.push(`/pools/${this.state.pool.id}/pendingTx`)
+              })
             }}
             validationSchemas={[validationSchema]}
           >
@@ -127,7 +141,7 @@ class Update extends Component {
           </MultiStepForm>
         )}
       </div>
-    );
+    )
   }
 }
 
@@ -138,6 +152,6 @@ Update.propTypes = {
       id: PropTypes.string,
     }).isRequired,
   }).isRequired,
-};
+}
 
-export default Update;
+export default Update

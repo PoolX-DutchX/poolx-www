@@ -1,63 +1,66 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Formik } from 'formik';
-import Button from '@material-ui/core/Button';
-import User from '../../../models/User';
-import PoolService from '../../../services/Pool';
-import Loader from '../../Loader';
-import WalletAndLimits from './components/WalletAndLimits';
-import FeesAndAdmins from './components/FeesAndAdmins';
-import DestinationAndWhitelist from './components/DestinationAndWhitelist';
-import NameAndDescription from './components/NameAndDescription';
-import ErrorPopup from '../../ErrorPopup';
-import { history } from '../../../lib/helpers';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Formik } from 'formik'
+import Button from '@material-ui/core/Button'
+import User from '../../../models/User'
+import PoolService from '../../../services/Pool'
+import Loader from '../../Loader'
+import WalletAndLimits from './components/WalletAndLimits'
+import FeesAndAdmins from './components/FeesAndAdmins'
+import DestinationAndWhitelist from './components/DestinationAndWhitelist'
+import NameAndDescription from './components/NameAndDescription'
+import ErrorPopup from '../../ErrorPopup'
+import { history } from '../../../lib/helpers'
 
-import validationSchema from './validation/';
+import validationSchema from './validation/'
 
 class EditPool extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       isLoading: true,
-    };
+    }
   }
 
   async componentDidMount() {
-    const poolId = this.props.match.params.poolId;
+    const poolId = this.props.match.params.poolId
     try {
-      const pool = await PoolService.getById(poolId);
-      this.setState({ pool, isLoading: false });
+      const pool = await PoolService.getById(poolId)
+      this.setState({ pool, isLoading: false })
     } catch (err) {
-      console.log('err', err);
-      this.setState({ isLoading: false });
+      console.log('err', err)
+      this.setState({ isLoading: false })
     }
   }
 
   handleSubmit = pool => {
-    delete pool.fee;
-    delete pool.adminPayoutAddress;
-    delete pool.maxAllocation;
-    delete pool.admins;
+    delete pool.fee
+    delete pool.adminPayoutAddress
+    delete pool.maxAllocation
+    delete pool.admins
 
     PoolService.patch(this.state.pool.id, pool)
       .then(() => {
         React.toast.success(
           <p>
             Your pool was updated! <br />
-          </p>,
-        );
-        history.push(`/pools/${this.state.pool.id}`);
+          </p>
+        )
+        history.push(`/pools/${this.state.pool.id}`)
       })
       .catch(err => {
-        React.toast.error(err.message);
-        ErrorPopup('Something went wrong saving your pool. Please try refresh the page.', err);
-      });
+        React.toast.error(err.message)
+        ErrorPopup(
+          'Something went wrong saving your pool. Please try refresh the page.',
+          err
+        )
+      })
     //check hasWhitelist
-  };
+  }
 
   render() {
-    const { isLoading, pool } = this.state;
-    console.log('pool', pool);
+    const { isLoading, pool } = this.state
+    console.log('pool', pool)
     return (
       <div id="create-pool-view" className="container">
         {isLoading && <Loader className="fixed" />}
@@ -73,11 +76,14 @@ class EditPool extends Component {
               validationSchema={validationSchema}
               onSubmit={this.handleSubmit}
               render={formikProps => {
-                const { handleSubmit, isSubmitting } = formikProps;
+                const { handleSubmit, isSubmitting } = formikProps
                 return (
                   <form onSubmit={handleSubmit} noValidate>
                     <h2 className="spacer-top-50">Name & Description</h2>
-                    <NameAndDescription formik={formikProps} currentUser={this.props.currentUser} />
+                    <NameAndDescription
+                      formik={formikProps}
+                      currentUser={this.props.currentUser}
+                    />
                     <h2 className="spacer-top-50">Wallet & Limits</h2>
                     <WalletAndLimits
                       formik={formikProps}
@@ -120,13 +126,13 @@ class EditPool extends Component {
                       </div>
                     </div>
                   </form>
-                );
+                )
               }}
             />
           </div>
         )}
       </div>
-    );
+    )
   }
 }
 
@@ -141,10 +147,10 @@ EditPool.propTypes = {
       poolId: PropTypes.string,
     }).isRequired,
   }).isRequired,
-};
+}
 
 EditPool.defaultProps = {
   currentUser: undefined,
-};
+}
 
-export default EditPool;
+export default EditPool

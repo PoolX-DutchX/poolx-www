@@ -16,8 +16,8 @@ class Model {
       console.log(
         `Model Error - checkType: The type of ${propName} supplied to ${
           this.constructor.name
-        } is: ${typeof value}. Expected one of: ${types.join(', ')}.`,
-      );
+        } is: ${typeof value}. Expected one of: ${types.join(', ')}.`
+      )
 
       // throw new TypeError(
       //   `The type of ${propName} supplied to ${
@@ -41,8 +41,8 @@ class Model {
       console.log(
         `Model Error - checkValue: The value of ${propName} supplied to ${
           this.constructor.name
-        } is: ${value}. Expected one of: ${values.join(', ')}.`,
-      );
+        } is: ${value}. Expected one of: ${values.join(', ')}.`
+      )
       // throw new Error(
       //   `The value of ${propName} supplied to ${
       //     this.constructor.name
@@ -52,4 +52,4 @@ class Model {
   }
 }
 
-export default Model;
+export default Model

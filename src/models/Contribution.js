@@ -1,5 +1,5 @@
-import BasicModel from './BasicModel';
-import ContributionService from '../services/Contribution';
+import BasicModel from './BasicModel'
+import ContributionService from '../services/Contribution'
 
 import {
   PENDING_CONFIRMATION,
@@ -11,45 +11,45 @@ import {
   PENDING_REFUND,
   REFUND_RECEIVED,
   PAUSED,
-} from '../constants';
+} from '../constants'
 
 class Contribution extends BasicModel {
   static get PENDING_CONFIRMATION() {
-    return PENDING_CONFIRMATION;
+    return PENDING_CONFIRMATION
   }
   static get CONFIRMED() {
-    return CONFIRMED;
+    return CONFIRMED
   }
   static get TOKENS_AVAILABLE() {
-    return TOKENS_AVAILABLE;
+    return TOKENS_AVAILABLE
   }
   static get PENDING_CLAIM_TOKENS() {
-    return PENDING_CLAIM_TOKENS;
+    return PENDING_CLAIM_TOKENS
   }
   static get TOKENS_CLAIMED() {
-    return TOKENS_CLAIMED;
+    return TOKENS_CLAIMED
   }
   static get REFUND_AVAILABLE() {
-    return REFUND_AVAILABLE;
+    return REFUND_AVAILABLE
   }
   static get PENDING_REFUND() {
-    return PENDING_REFUND;
+    return PENDING_REFUND
   }
   static get REFUND_RECEIVED() {
-    return REFUND_RECEIVED;
+    return REFUND_RECEIVED
   }
   static get PAUSED() {
-    return PAUSED;
+    return PAUSED
   }
 
   constructor(data) {
-    super(data);
-    this.pool = data.pool || '';
-    this.poolAddress = data.poolAddress || '';
-    this.amount = data.amount || 0; // in Ether
-    this.status = data.status || Contribution.PENDING_CONFIRMATION;
-    this.tokenAmountClaimed = data.tokenAmountClaimed || 0;
-    this.owner = data.owner || '';
+    super(data)
+    this.pool = data.pool || ''
+    this.poolAddress = data.poolAddress || ''
+    this.amount = data.amount || 0 // in Ether
+    this.status = data.status || Contribution.PENDING_CONFIRMATION
+    this.tokenAmountClaimed = data.tokenAmountClaimed || 0
+    this.owner = data.owner || ''
     // ToDo: currency, ether by default for now
     // ToDo: network - or place in seperate DB ??
   }
@@ -63,7 +63,7 @@ class Contribution extends BasicModel {
       status: this.status,
       owner: this.owner,
       ownerAddress: this.ownerAddress,
-    };
+    }
   }
 
   /**
@@ -74,11 +74,11 @@ class Contribution extends BasicModel {
    * @param afterMined  Callback function once the transaction is mined and feathers updated
    */
   cancel(from, afterCreate, afterMined) {
-    ContributionService.cancel(this, from, afterCreate, afterMined);
+    ContributionService.cancel(this, from, afterCreate, afterMined)
   }
 
   get status() {
-    return this.myStatus;
+    return this.myStatus
   }
 
   set status(value) {
@@ -95,9 +95,9 @@ class Contribution extends BasicModel {
         Contribution.REFUND_RECEIVED,
         Contribution.PAUSED,
       ],
-      'status',
-    );
-    this.myStatus = value;
+      'status'
+    )
+    this.myStatus = value
     // if (value === Contribution.PENDING) this.myOrder = 1;
     // else if (value === Contribution.ACTIVE) this.myOrder = 2;
     // else if (value === Contribution.CANCELED) this.myOrder = 3;
@@ -105,40 +105,40 @@ class Contribution extends BasicModel {
   }
 
   get amount() {
-    return this.myAmount;
+    return this.myAmount
   }
 
   set amount(value) {
-    this.checkType(value, ['number'], 'amount');
-    this.myAmount = value;
+    this.checkType(value, ['number'], 'amount')
+    this.myAmount = value
   }
 
   get tokenAmountClaimed() {
-    return this.myTokenAmountClaimed;
+    return this.myTokenAmountClaimed
   }
 
   set tokenAmountClaimed(value) {
-    this.checkType(value, ['number'], 'tokenAmountClaimed');
-    this.myTokenAmountClaimed = value;
+    this.checkType(value, ['number'], 'tokenAmountClaimed')
+    this.myTokenAmountClaimed = value
   }
 
   get pool() {
-    return this.myPool;
+    return this.myPool
   }
 
   set pool(value) {
-    this.checkType(value, ['object', 'string'], 'pool');
-    this.myPool = value;
+    this.checkType(value, ['object', 'string'], 'pool')
+    this.myPool = value
   }
 
   get poolAddress() {
-    return this.myPoolAddress;
+    return this.myPoolAddress
   }
 
   set poolAddress(value) {
-    this.checkType(value, ['string'], 'poolAddress');
-    this.myPoolAddress = value;
+    this.checkType(value, ['string'], 'poolAddress')
+    this.myPoolAddress = value
   }
 }
 
-export default Contribution;
+export default Contribution

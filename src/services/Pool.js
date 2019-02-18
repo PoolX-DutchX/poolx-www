@@ -1,5 +1,5 @@
-import { feathersClient } from '../lib/feathersClient';
-import Pool from '../models/Pool';
+import { feathersClient } from '../lib/feathersClient'
+import Pool from '../models/Pool'
 
 class PoolService {
   /**
@@ -12,9 +12,9 @@ class PoolService {
       .service('pools')
       .get(poolId)
       .then(pool => {
-        console.log('pool response', pool);
-        return new Pool(pool);
-      });
+        console.log('pool response', pool)
+        return new Pool(pool)
+      })
   }
 
   /**
@@ -27,7 +27,7 @@ class PoolService {
       .service('pools')
       .watch({ listStrategy: 'always' })
       .get(poolId)
-      .subscribe(pool => onSuccess(new Pool(pool)), onError);
+      .subscribe(pool => onSuccess(new Pool(pool)), onError)
   }
 
   /**
@@ -47,14 +47,14 @@ class PoolService {
         .then(({ data: pools }) => {
           resolve(
             pools.map(pool => {
-              console.log('pool', pool);
-              console.log('new Pool(pool)', new Pool(pool));
-              return new Pool(pool);
-            }),
-          );
+              console.log('pool', pool)
+              console.log('new Pool(pool)', new Pool(pool))
+              return new Pool(pool)
+            })
+          )
         })
-        .catch(reject);
-    });
+        .catch(reject)
+    })
   }
 
   /**
@@ -63,7 +63,7 @@ class PoolService {
    * @param id   ID of the Pool to be patched
    */
   static patch(poolId, data) {
-    return feathersClient.service('pools').patch(poolId, data);
+    return feathersClient.service('pools').patch(poolId, data)
   }
 
   /**
@@ -85,9 +85,9 @@ class PoolService {
       .subscribe(resp => {
         const newResp = Object.assign({}, resp, {
           data: resp.data.map(c => new Pool(c)),
-        });
-        onSuccess(newResp);
-      }, onError);
+        })
+        onSuccess(newResp)
+      }, onError)
   }
 
   /**
@@ -107,9 +107,10 @@ class PoolService {
         },
       })
       .subscribe(
-        resp => onSuccess(resp.data.map(pool => new Pool(pool)).sort(Pool.compare)),
-        onError,
-      );
+        resp =>
+          onSuccess(resp.data.map(pool => new Pool(pool)).sort(Pool.compare)),
+        onError
+      )
   }
 
   /**
@@ -124,7 +125,7 @@ class PoolService {
       query: {
         userWhitelisted: userId,
       },
-    });
+    })
   }
 
   /**
@@ -137,11 +138,11 @@ class PoolService {
    * @param afterMined  Callback to be triggered after the transaction is mined
    */
   static save(pool) {
-    console.log('pool.toFeathers()', pool.toFeathers());
+    console.log('pool.toFeathers()', pool.toFeathers())
     if (pool.id) {
-      return feathersClient.service('pools').patch(pool.id, pool.toFeathers());
+      return feathersClient.service('pools').patch(pool.id, pool.toFeathers())
     } else {
-      return feathersClient.service('pools').create(pool.toFeathers());
+      return feathersClient.service('pools').create(pool.toFeathers())
     }
   }
 
@@ -154,7 +155,12 @@ class PoolService {
    * @param afterCreate Callback to be triggered after the Campaign is cancelled in feathers
    * @param afterMined  Callback to be triggered after the transaction is mined
    */
-  static cancel(campaign, from, afterCreate = () => {}, afterMined = () => {}) {}
+  static cancel(
+    campaign,
+    from,
+    afterCreate = () => {},
+    afterMined = () => {}
+  ) {}
 }
 
-export default PoolService;
+export default PoolService
