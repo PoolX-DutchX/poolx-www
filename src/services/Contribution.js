@@ -1,5 +1,5 @@
-import { feathersClient } from '../lib/feathersClient';
-import Contribution from '../models/Contribution';
+import { feathersClient } from '../lib/feathersClient'
+import Contribution from '../models/Contribution'
 
 class ContributionService {
   /**
@@ -13,10 +13,10 @@ class ContributionService {
         .service('contributions')
         .find({ query: { ownerWallet: ownerWallet } })
         .then(resp => {
-          resolve(new Contribution(resp.data[0]));
+          resolve(new Contribution(resp.data[0]))
         })
-        .catch(reject);
-    });
+        .catch(reject)
+    })
   }
 
   /**
@@ -38,9 +38,9 @@ class ContributionService {
       .subscribe(resp => {
         const newResp = Object.assign({}, resp, {
           data: resp.data.map(c => new Contribution(c)),
-        });
-        onSuccess(newResp);
-      }, onError);
+        })
+        onSuccess(newResp)
+      }, onError)
   }
 
   /**
@@ -60,9 +60,11 @@ class ContributionService {
         },
       })
       .subscribe(resp => {
-        const contributions = resp.data.map(contribution => new Contribution(contribution));
-        onSuccess(contributions);
-      }, onError);
+        const contributions = resp.data.map(
+          contribution => new Contribution(contribution)
+        )
+        onSuccess(contributions)
+      }, onError)
   }
 
   /**
@@ -72,7 +74,12 @@ class ContributionService {
    * @param pooId Id of the pool whose contribution was made to
    *
    */
-  static subscribeUserContributionsByPoolId(userId, poolId, onSuccess, onError) {
+  static subscribeUserContributionsByPoolId(
+    userId,
+    poolId,
+    onSuccess,
+    onError
+  ) {
     return feathersClient
       .service('contributions')
       .watch({ listStrategy: 'always' })
@@ -86,9 +93,11 @@ class ContributionService {
         },
       })
       .subscribe(resp => {
-        const contributions = resp.data.map(contribution => new Contribution(contribution));
-        onSuccess(contributions);
-      }, onError);
+        const contributions = resp.data.map(
+          contribution => new Contribution(contribution)
+        )
+        onSuccess(contributions)
+      }, onError)
   }
   /**
    * Get the user's Contributions made to a particular pool
@@ -106,7 +115,7 @@ class ContributionService {
           $ne: Contribution.PENDING_CONFIRMATION,
         },
       },
-    });
+    })
   }
 
   /**
@@ -117,8 +126,10 @@ class ContributionService {
    *
    */
   static patch(contributionId, payload) {
-    console.log('contributionId', contributionId);
-    return feathersClient.service('contributions').patch(contributionId, payload);
+    console.log('contributionId', contributionId)
+    return feathersClient
+      .service('contributions')
+      .patch(contributionId, payload)
   }
 
   /**
@@ -130,7 +141,12 @@ class ContributionService {
    * @param afterCreate Callback to be triggered after the Campaign is cancelled in feathers
    * @param afterMined  Callback to be triggered after the transaction is mined
    */
-  static cancel(campaign, from, afterCreate = () => {}, afterMined = () => {}) {}
+  static cancel(
+    campaign,
+    from,
+    afterCreate = () => {},
+    afterMined = () => {}
+  ) {}
 }
 
-export default ContributionService;
+export default ContributionService

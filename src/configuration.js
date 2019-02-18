@@ -1,6 +1,6 @@
-export const ENV_LOCALHOST = 'localhost';
-export const ENV_STAGING = 'staging';
-export const ENV_PRODUCTION = 'production';
+export const ENV_LOCALHOST = 'localhost'
+export const ENV_STAGING = 'staging'
+export const ENV_PRODUCTION = 'production'
 
 const {
   REACT_APP_ENVIRONMENT = ENV_LOCALHOST, // optional
@@ -9,7 +9,7 @@ const {
   REACT_APP_ETH_NODE_CONNECTION_URL,
   REACT_APP_BLOCKEXPLORER,
   REACT_APP_BUGS_EMAIL = 'bugs@poolbase.io',
-} = process.env;
+} = process.env
 
 const configurations = {
   [ENV_LOCALHOST]: {
@@ -42,26 +42,30 @@ const configurations = {
     feathersConnection: 'https://feathers.mainnet.giveth.io',
     nodeConnection: 'wss://mew.giveth.io/ws',
   },
-};
+}
 
 // Unknown environment
 if (configurations[REACT_APP_ENVIRONMENT] === undefined)
   throw new Error(
     `There is no configuration object for environment: ${REACT_APP_ENVIRONMENT}. Expected REACT_APP_ENVIRONMENT to be empty or one of: ${Object.keys(
-      configurations,
-    )}`,
-  );
+      configurations
+    )}`
+  )
 
 // Create config object based on environment setup
-const config = Object.assign({}, configurations[REACT_APP_ENVIRONMENT]);
+const config = Object.assign({}, configurations[REACT_APP_ENVIRONMENT])
 
 // Overwrite the environment values with parameters
-config.etherscan = REACT_APP_BLOCKEXPLORER || config.etherscan;
-config.feathersConnection = REACT_APP_FEATHERJS_CONNECTION_URL || config.feathersConnection;
-config.nodeConnection = REACT_APP_ETH_NODE_CONNECTION_URL || config.nodeConnection;
-config.decimals = REACT_APP_DECIMALS;
-config.bugsEmail = REACT_APP_BUGS_EMAIL;
-config.sendErrors = [ENV_STAGING, ENV_PRODUCTION].includes(REACT_APP_ENVIRONMENT);
-config.env = REACT_APP_ENVIRONMENT;
+config.etherscan = REACT_APP_BLOCKEXPLORER || config.etherscan
+config.feathersConnection =
+  REACT_APP_FEATHERJS_CONNECTION_URL || config.feathersConnection
+config.nodeConnection =
+  REACT_APP_ETH_NODE_CONNECTION_URL || config.nodeConnection
+config.decimals = REACT_APP_DECIMALS
+config.bugsEmail = REACT_APP_BUGS_EMAIL
+config.sendErrors = [ENV_STAGING, ENV_PRODUCTION].includes(
+  REACT_APP_ENVIRONMENT
+)
+config.env = REACT_APP_ENVIRONMENT
 
-export default config;
+export default config

@@ -1,6 +1,6 @@
-import * as Yup from 'yup';
-import Pool from '../../../../models/Pool';
-import { ethereumAddress, hexString } from '../../../../lib/validators';
+import * as Yup from 'yup'
+import Pool from '../../../../models/Pool'
+import { ethereumAddress, hexString } from '../../../../lib/validators'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Required'),
@@ -13,7 +13,7 @@ const validationSchema = Yup.object().shape({
     .when('maxAllocation', (maxAllocation, schema) => {
       return maxAllocation
         ? schema.max(maxAllocation, 'Must be less than Net max pool allocation')
-        : schema;
+        : schema
     })
     .min(0, `Must be more than zero`)
     .required('Required'),
@@ -21,13 +21,13 @@ const validationSchema = Yup.object().shape({
     .when('maxAllocation', (maxAllocation, schema) => {
       return maxAllocation
         ? schema.max(maxAllocation, 'Must be less than Net max pool allocation')
-        : schema;
+        : schema
     })
     .min(0, `Must be more than zero`)
     .when('minContribution', (minContribution, schema) => {
       return minContribution
         ? schema.min(minContribution, 'Must be more than Minimum contribution')
-        : schema;
+        : schema
     })
     .required('Required'),
   fee: Yup.number()
@@ -37,7 +37,7 @@ const validationSchema = Yup.object().shape({
   feePayoutCurrency: Yup.string()
     .oneOf(
       [Pool.CURRENCY_ETHER, Pool.CURRENCY_TOKEN],
-      `Must be either ${Pool.CURRENCY_ETHER} or ${Pool.CURRENCY_TOKEN}`,
+      `Must be either ${Pool.CURRENCY_ETHER} or ${Pool.CURRENCY_TOKEN}`
     )
     .required('Select a payout currency'),
   adminPayoutAddress: ethereumAddress().required('Required'),
@@ -46,12 +46,12 @@ const validationSchema = Yup.object().shape({
       Yup.object().shape({
         address: ethereumAddress().required('Required'),
         name: Yup.string(),
-      }),
+      })
     )
     .max(5),
   lockPayoutAddress: Yup.boolean().required('Required'),
   payoutAddress: ethereumAddress(),
   payoutTxData: hexString(),
-});
+})
 
-export default validationSchema;
+export default validationSchema

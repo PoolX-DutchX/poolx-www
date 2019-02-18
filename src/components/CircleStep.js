@@ -1,10 +1,10 @@
-import React from 'react';
+import React from 'react'
 const CircleStep = ({ step }) => {
   const style = {
     position: 'relative',
     top: '3px',
     marginRight: '0.5rem',
-  };
+  }
   return (
     <svg width="24" height="24" style={style}>
       <circle cx="12" cy="12" r="12" fill="#4941B8" />
@@ -20,7 +20,7 @@ const CircleStep = ({ step }) => {
         {step}
       </text>
     </svg>
-  );
-};
+  )
+}
 
-export default CircleStep;
+export default CircleStep

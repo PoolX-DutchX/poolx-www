@@ -1,29 +1,29 @@
-import { history } from './lib/helpers';
-import config from './configuration';
-import PoolService from './services/Pool';
-import ContributionService from './services/Contribution';
+import { history } from './lib/helpers'
+import config from './configuration'
+import PoolService from './services/Pool'
+import ContributionService from './services/Contribution'
 
 //Contribution Statuses
-export const PENDING_CONFIRMATION = 'pending_confirmation';
-export const CONFIRMED = 'confirmed';
-export const TOKENS_AVAILABLE = 'tokens_available';
-export const PENDING_CLAIM_TOKENS = 'pending_claim_tokens';
-export const TOKENS_CLAIMED = 'tokens_claimed';
-export const REFUND_AVAILABLE = 'refund_available';
-export const PENDING_REFUND = 'pending_refund';
-export const REFUND_RECEIVED = 'refund_received';
+export const PENDING_CONFIRMATION = 'pending_confirmation'
+export const CONFIRMED = 'confirmed'
+export const TOKENS_AVAILABLE = 'tokens_available'
+export const PENDING_CLAIM_TOKENS = 'pending_claim_tokens'
+export const TOKENS_CLAIMED = 'tokens_claimed'
+export const REFUND_AVAILABLE = 'refund_available'
+export const PENDING_REFUND = 'pending_refund'
+export const REFUND_RECEIVED = 'refund_received'
 // export const PAUSED = 'paused';
 
 //Pool Statuses
-export const PENDING_DEPLOYMENT = 'pending_deployment';
-export const ACTIVE = 'active';
-export const PENDING_CLOSE_POOL = 'pending_close_pool';
-export const CLOSED = 'closed';
-export const PENDING_TOKEN_BATCH = 'pending_token_batch';
-export const PAYOUT_ENABLED = 'payout_enabled';
-export const PENDING_ENABLE_REFUNDS = 'pending_enable_refunds';
-export const REFUNDS_ENABLED = 'refunds_enabled';
-export const PAUSED = 'paused';
+export const PENDING_DEPLOYMENT = 'pending_deployment'
+export const ACTIVE = 'active'
+export const PENDING_CLOSE_POOL = 'pending_close_pool'
+export const CLOSED = 'closed'
+export const PENDING_TOKEN_BATCH = 'pending_token_batch'
+export const PAYOUT_ENABLED = 'payout_enabled'
+export const PENDING_ENABLE_REFUNDS = 'pending_enable_refunds'
+export const REFUNDS_ENABLED = 'refunds_enabled'
+export const PAUSED = 'paused'
 
 export const statusDisplayMap = {
   //Contributions
@@ -45,14 +45,14 @@ export const statusDisplayMap = {
   [PENDING_ENABLE_REFUNDS]: 'Pending Enable Refunds',
   [REFUNDS_ENABLED]: 'Refunds Enabled',
   [PAUSED]: 'Paused',
-};
+}
 
 export const contributionStatusMap = {
   [PENDING_CONFIRMATION]: {
     displayText: 'Pending',
     actionText: 'View TX Data',
     action: contribution => () => {
-      history.push(`contributions/${contribution.id}/pendingTx`);
+      history.push(`contributions/${contribution.id}/pendingTx`)
     },
   },
   [CONFIRMED]: {
@@ -68,15 +68,15 @@ export const contributionStatusMap = {
         status: PENDING_CLAIM_TOKENS,
         poolAddress,
         ownerAddress,
-      });
-      history.push(`contributions/${contributionId}/pendingTx`);
+      })
+      history.push(`contributions/${contributionId}/pendingTx`)
     },
   },
   [PENDING_CLAIM_TOKENS]: {
     displayText: 'Pending Claim',
     actionText: 'View TX Data',
     action: contribution => () => {
-      history.push(`contributions/${contribution.id}/pendingTx`);
+      history.push(`contributions/${contribution.id}/pendingTx`)
     },
   },
   [TOKENS_CLAIMED]: {
@@ -99,56 +99,56 @@ export const contributionStatusMap = {
     actionText: '',
     action: null,
   },
-};
+}
 
 export const poolStatusMap = {
   [PENDING_DEPLOYMENT]: {
     displayText: statusDisplayMap[PENDING_DEPLOYMENT],
     actionText: 'View TX Data',
     action: pool => () => {
-      history.push(`pools/${pool.id}/pendingTx`);
+      history.push(`pools/${pool.id}/pendingTx`)
     },
   },
   [ACTIVE]: {
     displayText: statusDisplayMap[ACTIVE],
     actionText: 'Send Funds',
     action: pool => () => {
-      history.push(`pools/${pool.id}/payout`);
+      history.push(`pools/${pool.id}/payout`)
     },
   },
   [PENDING_CLOSE_POOL]: {
     displayText: statusDisplayMap[PENDING_CLOSE_POOL],
     actionText: 'View TX Data',
     action: pool => () => {
-      history.push(`pools/${pool.id}/pendingTx`);
+      history.push(`pools/${pool.id}/pendingTx`)
     },
   },
   [CLOSED]: {
     displayText: statusDisplayMap[CLOSED],
     actionText: 'Confirm Token',
     action: pool => () => {
-      history.push(`pools/${pool.id}/confirmTokenBatch`);
+      history.push(`pools/${pool.id}/confirmTokenBatch`)
     },
   },
   [PENDING_TOKEN_BATCH]: {
     displayText: statusDisplayMap[PENDING_TOKEN_BATCH],
     actionText: 'View TX Data',
     action: pool => () => {
-      history.push(`pools/${pool.id}/pendingTx`);
+      history.push(`pools/${pool.id}/pendingTx`)
     },
   },
   [PAYOUT_ENABLED]: {
     displayText: statusDisplayMap[PAYOUT_ENABLED],
     actionText: 'Add Token Batch',
     action: pool => () => {
-      history.push(`pools/${pool.id}/confirmTokenBatch`); //token address needs to be disabled, without needing
+      history.push(`pools/${pool.id}/confirmTokenBatch`) //token address needs to be disabled, without needing
     },
   },
   [PENDING_ENABLE_REFUNDS]: {
     displayText: statusDisplayMap[PENDING_ENABLE_REFUNDS],
     actionText: 'View TX Data',
     action: pool => () => {
-      history.push(`pools/${pool.id}/pendingTx`);
+      history.push(`pools/${pool.id}/pendingTx`)
     },
   },
   [REFUNDS_ENABLED]: {
@@ -161,7 +161,7 @@ export const poolStatusMap = {
     actionText: 'Unpause',
     action: null,
   },
-};
+}
 
 export const teamList = [
   {
@@ -184,8 +184,8 @@ export const teamList = [
     name: 'Michael Teixeira',
     title: 'Co-founder',
   },
-];
+]
 
 export const getEtherscanTxLink = txHash => {
-  return `${config.etherscan}/tx/${txHash}`;
-};
+  return `${config.etherscan}/tx/${txHash}`
+}

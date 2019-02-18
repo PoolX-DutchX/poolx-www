@@ -1,4 +1,4 @@
-import Model from './Model';
+import Model from './Model'
 
 /**
  * The Pool and Contribution base model containing basic common interface
@@ -15,72 +15,72 @@ class BasicModel extends Model {
    *         0  if a = b
    */
   static compare(a, b) {
-    if (a.myOrder > b.myOrder) return 1;
-    if (a.myOrder < b.myOrder) return -1;
-    return 0;
+    if (a.myOrder > b.myOrder) return 1
+    if (a.myOrder < b.myOrder) return -1
+    return 0
   }
 
   constructor({ _id, owner, ownerAddress, transactions, createdAt }) {
-    super();
+    super()
 
-    this.id = _id;
-    this.owner = owner;
-    this.ownerAddress = ownerAddress;
-    this.transactions = transactions || [];
-    this.createdAt = createdAt;
-    this.myOrder = -1;
+    this.id = _id
+    this.owner = owner
+    this.ownerAddress = ownerAddress
+    this.transactions = transactions || []
+    this.createdAt = createdAt
+    this.myOrder = -1
   }
 
   toFeathers() {
     return {
       ownerAddress: this.ownerAddress,
-    };
+    }
   }
 
   get id() {
-    return this.myId;
+    return this.myId
   }
 
   set id(value) {
-    this.checkType(value, ['undefined', 'string'], 'id');
-    this.myId = value;
+    this.checkType(value, ['undefined', 'string'], 'id')
+    this.myId = value
   }
 
   get owner() {
-    return this.myOwner;
+    return this.myOwner
   }
 
   set owner(value) {
-    this.checkType(value, ['undefined', 'object'], 'owner');
-    this.myOwner = value;
+    this.checkType(value, ['undefined', 'object'], 'owner')
+    this.myOwner = value
   }
 
   get ownerAddress() {
-    return this.myOwnerAddress;
+    return this.myOwnerAddress
   }
 
   set ownerAddress(value) {
-    this.checkType(value, ['undefined', 'string'], 'ownerAddress');
-    this.myOwnerAddress = value;
+    this.checkType(value, ['undefined', 'string'], 'ownerAddress')
+    this.myOwnerAddress = value
   }
 
   get transactions() {
-    return this.myTransactions;
+    return this.myTransactions
   }
 
   set transactions(value) {
-    this.checkType(value, ['object', 'array'], 'transactions');
-    this.myTransactions = value;
+    this.checkType(value, ['object', 'array'], 'transactions')
+    this.myTransactions = value
   }
 
   get createdAt() {
-    return this.myCreatedAt;
+    return this.myCreatedAt
   }
 
   set createdAt(value) {
-    this.checkType(value, ['undefined', 'string'], 'createdAt');
-    this.myCreatedAt = value;
+    this.checkType(value, ['undefined', 'string'], 'createdAt')
+    this.myCreatedAt = value
   }
 }
 
-export default BasicModel;
+export default BasicModel

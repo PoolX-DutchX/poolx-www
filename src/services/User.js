@@ -1,5 +1,5 @@
-import { feathersClient } from '../lib/feathersClient';
-import User from '../models/User';
+import { feathersClient } from '../lib/feathersClient'
+import User from '../models/User'
 
 class UserService {
   /**
@@ -13,11 +13,11 @@ class UserService {
         .service('users')
         .get(userId)
         .then(resp => {
-          resolve(new User(resp.data));
+          resolve(new User(resp.data))
         })
-        .catch(reject);
-    });
+        .catch(reject)
+    })
   }
 }
 
-export default UserService;
+export default UserService
