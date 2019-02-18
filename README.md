@@ -49,7 +49,7 @@ In the following sections you will learn all you need to know to run the Poolbas
 3. Make sure you have [NodeJS](https://nodejs.org/) (v8.4.0 or higher) and [npm](https://www.npmjs.com/) (5.4.1 or higher) installed.
 4. Install dependencies from within poolbase-www directory:
    ```
-   npm install
+   yarn install
    ```
 5. That is it, you are now ready to run the poolbase dapp! Head to the [Run DApp](#run-dapp) section for further instructions.
 
@@ -62,9 +62,9 @@ In the following sections you will learn all you need to know to run the Poolbas
    ```
    cd C:\some\directory\for\repositories
    ```
-5. Update npm to the latest version (in order to make sure the next step has the latest dependencies to install) with:
+5. Update yarn to the latest version (in order to make sure the next step has the latest dependencies to install) with:
    ```
-   npm install npm@latest -g
+   npm install yarn@latest -g
    ```
 6. You must install the NodeJS/NPM dependcies for Windows before you are able to continue. This command will take a few minutes to install all of the necessary dependencies for building NodeJS applications on Windows.
    ```
@@ -72,7 +72,7 @@ In the following sections you will learn all you need to know to run the Poolbas
    ```
 7. Install dependencies from within poolbase-www directory:
    ```
-   npm install
+   yarn install
    ```
 8. For some reason the npm node-sass package does not install correctly in windows when using the 'npm install' command, so you must rebuild the node-sass package with:
    ```
@@ -89,14 +89,14 @@ In the following sections you will learn all you need to know to run the Poolbas
 1. The Poolbase dapp will need to connect to a poolbase-api feathers server. Follow the poolbase-api readme instructions to install and run server before proceeding further. Alternatively, you could change the configuration to connect to the `develop` environment, see the [Configuration](#configuration) section.
 2. Start the dapp.
    ```
-   npm start
+   yarn start
    ```
 3. Once the dapp is up in your browser, click "Sign In" from the main menu.
 
 ### Build
 
 ```
-npm run build
+yarn build
 ```
 
 NOTE: due to a bug in Safari create-react-app's output does not work in Safari (and any iPhone browser)
