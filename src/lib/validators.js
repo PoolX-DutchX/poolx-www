@@ -30,7 +30,7 @@ addValidationRule('isMoment', (formValues, inputValue) =>
 
 // Checks if input is a valid Ether address
 // TODO: Does not support ENS! (It's hard, ENS returns promises)
-addValidationRule('isEtherAddress', (formValues, inputValue, _value) =>
+addValidationRule('isEtherAddress', (formValues, inputValue /*, value*/) =>
   Web3.utils.isAddress(inputValue)
 )
 
@@ -95,7 +95,7 @@ export function isWhitelistedAddress(pool, message) {
     message,
     name: 'whitelisted',
     exclusive: true,
-    test(value) {
+    test(/*value*/) {
       // if (pool.hasWhitelist) {
       //   return WhitelistService
       // }

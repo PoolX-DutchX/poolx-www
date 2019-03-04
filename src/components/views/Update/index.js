@@ -2,17 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import User from '../../../models/User'
-import Pool from '../../../models/Pool'
 import PoolService from '../../../services/Pool'
-
-import * as Yup from 'yup'
 
 import MultiStepForm from '../../MultiStepForm'
 
 import Loader from '../../Loader'
 import { history, isPoolAdmin } from '../../../lib/helpers'
 import { isAuthenticated } from '../../../lib/middleware'
-import { ethereumAddress } from '../../../lib/validators'
 import validationSchemas from './validation/'
 import updateComponents from './components/'
 
@@ -108,7 +104,7 @@ class Update extends Component {
   render() {
     const {
       isLoading,
-      pool,
+      // pool,
       formProps: {
         initialValues,
         UpdateComponent,
@@ -126,7 +122,7 @@ class Update extends Component {
             header={<Header text={headerText} />}
             initialValues={initialValues}
             stepLabels={[stepLabel, 'Perform transaction']}
-            onSubmit={(values, actions) => {
+            onSubmit={values => {
               const { updateProperty } = this.state
               console.log('updateProperty', updateProperty)
               PoolService.patch(this.state.pool.id, {

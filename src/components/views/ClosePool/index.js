@@ -12,7 +12,6 @@ import validationSchemas from './validation/'
 
 import Loader from '../../Loader'
 import { history, isPoolAdmin } from '../../../lib/helpers'
-import { isAuthenticated } from '../../../lib/middleware'
 /**
  * View flow to create a Contribution
  *
@@ -87,7 +86,7 @@ class ClosePool extends Component {
             header={<Header />}
             initialValues={initialValues}
             stepLabels={['Destination & Data', 'Perform transaction']}
-            onSubmit={({ payoutAddress, payoutTxData }, actions) => {
+            onSubmit={({ payoutAddress, payoutTxData }) => {
               console.log('payoutAddress', payoutAddress)
               console.log('payoutTxData', payoutTxData)
               PoolService.patch(this.state.pool.id, {

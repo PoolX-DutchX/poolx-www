@@ -155,12 +155,11 @@ class PoolService {
    * @param afterCreate Callback to be triggered after the Campaign is cancelled in feathers
    * @param afterMined  Callback to be triggered after the transaction is mined
    */
-  static cancel(
-    campaign,
-    from,
-    afterCreate = () => {},
-    afterMined = () => {}
-  ) {}
+  static cancel() {}
+  //campaign,
+  //from,
+  //afterCreate = () => {},
+  //afterMined = () => {}
 }
 
 export default PoolService
