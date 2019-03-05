@@ -1,6 +1,5 @@
 import { history } from './lib/helpers'
 import config from './configuration'
-import PoolService from './services/Pool'
 import ContributionService from './services/Contribution'
 
 //Contribution Statuses

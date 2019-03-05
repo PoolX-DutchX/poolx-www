@@ -81,7 +81,7 @@ class ConfirmTokenBatch extends Component {
               tokenAddress: tokenAddress || '',
             }}
             stepLabels={['Token address', 'Perform transaction']}
-            onSubmit={({ tokenAddress }, actions) => {
+            onSubmit={({ tokenAddress }) => {
               PoolService.patch(this.state.pool.id, {
                 status: Pool.PENDING_TOKEN_BATCH,
                 tokenAddress,
