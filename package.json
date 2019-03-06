@@ -52,7 +52,7 @@
     "underscore": "^1.8.3",
     "web3": "^1.0.0-beta.33",
     "web3-eth-accounts": "^1.0.0-beta.18",
-    "web3-provider-engine": "^13.3.3",
+    "web3-provider-engine": "^14.1.0",
     "whatwg-fetch": "^2.0.3",
     "yup": "^0.26.10"
   },
