@@ -34,28 +34,29 @@ class UserProvider extends Component {
   }
 
   async componentDidMount() {
-    try {
-      const token = await feathersClient.passport.getJWT();
-      if (token) {
-        const tokenPayload = await feathersClient.passport.verifyJWT(token);
-        const { userId } = tokenPayload;
+    this.setState({ isLoading: false, hasError: false });
+    // try {
+    //   const token = await feathersClient.passport.getJWT();
+    //   if (token) {
+    //     const tokenPayload = await feathersClient.passport.verifyJWT(token);
+    //     const { userId } = tokenPayload;
 
-        if (userId) {
-          await feathersClient.authenticate();
-          const user = await UserProvider.getUserProfile(userId);
-          this.setState({ isLoading: false, hasError: false, currentUser: new User(user) });
-        } else {
-          feathersClient.logout();
-          this.setState({ isLoading: false, hasError: false });
-        }
-      } else {
-        this.setState({ isLoading: false, hasError: false });
-      }
-    } catch (err) {
-      console.log('Passport err:', err);
-      this.setState({ isLoading: false, hasError: false });
-      history.push(`/`);
-    }
+    //     if (userId) {
+    //       await feathersClient.authenticate();
+    //       const user = await UserProvider.getUserProfile(userId);
+    //       this.setState({ isLoading: false, hasError: false, currentUser: new User(user) });
+    //     } else {
+    //       feathersClient.logout();
+    //       this.setState({ isLoading: false, hasError: false });
+    //     }
+    //   } else {
+    //     this.setState({ isLoading: false, hasError: false });
+    //   }
+    // } catch (err) {
+    //   console.log('Passport err:', err);
+    //   this.setState({ isLoading: false, hasError: false });
+    //   history.push(`/`);
+    // }
   }
 
   // async getMetamaskAddress() {

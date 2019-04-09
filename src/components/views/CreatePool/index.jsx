@@ -15,7 +15,7 @@ import validationSchemas from './validation/';
 
 import Loader from '../../Loader';
 import { history } from '../../../lib/helpers';
-import { feathersClient } from '../../../lib/feathersClient';
+// import { feathersClient } from '../../../lib/feathersClient';
 /**
  * View flow to create a Contribution
  *
@@ -40,12 +40,12 @@ class CreatePool extends Component {
 
   async componentDidMount() {
     this.setState({ isLoading: true });
-    const { data: [{ percent: percentFee }] } = await feathersClient
-      .service('fees')
-      .find({ query: { type: 'standard' } });
+    // const { data: [{ percent: percentFee }] } = await feathersClient
+    //   .service('fees')
+    //   .find({ query: { type: 'standard' } });
 
     this.setState({
-      poolbaseFee: percentFee,
+      poolbaseFee: 0, // fee set to zero
       isLoading: false,
     });
     // isAuthenticated(this.props.currentUser)

@@ -56,20 +56,21 @@ class Home extends Component {
                       Create a Pool
                     </PillButton>
                   </div>
-                  <div className="col-sm-7">
+                  {/* <div className="col-sm-7">
                     <img
                       className="pb-screenshot"
                       src="/img/screenshots.png"
-                      alt="Poolbase Screenshot"
+                      alt="PoolX Screenshot"
                     />
-                  </div>
+                  </div> */}
                 </div>
               </div>
+
               <div className="bottom-banner">
                 <div className="skew2 cover-all bg-color-medium" />
                 <div className="relative">
                   <div className="container wallet-providers">
-                    <a
+                    {/* <a
                       className="wallet-logo"
                       href="https://metamask.io/"
                       target="_blank"
@@ -104,15 +105,17 @@ class Home extends Component {
                       rel="noopener noreferrer"
                     >
                       <img src="/img/ethereum-logo-white.png" height="70px" alt="Ethereum.org" />
-                    </a>
+                    </a> */}
                   </div>
                 </div>
               </div>
+
+
             </div>
           </div>
 
           <section className="workflow-section">
-            <h2>That's how PoolBase works</h2>
+            <h2>That's how PoolX works</h2>
 
             <div className="switch">
               <span
@@ -234,10 +237,12 @@ class Home extends Component {
                 </div>
               </div>
             )}
+
+
           </section>
 
           <section className="advantages-section four-columns">
-            <h2>That speaks for PoolBase</h2>
+            <h2>That speaks for PoolX</h2>
             <div className="container">
               <div className="row">
                 <div className="col-sm-6 col-md-3">
@@ -288,7 +293,7 @@ class Home extends Component {
             </div>
           </section>
 
-          <section className="team-section four-columns">
+          {/* <section className="team-section four-columns">
             <h2>The team</h2>
             <div className="container">
               <div className="row">
@@ -297,12 +302,12 @@ class Home extends Component {
                 ))}
               </div>
             </div>
-          </section>
+          </section> */}
 
           <footer id="footer">
             <div className="menu container-fluid four-columns">
               <div className="row">
-                <div className="col-sm-6 col-md-3">
+                <div className="col-sm-6 col-md-4">
                   <h4>Get started</h4>
                   <ul>
                     <li>
@@ -319,21 +324,21 @@ class Home extends Component {
                     </li>
                   </ul>
                 </div>
-                <div className="col-sm-6 col-md-3">
+                <div className="col-sm-6 col-md-4">
                   <h4>The company</h4>
                   <ul>
                     <li>
                       <a href="">Our vision</a>
                     </li>
                     <li>
-                      <a href="">PoolBase company</a>
+                      <a href="">PoolX company</a>
                     </li>
                     <li>
                       <a href="">Meet the team</a>
                     </li>
                   </ul>
                 </div>
-                <div className="col-sm-6 col-md-3">
+                <div className="col-sm-6 col-md-4">
                   <h4>Support</h4>
                   <ul>
                     <li>
@@ -350,7 +355,8 @@ class Home extends Component {
                     </li>
                   </ul>
                 </div>
-                <div className="col-sm-6 col-md-3">
+
+                {/* <div className="col-sm-6 col-md-3">
                   <h4>Social</h4>
                   <ol>
                     {this.footerSocial.map((v, i) => (
@@ -361,7 +367,8 @@ class Home extends Component {
                       </li>
                     ))}
                   </ol>
-                </div>
+                </div> */}
+
               </div>
             </div>
             <div className="divider" />
@@ -371,7 +378,7 @@ class Home extends Component {
                   <a href="">Terms &amp; Conditions</a>
                   <a href="">Privacy</a>
                 </div>
-                <div className="col-xs-12 col-sm-6 copyright">Copyright &copy; 2018 PoolBase</div>
+                <div className="col-xs-12 col-sm-6 copyright">Copyright &copy; 2018 PoolX</div>
               </div>
             </div>
           </footer>
