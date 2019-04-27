@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 
 import User from '../../../models/User';
-import Contribution from '../../../models/Contribution';
-import ContributionService from '../../../services/Contribution';
-import PoolService from '../../../services/Pool';
+// import Contribution from '../../../models/Contribution';
+// import ContributionService from '../../../services/Contribution';
+// import PoolService from '../../../services/Pool';
 
 import MultiStepForm from '../../MultiStepForm';
 import StepOne from './components/Step_1';
@@ -15,8 +15,9 @@ import Loader from '../../Loader';
 
 import { history } from '../../../lib/helpers';
 import { feathersClient } from '../../../lib/feathersClient';
-import { isAuthenticated } from '../../../lib/middleware';
-import { isWhitelistedAddress, ethereumAddress } from '../../../lib/validators';
+// import { isAuthenticated } from '../../../lib/middleware';
+import { ethereumAddress } from '../../../lib/validators';
+// import { isWhitelistedAddress } from '../../../lib/validators';
 
 /**
  * View flow to create a Contribution
@@ -47,31 +48,31 @@ class Contribute extends Component {
 
   async componentDidMount() {
     window.scrollTo(0, 0);
-    const { currentUser, match: { params: { poolId } } } = this.props;
-    try {
-      await isAuthenticated(currentUser);
+    // const { currentUser, match: { params: { poolId } } } = this.props;
+    // try {
+    //   await isAuthenticated(currentUser);
 
-      const pool = await PoolService.getById(poolId);
-      // const pools = await feathersClient.service('pools').find({
-      //   query: {
-      //     whitelist: {
-      //       $elemMatch: {
-      //         address:'0x48bb011dcd25d9fb58e3117da48626f4910d7f24'
-      //       }
-      //     }
-      //   }
-      // });
-      // console.log('pools', pools);
-      // const pool = pools[0];
+    //   const pool = await PoolService.getById(poolId);
+    //   // const pools = await feathersClient.service('pools').find({
+    //   //   query: {
+    //   //     whitelist: {
+    //   //       $elemMatch: {
+    //   //         address:'0x48bb011dcd25d9fb58e3117da48626f4910d7f24'
+    //   //       }
+    //   //     }
+    //   //   }
+    //   // });
+    //   // console.log('pools', pools);
+    //   // const pool = pools[0];
 
-      this.setState({
-        isLoading: false,
-        pool,
-      });
-    } catch (err) {
-      console.log('err', err);
-      //oops something wrong
-    }
+    //   this.setState({
+    //     isLoading: false,
+    //     pool,
+    //   });
+    // } catch (err) {
+    //   console.log('err', err);
+    //   //oops something wrong
+    // }
   }
 
   render() {

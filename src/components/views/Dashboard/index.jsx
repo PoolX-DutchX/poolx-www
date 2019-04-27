@@ -15,7 +15,7 @@ import ContributionList from './components/ContributionList';
 import User from '../../../models/User';
 import Loader from '../../Loader';
 import { history } from '../../../lib/helpers';
-import { isLoggedIn } from '../../../lib/middleware';
+// import { isLoggedIn } from '../../../lib/middleware';
 
 import PoolService from '../../../services/Pool';
 import ContributionService from '../../../services/Contribution';

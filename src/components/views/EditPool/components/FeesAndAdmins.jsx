@@ -6,7 +6,7 @@ import { FieldArray } from 'formik';
 import TextField from '@material-ui/core/TextField';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
-import InputAdornment from '@material-ui/core/InputAdornment';
+// import InputAdornment from '@material-ui/core/InputAdornment';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -85,13 +85,13 @@ class StepTwo extends Component {
                         )
                   }
                   placeholder="% 0.0"
-                  InputProps={
-                    values.fee || values.fee === 0
-                      ? {
-                          startAdornment: <InputAdornment position="start">% </InputAdornment>,
-                        }
-                      : {}
-                  }
+                  // InputProps={
+                  //   values.fee || values.fee === 0
+                  //     ? {
+                  //         startAdornment: <InputAdornment position="start">% </InputAdornment>,
+                  //       }
+                  //     : {}
+                  // }
                   inputProps={{
                     min: '0',
                     max: '100',

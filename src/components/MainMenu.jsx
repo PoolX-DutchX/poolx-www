@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import Avatar from 'react-avatar';
-import { Link, NavLink, withRouter } from 'react-router-dom';
+// import Avatar from 'react-avatar';
+import { Link, withRouter } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 import { Consumer as UserConsumer } from '../contextProviders/UserProvider';
 import { history } from '../lib/helpers';
 
@@ -93,7 +94,7 @@ class MainMenu extends Component {
                     </li>
                   )*/}
                 </ul>
-                <ul className="navbar-nav">
+                {/* <ul className="navbar-nav">
                   {!state.currentUser && (
                     <NavLink className="nav-link" to="/signin" activeClassName="active">
                       Sign In
@@ -145,7 +146,7 @@ class MainMenu extends Component {
                       </div>
                     </li>
                   )}
-                </ul>
+                </ul> */}
               </div>
             </nav>
           </div>

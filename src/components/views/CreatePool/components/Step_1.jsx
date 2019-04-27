@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormLabel from '@material-ui/core/FormLabel';
 
-import ChooseWalletDialog from '../../../ChooseWalletDialog';
+// import ChooseWalletDialog from '../../../ChooseWalletDialog';
 
 class StepOne extends Component {
   constructor(props) {
@@ -29,7 +29,7 @@ class StepOne extends Component {
   render() {
     const {
       formik: { values, handleChange, handleBlur, touched, errors },
-      currentUser,
+      // currentUser,
       disabledFields = {},
     } = this.props; // formik props passed in from Wizard
     return (
@@ -53,7 +53,7 @@ class StepOne extends Component {
               fullWidth
             />
           </div>
-          {this.props.currentUser &&
+          {/* {this.props.currentUser &&
             !disabledFields.ownerAddress && (
               <div className="col-md-3">
                 <Button
@@ -71,7 +71,7 @@ class StepOne extends Component {
                   onClose={this.handleWalletDialogClose}
                 />
               </div>
-            )}
+            )} */}
         </div>
         <div className="row">
           <div className="col-md-3">
@@ -81,7 +81,7 @@ class StepOne extends Component {
             <TextField
               id="maxAllocation"
               label="Net max pool allocation"
-              inputProps={{ style: { width: '100%' } }}
+              // inputProps={{ style: { width: '100%' } }}
               placeholder="Ξther amount"
               value={values.maxAllocation}
               onChange={handleChange}
@@ -90,6 +90,7 @@ class StepOne extends Component {
               helperText={touched.maxAllocation && errors.maxAllocation}
               inputProps={{
                 min: values.maxContribution || 0.01,
+                style: { width: '100%' }
               }}
               type="number"
               margin="normal"

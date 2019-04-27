@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 import PillButton from '../PillButton.jsx';
-import TeamCard from '../TeamCard.jsx';
-import { teamList } from '../../constants';
+// import TeamCard from '../TeamCard.jsx';
+// import { teamList } from '../../constants';
 import User from '../../models/User';
 
 class Home extends Component {
@@ -114,7 +114,7 @@ class Home extends Component {
             </div>
           </div>
 
-          <section className="workflow-section">
+          {/* <section className="workflow-section">
             <h2>That's how PoolX works</h2>
 
             <div className="switch">
@@ -291,7 +291,7 @@ class Home extends Component {
                 </div>
               </div>
             </div>
-          </section>
+          </section> */}
 
           {/* <section className="team-section four-columns">
             <h2>The team</h2>
@@ -304,7 +304,7 @@ class Home extends Component {
             </div>
           </section> */}
 
-          <footer id="footer">
+          {/* <footer id="footer">
             <div className="menu container-fluid four-columns">
               <div className="row">
                 <div className="col-sm-6 col-md-4">
@@ -356,7 +356,7 @@ class Home extends Component {
                   </ul>
                 </div>
 
-                {/* <div className="col-sm-6 col-md-3">
+                <div className="col-sm-6 col-md-3">
                   <h4>Social</h4>
                   <ol>
                     {this.footerSocial.map((v, i) => (
@@ -367,7 +367,7 @@ class Home extends Component {
                       </li>
                     ))}
                   </ol>
-                </div> */}
+                </div>
 
               </div>
             </div>
@@ -381,7 +381,8 @@ class Home extends Component {
                 <div className="col-xs-12 col-sm-6 copyright">Copyright &copy; 2018 PoolX</div>
               </div>
             </div>
-          </footer>
+          </footer> */}
+
         </div>
       </div>
     );

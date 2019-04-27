@@ -80,7 +80,7 @@ class MultiStepForm extends React.Component {
                 validationSchema={validationSchemas[step]}
                 onSubmit={this.handleSubmit}
                 render={formikProps => {
-                  console.log('activeStep', activeStep);
+                  // console.log('activeStep', activeStep);
                   const activeStepWithFormikProps = React.cloneElement(activeStep, {
                     formik: formikProps,
                   });

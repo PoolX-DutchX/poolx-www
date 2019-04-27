@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import Button from '@material-ui/core/Button';
-import { utils } from 'web3';
+// import { utils } from 'web3';
 import { poolStatusMap } from '../../../../constants';
 
 import Pool from '../../../../models/Pool';

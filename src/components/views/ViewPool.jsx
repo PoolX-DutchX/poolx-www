@@ -10,7 +10,7 @@ import User from '../../models/User';
 import PoolService from '../../services/Pool';
 import PoolModel from '../../models/Pool';
 import ContributionService from '../../services/Contribution';
-import { feathersClient } from '../../lib/feathersClient';
+// import { feathersClient } from '../../lib/feathersClient';
 
 import { statusDisplayMap } from '../../constants';
 
