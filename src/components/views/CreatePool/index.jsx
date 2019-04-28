@@ -10,6 +10,7 @@ import StepTwo from './components/Step_2';
 import StepThree from './components/Step_3';
 import StepFour from './components/Step_4';
 import PoolReview from './components/PoolReview';
+import { useWeb3Context } from 'web3-react'
 
 // import validationSchemas from './validation/';
 
@@ -22,6 +23,7 @@ import Loader from '../../Loader';
  * @param id URL parameter which is an id of a pool object
  */
 
+
 const Header = () => (
   <div>
     <h1 className="font-xl">Create Pool</h1>
@@ -29,39 +31,65 @@ const Header = () => (
   </div>
 );
 
-class CreatePool extends Component {
-  constructor(props) {
-    super(props);
+// const Web3Setter = props => {
+//   let web3 = null;
+//   if (web3 === null) {
+//     web3 = useWeb3Context();
+//   }
 
-    this.state = {
-      isLoading: true,
-    };
-  }
+//   return <div />;
+// };
 
-  async componentDidMount() {
-    this.setState({ isLoading: true });
-    // const { data: [{ percent: percentFee }] } = await feathersClient
-    //   .service('fees')
-    //   .find({ query: { type: 'standard' } });
+function CreatePool(props) {
+  // constructor(props) {
+  //   super(props);
 
-    this.setState({
-      poolbaseFee: 0, // fee set to zero
-      isLoading: false,
-    });
-    // isAuthenticated(this.props.currentUser)
-    //   .then(() => {
-    //       this.setState({ isLoading: false });
-    //   })
-    //   .catch((err, anythingElse) => {
-    //     console.log('err', err);
-    //   });
-  }
+  //   this.state = {
+  //     isLoading: false,
+  //     web3: null,
+  //     poolbaseFee: 0
+  //   };
+  // }
 
-  render() {
-    const { isLoading, poolbaseFee } = this.state;
+  // async componentDidMount() {
+  //   this.setState({ isLoading: true });
+  //   // const { data: [{ percent: percentFee }] } = await feathersClient
+  //   //   .service('fees')
+  //   //   .find({ query: { type: 'standard' } });
+
+  //    const web3 = useWeb3Context();
+  //     if (web3.account) {
+  //       this.setState({ isLoading: false, web3 });
+  //     }
+
+  //   // this.setState({
+  //   //   poolbaseFee: 0, // fee set to zero
+  //   //   isLoading: false,
+  //   // });
+  //   // isAuthenticated(props.currentUser)
+  //   //   .then(() => {
+  //   //       this.setState({ isLoading: false });
+  //   //   })
+  //   //   .catch((err, anythingElse) => {
+  //   //     console.log('err', err);
+  //   //   });
+  // }
+
+
+    // const { isLoading, poolbaseFee } = this.state;
+    let web3 = null;
+    let isLoading = false
+    let poolbaseFee = 0;
+
+    if (web3 === null) {
+      web3 = useWeb3Context();
+    }
+    console.log({web3})
 
     return (
       <div>
+        {/* <Web3Setter /> */}
+        <p>HAHAHAHA{web3.account}</p>
         {isLoading && <Loader className="fixed" />}
         {!isLoading && (
           <MultiStepForm
@@ -102,7 +130,7 @@ class CreatePool extends Component {
             }}
             validationSchemas={{}}
           >
-            <StepOne currentUser={this.props.currentUser} />
+            <StepOne currentUser={props.currentUser} />
             <StepTwo poolbaseFee={poolbaseFee} />
             <StepThree />
             <StepFour />
@@ -111,17 +139,16 @@ class CreatePool extends Component {
         )}
       </div>
     );
-  }
 }
 
-CreatePool.propTypes = {
-  currentUser: PropTypes.instanceOf(User),
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
-};
+// CreatePool.propTypes = {
+//   currentUser: PropTypes.instanceOf(User),
+//   match: PropTypes.shape({
+//     params: PropTypes.shape({
+//       id: PropTypes.string,
+//     }).isRequired,
+//   }).isRequired,
+// };
 
 export default CreatePool;
 

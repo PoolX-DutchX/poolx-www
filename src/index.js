@@ -2,12 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import registerServiceWorker from './lib/registerServiceWorker'
-import Application from './containers/Application'
+import ApplicationWrapper from './containers/ApplicationWrapper'
 import './styles/application.css'
 
 /* global document */
 ReactDOM.render(
-  <Application />, // eslint-disable-line react/jsx-filename-extension
+  <ApplicationWrapper />, // eslint-disable-line react/jsx-filename-extension
   document.getElementById('root')
 )
 
