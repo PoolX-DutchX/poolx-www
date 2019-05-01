@@ -1,8 +1,4 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-
-import User from '../../../models/User';
-// import Pool from '../../../models/Pool';
+import React from 'react';
 
 import MultiStepForm from '../../MultiStepForm';
 import StepOne from './components/Step_1';
@@ -10,19 +6,14 @@ import StepTwo from './components/Step_2';
 import StepThree from './components/Step_3';
 import StepFour from './components/Step_4';
 import PoolReview from './components/PoolReview';
-import { useWeb3Context } from 'web3-react'
-
-// import validationSchemas from './validation/';
+import { useWeb3Context, Web3Consumer } from 'web3-react'
 
 import Loader from '../../Loader';
-// import { history } from '../../../lib/helpers';
-// import { feathersClient } from '../../../lib/feathersClient';
 /**
  * View flow to create a Contribution
  *
  * @param id URL parameter which is an id of a pool object
  */
-
 
 const Header = () => (
   <div>
@@ -31,65 +22,37 @@ const Header = () => (
   </div>
 );
 
-// const Web3Setter = props => {
-//   let web3 = null;
-//   if (web3 === null) {
-//     web3 = useWeb3Context();
-//   }
-
-//   return <div />;
-// };
+function Web3ConsumerComponent() {
+  return (
+    <Web3Consumer>
+      {context => {
+        const { active, connectorName, account, networkId } = context;
+        return (
+          active && (
+            <React.Fragment>
+              <p>Active Connector: {connectorName}</p>
+              <p>Account: {account || "None"}</p>
+              <p>Network ID: {networkId}</p>
+            </React.Fragment>
+          )
+        );
+      }}
+    </Web3Consumer>
+  );
+}
 
 function CreatePool(props) {
-  // constructor(props) {
-  //   super(props);
+    const context = useWeb3Context()
+    const { active } = context;
 
-  //   this.state = {
-  //     isLoading: false,
-  //     web3: null,
-  //     poolbaseFee: 0
-  //   };
-  // }
-
-  // async componentDidMount() {
-  //   this.setState({ isLoading: true });
-  //   // const { data: [{ percent: percentFee }] } = await feathersClient
-  //   //   .service('fees')
-  //   //   .find({ query: { type: 'standard' } });
-
-  //    const web3 = useWeb3Context();
-  //     if (web3.account) {
-  //       this.setState({ isLoading: false, web3 });
-  //     }
-
-  //   // this.setState({
-  //   //   poolbaseFee: 0, // fee set to zero
-  //   //   isLoading: false,
-  //   // });
-  //   // isAuthenticated(props.currentUser)
-  //   //   .then(() => {
-  //   //       this.setState({ isLoading: false });
-  //   //   })
-  //   //   .catch((err, anythingElse) => {
-  //   //     console.log('err', err);
-  //   //   });
-  // }
-
-
-    // const { isLoading, poolbaseFee } = this.state;
-    let web3 = null;
-    let isLoading = false
+    let isLoading = active ? false : true;
     let poolbaseFee = 0;
 
-    if (web3 === null) {
-      web3 = useWeb3Context();
-    }
-    console.log({web3})
 
     return (
       <div>
-        {/* <Web3Setter /> */}
-        <p>HAHAHAHA{web3.account}</p>
+        <Web3ConsumerComponent />
+
         {isLoading && <Loader className="fixed" />}
         {!isLoading && (
           <MultiStepForm
@@ -140,15 +103,6 @@ function CreatePool(props) {
       </div>
     );
 }
-
-// CreatePool.propTypes = {
-//   currentUser: PropTypes.instanceOf(User),
-//   match: PropTypes.shape({
-//     params: PropTypes.shape({
-//       id: PropTypes.string,
-//     }).isRequired,
-//   }).isRequired,
-// };
 
 export default CreatePool;
 

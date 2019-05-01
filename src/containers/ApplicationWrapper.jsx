@@ -7,7 +7,7 @@ export default function AppWrapper () {
   return (
     <Web3Provider
       connectors={connectors}
-      libraryName={'ethers.js'|'web3.js'}
+      libraryName={'ethers.js'}
     >
       <Application />
     </Web3Provider>

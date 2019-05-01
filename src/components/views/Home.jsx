@@ -10,7 +10,6 @@ import User from '../../models/User';
 class Home extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       showMobileMenu: false,
       workflowSwitch: true,

@@ -34,6 +34,7 @@ import MainMenu from './../components/MainMenu';
 import Loader from './../components/Loader';
 import PrivateRoute from '../components/PrivateRoute';
 import CurrentUserProtectedRoute from '../components/CurrentUserProtectedRoute';
+import Web3ProtectedRoute from '../components/Web3ProtectedRoute';
 
 // context providers
 import UserProvider, { Consumer as UserConsumer } from '../contextProviders/UserProvider';
@@ -92,10 +93,10 @@ class Application extends Component {
                           {/* Routes are defined here. Persistent data is set as props on components
                     NOTE order matters, wrong order breaks routes!
                  */}
-                          <Route
+                          <Web3ProtectedRoute
                             exact
                             path="/pools/create"
-                            component={props => <CreatePool currentUser={currentUser} {...props} />}
+                            component={props => <CreatePool {...props} />}
                           />
                           <Route
                             exact
