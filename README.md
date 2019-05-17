@@ -1,4 +1,4 @@
-![Poolbase](./public/img/poolbase_logo.png)
+![PoolX](./public/img/poolbase_logo.png)
 
 ## Quick Setting Up Of Development
 
@@ -23,7 +23,7 @@
 
 ## Getting Started
 
-In the following sections you will learn all you need to know to run the Poolbase DApp locally.
+In the following sections you will learn all you need to know to run the PoolX DApp locally.
 
 #### Prerequisities
 
@@ -86,7 +86,7 @@ In the following sections you will learn all you need to know to run the Poolbas
 
 ### Run
 
-1. The Poolbase dapp will need to connect to a poolbase-api feathers server. Follow the poolbase-api readme instructions to install and run server before proceeding further. Alternatively, you could change the configuration to connect to the `develop` environment, see the [Configuration](#configuration) section.
+1. The PoolX dapp will need to connect to a poolbase-api feathers server. Follow the poolbase-api readme instructions to install and run server before proceeding further. Alternatively, you could change the configuration to connect to the `develop` environment, see the [Configuration](#configuration) section.
 2. Start the dapp.
    ```
    yarn start

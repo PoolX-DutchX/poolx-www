@@ -305,12 +305,12 @@ class Pool extends BasicModel {
   }
 
   get poolbaseFee() {
-    return this.myPoolbaseFee
+    return this.myPoolXFee
   }
 
   set poolbaseFee(value) {
     this.checkType(value, ['undefined', 'number'], 'poolbaseFee')
-    this.myPoolbaseFee = value
+    this.myPoolXFee = value
   }
 
   get whitelist() {
