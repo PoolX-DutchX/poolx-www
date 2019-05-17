@@ -52,9 +52,9 @@ class MainMenu extends Component {
               </button>
               <Link className="navbar-brand" to="/">
                 {isHomePage ? (
-                  <img src="/img/logo_white.svg" width="140px" alt="Poolbase logo" />
+                  <img src="/img/poolbase_logo.png" width="140px" alt="PoolX logo" />
                 ) : (
-                  <img src="/img/logo_blue.svg" width="140px" alt="Poolbase logo" />
+                  <img src="/img/poolbase_logo.png" width="140px" alt="PoolX logo" />
                 )}
               </Link>
 
