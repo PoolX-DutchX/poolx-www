@@ -1,14 +1,13 @@
-import React from 'react';
+import React from 'react'
 
-import MultiStepForm from '../../MultiStepForm';
-import StepOne from './components/Step_1';
-import StepTwo from './components/Step_2';
-import StepThree from './components/Step_3';
-import StepFour from './components/Step_4';
-import PoolReview from './components/PoolReview';
+import MultiStepForm from '../../MultiStepForm'
+import StepOne from './components/Step_1'
+import StepThree from './components/Step_3'
+import StepFour from './components/Step_4'
+import PoolReview from './components/PoolReview'
 import { useWeb3Context, Web3Consumer } from 'web3-react'
 
-import Loader from '../../Loader';
+import Loader from '../../Loader'
 /**
  * View flow to create a Contribution
  *
@@ -20,108 +19,96 @@ const Header = () => (
     <h1 className="font-xl">Create Pool</h1>
     <p className="font-m">...And get that money!</p>
   </div>
-);
+)
 
 function Web3ConsumerComponent() {
   return (
     <Web3Consumer>
       {context => {
-        const { active, connectorName, account, networkId } = context;
+        const { active, connectorName, account, networkId } = context
         return (
           active && (
             <React.Fragment>
               <p>Active Connector: {connectorName}</p>
-              <p>Account: {account || "None"}</p>
+              <p>Account: {account || 'None'}</p>
               <p>Network ID: {networkId}</p>
             </React.Fragment>
           )
-        );
+        )
       }}
     </Web3Consumer>
-  );
+  )
 }
 
 function CreatePool(props) {
-    const context = useWeb3Context()
-    const { active } = context;
+  const context = useWeb3Context()
+  const { active } = context
 
-    let isLoading = active ? false : true;
-    let poolbaseFee = 0;
+  let isLoading = active ? false : true
+  let poolbaseFee = 0
 
+  return (
+    <div>
+      <Web3ConsumerComponent />
 
-    return (
-      <div>
-        <Web3ConsumerComponent />
-
-        {isLoading && <Loader className="fixed" />}
-        {!isLoading && (
-          <MultiStepForm
-            header={<Header />}
-            initialValues={{
-              ...initialPoolData,
-              // ...samplePoolData
-            }}
-            stepLabels={[
-              'Wallet & Limits',
-              'Fees & Admins',
-              'Destination & Whitelist',
-              'Name & Description',
-              'Review',
-            ]}
-            onSubmit={(values, actions) => {
-              console.log('submitting values', values);
-              // const pool = new Pool(values);
-              // console.log('pool', pool);
-              // pool
-              //   .save()
-              //   .then(newPool => {
-              //     console.log('newPool', newPool);
-              //     history.push(`/pools/${newPool._id}/pendingTx`); // maybe ._id
-              //     // actions.setSubmitting(false);
-              //   })
-              //   .catch(err => {
-              //     console.log('err', err);
-              //     React.toast.error(
-              //       <p>
-              //         {err.message} <br />
-              //         <p>
-              //           Please sign up to create a pool<br />
-              //         </p>
-              //       </p>,
-              //     );
-              //   });
-            }}
-            validationSchemas={{}}
-          >
-            <StepOne currentUser={props.currentUser} />
-            <StepTwo poolbaseFee={poolbaseFee} />
-            <StepThree />
-            <StepFour />
-            <PoolReview />
-          </MultiStepForm>
-        )}
-      </div>
-    );
+      {isLoading && <Loader className="fixed" />}
+      {!isLoading && (
+        <MultiStepForm
+          header={<Header />}
+          initialValues={{
+            ...initialPoolData,
+            // ...samplePoolData
+          }}
+          stepLabels={[
+            'Wallet & Limits',
+            'Destination & Whitelist',
+            'Name & Description',
+            'Review',
+          ]}
+          onSubmit={(values, actions) => {
+            console.log('submitting values', values)
+            // const pool = new Pool(values);
+            // console.log('pool', pool);
+            // pool
+            //   .save()
+            //   .then(newPool => {
+            //     console.log('newPool', newPool);
+            //     history.push(`/pools/${newPool._id}/pendingTx`); // maybe ._id
+            //     // actions.setSubmitting(false);
+            //   })
+            //   .catch(err => {
+            //     console.log('err', err);
+            //     React.toast.error(
+            //       <p>
+            //         {err.message} <br />
+            //         <p>
+            //           Please sign up to create a pool<br />
+            //         </p>
+            //       </p>,
+            //     );
+            //   });
+          }}
+          validationSchemas={{}}
+        >
+          <StepOne currentUser={props.currentUser} />
+          <StepThree />
+          <StepFour />
+          <PoolReview />
+        </MultiStepForm>
+      )}
+    </div>
+  )
 }
 
-export default CreatePool;
+export default CreatePool
 
 const initialPoolData = {
-  ownerAddress: '',
-  maxAllocation: '',
-  fee: '',
-  feePayoutCurrency: '',
-  lockPayoutAddress: false,
-  payoutAddress: '',
-  payoutTxData: '',
-  admins: [],
-  hasWhitelist: false,
-  adminPayoutAddress: '',
-  name: '',
-  description: '',
-  minContribution: '',
-  maxContribution: '',
-};
+  dutchXAddress: '',
+  sellPriceDenumerator: '',
+  sellPriceNumerator: '',
+  token1Address: '',
+  token2Address: '',
+}
 
 // const samplePoolData = {
 //   ownerAddress: '0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1',

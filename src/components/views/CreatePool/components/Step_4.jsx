@@ -1,26 +1,30 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import TextField from '@material-ui/core/TextField';
+import TextField from '@material-ui/core/TextField'
 
 class StepFour extends Component {
   render() {
-    const { formik: { values, handleChange, handleBlur, touched, errors } } = this.props; // formik props passed in from Wizard
+    const {
+      formik: { values, handleChange, handleBlur, touched, errors },
+    } = this.props // formik props passed in from Wizard
     return (
       <div>
         <div className="row">
           <div className="col">
             <TextField
-              id="name"
-              name="name"
-              label="Pool name"
-              value={values.name}
+              id="sellPriceNumerator"
+              name="sellPriceNumerator"
+              label="Pool's sellPriceNumerator"
+              value={values.sellPriceNumerator}
               autoComplete="Off"
               spellCheck="false"
-              placeholder="Your pool's name"
+              placeholder="The pool's sellPriceNumerator"
               onChange={handleChange}
               onBlur={handleBlur}
-              error={touched.name && !!errors.name}
-              helperText={touched.name && errors.name}
+              error={touched.sellPriceNumerator && !!errors.sellPriceNumerator}
+              helperText={
+                touched.sellPriceNumerator && errors.sellPriceNumerator
+              }
               margin="normal"
               fullWidth
             />
@@ -29,27 +33,29 @@ class StepFour extends Component {
         <div className="row">
           <div className="col">
             <TextField
-              id="description"
-              name="description"
-              label="Pool description"
-              value={values.description}
-              multiline
-              rowsMax="14"
+              id="sellPriceDenumerator"
+              name="sellPriceDenumerator"
+              label="Pool's sellPriceDenumerator"
+              value={values.sellPriceDenumerator}
               autoComplete="Off"
               spellCheck="false"
-              placeholder="Say a few words about your pool"
+              placeholder="The pool's sellPriceDenumerator"
               onChange={handleChange}
               onBlur={handleBlur}
-              error={touched.description && !!errors.description}
-              helperText={touched.description && errors.description}
+              error={
+                touched.sellPriceDenumerator && !!errors.sellPriceDenumerator
+              }
+              helperText={
+                touched.sellPriceDenumerator && errors.sellPriceDenumerator
+              }
               margin="normal"
               fullWidth
             />
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default StepFour;
+export default StepFour

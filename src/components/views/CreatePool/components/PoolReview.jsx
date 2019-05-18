@@ -1,12 +1,12 @@
-import React from 'react';
+import React from 'react'
 
-import Pool from '../../../../models/Pool';
+import Pool from '../../../../models/Pool'
 
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableRow from '@material-ui/core/TableRow'
 
 /**
  * Shows the statistics on DACs, Campaigns and milestonesCount
@@ -15,139 +15,56 @@ import TableRow from '@material-ui/core/TableRow';
  */
 const PoolReview = ({ formik: { values } }) => {
   const {
-    name,
-    description,
-    ownerAddress,
-    maxAllocation,
-    minContribution,
-    maxContribution,
-    fee,
-    feePayoutCurrency,
-    admins,
-    lockPayoutAddress,
-    payoutAddress,
-    payoutTxData,
-    hasWhitelist,
-    whitelist,
-  } = values;
+    dutchXAddress,
+    sellPriceDenumerator,
+    sellPriceNumerator,
+    token1Address,
+    token2Address,
+  } = values
+
+  console.log({ values })
   return (
     <Paper>
       <Table>
         <TableBody>
           <TableRow>
             <TableCell component="th" scope="row">
-              Pool Name
+              Pool dutchXAddress
             </TableCell>
-            <TableCell>{name}</TableCell>
+            <TableCell>{dutchXAddress}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell component="th" scope="row">
-              Pool Description
+              Pool token1Address
             </TableCell>
-            <TableCell>{description}</TableCell>
+            <TableCell>{token1Address}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell component="th" scope="row">
-              Wallet Address
+              Pool token2Address
             </TableCell>
-            <TableCell>{ownerAddress}</TableCell>
+            <TableCell>{token2Address}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell component="th" scope="row">
-              Max allocation
+              Pool sellPriceNumerator
             </TableCell>
-            <TableCell>{maxAllocation} Ξ</TableCell>
+            <TableCell>{sellPriceNumerator}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell component="th" scope="row">
-              Min/Max Contribution
+              Pool sellPriceDenumerator
             </TableCell>
-            <TableCell>
-              {minContribution} Ξ / {maxContribution} Ξ
-            </TableCell>
+            <TableCell>{sellPriceDenumerator}</TableCell>
           </TableRow>
-          <TableRow>
-            <TableCell component="th" scope="row">
-              Your fee
-            </TableCell>
-            <TableCell>{fee}%</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell component="th" scope="row">
-              Fee payout currency
-            </TableCell>
-            <TableCell>{feePayoutCurrency === Pool.CURRENCY_ETHER ? 'Ether' : 'Token'} </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell component="th" scope="row">
-              Admins
-            </TableCell>
-            <Table>
-              <TableBody>
-                {!!admins.length &&
-                  admins.map(({ address, name }, index) => {
-                    return (
-                      <TableRow key={index}>
-                        <TableCell>{address}</TableCell>
-                        <TableCell>{name}</TableCell>
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
-          </TableRow>
-          <TableRow>
-            <TableCell component="th" scope="row">
-              Lock destination
-            </TableCell>
-            <TableCell>{String(lockPayoutAddress)}</TableCell>
-          </TableRow>
-          {lockPayoutAddress &&
-            payoutAddress && (
-              <TableRow>
-                <TableCell component="th" scope="row">
-                  Desintation Address
-                </TableCell>
-                <TableCell>{payoutAddress}</TableCell>
-              </TableRow>
-            )}
-          {lockPayoutAddress &&
-            payoutTxData && (
-              <TableRow>
-                <TableCell component="th" scope="row">
-                  Destination Tx Data
-                </TableCell>
-                <TableCell>{payoutTxData}</TableCell>
-              </TableRow>
-            )}
-          {hasWhitelist &&
-            !!whitelist.length && (
-              <TableRow>
-                <TableCell component="th" scope="row">
-                  Whitelist
-                </TableCell>
-                <Table>
-                  <TableBody>
-                    {whitelist.map(({ address, name }, index) => {
-                      return (
-                        <TableRow key={index}>
-                          <TableCell>{address}</TableCell>
-                          <TableCell>{name}</TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </TableRow>
-            )}
         </TableBody>
       </Table>
     </Paper>
-  );
-};
+  )
+}
 //
 // PoolReview.propTypes = {
 //   pool: PropTypes.object.isRequired
 // };
 
-export default PoolReview;
+export default PoolReview
