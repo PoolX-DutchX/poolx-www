@@ -33,20 +33,20 @@ class StepFour extends Component {
         <div className="row">
           <div className="col">
             <TextField
-              id="sellPriceDenumerator"
-              name="sellPriceDenumerator"
-              label="Pool's sellPriceDenumerator"
-              value={values.sellPriceDenumerator}
+              id="sellPriceDenominator"
+              name="sellPriceDenominator"
+              label="Pool's sellPriceDenominator"
+              value={values.sellPriceDenominator}
               autoComplete="Off"
               spellCheck="false"
-              placeholder="The pool's sellPriceDenumerator"
+              placeholder="The pool's sellPriceDenominator"
               onChange={handleChange}
               onBlur={handleBlur}
               error={
-                touched.sellPriceDenumerator && !!errors.sellPriceDenumerator
+                touched.sellPriceDenominator && !!errors.sellPriceDenominator
               }
               helperText={
-                touched.sellPriceDenumerator && errors.sellPriceDenumerator
+                touched.sellPriceDenominator && errors.sellPriceDenominator
               }
               margin="normal"
               fullWidth

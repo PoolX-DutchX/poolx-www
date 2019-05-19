@@ -16,7 +16,7 @@ import TableRow from '@material-ui/core/TableRow'
 const PoolReview = ({ formik: { values } }) => {
   const {
     dutchXAddress,
-    sellPriceDenumerator,
+    sellPriceDenominator,
     sellPriceNumerator,
     token1Address,
     token2Address,
@@ -53,9 +53,9 @@ const PoolReview = ({ formik: { values } }) => {
           </TableRow>
           <TableRow>
             <TableCell component="th" scope="row">
-              Pool sellPriceDenumerator
+              Pool sellPriceDenominator
             </TableCell>
-            <TableCell>{sellPriceDenumerator}</TableCell>
+            <TableCell>{sellPriceDenominator}</TableCell>
           </TableRow>
         </TableBody>
       </Table>

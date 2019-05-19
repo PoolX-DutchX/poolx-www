@@ -104,7 +104,7 @@ export default CreatePool
 
 const initialPoolData = {
   dutchXAddress: '',
-  sellPriceDenumerator: '',
+  sellPriceDenominator: '',
   sellPriceNumerator: '',
   token1Address: '',
   token2Address: '',
