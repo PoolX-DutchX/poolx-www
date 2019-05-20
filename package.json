@@ -16,7 +16,7 @@
     "feathers-reactive": "^0.5.2",
     "feathers-rest": "^1.8.1",
     "feathers-socketio": "^2.0.1",
-    "formik": "^0.11.11",
+    "formik": "^1.5.7",
     "formsy-react": "^1.1.4",
     "formsy-react-components": "^1.0.0",
     "giveth-react-scripts": "1.1.4",
