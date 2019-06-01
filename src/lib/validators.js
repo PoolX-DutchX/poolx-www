@@ -2,7 +2,7 @@ import * as Yup from 'yup'
 import { addValidationRule } from 'formsy-react'
 import moment from 'moment'
 import Web3 from 'web3'
-import { utils } from 'web3'
+const web3 = new Web3(Web3.givenProvider, null, {})
 
 // Formsy validations
 
@@ -30,9 +30,10 @@ addValidationRule('isMoment', (formValues, inputValue) =>
 
 // Checks if input is a valid Ether address
 // TODO: Does not support ENS! (It's hard, ENS returns promises)
-addValidationRule('isEtherAddress', (formValues, inputValue /*, value*/) =>
-  Web3.utils.isAddress(inputValue)
-)
+addValidationRule('isEtherAddress', (formValues, inputValue /*, value*/) => {
+  console.log({ inputValue })
+  return Web3.utils.isAddress(inputValue)
+})
 
 // YUP validation tests
 function checkEthereumAddress(message) {
@@ -41,11 +42,12 @@ function checkEthereumAddress(message) {
     name: 'ethereumAddress',
     exclusive: true,
     test(value) {
-      return value == null || utils.isAddress(value)
+      return value === null || web3.utils.isAddress(value)
     },
   })
 }
 Yup.addMethod(Yup.string, 'ethereumAddress', checkEthereumAddress)
+
 export const ethereumAddress = () =>
   Yup.string()
     .strict(true)
@@ -89,18 +91,3 @@ export const hexString = () =>
     .ensure()
     .hexPrefix('Hexidecimal data must begin with 0x')
     .hexValidity('Invalid hexidecimal data')
-
-export function isWhitelistedAddress(pool, message) {
-  return this.test({
-    message,
-    name: 'whitelisted',
-    exclusive: true,
-    test(/*value*/) {
-      // if (pool.hasWhitelist) {
-      //   return WhitelistService
-      // }
-
-      return true
-    },
-  })
-}

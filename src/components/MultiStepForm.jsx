@@ -1,67 +1,69 @@
-import React from 'react';
-import { Formik } from 'formik';
+import React from 'react'
+import { Formik } from 'formik'
 
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepButton from '@material-ui/core/StepButton';
-import Button from '@material-ui/core/Button';
+import Stepper from '@material-ui/core/Stepper'
+import Step from '@material-ui/core/Step'
+import StepButton from '@material-ui/core/StepButton'
+import Button from '@material-ui/core/Button'
 
 class MultiStepForm extends React.Component {
-  static Step = ({ children }) => children;
+  static Step = ({ children }) => children
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       step: 0,
       values: props.initialValues,
       completed: {},
-    };
+    }
   }
   componentDidMount() {
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0)
   }
 
   next = values => {
-    window.scrollTo(0, 0);
+    const newValues = Object.entries(values)
+      .filter(([, value]) => value !== '')
+      .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
+
+    window.scrollTo(0, 0)
     this.setState(state => ({
       step: Math.min(state.step + 1, this.props.children.length - 1),
-      values,
-    }));
-  };
-
-  handleStep = step => {
-    return () => {
-      console.log('step', step);
-    };
-  };
+      values: { ...this.state.values, ...newValues },
+    }))
+  }
 
   previous = () => {
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0)
     this.setState(state => ({
       step: Math.max(state.step - 1, 0),
-    }));
-  };
+    }))
+  }
 
   handleSubmit = (values, bag) => {
-    const { children, onSubmit } = this.props;
-    const { step } = this.state;
-    const isLastStep = step === React.Children.count(children) - 1;
-    console.log('step', step);
-    console.log('isLastStep', isLastStep);
+    const { children, onSubmit } = this.props
+    const { step } = this.state
+    const isLastStep = step === React.Children.count(children) - 1
+
     if (isLastStep) {
-      return onSubmit(values);
+      return onSubmit(values)
     } else {
-      this.next(values);
-      bag.resetForm();
-      // bag.setSubmitting(false);
+      console.log({ insideHandleSubmit: values })
+      this.next(values)
+      bag.resetForm()
     }
-  };
+  }
 
   render() {
-    const { children, header, validationSchemas, stepLabels } = this.props;
-    const { step, values } = this.state;
-    const activeStep = React.Children.toArray(children)[step];
-    const isLastStep = step === React.Children.count(children) - 1;
+    const {
+      children,
+      header,
+      validationSchemas,
+      stepLabels,
+    } = this.props
+    const { step, values } = this.state
+    const activeStep = React.Children.toArray(children)[step]
+    const isLastStep = step === React.Children.count(children) - 1
 
     return (
       <div id="multi-step-form">
@@ -70,7 +72,7 @@ class MultiStepForm extends React.Component {
             <section className="col-8 offset-2">{header}</section>
           </div>
         </div>
-        {/*ToDo: need to conjoin all schemas on last step*/}
+
         <div className="container main-wrap">
           <div className="row">
             <div className="col-md-9">
@@ -80,11 +82,13 @@ class MultiStepForm extends React.Component {
                 validationSchema={validationSchemas[step]}
                 onSubmit={this.handleSubmit}
                 render={formikProps => {
-                  // console.log('activeStep', activeStep);
-                  const activeStepWithFormikProps = React.cloneElement(activeStep, {
-                    formik: formikProps,
-                  });
-                  const { handleSubmit, isSubmitting } = formikProps;
+                  const activeStepWithFormikProps = React.cloneElement(
+                    activeStep,
+                    {
+                      formik: formikProps,
+                    }
+                  )
+                  const { handleSubmit, isSubmitting } = formikProps
                   return (
                     <form onSubmit={handleSubmit} noValidate>
                       {activeStepWithFormikProps}
@@ -114,7 +118,7 @@ class MultiStepForm extends React.Component {
                         </div>
                       </div>
                     </form>
-                  );
+                  )
                 }}
               />
             </div>
@@ -124,14 +128,11 @@ class MultiStepForm extends React.Component {
                   {stepLabels.map((label, index) => {
                     return (
                       <Step key={index}>
-                        <StepButton
-                          onClick={this.handleStep(index)}
-                          completed={this.state.completed[index]}
-                        >
+                        <StepButton completed={this.state.completed[index]}>
                           {label}
                         </StepButton>
                       </Step>
-                    );
+                    )
                   })}
                 </Stepper>
               </div>
@@ -139,8 +140,8 @@ class MultiStepForm extends React.Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default MultiStepForm;
+export default MultiStepForm

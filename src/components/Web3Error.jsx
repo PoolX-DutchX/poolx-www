@@ -6,10 +6,9 @@ import { Connectors } from 'web3-react'
 import error from '../assets/error.svg';
 import Common, { Text, Button } from './Web3ErrorBase'
 // import { getNetworkName } from 'web3-react/utilities'
-import { useWeb3Context, getNetworkName } from 'web3-react'
+// import { useWeb3Context, getNetworkName } from 'web3-react'
 // const context = useWeb3Context()
 const { InjectedConnector } = Connectors
-
 
 const Logo = styled.div`
   margin: 1em;
