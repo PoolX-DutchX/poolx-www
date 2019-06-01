@@ -48,7 +48,6 @@ class MultiStepForm extends React.Component {
     if (isLastStep) {
       return onSubmit(values)
     } else {
-      console.log({ insideHandleSubmit: values })
       this.next(values)
       bag.resetForm()
     }

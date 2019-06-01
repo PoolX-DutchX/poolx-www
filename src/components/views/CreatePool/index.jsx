@@ -9,6 +9,8 @@ import { useWeb3Context, Web3Consumer } from 'web3-react'
 
 import validationSchemas from './validation/';
 
+import createPool from './web3Helpers/createPool'
+
 const Header = () => (
   <div>
     <h1 className="font-xl">Create Pool</h1>
@@ -19,11 +21,10 @@ const Web3ConsumerComponent = () => {
   return (
     <Web3Consumer>
       {context => {
-        const { active, connectorName, account, networkId } = context
+        const { active, account, networkId } = context
         return (
           active && (
             <React.Fragment>
-              <p>Active Connector: {connectorName}</p>
               <p>Account: {account || 'None'}</p>
               <p>Network ID: {networkId}</p>
             </React.Fragment>
@@ -40,10 +41,16 @@ const initialPoolData = {
   initialClosingPrice: '',
 }
 
+
 export default () => {
   const context = useWeb3Context()
+  const { account } = context;
   const { active } = context
   const isLoading = active ? false : true
+
+  const handleSubmit = (values) => {
+    createPool(account, values)
+  }
 
   return (
     <div>
@@ -55,9 +62,7 @@ export default () => {
           header={<Header />}
           initialValues={initialPoolData}
           stepLabels={['Add Token Pair', 'Add Initial Price', 'Review']}
-          onSubmit={(values, actions) => {
-            console.log('submitting values', values)
-          }}
+          onSubmit={handleSubmit}
           validationSchemas={validationSchemas}
         >
           <StepOne />

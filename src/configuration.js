@@ -14,18 +14,20 @@ const {
 const configurations = {
   [ENV_LOCALHOST]: {
     title: 'Ganache',
-    poolFactoryAddress: '0x5904adeba7bc0550607c611e906e317338b8e6c2',
-    eventEmitterAddress: '0xd84e2462b412bba3fd81f95812823f7c6a72bab9',
+    poolFactoryAddress: '0xeF81631d6598C821cb90b211B597c1dc07A894Df',
+    poolLibraryAddress: '0xB5d2580F69d48F02717612143EA50866d1E7CC06',
+    dxAddress: '0x7b7DC59ADBE59CA4D0eB32042fD5259Cf5329DE1',
     networkName: 'ganache',
     networkId: 123456789123456789,
-    etherscan: 'https://etherscan.io/', // this won't work, only here so we can see links during development
+    etherscan: 'https://rinkeby.etherscan.io/', // this won't work, only here so we can see links during development
     feathersConnection: 'http://localhost:3030',
     nodeConnection: 'ws://localhost:8545',
   },
   [ENV_STAGING]: {
     title: 'staging',
-    poolFactoryAddress: '0x1ce25E5Db192BB0804aA75D0cA3C7A4f2788Fe10',
-    eventEmitterAddress: '0xd84e2462b412bba3fd81f95812823f7c6a72bab9',
+    poolFactoryAddress: '0xeF81631d6598C821cb90b211B597c1dc07A894Df',
+    poolLibraryAddress: '0xB5d2580F69d48F02717612143EA50866d1E7CC06',
+    dxAddress: '0x7b7DC59ADBE59CA4D0eB32042fD5259Cf5329DE1', // https://dutchx.readthedocs.io/en/latest/smart-contracts_addresses.html#rinkeby
     networkName: 'rinkeby',
     networkId: 4,
     etherscan: 'https://rinkeby.etherscan.io/',
