@@ -9,6 +9,7 @@ const rowTitleMapping = {
   token1: 'Token 1',
   token2: 'Token 2',
   initialClosingPrice: 'Token1 / Token 2 Initial Price',
+  willUseWeth: 'Using Wrapped ETH (WETH)'
 }
 
 export default ({ formik: { values } }) => (
@@ -20,7 +21,7 @@ export default ({ formik: { values } }) => (
             <TableCell component="th" scope="row">
               {rowTitleMapping[key]}
             </TableCell>
-            <TableCell>{value}</TableCell>
+            <TableCell>{`${value}`}</TableCell>
           </TableRow>
         ))}
       </TableBody>

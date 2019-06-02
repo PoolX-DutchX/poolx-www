@@ -39,6 +39,7 @@ const initialPoolData = {
   token1: '',
   token2: '',
   initialClosingPrice: '',
+  willUseWeth: false
 }
 
 

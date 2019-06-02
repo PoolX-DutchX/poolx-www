@@ -1,10 +1,15 @@
 import poolXCloneFactoryAbi from './poolXCloneFactoryAbi.json'
 import config from '../../../../configuration'
 import { wholeNumberToFractionArray } from './fraction'
+import {
+  showToastOnTxSubmitted,
+  showToastOnTxConfirmation,
+  showToastOnTxError,
+} from './showToasts'
+import isMetamasInstalled from '../../../../lib/blockchain/isMetamasInstalled'
 import Web3 from 'web3'
-import { toast } from 'react-toastify'
-const { poolFactoryAddress, dxAddress, etherscan } = config
-const web3 = new Web3(Web3.givenProvider, null, {})
+const web3 = isMetamasInstalled() && new Web3(Web3.givenProvider, null, {})
+const { poolFactoryAddress, dxAddress } = config
 
 export default (
   ethereumAddressFrom,
@@ -31,19 +36,16 @@ export default (
       .send({
         from: ethereumAddressFrom,
       })
-      .once('transactionHash', hash => {
-        toast.info(
-          `Transaction created please see whether it has been confirmed at ${etherscan}/${hash}`,
-          {
-            autoClose: false,
-          }
-        )
-        return resolve(hash)
+      .on('transactionHash', txHash => {
+        showToastOnTxSubmitted(txHash)
+
+        return resolve(txHash)
       })
-      .on('error', error => {
-        toast.error(error.message, {
-          autoClose: false,
-        })
+      .on('confirmation', (confirmationNumber, receipt) => {
+        showToastOnTxConfirmation(confirmationNumber, receipt)
+      })
+      .on('error', (error, receipt) => {
+        showToastOnTxError(receipt)
         return reject(error)
       })
   })

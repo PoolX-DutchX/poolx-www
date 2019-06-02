@@ -3,7 +3,7 @@ import { ethereumAddress } from '../../../../lib/validators'
 
 const stepOneSchema = Yup.object().shape({
   token1: ethereumAddress().required('Required'),
-  token2: ethereumAddress().required('Required'),
+  // token2: ethereumAddress().required('Required'), // need to skip validation when it is wrapped ether
 })
 
 const stepTwoSchema = Yup.object().shape({

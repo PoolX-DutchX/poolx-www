@@ -2,7 +2,15 @@ import * as Yup from 'yup'
 import { addValidationRule } from 'formsy-react'
 import moment from 'moment'
 import Web3 from 'web3'
-const web3 = new Web3(Web3.givenProvider, null, {})
+import isMetamasInstalled from './blockchain/isMetamasInstalled'
+const web3 =
+  isMetamasInstalled() &&
+  new Web3(
+    Web3.givenProvider ||
+      'https://rinkeby.infura.io/v3/a7fc9e96cb5b4b95b0d40b8a76e25747',
+    null,
+    {}
+  )
 
 // Formsy validations
 
@@ -32,7 +40,7 @@ addValidationRule('isMoment', (formValues, inputValue) =>
 // TODO: Does not support ENS! (It's hard, ENS returns promises)
 addValidationRule('isEtherAddress', (formValues, inputValue /*, value*/) => {
   console.log({ inputValue })
-  return Web3.utils.isAddress(inputValue)
+  return web3.utils.isAddress(inputValue)
 })
 
 // YUP validation tests
@@ -59,7 +67,6 @@ function checkHexPrefix(message) {
     name: 'hexPrefix',
     exclusive: true,
     test(value) {
-      console.log('hasPrefix value', value)
       return !value || value.slice(0, 2) === '0x'
     },
   })

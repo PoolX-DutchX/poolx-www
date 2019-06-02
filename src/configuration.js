@@ -17,6 +17,8 @@ const configurations = {
     poolFactoryAddress: '0xeF81631d6598C821cb90b211B597c1dc07A894Df',
     poolLibraryAddress: '0xB5d2580F69d48F02717612143EA50866d1E7CC06',
     dxAddress: '0x7b7DC59ADBE59CA4D0eB32042fD5259Cf5329DE1',
+    dxProxyAddress: '0xaaeb2035ff394fdb2c879190f95e7676f1a9444b',
+    wethAddress: '0xc778417e063141139fce010982780140aa0cd5ab',
     networkName: 'ganache',
     networkId: 123456789123456789,
     etherscan: 'https://rinkeby.etherscan.io/', // this won't work, only here so we can see links during development
@@ -28,6 +30,8 @@ const configurations = {
     poolFactoryAddress: '0xeF81631d6598C821cb90b211B597c1dc07A894Df',
     poolLibraryAddress: '0xB5d2580F69d48F02717612143EA50866d1E7CC06',
     dxAddress: '0x7b7DC59ADBE59CA4D0eB32042fD5259Cf5329DE1', // https://dutchx.readthedocs.io/en/latest/smart-contracts_addresses.html#rinkeby
+    dxProxyAddress: '0xaaeb2035ff394fdb2c879190f95e7676f1a9444b', // https://dutchx.readthedocs.io/en/latest/smart-contracts_addresses.html#rinkeby
+    wethAddress: '0xc778417e063141139fce010982780140aa0cd5ab', // https://dutchx.readthedocs.io/en/latest/add-token-pair.html#get-the-information-for-adding-a-token-pair
     networkName: 'rinkeby',
     networkId: 4,
     etherscan: 'https://rinkeby.etherscan.io/',

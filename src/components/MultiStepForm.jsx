@@ -5,6 +5,8 @@ import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
 import StepButton from '@material-ui/core/StepButton'
 import Button from '@material-ui/core/Button'
+import config from '../configuration'
+const { wethAddress } = config
 
 class MultiStepForm extends React.Component {
   static Step = ({ children }) => children
@@ -25,6 +27,8 @@ class MultiStepForm extends React.Component {
     const newValues = Object.entries(values)
       .filter(([, value]) => value !== '')
       .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
+
+    if (values.willUseWeth) newValues.token2 = wethAddress
 
     window.scrollTo(0, 0)
     this.setState(state => ({
