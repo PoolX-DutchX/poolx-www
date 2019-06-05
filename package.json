@@ -1,5 +1,5 @@
 {
-  "name": "poolbase-www",
+  "name": "poolx-www",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -97,12 +97,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://bitbucket.org/account/user/felixpool/projects/FP/poolbase-www.git"
+    "url": "https://github.com/PoolX-DutchX"
   },
   "author": {
-    "name": "poolbase",
-    "email": "info@poolbase.io",
-    "url": "http://poolbase.io"
+    "name": "poolx",
+    "email": "info@poolx.io",
+    "url": "http://poolx.io"
   },
   "license": "GPL-3.0"
 }

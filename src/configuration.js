@@ -8,7 +8,7 @@ const {
   REACT_APP_FEATHERJS_CONNECTION_URL,
   REACT_APP_ETH_NODE_CONNECTION_URL,
   REACT_APP_BLOCKEXPLORER,
-  REACT_APP_BUGS_EMAIL = 'bugs@poolbase.io',
+  REACT_APP_BUGS_EMAIL = 'bugs@poolx.io',
 } = process.env
 
 const configurations = {
@@ -35,7 +35,7 @@ const configurations = {
     networkName: 'rinkeby',
     networkId: 4,
     etherscan: 'https://rinkeby.etherscan.io/',
-    feathersConnection: 'https://poolbase-api.herokuapp.com/',
+    feathersConnection: 'https://poolx-api.herokuapp.com/',
     nodeConnection: 'wss://rinkeby.infura.io/ws',
   },
   [ENV_PRODUCTION]: {

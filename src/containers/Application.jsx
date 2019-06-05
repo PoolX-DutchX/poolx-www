@@ -69,7 +69,7 @@ class Application extends Component {
     super();
 
     localforage.config({
-      name: 'poolbase',
+      name: 'poolx',
     });
   }
 
@@ -185,7 +185,7 @@ class Application extends Component {
                   hasError && (
                     <center>
                       <h2>Oops, something went wrong...</h2>
-                      <p>Poolbase could not load for some reason. Please try again...</p>
+                      <p>PoolX could not load for some reason. Please try again...</p>
                     </center>
                   )}
 
