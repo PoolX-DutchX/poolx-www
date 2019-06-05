@@ -1,9 +1,9 @@
 .btn-success, .btn-info {
-  background-color: $poolbase-blue;
-  border-color: $poolbase-blue;
+  background-color: $poolx-blue;
+  border-color: $poolx-blue;
 
   &:active, &:hover {
-    background-color: $poolbase-blue;
-    border-color: $poolbase-blue-border;
+    background-color: $poolx-blue;
+    border-color: $poolx-blue-border;
   }
 }

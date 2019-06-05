@@ -1,4 +1,4 @@
-![Poolbase](./public/img/poolbase_logo.png)
+![PoolX](./public/img/poolX_logo.png)
 
 ## Quick Setting Up Of Development
 
@@ -23,7 +23,7 @@
 
 ## Getting Started
 
-In the following sections you will learn all you need to know to run the Poolbase DApp locally.
+In the following sections you will learn all you need to know to run the PoolX DApp locally.
 
 #### Prerequisities
 
@@ -34,7 +34,7 @@ In the following sections you will learn all you need to know to run the Poolbas
 
 #### OSX and Linux
 
-1. From the desired directory you wish to copy the "poolbase-www" folder with source files to.
+1. From the desired directory you wish to copy the "poolx-www" folder with source files to.
    ```
    git clone {paste your repo link here}
    ```
@@ -42,16 +42,16 @@ In the following sections you will learn all you need to know to run the Poolbas
    ```
    git clone -b develop {paste repo link here}
    ```
-2. Change directories to poolbase-www:
+2. Change directories to poolx-www:
    ```
-   cd poolbase-www
+   cd poolx-www
    ```
 3. Make sure you have [NodeJS](https://nodejs.org/) (v8.4.0 or higher) and [npm](https://www.npmjs.com/) (5.4.1 or higher) installed.
-4. Install dependencies from within poolbase-www directory:
+4. Install dependencies from within poolx-www directory:
    ```
    yarn install
    ```
-5. That is it, you are now ready to run the poolbase dapp! Head to the [Run DApp](#run-dapp) section for further instructions.
+5. That is it, you are now ready to run the poolX dapp! Head to the [Run DApp](#run-dapp) section for further instructions.
 
 #### Windows
 
@@ -70,7 +70,7 @@ In the following sections you will learn all you need to know to run the Poolbas
    ```
    npm install -g windows-build-tools
    ```
-7. Install dependencies from within poolbase-www directory:
+7. Install dependencies from within poolx-www directory:
    ```
    yarn install
    ```
@@ -82,11 +82,11 @@ In the following sections you will learn all you need to know to run the Poolbas
    ```
    npm install web3
    ```
-10. That is it, you are now ready to run the poolbase dapp! Head to the [Run dapp](#run-dapp) section for further instructions.
+10. That is it, you are now ready to run the poolX dapp! Head to the [Run dapp](#run-dapp) section for further instructions.
 
 ### Run
 
-1. The Poolbase dapp will need to connect to a poolbase-api feathers server. Follow the poolbase-api readme instructions to install and run server before proceeding further. Alternatively, you could change the configuration to connect to the `develop` environment, see the [Configuration](#configuration) section.
+1. The PoolX dapp will need to connect to a poolX-api feathers server. Follow the poolX-api readme instructions to install and run server before proceeding further. Alternatively, you could change the configuration to connect to the `develop` environment, see the [Configuration](#configuration) section.
 2. Start the dapp.
    ```
    yarn start

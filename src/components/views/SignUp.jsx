@@ -53,7 +53,7 @@ class SignUp extends Component {
         this.props.onSignIn(userId);
         React.toast.success(
           <p>
-            Welcome to Poolbase! <br />
+            Welcome to PoolX! <br />
           </p>,
         );
         this.props.history.goBack();
