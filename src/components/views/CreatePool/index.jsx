@@ -43,14 +43,34 @@ const initialPoolData = {
 }
 
 
-export default () => {
+export default ({ history }) => {
   const context = useWeb3Context()
   const { account } = context;
   const { active } = context
   const isLoading = active ? false : true
 
+  const getAddressFromReceiptData = (data) => {
+    const zeroStrippedAddress = data.replace(/(0x)0*(.*)/i, '$1$2')
+    return zeroStrippedAddress
+  }
+
   const handleSubmit = (values) => {
-    createPool(account, values)
+    React.swal({
+      title: 'Hold on tight. Your transaction will be mined soon',
+      text:
+        'After clicking OK, Metamask will request you to create the transaction for the pool creation. After 5 block confirmations, we will redirect you to the pool page.',
+      icon: 'info',
+    }).then(() => {
+      createPool(account, values)
+      .then(receipt => {
+        const { logs } = receipt
+        const data = logs[0].data
+        const poolAddress = getAddressFromReceiptData(data)
+
+        history.push(`/pools/view-pool/${poolAddress}`)
+      })
+    })
+
   }
 
   return (

@@ -24,7 +24,7 @@ const ViewPool = () => {
 
   useEffect(() => {
     getToken1Balance().then((balance) => {
-      setToken1Balance(balance)
+      setToken1Balance(balance.toNumber())
       setIsLoading(false)
     });
   }, [token1Balance]);
@@ -128,6 +128,7 @@ const ViewPool = () => {
   // }
   const contribute = () => console.log('I have been clicked')
 
+  if (isLoading) return (<Loader className="fixed" />)
   // componentWillUnmount() {
     // this.contributionObserver.unsubscribe();
   // }
@@ -144,8 +145,6 @@ const ViewPool = () => {
 
     return (
       <div id="view-pool-view" className="container">
-        {isLoading && <Loader className="fixed" />}
-
         {!isLoading && (
           <div>
             <div className="row justify-content-between">

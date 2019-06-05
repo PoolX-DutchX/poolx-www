@@ -38,12 +38,11 @@ export default (
       })
       .on('transactionHash', txHash => {
         showToastOnTxSubmitted(txHash)
-
-        return resolve(txHash)
       })
       .on('confirmation', (confirmationNumber, receipt) => {
-        console.log({ receipt, confirmationNumber })
         showToastOnTxConfirmation(confirmationNumber, receipt)
+
+        if (confirmationNumber === 5) return resolve(receipt)
       })
       .on('error', (error, receipt) => {
         showToastOnTxError(receipt)
