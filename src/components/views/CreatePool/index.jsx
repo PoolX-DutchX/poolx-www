@@ -36,6 +36,8 @@ const Web3ConsumerComponent = () => {
 }
 
 const initialPoolData = {
+  name: '',
+  description: '',
   token1: '',
   token2: '',
   initialClosingPrice: '',

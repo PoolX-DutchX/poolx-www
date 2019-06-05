@@ -13,7 +13,7 @@ const { poolFactoryAddress, dxAddress } = config
 
 export default (
   ethereumAddressFrom,
-  { token1, token2, initialClosingPrice }
+  { name, description, token1, token2, initialClosingPrice }
 ) => {
   const contract = new web3.eth.Contract(
     poolXCloneFactoryAbi,
@@ -31,7 +31,9 @@ export default (
         token1,
         token2,
         initialClosingPriceNum,
-        initialClosingPriceDen
+        initialClosingPriceDen,
+        name,
+        description
       )
       .send({
         from: ethereumAddressFrom,

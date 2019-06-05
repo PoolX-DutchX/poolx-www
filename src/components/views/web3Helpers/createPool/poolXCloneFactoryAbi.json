@@ -51,7 +51,9 @@
       { "name": "_token1", "type": "address" },
       { "name": "_token2", "type": "address" },
       { "name": "_initialClosingPriceNum", "type": "uint256" },
-      { "name": "_initialClosingPriceDen", "type": "uint256" }
+      { "name": "_initialClosingPriceDen", "type": "uint256" },
+      { "name": "_name", "type": "string" },
+      { "name": "_description", "type": "string" }
     ],
     "name": "createPool",
     "outputs": [],

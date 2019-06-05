@@ -6,7 +6,7 @@ import FormLabel from '@material-ui/core/FormLabel'
 
 const StepOne = ({
   formik: {
-    values: { token1, token2, willUseWeth },
+    values: { name, description, token1, token2, willUseWeth },
     handleChange,
     handleBlur,
     touched,
@@ -27,6 +27,44 @@ const StepOne = ({
       label="Use Wrapped ETH (WETH) for Token Pair"
     />
 
+    <div className="row">
+      <div className="col-md-3">
+        <FormLabel className="spacer-top-40">Pool info</FormLabel>
+      </div>
+      <div className="col-md-9">
+        <div className="d-flex justify-content-between two-col-inner-padding">
+          <TextField
+            id="name"
+            label="name"
+            placeholder="Pool name"
+            value={name}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={touched.name && !!errors.name}
+            helperText={touched.name && errors.name}
+            autoComplete="Off"
+            type="text"
+            margin="normal"
+            fullWidth
+          />
+
+          <TextField
+            id="description"
+            label="description"
+            placeholder="Pool description"
+            value={description}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={touched.description && !!errors.description}
+            helperText={touched.description && errors.description}
+            autoComplete="Off"
+            type="text"
+            margin="normal"
+            fullWidth
+          />
+        </div>
+      </div>
+    </div>
     <div className="row">
       <div className="col-md-3">
         <FormLabel className="spacer-top-40">Token Pair</FormLabel>

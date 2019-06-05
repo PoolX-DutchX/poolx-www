@@ -1,17 +1,11 @@
 [
   {
-    "constant": false,
-    "inputs": [
-      { "name": "_dx", "type": "address" },
-      { "name": "_token1", "type": "address" },
-      { "name": "_token2", "type": "address" },
-      { "name": "_initialClosingPriceNum", "type": "uint256" },
-      { "name": "_initialClosingPriceDen", "type": "uint256" }
-    ],
-    "name": "init",
-    "outputs": [],
+    "constant": true,
+    "inputs": [],
+    "name": "name",
+    "outputs": [{ "name": "", "type": "string" }],
     "payable": false,
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -21,6 +15,23 @@
     "outputs": [{ "name": "", "type": "bool" }],
     "payable": false,
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "name": "_dx", "type": "address" },
+      { "name": "_token1", "type": "address" },
+      { "name": "_token2", "type": "address" },
+      { "name": "_initialClosingPriceNum", "type": "uint256" },
+      { "name": "_initialClosingPriceDen", "type": "uint256" },
+      { "name": "_name", "type": "string" },
+      { "name": "_description", "type": "string" }
+    ],
+    "name": "init",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -53,8 +64,35 @@
   {
     "constant": true,
     "inputs": [],
+    "name": "getFundedValueInUsd",
+    "outputs": [{ "name": "", "type": "uint256" }, { "name": "", "type": "uint256" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
     "name": "token2Balance",
     "outputs": [{ "name": "", "type": "uint256" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "currentDxThreshold",
+    "outputs": [{ "name": "", "type": "uint256" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "description",
+    "outputs": [{ "name": "", "type": "string" }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
