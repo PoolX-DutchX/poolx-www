@@ -9,7 +9,7 @@ import { useWeb3Context, Web3Consumer } from 'web3-react'
 
 import validationSchemas from './validation/';
 
-import createPool from './web3Helpers/createPool'
+import createPool from '../web3Helpers/createPool/createPool'
 
 const Header = () => (
   <div>

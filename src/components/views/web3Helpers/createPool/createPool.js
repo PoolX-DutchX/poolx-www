@@ -42,6 +42,7 @@ export default (
         return resolve(txHash)
       })
       .on('confirmation', (confirmationNumber, receipt) => {
+        console.log({ receipt, confirmationNumber })
         showToastOnTxConfirmation(confirmationNumber, receipt)
       })
       .on('error', (error, receipt) => {

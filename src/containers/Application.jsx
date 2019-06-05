@@ -100,7 +100,7 @@ class Application extends Component {
                           />
                           <Route
                             exact
-                            path="/pools/:poolId"
+                            path="/pools/view-pool"
                             component={props => <ViewPool currentUser={currentUser} {...props} />}
                           />
                           <Route

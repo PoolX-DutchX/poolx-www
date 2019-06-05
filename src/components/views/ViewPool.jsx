@@ -1,130 +1,145 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react';
+// import PropTypes from 'prop-types';
 
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Button from '@material-ui/core/Button';
 import Loader from '../Loader';
 import WithTooltip from '../WithTooltip';
 
-import User from '../../models/User';
-import PoolService from '../../services/Pool';
-import PoolModel from '../../models/Pool';
-import ContributionService from '../../services/Contribution';
+// import User from '../../models/User';
+// import PoolService from '../../services/Pool';
+// import PoolModel from '../../models/Pool';
+// import ContributionService from '../../services/Contribution';
 // import { feathersClient } from '../../lib/feathersClient';
 
-import { statusDisplayMap } from '../../constants';
+// import {  } from '../../constants';
 
-import ErrorPopup from '../ErrorPopup';
+// import ErrorPopup from '../ErrorPopup';
 
-class ViewPool extends Component {
-  constructor(props) {
-    super(props);
+import getToken1Balance from './web3Helpers/viewPool/viewPool'
 
-    this.state = {
-      isLoading: true,
-      myContributions: [],
-      myContributionTotal: 0,
-    };
-    this.contribute = this.contribute.bind(this);
-  }
+const ViewPool = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [token1Balance, setToken1Balance] = useState(null);
 
-  async componentDidMount() {
-    window.scrollTo(0, 0);
-    const poolId = this.props.match.params.poolId;
-    console.log('poolId', poolId);
+  useEffect(() => {
+    getToken1Balance().then((balance) => {
+      setToken1Balance(balance)
+      setIsLoading(false)
+    });
+  }, [token1Balance]);
 
-    PoolService.subscribeById(
-      poolId,
-      pool => {
-        this.setState({
-          pool,
-          isLoading: false,
-        });
-      },
-      err => {
-        console.log('err getting pool', err);
-        React.toast.error(err.message);
-        ErrorPopup('Something went wrong loading pool. Please try refresh the page.', err);
-        this.setState({ isLoading: false });
-      },
-    );
-    if (this.props.currentUser) {
-      console.log('this.props.currentUser', this.props.currentUser);
-      ContributionService.subscribeUserContributionsByPoolId(
-        this.props.currentUser.id,
-        poolId,
-        contributions => {
-          const myContributions = contributions || [];
-          const myContributionTotal = myContributions.reduce(
-            (total, { amount }) => total + amount,
-            0,
-          );
-          this.setState({ myContributions, myContributionTotal });
-        },
-        err => {
-          React.toast.error(err.message);
-          console.log('err getting user contributions', err);
-        },
-      );
-    }
-  }
+  // constructor(props) {
+  //   super(props);
 
-  contribute() {
-    const { history } = this.props;
-    if (!this.props.currentUser) {
-      React.swal({
-        title: "You're almost there...",
-        content: React.swal.msg(
-          <p>
-            It&#8217;s great to see that you want to contribute, however, if you first sign in or
-            sign up, you'll get the benefit of tracking your contributions after they're made.{' '}
-            <br />
-            <br />
-            You can also continue anonymously.
-          </p>,
-        ),
-        icon: 'info',
-        buttons: {
-          signin: {
-            text: 'Signin',
-          },
-          signup: {
-            text: 'Signup',
-          },
-          continue: {
-            text: 'Continue',
-          },
-        },
-      }).then(value => {
-        switch (value) {
-          case 'signin':
-            history.push('/signin');
-            break;
-          case 'signup':
-            history.push('/signup');
-            break;
-          case 'continue':
-            history.push(`/pools/${this.state.pool.id}/contribute`);
-            break;
-          default:
-            break;
-        }
-      });
-    } else {
-      history.push(`/pools/${this.state.pool.id}/contribute`);
-    }
-  }
+  //   this.state = {
+  //     isLoading: false,
+  //     myContributions: [],
+  //     myContributionTotal: 0,
+  //   };
+  //   this.contribute = this.contribute.bind(this);
+  // }
 
-  componentWillUnmount() {
+  // async componentDidMount() {
+  //   window.scrollTo(0, 0);
+    // const poolId = this.props.match.params.poolId;
+    // console.log('poolId', poolId);
+
+    // PoolService.subscribeById(
+    //   poolId,
+    //   pool => {
+    //     this.setState({
+    //       pool,
+    //       isLoading: false,
+    //     });
+    //   },
+    //   err => {
+    //     console.log('err getting pool', err);
+    //     React.toast.error(err.message);
+    //     ErrorPopup('Something went wrong loading pool. Please try refresh the page.', err);
+    //     this.setState({ isLoading: false });
+    //   },
+    // );
+    // if (this.props.currentUser) {
+    //   console.log('this.props.currentUser', this.props.currentUser);
+    //   ContributionService.subscribeUserContributionsByPoolId(
+    //     this.props.currentUser.id,
+    //     poolId,
+    //     contributions => {
+    //       const myContributions = contributions || [];
+    //       const myContributionTotal = myContributions.reduce(
+    //         (total, { amount }) => total + amount,
+    //         0,
+    //       );
+    //       this.setState({ myContributions, myContributionTotal });
+    //     },
+    //     err => {
+    //       React.toast.error(err.message);
+    //       console.log('err getting user contributions', err);
+    //     },
+    //   );
+    // }
+  // }
+
+  // const contribute = () => {
+  //   const { history } = this.props;
+  //   if (!this.props.currentUser) {
+  //     React.swal({
+  //       title: "You're almost there...",
+  //       content: React.swal.msg(
+  //         <p>
+  //           It&#8217;s great to see that you want to contribute, however, if you first sign in or
+  //           sign up, you'll get the benefit of tracking your contributions after they're made.{' '}
+  //           <br />
+  //           <br />
+  //           You can also continue anonymously.
+  //         </p>,
+  //       ),
+  //       icon: 'info',
+  //       buttons: {
+  //         signin: {
+  //           text: 'Signin',
+  //         },
+  //         signup: {
+  //           text: 'Signup',
+  //         },
+  //         continue: {
+  //           text: 'Continue',
+  //         },
+  //       },
+  //     }).then(value => {
+  //       switch (value) {
+  //         case 'signin':
+  //           history.push('/signin');
+  //           break;
+  //         case 'signup':
+  //           history.push('/signup');
+  //           break;
+  //         case 'continue':
+  //           history.push(`/pools/${this.state.pool.id}/contribute`);
+  //           break;
+  //         default:
+  //           break;
+  //       }
+  //     });
+  //   } else {
+  //     history.push(`/pools/${this.state.pool.id}/contribute`);
+  //   }
+  // }
+  const contribute = () => console.log('I have been clicked')
+
+  // componentWillUnmount() {
     // this.contributionObserver.unsubscribe();
-  }
+  // }
 
-  render() {
-    const { isLoading, pool } = this.state;
+  // render() {
+    // const isLoading = false
+    // const token1Balance = 0
 
     let poolProgress = 0;
     if (!isLoading) {
-      poolProgress = pool.netInvested / pool.maxAllocation * 100;
+      // poolProgress = pool.netInvested / pool.maxAllocation * 100;
+      poolProgress = 1 / 100 * 100;
     }
 
     return (
@@ -136,13 +151,13 @@ class ViewPool extends Component {
             <div className="row justify-content-between">
               <div className="col-md-6 ">
                 <h1>
-                  <strong>{pool.name}</strong>
+                  <strong>Pool name</strong>
                 </h1>
-                <div className="pool-creator">
+                {/* <div className="pool-creator">
                   Pool Creator Verified{' '}
                   <img src="/img/telegram_logo.png" width="20" alt="Telegram logo" /> KYC
-                </div>
-                {!!this.state.myContributions.length && (
+                </div> */}
+                {/* !!this.state.myContributions.length && (
                   <div className="alert alert-success row my-contributions-panel" role="alert">
                     <div className="col-md-4 ">
                       <h6>
@@ -159,43 +174,43 @@ class ViewPool extends Component {
                       ))}
                     </div>
                   </div>
-                )}
+                      )*/}
                 <p className="info-disclaimer">
                   The following information is provided by the pool creator
                 </p>
-                <p>{pool.description}</p>
+                <p>pool.description</p>
               </div>
               <div className="col-md-5 pool-action-panel">
                 <h3>
-                  <strong>{statusDisplayMap[pool.status]}</strong>
+                  <strong>statusDisplayMap[pool.status]</strong>
                 </h3>
                 <LinearProgress variant="determinate" value={poolProgress} />
                 <div className="total-invested-section">
                   <h4 className="invested">
-                    <strong>{pool.netInvested.toFixed(2)} ETH </strong>
+                    <strong>pool.netInvested.toFixed(2) ETH </strong>
                   </h4>
-                  <div className="subheading">of {pool.maxAllocation} ETH maximum</div>
+                  <div className="subheading">of pool.maxAllocation ETH maximum</div>
                 </div>
                 <div className="min-max-section">
                   <span>
                     <h4>
-                      <strong>{pool.minContribution} ETH </strong>
+                      <strong>{token1Balance}</strong>
                     </h4>
-                    <div className="subheading">Min. Contribution</div>
+                    <div className="subheading">Token1 balance</div>
                   </span>
                   <span>
                     <h4>
-                      <strong>{pool.maxContribution} ETH </strong>
+                      <strong>{token1Balance}</strong>
                     </h4>
-                    <div className="subheading">Max. Contribution</div>
+                    <div className="subheading">Token2 balance</div>
                   </span>
                 </div>
                 <Button
                   variant="contained"
                   color="primary"
                   fullWidth
-                  onClick={this.contribute}
-                  disabled={pool.status !== PoolModel.ACTIVE}
+                  onClick={contribute}
+                  disabled={false}
                 >
                   Contribute to Pool
                 </Button>
@@ -219,7 +234,7 @@ class ViewPool extends Component {
                     Autodistribution <strong>On</strong>
                   </div>
                   <div className="col">
-                    Fee <strong>{pool.fee}%</strong>
+                    Fee <strong>pool.fee %</strong>
                   </div>
                 </div>
               </div>
@@ -228,24 +243,24 @@ class ViewPool extends Component {
         )}
       </div>
     );
-  }
+  // }
 }
 
-ViewPool.propTypes = {
-  history: PropTypes.shape({
-    goBack: PropTypes.func.isRequired,
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-  currentUser: PropTypes.instanceOf(User),
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      poolId: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
-};
+// ViewPool.propTypes = {
+//   history: PropTypes.shape({
+//     goBack: PropTypes.func.isRequired,
+//     push: PropTypes.func.isRequired,
+//   }).isRequired,
+//   currentUser: PropTypes.instanceOf(User),
+//   match: PropTypes.shape({
+//     params: PropTypes.shape({
+//       poolId: PropTypes.string,
+//     }).isRequired,
+//   }).isRequired,
+// };
 
-ViewPool.defaultProps = {
-  currentUser: undefined,
-};
+// ViewPool.defaultProps = {
+//   currentUser: undefined,
+// };
 
 export default ViewPool;
