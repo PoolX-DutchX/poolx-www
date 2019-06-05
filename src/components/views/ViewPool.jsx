@@ -1,85 +1,56 @@
-import React, { useState, useEffect } from 'react';
-// import PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react'
+import BigNumber from 'bignumber.js';
 
-import LinearProgress from '@material-ui/core/LinearProgress';
-import Button from '@material-ui/core/Button';
-import Loader from '../Loader';
-import WithTooltip from '../WithTooltip';
+import LinearProgress from '@material-ui/core/LinearProgress'
+import Button from '@material-ui/core/Button'
+import Loader from '../Loader'
+import WithTooltip from '../WithTooltip'
 
-// import User from '../../models/User';
-// import PoolService from '../../services/Pool';
-// import PoolModel from '../../models/Pool';
-// import ContributionService from '../../services/Contribution';
-// import { feathersClient } from '../../lib/feathersClient';
+import fetchPoolData from './web3Helpers/viewPool/viewPool'
+import isEmpty from 'lodash/isEmpty'
 
-// import {  } from '../../constants';
-
-// import ErrorPopup from '../ErrorPopup';
-
-import getToken1Balance from './web3Helpers/viewPool/viewPool'
-
-const ViewPool = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [token1Balance, setToken1Balance] = useState(null);
+BigNumber.config({ DECIMAL_PLACES: 18 });
+const ViewPool = ({ match }) => {
+  const [isLoading, setIsLoading] = useState(true)
+  const [poolData, setPoolData] = useState({})
 
   useEffect(() => {
-    getToken1Balance().then((balance) => {
-      setToken1Balance(balance.toNumber())
+    const {
+      params: { poolAddress },
+    } = match
+
+    fetchPoolData(poolAddress).then(values => {
+      console.log(values)
+
+      const [
+        token1BalanceResult,
+        token2BalanceResult,
+        name,
+        description,
+        currentDxThreshold,
+        tokenBalancesInUsd,
+      ] = values
+
+      const tokenBalanceArray = Object.entries(tokenBalancesInUsd).map(
+        ([, value]) => value
+      )
+      const [token1BalanceInUsd, token2BalanceInUsd] = tokenBalanceArray
+
+      console.log({ token1BalanceInUsd, token2BalanceInUsd, tokenBalanceArray })
+
+      setPoolData({
+        token1Balance: token1BalanceResult.toNumber(),
+        token2Balance: token2BalanceResult.toNumber(),
+        name,
+        description,
+        currentDxThreshold: currentDxThreshold,
+        token1BalanceInUsd: token1BalanceInUsd,
+        token2BalanceInUsd: token2BalanceInUsd,
+      })
+
       setIsLoading(false)
-    });
-  }, [token1Balance]);
-
-  // constructor(props) {
-  //   super(props);
-
-  //   this.state = {
-  //     isLoading: false,
-  //     myContributions: [],
-  //     myContributionTotal: 0,
-  //   };
-  //   this.contribute = this.contribute.bind(this);
-  // }
-
-  // async componentDidMount() {
-  //   window.scrollTo(0, 0);
-    // const poolId = this.props.match.params.poolId;
-    // console.log('poolId', poolId);
-
-    // PoolService.subscribeById(
-    //   poolId,
-    //   pool => {
-    //     this.setState({
-    //       pool,
-    //       isLoading: false,
-    //     });
-    //   },
-    //   err => {
-    //     console.log('err getting pool', err);
-    //     React.toast.error(err.message);
-    //     ErrorPopup('Something went wrong loading pool. Please try refresh the page.', err);
-    //     this.setState({ isLoading: false });
-    //   },
-    // );
-    // if (this.props.currentUser) {
-    //   console.log('this.props.currentUser', this.props.currentUser);
-    //   ContributionService.subscribeUserContributionsByPoolId(
-    //     this.props.currentUser.id,
-    //     poolId,
-    //     contributions => {
-    //       const myContributions = contributions || [];
-    //       const myContributionTotal = myContributions.reduce(
-    //         (total, { amount }) => total + amount,
-    //         0,
-    //       );
-    //       this.setState({ myContributions, myContributionTotal });
-    //     },
-    //     err => {
-    //       React.toast.error(err.message);
-    //       console.log('err getting user contributions', err);
-    //     },
-    //   );
-    // }
-  // }
+    })
+  }, [isEmpty(poolData)])
 
   // const contribute = () => {
   //   const { history } = this.props;
@@ -128,35 +99,34 @@ const ViewPool = () => {
   // }
   const contribute = () => console.log('I have been clicked')
 
-  if (isLoading) return (<Loader className="fixed" />)
-  // componentWillUnmount() {
-    // this.contributionObserver.unsubscribe();
-  // }
+  if (isLoading) return <Loader className="fixed" />
 
-  // render() {
-    // const isLoading = false
-    // const token1Balance = 0
+  const {
+    token1Balance,
+    token2Balance,
+    name,
+    description,
+    currentDxThreshold,
+    token1BalanceInUsd,
+    token2BalanceInUsd,
+  } = poolData
 
-    let poolProgress = 0;
-    if (!isLoading) {
-      // poolProgress = pool.netInvested / pool.maxAllocation * 100;
-      poolProgress = 1 / 100 * 100;
-    }
+  const poolProgress = token1BalanceInUsd.add(token2BalanceInUsd).div(currentDxThreshold).mul(100).toNumber();
+  console.log({ currentDxThreshold, poolProgress })
 
-    return (
-      <div id="view-pool-view" className="container">
-        {!isLoading && (
-          <div>
-            <div className="row justify-content-between">
-              <div className="col-md-6 ">
-                <h1>
-                  <strong>Pool name</strong>
-                </h1>
-                {/* <div className="pool-creator">
+  return (
+    <div id="view-pool-view" className="container">
+      <div>
+        <div className="row justify-content-between">
+          <div className="col-md-6 ">
+            <h1>
+              <strong>{name}</strong>
+            </h1>
+            {/* <div className="pool-creator">
                   Pool Creator Verified{' '}
                   <img src="/img/telegram_logo.png" width="20" alt="Telegram logo" /> KYC
                 </div> */}
-                {/* !!this.state.myContributions.length && (
+            {/* !!this.state.myContributions.length && (
                   <div className="alert alert-success row my-contributions-panel" role="alert">
                     <div className="col-md-4 ">
                       <h6>
@@ -174,92 +144,61 @@ const ViewPool = () => {
                     </div>
                   </div>
                       )*/}
-                <p className="info-disclaimer">
-                  The following information is provided by the pool creator
-                </p>
-                <p>pool.description</p>
+            <p className="info-disclaimer">
+              The following information is provided by the pool creator
+            </p>
+            <p>{description}</p>
+          </div>
+          <div className="col-md-5 pool-action-panel">
+            <h3>
+              <strong>Progress to reach threshold</strong>
+            </h3>
+            <LinearProgress variant="determinate" value={poolProgress} />
+            <div className="total-invested-section">
+              <h4 className="invested">
+                <strong>
+                  {token1BalanceInUsd.add(token2BalanceInUsd).toString()} USD
+                </strong>
+              </h4>
+              <div className="subheading">
+                of { currentDxThreshold.toString() } USD threshold
               </div>
-              <div className="col-md-5 pool-action-panel">
-                <h3>
-                  <strong>statusDisplayMap[pool.status]</strong>
-                </h3>
-                <LinearProgress variant="determinate" value={poolProgress} />
-                <div className="total-invested-section">
-                  <h4 className="invested">
-                    <strong>pool.netInvested.toFixed(2) ETH </strong>
-                  </h4>
-                  <div className="subheading">of pool.maxAllocation ETH maximum</div>
-                </div>
-                <div className="min-max-section">
-                  <span>
-                    <h4>
-                      <strong>{token1Balance}</strong>
-                    </h4>
-                    <div className="subheading">Token1 balance</div>
-                  </span>
-                  <span>
-                    <h4>
-                      <strong>{token1Balance}</strong>
-                    </h4>
-                    <div className="subheading">Token2 balance</div>
-                  </span>
-                </div>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  onClick={contribute}
-                  disabled={false}
-                >
-                  Contribute to Pool
+            </div>
+            <div className="min-max-section">
+              <span>
+                <h4>
+                  <strong>{token1Balance}</strong>
+                </h4>
+                <div className="subheading">Token1 balance</div>
+              </span>
+              <span>
+                <h4>
+                  <strong>{token2Balance}</strong>
+                </h4>
+                <div className="subheading">Token2 balance</div>
+              </span>
+            </div>
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              onClick={contribute}
+              disabled={false}
+            >
+              Contribute to Pool
+            </Button>
+            <div className="row margin-top-bottom">
+              <div className="col">
+                <Button variant="outlined" fullWidth>
+                  Withdraw
                 </Button>
-                <div className="row margin-top-bottom">
-                  <div className="col">
-                    <Button variant="outlined" fullWidth>
-                      Withdraw
-                    </Button>
-                  </div>
-                  <div className="col">
-                    <Button variant="outlined" fullWidth>
-                      Bookmark
-                    </Button>
-                  </div>
-                </div>
-                <div className="row justify-content-start">
-                  <div className="col">
-                    Whitelist <strong>Off</strong>
-                  </div>
-                  <div className="col-md-auto">
-                    Autodistribution <strong>On</strong>
-                  </div>
-                  <div className="col">
-                    Fee <strong>pool.fee %</strong>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
-    );
-  // }
+    </div>
+  )
 }
 
-// ViewPool.propTypes = {
-//   history: PropTypes.shape({
-//     goBack: PropTypes.func.isRequired,
-//     push: PropTypes.func.isRequired,
-//   }).isRequired,
-//   currentUser: PropTypes.instanceOf(User),
-//   match: PropTypes.shape({
-//     params: PropTypes.shape({
-//       poolId: PropTypes.string,
-//     }).isRequired,
-//   }).isRequired,
-// };
-
-// ViewPool.defaultProps = {
-//   currentUser: undefined,
-// };
-
-export default ViewPool;
+export default ViewPool

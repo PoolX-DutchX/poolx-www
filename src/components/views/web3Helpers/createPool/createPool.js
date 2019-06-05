@@ -9,7 +9,7 @@ import {
 import isMetamasInstalled from '../../../../lib/blockchain/isMetamasInstalled'
 import Web3 from 'web3'
 const web3 = isMetamasInstalled() && new Web3(Web3.givenProvider, null, {})
-const { poolFactoryAddress, dxAddress } = config
+const { poolFactoryAddress, dxProxyAddress } = config
 
 export default (
   ethereumAddressFrom,
@@ -27,7 +27,7 @@ export default (
   return new Promise((resolve, reject) => {
     contract.methods
       .createPool(
-        dxAddress,
+        dxProxyAddress,
         token1,
         token2,
         initialClosingPriceNum,
