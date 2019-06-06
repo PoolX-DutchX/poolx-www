@@ -1,7 +1,6 @@
 import poolAbi from './poolAbi.json'
-import isMetamasInstalled from '../../../../lib/blockchain/isMetamasInstalled'
-import Web3 from 'web3'
-const web3 = isMetamasInstalled() && new Web3(Web3.givenProvider, null, {})
+import getWeb3 from '../../../../lib/blockchain/getWeb3'
+const web3 = getWeb3()
 
 const getPoolData = (poolAddress, funcIdentifier) =>
   new Promise(async (resolve, reject) => {
@@ -29,7 +28,21 @@ const getTokenBalancesInUsd = poolAddress =>
     }
   })
 
-export default poolAddress =>
+const getUserTokenContribution = (poolAddress, userAddress, funcIdentifier) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const contract = new web3.eth.Contract(poolAbi, poolAddress)
+      const userContribution = await contract.methods[
+        `${funcIdentifier}(address)`
+      ](userAddress).call()
+      resolve(userContribution)
+    } catch (error) {
+      console.log({ error })
+      reject(error)
+    }
+  })
+
+export default (poolAddress, userAddress) =>
   Promise.all([
     getPoolData(poolAddress, 'token1Balance'),
     getPoolData(poolAddress, 'token2Balance'),
@@ -37,4 +50,15 @@ export default poolAddress =>
     getPoolData(poolAddress, 'description'),
     getPoolData(poolAddress, 'currentDxThreshold'),
     getTokenBalancesInUsd(poolAddress),
+    getPoolData(poolAddress, 'stage'),
+    getUserTokenContribution(
+      poolAddress,
+      userAddress,
+      'contributorToken1Amount'
+    ),
+    getUserTokenContribution(
+      poolAddress,
+      userAddress,
+      'contributorToken2Amount'
+    ),
   ])
