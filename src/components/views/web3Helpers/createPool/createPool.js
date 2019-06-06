@@ -6,9 +6,8 @@ import {
   showToastOnTxConfirmation,
   showToastOnTxError,
 } from './showToasts'
-import isMetamasInstalled from '../../../../lib/blockchain/isMetamasInstalled'
-import Web3 from 'web3'
-const web3 = isMetamasInstalled() && new Web3(Web3.givenProvider, null, {})
+import getWeb3 from '../../../../lib/blockchain/getWeb3'
+const web3 = getWeb3()
 const { poolFactoryAddress, dxProxyAddress } = config
 
 export default (
