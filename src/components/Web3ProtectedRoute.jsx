@@ -1,46 +1,41 @@
-import React, { useState, useEffect } from 'react'
-import { Redirect, Route } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import {  Route } from 'react-router-dom'
 import { useWeb3Context } from 'web3-react'
 import Web3Error from './Web3Error'
+import Loader from './Loader'
+import getWeb3 from '../lib/blockchain/getWeb3'
 
-const Web3ProtectedRoute = ({ currentUser, component, ...rest }) => {
+const Web3ProtectedRoute = ({ component, ...rest }) => {
   const context = useWeb3Context()
-  const [setInitializationOver] = useState(false)
-  const { active, error, unsetConnector, connectorName } = context
-  // const { account } = context;
+  const { active, networkId, error, connectorName } = context;
 
-  if (!active) {
-    useEffect(() => {
-      context.setConnector('Injected').catch(() => {
-        setInitializationOver(true)
-        console.log('Unable to automatically activate MetaMask') // eslint-disable-line no-console
-      })
-    }, [])
-  }
+  const web3 = getWeb3()
+
+  useEffect(() => {
+    if(!networkId) {
+      context.setFirstValidConnector(['Injected'])
+    }
+  }, [])
 
   return (
     <Route
       {...rest}
       render={props => {
-        if (active) {
-          return component(props)
+        if (!active && !error) {
+          // loading
+          return <Loader className="fixed" />
         } else if (error) {
+          //error
           return (
             <Web3Error
               error={error}
               connectorName={connectorName}
-              unsetConnector={unsetConnector}
             />
           )
         } else {
-          return (
-            <Redirect
-              to={{
-                pathname: '/',
-                state: { from: props.location },
-              }}
-            />
-          )
+          // success
+          const newProps = {web3, ...props}
+          return component(newProps)
         }
       }}
     />

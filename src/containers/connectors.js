@@ -11,7 +11,7 @@ const Injected = new InjectedConnector({
 })
 
 const Network = new NetworkOnlyConnector({
-  providerURL: supportedNetworkURLs[1],
+  providerURL: supportedNetworkURLs[4],
 })
 
 export default { Injected, Network }
