@@ -6,6 +6,8 @@ import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 
 const rowTitleMapping = {
+  name: 'Pool name',
+  description: 'Pool description',
   token1: 'Token 1',
   token2: 'Token 2',
   initialClosingPrice: 'Token1 / Token 2 Initial Price',

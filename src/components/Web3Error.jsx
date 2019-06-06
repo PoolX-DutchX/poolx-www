@@ -1,13 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 
-// import { Connector, InjectedConnector } from 'web3-react/connectors'
 import { Connectors } from 'web3-react'
-import error from '../assets/error.svg';
+import error from '../assets/error.svg'
 import Common, { Text, Button } from './Web3ErrorBase'
-// import { getNetworkName } from 'web3-react/utilities'
-// import { useWeb3Context, getNetworkName } from 'web3-react'
-// const context = useWeb3Context()
+
+import { Link } from 'react-router-dom'
 const { InjectedConnector } = Connectors
 
 const Logo = styled.div`
@@ -42,10 +40,12 @@ const ErrorText = styled(Text)`
   font-size: 2em;
   margin-bottom: 1em;
 `
-
-export default function Web3Error ({ error, connectorName, unsetConnector }) {
+export default function Web3Error({
+  error,
+  connectorName,
+}) {
   console.error(`The '${connectorName}' connector threw an error.`) // eslint-disable-line no-console
-  console.log(error.code) // eslint-disable-line no-console
+  console.log({ error: error.code }) // eslint-disable-line no-console
 
   const getErrorMessage = () => {
     if (error.code === InjectedConnector.errorCodes.ETHEREUM_ACCESS_DENIED)
@@ -66,9 +66,13 @@ export default function Web3Error ({ error, connectorName, unsetConnector }) {
   return (
     <Common>
       <ErrorWrapper>
-        <ErrorLogo></ErrorLogo>
+        <ErrorLogo />
         <ErrorText>{getErrorMessage()}</ErrorText>
-        <ResetButton onClick={() => unsetConnector()}>Reset</ResetButton>
+        <Link to='/'>
+          <ResetButton>
+            Reset
+          </ResetButton>
+        </Link>
       </ErrorWrapper>
     </Common>
   )

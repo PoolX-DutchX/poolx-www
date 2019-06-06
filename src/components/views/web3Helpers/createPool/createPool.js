@@ -6,14 +6,13 @@ import {
   showToastOnTxConfirmation,
   showToastOnTxError,
 } from './showToasts'
-import isMetamasInstalled from '../../../../lib/blockchain/isMetamasInstalled'
-import Web3 from 'web3'
-const web3 = isMetamasInstalled() && new Web3(Web3.givenProvider, null, {})
-const { poolFactoryAddress, dxAddress } = config
+import getWeb3 from '../../../../lib/blockchain/getWeb3'
+const web3 = getWeb3()
+const { poolFactoryAddress, dxProxyAddress } = config
 
 export default (
   ethereumAddressFrom,
-  { token1, token2, initialClosingPrice }
+  { name, description, token1, token2, initialClosingPrice }
 ) => {
   const contract = new web3.eth.Contract(
     poolXCloneFactoryAbi,
@@ -27,22 +26,24 @@ export default (
   return new Promise((resolve, reject) => {
     contract.methods
       .createPool(
-        dxAddress,
+        dxProxyAddress,
         token1,
         token2,
         initialClosingPriceNum,
-        initialClosingPriceDen
+        initialClosingPriceDen,
+        name,
+        description
       )
       .send({
         from: ethereumAddressFrom,
       })
       .on('transactionHash', txHash => {
         showToastOnTxSubmitted(txHash)
-
-        return resolve(txHash)
       })
       .on('confirmation', (confirmationNumber, receipt) => {
         showToastOnTxConfirmation(confirmationNumber, receipt)
+
+        if (confirmationNumber === 5) return resolve(receipt)
       })
       .on('error', (error, receipt) => {
         showToastOnTxError(receipt)

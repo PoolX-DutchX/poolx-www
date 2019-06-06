@@ -39,40 +39,11 @@ class Contribute extends Component {
     super(props);
 
     this.state = {
-      isLoading: true,
+      isLoading: false,
       pool: {},
     };
 
     // Yup.addMethod(Yup.string, 'whitelisted', isWhitelistedAddress);
-  }
-
-  async componentDidMount() {
-    window.scrollTo(0, 0);
-    // const { currentUser, match: { params: { poolId } } } = this.props;
-    // try {
-    //   await isAuthenticated(currentUser);
-
-    //   const pool = await PoolService.getById(poolId);
-    //   // const pools = await feathersClient.service('pools').find({
-    //   //   query: {
-    //   //     whitelist: {
-    //   //       $elemMatch: {
-    //   //         address:'0x48bb011dcd25d9fb58e3117da48626f4910d7f24'
-    //   //       }
-    //   //     }
-    //   //   }
-    //   // });
-    //   // console.log('pools', pools);
-    //   // const pool = pools[0];
-
-    //   this.setState({
-    //     isLoading: false,
-    //     pool,
-    //   });
-    // } catch (err) {
-    //   console.log('err', err);
-    //   //oops something wrong
-    // }
   }
 
   render() {

@@ -2,6 +2,8 @@ import * as Yup from 'yup'
 import { ethereumAddress } from '../../../../lib/validators'
 
 const stepOneSchema = Yup.object().shape({
+  name: Yup.string().required('Required'),
+  description: Yup.string().required('Required'),
   token1: ethereumAddress().required('Required'),
   // token2: ethereumAddress().required('Required'), // need to skip validation when it is wrapped ether
 })
