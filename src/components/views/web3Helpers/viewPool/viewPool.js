@@ -6,7 +6,7 @@ const getPoolData = (poolAddress, funcIdentifier) =>
   new Promise(async (resolve, reject) => {
     try {
       const contract = new web3.eth.Contract(poolAbi, poolAddress)
-      const data = await contract.methods[`${funcIdentifier}()`]().call()
+      const data = await contract.methods[funcIdentifier]().call()
       resolve(data)
     } catch (error) {
       console.log({ error })
@@ -32,9 +32,9 @@ const getUserTokenContribution = (poolAddress, userAddress, funcIdentifier) =>
   new Promise(async (resolve, reject) => {
     try {
       const contract = new web3.eth.Contract(poolAbi, poolAddress)
-      const userContribution = await contract.methods[
-        `${funcIdentifier}(address)`
-      ](userAddress).call()
+      const userContribution = await contract.methods[funcIdentifier](
+        userAddress
+      ).call()
       resolve(userContribution)
     } catch (error) {
       console.log({ error })
