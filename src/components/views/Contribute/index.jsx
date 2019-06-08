@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import BigNumber from 'bignumber.js'
+
 import * as Yup from 'yup'
 
 import User from '../../../models/User'
+import ERC20Abi from './ERC20Abi.json'
 import poolAbi from '../web3Helpers/viewPool/poolAbi.json'
 
 import MultiStepForm from '../../MultiStepForm'
@@ -67,10 +70,12 @@ class Contribute extends Component {
             currentDxThreshold,
             tokenBalancesInUsd,
             stage,
-            userContributionForToken1Amount,
-            userContributionForToken2Amount,
+            token1,
+            token2,
             token1ThresholdReached,
             token2ThresholdReached,
+            userContributionForToken1Amount,
+            userContributionForToken2Amount,
           ] = values
 
           console.log({
@@ -81,10 +86,12 @@ class Contribute extends Component {
             currentDxThreshold,
             tokenBalancesInUsd,
             stage,
-            userContributionForToken1Amount,
-            userContributionForToken2Amount,
+            token1,
+            token2,
             token1ThresholdReached,
             token2ThresholdReached,
+            userContributionForToken1Amount,
+            userContributionForToken2Amount,
           })
 
           const tokenBalanceArray = Object.entries(tokenBalancesInUsd).map(
@@ -101,6 +108,8 @@ class Contribute extends Component {
             stage: mapPoolStage[stage],
             userContributionForToken1Amount,
             userContributionForToken2Amount,
+            token1,
+            token2,
             token1ThresholdReached,
             token2ThresholdReached,
             isLoading: false,
@@ -135,26 +144,47 @@ class Contribute extends Component {
                   console.log({ amount, isContributingToken2 })
                   console.log({ state: this.state })
 
-                  const contract = new web3.eth.Contract(
+                  const amountInWei = new BigNumber(amount)
+                    .times(1e18)
+                    .toString()
+
+                  const { token1, token2 } = this.state
+                  const { poolAddress } = this.props.match.params
+
+                  const tokenContract = new web3.eth.Contract(
+                    ERC20Abi,
+                    isContributingToken2 ? token2 : token1
+                  )
+                  const poolContract = new web3.eth.Contract(
                     poolAbi,
-                    this.props.match.params.poolAddress
+                    poolAddress
                   )
 
-                  contract.methods
-                    .contribute(
-                      isContributingToken2 ? 0 : amount,
-                      isContributingToken2 ? amount : 0
-                    )
-                    .send({
-                      from: accounts[0],
-                    })
+                  tokenContract.methods
+                    .approve(poolAddress, amountInWei)
+                    .send({ from: accounts[0] })
+
                     .on('transactionHash', txHash => {
                       showToastOnTxSubmitted(txHash)
                     })
-                    .on('confirmation', (confirmationNumber, receipt) => {
-                      showToastOnTxConfirmation(confirmationNumber, receipt)
+                    .once('confirmation', () => {
+                      poolContract.methods
+                        .contribute(
+                          isContributingToken2 ? 0 : amountInWei,
+                          isContributingToken2 ? amountInWei : 0
+                        )
+                        .send({
+                          from: accounts[0],
+                        })
+                        .on('confirmation', (confirmationNumber, receipt) => {
+                          showToastOnTxConfirmation(confirmationNumber, receipt)
 
-                      if (confirmationNumber === 5) return res(receipt)
+                          if (confirmationNumber === 5) return res(receipt)
+                        })
+                        .on('error', (error, receipt) => {
+                          showToastOnTxError(receipt)
+                          return rej(error)
+                        })
                     })
                     .on('error', (error, receipt) => {
                       showToastOnTxError(receipt)

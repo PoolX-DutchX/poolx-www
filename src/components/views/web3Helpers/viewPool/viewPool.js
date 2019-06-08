@@ -51,6 +51,8 @@ export default (poolAddress, userAddress) =>
     getPoolData(poolAddress, 'currentDxThreshold'),
     getTokenBalancesInUsd(poolAddress),
     getPoolData(poolAddress, 'stage'),
+    getPoolData(poolAddress, 'token1'),
+    getPoolData(poolAddress, 'token2'),
     getPoolData(poolAddress, 'token1ThresholdReached'),
     getPoolData(poolAddress, 'token2ThresholdReached'),
     getUserTokenContribution(

@@ -39,11 +39,13 @@ const ViewPool = ({ match, web3, history }) => {
         currentDxThreshold,
         tokenBalancesInUsd,
         stage,
+        token1,
+        token2,
+        token1ThresholdReached,
+        token2ThresholdReached,
         userContributionForToken1Amount,
         userContributionForToken2Amount,
       ] = values
-
-      console.log({ values })
 
       const tokenBalanceArray = Object.entries(tokenBalancesInUsd).map(
         ([, value]) => value
@@ -59,6 +61,10 @@ const ViewPool = ({ match, web3, history }) => {
         token1BalanceInUsd,
         token2BalanceInUsd,
         stage: mapPoolStage[stage],
+        token1,
+        token2,
+        token1ThresholdReached,
+        token2ThresholdReached,
         userContributionForToken1Amount: transformFromWei(
           userContributionForToken1Amount
         ),
