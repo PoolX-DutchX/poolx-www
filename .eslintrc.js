@@ -31,6 +31,7 @@ module.exports = {
         "trailingComma": "es5",
         "semi": false,
         "printWidth": 80,
+        "endOfLine":"auto"
       },
     ],
     "no-unused-vars": ["error", { "args": "after-used" }],
