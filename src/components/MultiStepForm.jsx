@@ -58,12 +58,7 @@ class MultiStepForm extends React.Component {
   }
 
   render() {
-    const {
-      children,
-      header,
-      validationSchemas,
-      stepLabels,
-    } = this.props
+    const { children, header, validationSchemas, stepLabels } = this.props
     const { step, values } = this.state
     const activeStep = React.Children.toArray(children)[step]
     const isLastStep = step === React.Children.count(children) - 1

@@ -1,26 +1,26 @@
-import React from 'react';
-import { withFormsy } from 'formsy-react';
-import DatePicker from 'react-datepicker';
-import moment from 'moment';
-import PropTypes from 'prop-types';
-import 'react-datepicker/dist/react-datepicker.css';
+import React from 'react'
+import { withFormsy } from 'formsy-react'
+import DatePicker from 'react-datepicker'
+import moment from 'moment'
+import PropTypes from 'prop-types'
+import 'react-datepicker/dist/react-datepicker.css'
 
-import { getStartOfDayUTC } from '../lib/helpers';
+import { getStartOfDayUTC } from '../lib/helpers'
 
 class DatePickerFormsy extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handleChange = this.handleChange.bind(this)
   }
 
   componentDidMount() {
-    this.props.setValue(getStartOfDayUTC().subtract(1, 'd'));
+    this.props.setValue(getStartOfDayUTC().subtract(1, 'd'))
   }
 
   handleChange(m) {
-    this.props.setValue(getStartOfDayUTC(m));
-    this.props.changeDate(getStartOfDayUTC(m));
+    this.props.setValue(getStartOfDayUTC(m))
+    this.props.changeDate(getStartOfDayUTC(m))
   }
 
   render() {
@@ -29,15 +29,15 @@ class DatePickerFormsy extends React.Component {
     // when the value is empty and the required prop is
     // passed to the input. showError() is true when the
     // value typed is invalid
-    let reqError = '';
-    if (this.props.showRequired()) reqError = 'required';
-    else if (this.props.showError()) reqError = 'error';
+    let reqError = ''
+    if (this.props.showRequired()) reqError = 'required'
+    else if (this.props.showError()) reqError = 'error'
 
-    const className = `form-group ${this.props.className} ${reqError}`;
+    const className = `form-group ${this.props.className} ${reqError}`
 
     // An error message is returned ONLY if the component is invalid
     // or the server has returned an error message
-    const errorMessage = this.props.getErrorMessage();
+    const errorMessage = this.props.getErrorMessage()
 
     return (
       <div className={`form-group ${className}`}>
@@ -47,7 +47,9 @@ class DatePickerFormsy extends React.Component {
             id="datePicker"
             dateFormat="YYYY/MM/DD"
             name="description"
-            selected={this.props.getValue() || getStartOfDayUTC().subtract(1, 'd')}
+            selected={
+              this.props.getValue() || getStartOfDayUTC().subtract(1, 'd')
+            }
             placeholderText={this.props.placeholder}
             onChange={this.handleChange}
             onChangeRaw={this.handleRaw}
@@ -60,7 +62,7 @@ class DatePickerFormsy extends React.Component {
         </label>
         <span>{errorMessage}</span>
       </div>
-    );
+    )
   }
 }
 
@@ -77,13 +79,13 @@ DatePickerFormsy.propTypes = {
   className: PropTypes.string,
   placeholder: PropTypes.string,
   disabled: PropTypes.bool,
-};
+}
 
 DatePickerFormsy.defaultProps = {
   label: undefined,
   className: undefined,
   placeholder: undefined,
   disabled: false,
-};
+}
 
-export default withFormsy(DatePickerFormsy);
+export default withFormsy(DatePickerFormsy)

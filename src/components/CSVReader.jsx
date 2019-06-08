@@ -1,8 +1,8 @@
-import React from 'react';
-import { string, func, element, oneOfType } from 'prop-types';
-import PapaParse from 'papaparse';
-import FormLabel from '@material-ui/core/FormLabel';
-import Button from '@material-ui/core/Button';
+import React from 'react'
+import { string, func, element, oneOfType } from 'prop-types'
+import PapaParse from 'papaparse'
+import FormLabel from '@material-ui/core/FormLabel'
+import Button from '@material-ui/core/Button'
 // const PapaParse = require('papaparse/papaparse.min.js');
 
 const CSVReader = ({
@@ -13,20 +13,20 @@ const CSVReader = ({
   inputId = null,
 }) => {
   const handleChangeFile = e => {
-    let reader = new FileReader();
-    const filename = e.target.files[0].name;
+    let reader = new FileReader()
+    const filename = e.target.files[0].name
 
     reader.onload = event => {
       const csvData = PapaParse.parse(event.target.result, {
         error: onError,
         header: true,
-      });
-      console.log('csvData', csvData);
-      onFileLoaded(csvData.data, csvData.meta, filename);
-    };
+      })
+      console.log('csvData', csvData)
+      onFileLoaded(csvData.data, csvData.meta, filename)
+    }
 
-    reader.readAsText(e.target.files[0]);
-  };
+    reader.readAsText(e.target.files[0])
+  }
 
   return (
     <div className={cssClass}>
@@ -59,8 +59,8 @@ const CSVReader = ({
         Choose file
       </Button>
     </div>
-  );
-};
+  )
+}
 
 CSVReader.propTypes = {
   cssClass: string,
@@ -68,6 +68,6 @@ CSVReader.propTypes = {
   onFileLoaded: func,
   onError: func,
   inputId: string,
-};
+}
 
-export default CSVReader;
+export default CSVReader

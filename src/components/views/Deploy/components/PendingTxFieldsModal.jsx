@@ -1,46 +1,48 @@
-import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { history } from '../../../../lib/helpers';
+import React, { Component } from 'react'
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import { history } from '../../../../lib/helpers'
 
-import PendingTxFields from './PendingTxFields';
+import PendingTxFields from './PendingTxFields'
 
 class PendingTxFieldsModal extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       open: false,
-    };
+    }
   }
   handleOpen = () => {
     this.setState({
       open: true,
-    });
-  };
+    })
+  }
   handleClose = redirect => () => {
     this.setState(
       {
         open: false,
       },
       () => {
-        redirect();
-      },
-    );
-  };
+        redirect()
+      }
+    )
+  }
 
   render() {
-    const { pendingTx, wallet, poolId } = this.props;
+    const { pendingTx, wallet, poolId } = this.props
     return (
       <Dialog
         open={this.state.open}
         onClose={this.handleClose(() => {})}
         aria-labelledby="responsive-dialog-title"
       >
-        <DialogTitle id="responsive-dialog-title">Your transaction data</DialogTitle>
+        <DialogTitle id="responsive-dialog-title">
+          Your transaction data
+        </DialogTitle>
         <DialogContent>
           <div className="alert alert-info">{wallet}</div>
           <PendingTxFields pendingTx={pendingTx} />
@@ -48,7 +50,7 @@ class PendingTxFieldsModal extends Component {
         <DialogActions>
           <Button
             onClick={this.handleClose(() => {
-              history.push('/dashboard');
+              history.push('/dashboard')
             })}
             color="primary"
             autoFocus
@@ -57,7 +59,7 @@ class PendingTxFieldsModal extends Component {
           </Button>
           <Button
             onClick={this.handleClose(() => {
-              history.push(`/pools/${poolId}`);
+              history.push(`/pools/${poolId}`)
             })}
             color="primary"
             autoFocus
@@ -66,8 +68,8 @@ class PendingTxFieldsModal extends Component {
           </Button>
         </DialogActions>
       </Dialog>
-    );
+    )
   }
 }
 
-export default PendingTxFieldsModal;
+export default PendingTxFieldsModal

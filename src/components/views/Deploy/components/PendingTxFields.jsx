@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import { copyToClipboard } from '../../../../lib/helpers';
+import { copyToClipboard } from '../../../../lib/helpers'
 
-import Input from '@material-ui/core/Input';
-import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
+import Input from '@material-ui/core/Input'
+import Button from '@material-ui/core/Button'
+import { withStyles } from '@material-ui/core/styles'
 
 const styles = {
   root: {
@@ -14,22 +14,22 @@ const styles = {
   input: {
     'text-align': 'right',
   },
-};
+}
 
 class PendingTxFields extends React.Component {
   constructor(props) {
-    super(props);
-    this._nodes = {};
-    this.handleClick = this.handleClick.bind(this);
+    super(props)
+    this._nodes = {}
+    this.handleClick = this.handleClick.bind(this)
   }
 
   handleClick(index) {
     return () => {
-      copyToClipboard(this._nodes[index]);
-    };
+      copyToClipboard(this._nodes[index])
+    }
   }
   render() {
-    const { classes, pendingTx } = this.props;
+    const { classes, pendingTx } = this.props
 
     return (
       <div id="deploy-data-fields">
@@ -60,19 +60,19 @@ class PendingTxFields extends React.Component {
                   Copy
                 </Button>
               </div>
-            );
+            )
           })}
         </div>
       </div>
-    );
+    )
   }
 }
 
 PendingTxFields.propTypes = {
   pendingTx: PropTypes.object.isRequired,
-};
+}
 
-export default withStyles(styles)(PendingTxFields);
+export default withStyles(styles)(PendingTxFields)
 
 const getFieldsArray = ({ toAddress, amount, gasLimit, data }) => {
   return [
@@ -92,5 +92,5 @@ const getFieldsArray = ({ toAddress, amount, gasLimit, data }) => {
       value: data,
       label: 'Transaction Data',
     },
-  ];
-};
+  ]
+}

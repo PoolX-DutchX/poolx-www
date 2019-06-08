@@ -1,50 +1,50 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
-import { FieldArray } from 'formik';
+import { FieldArray } from 'formik'
 
-import TextField from '@material-ui/core/TextField';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
+import TextField from '@material-ui/core/TextField'
+import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel'
 // import InputAdornment from '@material-ui/core/InputAdornment';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Button from '@material-ui/core/Button';
+import FormLabel from '@material-ui/core/FormLabel'
+import FormControl from '@material-ui/core/FormControl'
+import FormHelperText from '@material-ui/core/FormHelperText'
+import Select from '@material-ui/core/Select'
+import MenuItem from '@material-ui/core/MenuItem'
+import Button from '@material-ui/core/Button'
 
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip'
+import IconButton from '@material-ui/core/IconButton'
 
-import Pool from '../../../../models/Pool';
+import Pool from '../../../../models/Pool'
 
-import PlusIcon from '../../../PlusIcon';
-import AdminListItem from '../../CreatePool/components/AdminListItem';
+import PlusIcon from '../../../PlusIcon'
+import AdminListItem from '../../CreatePool/components/AdminListItem'
 
 class StepTwo extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       walletDialogOpen: false,
-    };
-    this.handleChooseWalletClick = this.handleChooseWalletClick.bind(this);
-    this.handleWalletDialogClose = this.handleWalletDialogClose.bind(this);
+    }
+    this.handleChooseWalletClick = this.handleChooseWalletClick.bind(this)
+    this.handleWalletDialogClose = this.handleWalletDialogClose.bind(this)
   }
   handleChooseWalletClick() {
     this.setState({
       walletDialogOpen: true,
-    });
+    })
   }
   handleWalletDialogClose(value) {
     if (!!value) {
-      this.props.formik.setFieldValue('ownerAddress', value);
+      this.props.formik.setFieldValue('ownerAddress', value)
     }
-    this.setState({ walletDialogOpen: false });
+    this.setState({ walletDialogOpen: false })
   }
   render() {
-    const { pool = {}, formik, disabledFields } = this.props; // *** formik props passed in from MultistepForm parent component
-    const { values, handleChange, handleBlur, touched, errors } = formik;
+    const { pool = {}, formik, disabledFields } = this.props // *** formik props passed in from MultistepForm parent component
+    const { values, handleChange, handleBlur, touched, errors } = formik
     return (
       <div>
         <div className="row">
@@ -65,18 +65,32 @@ class StepTwo extends Component {
                   helperText={
                     touched.fee && errors.fee
                       ? errors.fee
-                      : !(touched.feePayoutCurrency && errors.feePayoutCurrency) && (
+                      : !(
+                          touched.feePayoutCurrency && errors.feePayoutCurrency
+                        ) && (
                           <span>
                             <span>
-                              Your fee <span className="underline">{values.fee || 0}%</span> +{' '}
+                              Your fee{' '}
+                              <span className="underline">
+                                {values.fee || 0}%
+                              </span>{' '}
+                              +{' '}
                             </span>
                             <span>
-                              PB fee <span className="underline">{pool.poolbaseFee}%</span> ={' '}
+                              PB fee{' '}
+                              <span className="underline">
+                                {pool.poolbaseFee}%
+                              </span>{' '}
+                              ={' '}
                             </span>
                             <span>
                               <strong>
                                 <span className="underline">
-                                  {(parseFloat(values.fee || 0) + pool.poolbaseFee).toFixed(2)}%
+                                  {(
+                                    parseFloat(values.fee || 0) +
+                                    pool.poolbaseFee
+                                  ).toFixed(2)}
+                                  %
                                 </span>{' '}
                                 Total
                               </strong>
@@ -130,7 +144,9 @@ class StepTwo extends Component {
               <FormControl margin="normal">
                 <InputLabel
                   htmlFor="name-disabled"
-                  error={touched.feePayoutCurrency && !!errors.feePayoutCurrency}
+                  error={
+                    touched.feePayoutCurrency && !!errors.feePayoutCurrency
+                  }
                 >
                   Currency
                 </InputLabel>
@@ -142,14 +158,20 @@ class StepTwo extends Component {
                     <Input
                       name="feePayoutCurrency"
                       id="name-disabled"
-                      error={touched.feePayoutCurrency && !!errors.feePayoutCurrency}
+                      error={
+                        touched.feePayoutCurrency && !!errors.feePayoutCurrency
+                      }
                     />
                   }
                 >
                   <MenuItem value={Pool.CURRENCY_ETHER}>Ether</MenuItem>
                   <MenuItem value={Pool.CURRENCY_TOKEN}>Token</MenuItem>
                 </Select>
-                <FormHelperText error={touched.feePayoutCurrency && !!errors.feePayoutCurrency}>
+                <FormHelperText
+                  error={
+                    touched.feePayoutCurrency && !!errors.feePayoutCurrency
+                  }
+                >
                   {touched.feePayoutCurrency && errors.feePayoutCurrency}
                 </FormHelperText>
               </FormControl>
@@ -167,8 +189,12 @@ class StepTwo extends Component {
                 value={values.adminPayoutAddress}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                error={touched.adminPayoutAddress && !!errors.adminPayoutAddress}
-                helperText={touched.adminPayoutAddress && errors.adminPayoutAddress}
+                error={
+                  touched.adminPayoutAddress && !!errors.adminPayoutAddress
+                }
+                helperText={
+                  touched.adminPayoutAddress && errors.adminPayoutAddress
+                }
                 placeholder="Admin fee payout address"
                 autoComplete="Off"
                 spellCheck="false"
@@ -185,7 +211,12 @@ class StepTwo extends Component {
                   hash: 'adminPayoutAddress',
                 }}
               >
-                <Button type="submit" variant="outlined" size="small" color="primary">
+                <Button
+                  type="submit"
+                  variant="outlined"
+                  size="small"
+                  color="primary"
+                >
                   Change
                 </Button>
               </Link>
@@ -212,7 +243,10 @@ class StepTwo extends Component {
                               <IconButton
                                 aria-label="Add admin"
                                 onClick={() => {
-                                  fieldArrayHelpers.push({ address: '', name: '' });
+                                  fieldArrayHelpers.push({
+                                    address: '',
+                                    name: '',
+                                  })
                                 }}
                                 disableRipple
                               >
@@ -233,17 +267,17 @@ class StepTwo extends Component {
                             fieldArrayHelpers={fieldArrayHelpers}
                             disabledFields={disabledFields}
                           />
-                        );
+                        )
                       })}
                   </div>
                 </Tooltip>
               </div>
-            );
+            )
           }}
         />
       </div>
-    );
+    )
   }
 }
 
-export default StepTwo;
+export default StepTwo

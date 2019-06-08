@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Form, Input } from 'formsy-react-components';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Form, Input } from 'formsy-react-components'
 
-import { authenticateUser } from '../../lib/helpers';
-import { feathersClient } from '../../lib/feathersClient';
-import LoaderButton from '../LoaderButton';
+import { authenticateUser } from '../../lib/helpers'
+import { feathersClient } from '../../lib/feathersClient'
+import LoaderButton from '../LoaderButton'
 
 /* global window */
 /**
@@ -13,7 +13,7 @@ import LoaderButton from '../LoaderButton';
 
 class SignUp extends Component {
   constructor() {
-    super();
+    super()
 
     this.state = {
       isSaving: false,
@@ -22,10 +22,10 @@ class SignUp extends Component {
       email: '',
       password: '',
       confirmedPassword: '',
-    };
+    }
 
-    this.submit = this.submit.bind(this);
-    this.createAccount = this.createAccount.bind(this);
+    this.submit = this.submit.bind(this)
+    this.createAccount = this.createAccount.bind(this)
   }
 
   submit({ email, password }) {
@@ -36,44 +36,44 @@ class SignUp extends Component {
         email,
         password,
       },
-      this.createAccount,
-    );
+      this.createAccount
+    )
   }
 
   createAccount() {
-    const { email, password } = this.state;
+    const { email, password } = this.state
     feathersClient
       .service('/users')
       .create({ email, password })
       .then(() => authenticateUser({ email, password }))
       .then(token => feathersClient.passport.verifyJWT(token))
       .then(tokenPayload => {
-        const { userId } = tokenPayload;
-        this.setState({ isSaving: false });
-        this.props.onSignIn(userId);
+        const { userId } = tokenPayload
+        this.setState({ isSaving: false })
+        this.props.onSignIn(userId)
         React.toast.success(
           <p>
             Welcome to PoolX! <br />
-          </p>,
-        );
-        this.props.history.goBack();
+          </p>
+        )
+        this.props.history.goBack()
       })
       .catch(err => {
-        console.log('createAccount err', err);
-        React.toast.error(err.message);
+        console.log('createAccount err', err)
+        React.toast.error(err.message)
         this.setState({
           isSaving: false,
           error: err.message,
-        });
-      });
+        })
+      })
   }
 
   toggleFormValid(state) {
-    this.setState({ formIsValid: state });
+    this.setState({ formIsValid: state })
   }
 
   render() {
-    const { error, formIsValid, isSaving } = this.state;
+    const { error, formIsValid, isSaving } = this.state
 
     return (
       <div id="account-view" className="container-fluid page-layout">
@@ -84,7 +84,10 @@ class SignUp extends Component {
                 <center>
                   <div>
                     <h1>SignUp</h1>
-                    <p>Please provide a username and password to create your account</p>
+                    <p>
+                      Please provide a username and password to create your
+                      account
+                    </p>
 
                     {error && <div className="alert alert-danger">{error}</div>}
 
@@ -154,7 +157,7 @@ class SignUp extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -163,6 +166,6 @@ SignUp.propTypes = {
     push: PropTypes.func.isRequired,
     goBack: PropTypes.func.isRequired,
   }).isRequired,
-};
+}
 
-export default SignUp;
+export default SignUp

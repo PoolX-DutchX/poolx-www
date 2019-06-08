@@ -40,10 +40,7 @@ const ErrorText = styled(Text)`
   font-size: 2em;
   margin-bottom: 1em;
 `
-export default function Web3Error({
-  error,
-  connectorName,
-}) {
+export default function Web3Error({ error, connectorName }) {
   console.error(`The '${connectorName}' connector threw an error.`) // eslint-disable-line no-console
   console.log({ error: error.code }) // eslint-disable-line no-console
 
@@ -68,10 +65,8 @@ export default function Web3Error({
       <ErrorWrapper>
         <ErrorLogo />
         <ErrorText>{getErrorMessage()}</ErrorText>
-        <Link to='/'>
-          <ResetButton>
-            Reset
-          </ResetButton>
+        <Link to="/">
+          <ResetButton>Reset</ResetButton>
         </Link>
       </ErrorWrapper>
     </Common>

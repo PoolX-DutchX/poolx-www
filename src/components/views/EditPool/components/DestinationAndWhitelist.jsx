@@ -1,38 +1,50 @@
-import React, { Component } from 'react';
-import { utils } from 'web3';
+import React, { Component } from 'react'
+import { utils } from 'web3'
 
-import TextField from '@material-ui/core/TextField';
-import Switch from '@material-ui/core/Switch';
-import FormLabel from '@material-ui/core/FormLabel';
-import Tooltip from '@material-ui/core/Tooltip';
+import TextField from '@material-ui/core/TextField'
+import Switch from '@material-ui/core/Switch'
+import FormLabel from '@material-ui/core/FormLabel'
+import Tooltip from '@material-ui/core/Tooltip'
 
-import CSVReader from '../../../CSVReader';
-import WhitelistTable from '../../../WhitelistTable';
-import PoolModel from '../../../../models/Pool';
+import CSVReader from '../../../CSVReader'
+import WhitelistTable from '../../../WhitelistTable'
+import PoolModel from '../../../../models/Pool'
 
 class StepThree extends Component {
   constructor(props) {
-    super(props);
-    const { formik: { values: { hasWhitelist, whitelist } } } = this.props;
+    super(props)
+    const {
+      formik: {
+        values: { hasWhitelist, whitelist },
+      },
+    } = this.props
 
     this.state = {
       whitelist: hasWhitelist ? whitelist : [],
       invalidItemNumbers: [],
-    };
+    }
   }
 
   handleHasWhitelistChange = handleChange => (...eventProps) => {
     this.setState({
       whitelist: [],
-    });
-    handleChange(...eventProps);
-  };
+    })
+    handleChange(...eventProps)
+  }
 
   render() {
-    const { formik, pool } = this.props; // *** formik props passed in from MultistepForm parent component
-    const { values, handleChange, handleBlur, touched, errors, setFieldValue } = formik;
+    const { formik, pool } = this.props // *** formik props passed in from MultistepForm parent component
+    const {
+      values,
+      handleChange,
+      handleBlur,
+      touched,
+      errors,
+      setFieldValue,
+    } = formik
     const poolClosed =
-      pool.status !== PoolModel.ACTIVE && pool.status !== PoolModel.PENDING_CLOSE_POOL;
+      pool.status !== PoolModel.ACTIVE &&
+      pool.status !== PoolModel.PENDING_CLOSE_POOL
     return (
       <div>
         <div className="row">
@@ -119,34 +131,35 @@ class StepThree extends Component {
                 label="Whitelist CSV (address, name)"
                 onFileLoaded={(data, meta) => {
                   const csvIncludesHeader =
-                    meta.fields.includes('address') && meta.fields.includes('name');
-                  const invalidItemNumbers = [];
+                    meta.fields.includes('address') &&
+                    meta.fields.includes('name')
+                  const invalidItemNumbers = []
                   const validItems = data.filter((item, index) => {
-                    const itemNumber = csvIncludesHeader ? index + 2 : index + 1;
+                    const itemNumber = csvIncludesHeader ? index + 2 : index + 1
                     if (!item.address) {
-                      invalidItemNumbers.push(itemNumber);
-                      return false;
+                      invalidItemNumbers.push(itemNumber)
+                      return false
                     }
-                    const isAddress = utils.isAddress(item.address);
+                    const isAddress = utils.isAddress(item.address)
                     if (!isAddress) {
-                      invalidItemNumbers.push(itemNumber);
+                      invalidItemNumbers.push(itemNumber)
                     }
-                    return isAddress;
-                  });
+                    return isAddress
+                  })
                   /*
                     ToDo: Supports tables that have 'address' and 'name' as headings,
                     should also support tables without headings.
                   */
-                  setFieldValue('whitelist', validItems);
+                  setFieldValue('whitelist', validItems)
 
                   this.setState({
                     whitelist: validItems,
                     invalidItemNumbers: invalidItemNumbers,
-                  });
+                  })
                 }}
                 onError={error => {
                   // oops something went wrong, check your file is properly formatted
-                  console.log('error', error);
+                  console.log('error', error)
                 }}
                 inputId="some-input-id"
               />
@@ -156,21 +169,28 @@ class StepThree extends Component {
                   role="alert"
                   style={{ marginTop: '1rem' }}
                 >
-                  <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+                  <button
+                    type="button"
+                    className="close"
+                    data-dismiss="alert"
+                    aria-label="Close"
+                  >
                     <span aria-hidden="true">&times;</span>
                   </button>
                   {`The following CSV rows contained invalid ethereum addresses: ${this.state.invalidItemNumbers.join(
-                    ', ',
+                    ', '
                   )}.`}
                 </div>
               )}
-              {!!this.state.whitelist.length && <WhitelistTable whitelist={this.state.whitelist} />}
+              {!!this.state.whitelist.length && (
+                <WhitelistTable whitelist={this.state.whitelist} />
+              )}
             </div>
           )}
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default StepThree;
+export default StepThree

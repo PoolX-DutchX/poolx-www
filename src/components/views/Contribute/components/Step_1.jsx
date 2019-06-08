@@ -1,35 +1,35 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button'
+import TextField from '@material-ui/core/TextField'
 
-import ChooseWalletDialog from '../../../ChooseWalletDialog';
+import ChooseWalletDialog from '../../../ChooseWalletDialog'
 
 class StepOne extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       walletDialogOpen: false,
-    };
-    this.handleChooseWalletClick = this.handleChooseWalletClick.bind(this);
-    this.handleWalletDialogClose = this.handleWalletDialogClose.bind(this);
+    }
+    this.handleChooseWalletClick = this.handleChooseWalletClick.bind(this)
+    this.handleWalletDialogClose = this.handleWalletDialogClose.bind(this)
   }
   handleChooseWalletClick() {
     this.setState({
       walletDialogOpen: true,
-    });
+    })
   }
   handleWalletDialogClose(value) {
     if (!!value) {
-      this.props.formik.setFieldValue('ownerAddress', value);
+      this.props.formik.setFieldValue('ownerAddress', value)
     }
-    this.setState({ walletDialogOpen: false });
+    this.setState({ walletDialogOpen: false })
   }
   render() {
     const {
       formik: { values, handleChange, handleBlur, touched, errors },
       currentUser,
-    } = this.props; // formik props passed in from Wizard
+    } = this.props // formik props passed in from Wizard
     return (
       <div>
         <div className="row align-items-center">
@@ -88,8 +88,8 @@ class StepOne extends Component {
           fullWidth
         />
       </div>
-    );
+    )
   }
 }
 
-export default StepOne;
+export default StepOne
