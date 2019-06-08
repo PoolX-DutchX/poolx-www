@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import BigNumber from 'bignumber.js'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Button from '@material-ui/core/Button'
 import Loader from '../Loader'
@@ -23,11 +24,8 @@ const ViewPool = ({ match, web3, history }) => {
     3: 'Claim',
   }
 
-  const transformFromWei = (number) => {
-    const result = web3.utils.fromWei(
-      number.toString(),
-      'ether'
-    )
+  const transformFromWei = number => {
+    const result = web3.utils.fromWei(number.toString(), 'ether')
     return Number(result)
   }
 
@@ -45,6 +43,8 @@ const ViewPool = ({ match, web3, history }) => {
         userContributionForToken2Amount,
       ] = values
 
+      console.log({ values })
+
       const tokenBalanceArray = Object.entries(tokenBalancesInUsd).map(
         ([, value]) => value
       )
@@ -59,8 +59,12 @@ const ViewPool = ({ match, web3, history }) => {
         token1BalanceInUsd,
         token2BalanceInUsd,
         stage: mapPoolStage[stage],
-        userContributionForToken1Amount: transformFromWei(userContributionForToken1Amount),
-        userContributionForToken2Amount: transformFromWei(userContributionForToken2Amount),
+        userContributionForToken1Amount: transformFromWei(
+          userContributionForToken1Amount
+        ),
+        userContributionForToken2Amount: transformFromWei(
+          userContributionForToken2Amount
+        ),
       })
 
       setIsLoading(false)
@@ -81,13 +85,13 @@ const ViewPool = ({ match, web3, history }) => {
     token2BalanceInUsd,
     stage,
     userContributionForToken1Amount,
-    userContributionForToken2Amount
+    userContributionForToken2Amount,
   } = poolData
 
-  const poolProgress = token1BalanceInUsd
-    .add(token2BalanceInUsd)
+  const poolProgress = new BigNumber(token1BalanceInUsd)
+    .plus(token2BalanceInUsd)
     .div(currentDxThreshold)
-    .mul(100)
+    .times(100)
     .toNumber()
 
   return (
@@ -136,7 +140,10 @@ const ViewPool = ({ match, web3, history }) => {
             <div className="total-invested-section">
               <h4 className="invested">
                 <strong>
-                  {token1BalanceInUsd.add(token2BalanceInUsd).toString()} USD
+                  {new BigNumber(token1BalanceInUsd)
+                    .plus(token2BalanceInUsd)
+                    .toString()}{' '}
+                  USD
                 </strong>
               </h4>
               <div className="subheading">
