@@ -4,20 +4,31 @@ import PropTypes from 'prop-types'
 import * as Yup from 'yup'
 
 import User from '../../../models/User'
-// import Contribution from '../../../models/Contribution';
-// import ContributionService from '../../../services/Contribution';
-// import PoolService from '../../../services/Pool';
+import poolAbi from '../web3Helpers/viewPool/poolAbi.json'
 
 import MultiStepForm from '../../MultiStepForm'
 import StepOne from './components/Step_1'
 
+import WrongStage from './WrongStage'
 import Loader from '../../Loader'
 
-import { history } from '../../../lib/helpers'
-import { feathersClient } from '../../../lib/feathersClient'
-// import { isAuthenticated } from '../../../lib/middleware';
-import { ethereumAddress } from '../../../lib/validators'
-// import { isWhitelistedAddress } from '../../../lib/validators';
+import {
+  showToastOnTxSubmitted,
+  showToastOnTxConfirmation,
+  showToastOnTxError,
+} from '../web3Helpers/createPool/showToasts'
+
+import getWeb3 from '../../../lib/blockchain/getWeb3'
+
+import fetchPoolData from '../web3Helpers/viewPool/viewPool'
+const web3 = getWeb3()
+
+const mapPoolStage = {
+  0: 'Initialization',
+  1: 'Contribution',
+  2: 'Collection',
+  3: 'Claim',
+}
 
 /**
  * View flow to create a Contribution
@@ -39,65 +50,123 @@ class Contribute extends Component {
     super(props)
 
     this.state = {
-      isLoading: false,
+      isLoading: true,
       pool: {},
     }
+  }
 
-    // Yup.addMethod(Yup.string, 'whitelisted', isWhitelistedAddress);
+  componentDidMount() {
+    web3.eth.getAccounts().then(accounts => {
+      fetchPoolData(this.props.match.params.poolAddress, accounts[0]).then(
+        values => {
+          const [
+            token1BalanceResult,
+            token2BalanceResult,
+            name,
+            description,
+            currentDxThreshold,
+            tokenBalancesInUsd,
+            stage,
+            userContributionForToken1Amount,
+            userContributionForToken2Amount,
+            token1ThresholdReached,
+            token2ThresholdReached,
+          ] = values
+
+          console.log({
+            token1BalanceResult,
+            token2BalanceResult,
+            name,
+            description,
+            currentDxThreshold,
+            tokenBalancesInUsd,
+            stage,
+            userContributionForToken1Amount,
+            userContributionForToken2Amount,
+            token1ThresholdReached,
+            token2ThresholdReached,
+          })
+
+          const tokenBalanceArray = Object.entries(tokenBalancesInUsd).map(
+            ([, value]) => value
+          )
+          const [token1BalanceInUsd, token2BalanceInUsd] = tokenBalanceArray
+
+          this.setState({
+            name,
+            description,
+            currentDxThreshold,
+            token1BalanceInUsd,
+            token2BalanceInUsd,
+            stage: mapPoolStage[stage],
+            userContributionForToken1Amount,
+            userContributionForToken2Amount,
+            token1ThresholdReached,
+            token2ThresholdReached,
+            isLoading: false,
+          })
+        }
+      )
+    })
   }
 
   render() {
     const {
       isLoading,
       pool: { minContribution, maxContribution },
+      stage,
     } = this.state
 
     return (
       <div>
         {isLoading && <Loader className="fixed" />}
-        {!isLoading && (
+        {!isLoading && stage !== 'Contribution' && <WrongStage stage={stage} />}
+        {!isLoading && stage === 'Contribution' && (
           <MultiStepForm
             header={<Header />}
             initialValues={{
-              ownerAddress: '',
+              isContributingToken2: '',
               amount: '',
             }}
             stepLabels={['Contribution Details', 'Perform transaction']}
-            onSubmit={({ ownerAddress, amount }) => {
-              const { pool } = this.state
-              console.log('this.state.pool.id', this.state.pool.id)
-              console.log('ownerAddress', ownerAddress)
-              console.log('amount', amount)
-              feathersClient
-                .service('contributions')
-                .create({
-                  ownerAddress,
-                  amount,
-                  pool: pool.id,
-                  poolAddress: pool.contractAddress,
+            onSubmit={({ amount, isContributingToken2 }) => {
+              return new Promise((res, rej) =>
+                web3.eth.getAccounts().then(accounts => {
+                  console.log({ amount, isContributingToken2 })
+                  console.log({ state: this.state })
+
+                  const contract = new web3.eth.Contract(
+                    poolAbi,
+                    this.props.match.params.poolAddress
+                  )
+
+                  contract.methods
+                    .contribute(
+                      isContributingToken2 ? 0 : amount,
+                      isContributingToken2 ? amount : 0
+                    )
+                    .send({
+                      from: accounts[0],
+                    })
+                    .on('transactionHash', txHash => {
+                      showToastOnTxSubmitted(txHash)
+                    })
+                    .on('confirmation', (confirmationNumber, receipt) => {
+                      showToastOnTxConfirmation(confirmationNumber, receipt)
+
+                      if (confirmationNumber === 5) return res(receipt)
+                    })
+                    .on('error', (error, receipt) => {
+                      showToastOnTxError(receipt)
+                      return rej(error)
+                    })
                 })
-                .then(contribution => {
-                  history.push(`/contributions/${contribution._id}/pendingTx`)
-                })
-                .catch(err => {
-                  console.log('Oops something went wrong', err)
-                })
-              // actions.setSubmitting(false);
+              )
             }}
             validationSchemas={[
               Yup.object().shape({
-                ownerAddress: ethereumAddress()
-                  // .whitelisted(this.state.pool, 'The address provided is not on pool whitelist. Please contract pool admin')
-                  .required('Required'),
                 amount: Yup.number()
-                  .min(
-                    minContribution,
-                    `Must be more than Pool minimum contribution of ${minContribution} Ether`
-                  )
-                  .max(
-                    maxContribution,
-                    `Must be less than Pool Maximum contribution of ${maxContribution} Ether`
-                  )
+                  .min(0.00001, 'Token amount too small!')
                   .required('Required'),
               }),
             ]}

@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 
-import Button from '@material-ui/core/Button'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Checkbox from '@material-ui/core/Checkbox'
 import TextField from '@material-ui/core/TextField'
-
-import ChooseWalletDialog from '../../../ChooseWalletDialog'
 
 class StepOne extends Component {
   constructor(props) {
@@ -14,67 +13,56 @@ class StepOne extends Component {
     this.handleChooseWalletClick = this.handleChooseWalletClick.bind(this)
     this.handleWalletDialogClose = this.handleWalletDialogClose.bind(this)
   }
+
   handleChooseWalletClick() {
     this.setState({
       walletDialogOpen: true,
     })
   }
+
   handleWalletDialogClose(value) {
     if (!!value) {
-      this.props.formik.setFieldValue('ownerAddress', value)
+      this.props.formik.setFieldValue('isContributingToken2', value)
     }
     this.setState({ walletDialogOpen: false })
   }
+
   render() {
     const {
-      formik: { values, handleChange, handleBlur, touched, errors },
-      currentUser,
+      formik: {
+        values: { amount, isContributingToken2 },
+        handleChange,
+        handleBlur,
+        touched,
+        errors,
+      },
     } = this.props // formik props passed in from Wizard
+
+    // TODO check token1ThresholdReached + token2ThresholdReached
+
     return (
       <div>
-        <div className="row align-items-center">
-          <div className="col">
-            <TextField
-              id="ownerAddress"
-              name="ownerAddress"
-              label="Wallet address"
-              value={values.ownerAddress}
-              autoComplete="Off"
-              spellCheck="false"
-              placeholder="Your wallet address"
+        <FormControlLabel
+          control={
+            <Checkbox
+              id="isContributingToken2"
+              color="primary"
+              checked={isContributingToken2}
+              value="isContributingToken2"
               onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.ownerAddress && !!errors.ownerAddress}
-              helperText={touched.ownerAddress && errors.ownerAddress}
-              margin="normal"
-              fullWidth
             />
-          </div>
-          {this.props.currentUser && (
-            <div className="col-md-3">
-              <Button
-                type="button"
-                color="primary"
-                size="small"
-                onClick={this.handleChooseWalletClick}
-              >
-                Choose wallet
-              </Button>
-              <ChooseWalletDialog
-                wallets={currentUser.wallets}
-                selectedValue={values.ownerAddress}
-                open={this.state.walletDialogOpen}
-                onClose={this.handleWalletDialogClose}
-              />
-            </div>
-          )}
-        </div>
+          }
+          label="Contribute Token2"
+        />
         <TextField
           id="amount"
           name="amount"
-          label="Contribution amount"
-          placeholder="Ξther amount"
-          value={values.amount}
+          label={
+            (isContributingToken2 ? 'Token2' : 'Token1') +
+            ' Contribution amount'
+          }
+          placeholder="Token amount"
+          value={amount}
           autoComplete="Off"
           spellCheck="false"
           onChange={handleChange}
