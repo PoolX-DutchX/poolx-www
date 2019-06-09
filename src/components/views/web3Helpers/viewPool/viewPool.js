@@ -1,18 +1,7 @@
-import poolAbi from './poolAbi.json'
+import poolAbi from '../shared/poolAbi.json'
+import { getPoolData } from '../shared/commonWeb3Helpers'
 import getWeb3 from '../../../../lib/blockchain/getWeb3'
 const web3 = getWeb3()
-
-const getPoolData = (poolAddress, funcIdentifier) =>
-  new Promise(async (resolve, reject) => {
-    try {
-      const contract = new web3.eth.Contract(poolAbi, poolAddress)
-      const data = await contract.methods[funcIdentifier]().call()
-      resolve(data)
-    } catch (error) {
-      console.log({ error })
-      reject(error)
-    }
-  })
 
 const getTokenBalancesInUsd = poolAddress =>
   new Promise(async (resolve, reject) => {

@@ -6,6 +6,7 @@ import Loader from '../Loader'
 import WithTooltip from '../WithTooltip'
 
 import fetchPoolData from './web3Helpers/viewPool/viewPool'
+import { getPoolStage } from './web3Helpers/shared/commonWeb3Helpers'
 import isEmpty from 'lodash/isEmpty'
 import { useWeb3Context } from 'web3-react'
 
@@ -17,12 +18,7 @@ const ViewPool = ({ match, web3, history }) => {
   } = match
   const context = useWeb3Context()
   const { account } = context
-  const mapPoolStage = {
-    0: 'Initialization',
-    1: 'Contribution',
-    2: 'Collection',
-    3: 'Claim',
-  }
+
 
   const transformFromWei = number => {
     const result = web3.utils.fromWei(number.toString(), 'ether')
@@ -38,7 +34,7 @@ const ViewPool = ({ match, web3, history }) => {
         description,
         currentDxThreshold,
         tokenBalancesInUsd,
-        stage,
+        stageIndex,
         token1,
         token2,
         token1ThresholdReached,
@@ -60,7 +56,7 @@ const ViewPool = ({ match, web3, history }) => {
         currentDxThreshold,
         token1BalanceInUsd,
         token2BalanceInUsd,
-        stage: mapPoolStage[stage],
+        stage: getPoolStage(stageIndex),
         token1,
         token2,
         token1ThresholdReached,

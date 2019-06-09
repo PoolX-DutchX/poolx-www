@@ -5,7 +5,7 @@ import {
   showToastOnTxSubmitted,
   showToastOnTxConfirmation,
   showToastOnTxError,
-} from './showToasts'
+} from '../shared/showToasts'
 import getWeb3 from '../../../../lib/blockchain/getWeb3'
 const web3 = getWeb3()
 const { poolFactoryAddress, dxProxyAddress } = config
@@ -43,7 +43,7 @@ export default (
       .on('confirmation', (confirmationNumber, receipt) => {
         showToastOnTxConfirmation(confirmationNumber, receipt)
 
-        if (confirmationNumber === 5) return resolve(receipt)
+        if (confirmationNumber === 2) return resolve(receipt)
       })
       .on('error', (error, receipt) => {
         showToastOnTxError(receipt)
