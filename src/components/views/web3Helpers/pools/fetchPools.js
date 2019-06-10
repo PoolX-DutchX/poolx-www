@@ -14,7 +14,6 @@ export default () =>
       )
 
       const data = await contract.methods.getPools.call()
-      console.log({ data })
       resolve(data)
     } catch (error) {
       reject(error)
