@@ -31,7 +31,7 @@ export default ({ history }) => {
   const { account, active } = context
   const isLoading = active ? false : true
   const getAddressFromReceiptData = data => {
-    const zeroStrippedAddress = data.replace(/(0x)0*(.*)/i, '$1$2')
+    const zeroStrippedAddress = data.replace(/(0x)(0{24})(.*)/i, '$1$3')
     return zeroStrippedAddress
   }
 
@@ -44,6 +44,7 @@ export default ({ history }) => {
     }).then(() => {
       createPool(account, values).then(receipt => {
         const { logs } = receipt
+        console.log({ receipt })
         const data = logs[0].data
         const poolAddress = getAddressFromReceiptData(data)
 
