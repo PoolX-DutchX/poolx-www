@@ -20,7 +20,7 @@ const ViewPool = ({ match, web3, history }) => {
   const { account } = context
 
 
-  const transformFromWei = number => {
+  const transfromFromWei = number => {
     const result = web3.utils.fromWei(number.toString(), 'ether')
     return Number(result)
   }
@@ -49,8 +49,8 @@ const ViewPool = ({ match, web3, history }) => {
       const [token1BalanceInUsd, token2BalanceInUsd] = tokenBalanceArray
 
       setPoolData({
-        token1Balance: transformFromWei(token1BalanceResult),
-        token2Balance: transformFromWei(token2BalanceResult),
+        token1Balance: transfromFromWei(token1BalanceResult),
+        token2Balance: transfromFromWei(token2BalanceResult),
         name,
         description,
         currentDxThreshold,
@@ -61,10 +61,10 @@ const ViewPool = ({ match, web3, history }) => {
         token2,
         token1ThresholdReached,
         token2ThresholdReached,
-        userContributionForToken1Amount: transformFromWei(
+        userContributionForToken1Amount: transfromFromWei(
           userContributionForToken1Amount
         ),
-        userContributionForToken2Amount: transformFromWei(
+        userContributionForToken2Amount: transfromFromWei(
           userContributionForToken2Amount
         ),
       })
@@ -142,14 +142,14 @@ const ViewPool = ({ match, web3, history }) => {
             <div className="total-invested-section">
               <h4 className="invested">
                 <strong>
-                  {new BigNumber(token1BalanceInUsd)
-                    .plus(token2BalanceInUsd)
-                    .toString()}{' '}
-                  USD
+                {transfromFromWei(
+                    new BigNumber(token1BalanceInUsd).plus(token2BalanceInUsd)
+                  )}
                 </strong>
+                  USD
               </h4>
               <div className="subheading">
-                of {transformFromWei(currentDxThreshold)} USD to list token pair
+                of {transfromFromWei(currentDxThreshold)} USD to list token pair
               </div>
             </div>
             <div className="min-max-section">
@@ -171,16 +171,17 @@ const ViewPool = ({ match, web3, history }) => {
               color="primary"
               fullWidth
               onClick={contribute}
-              disabled={false}
             >
               Contribute to Pool
             </Button>
             <div className="row margin-top-bottom">
-              <div className="col">
-                <Button variant="outlined" fullWidth>
-                  Withdraw
-                </Button>
-              </div>
+              { stage === 'Collection' &&
+                <div className="col">
+                  <Button variant="outlined" fullWidth>
+                    Withdraw
+                  </Button>
+                </div>
+              }
             </div>
           </div>
         </div>

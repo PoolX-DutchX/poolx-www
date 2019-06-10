@@ -14,8 +14,8 @@ const {
 const configurations = {
   [ENV_LOCALHOST]: {
     title: 'Ganache',
-    poolFactoryAddress: '0x31188a1a6AEf040ab08a8B0e8503c1972Ff7AAbB',
-    poolLibraryAddress: '0x7270FA39099bFbB8d1914c3cD99873e2d1C23184',
+    poolFactoryAddress: '0xE76eD7dBaC948e3576291Ee46527ba35164dd4BD',
+    poolLibraryAddress: '0x1A48393ba853b9e1DE7Fc1c041FDaAf04af52454',
     dxAddress: '0x7b7DC59ADBE59CA4D0eB32042fD5259Cf5329DE1',
     dxProxyAddress: '0xaaeb2035ff394fdb2c879190f95e7676f1a9444b',
     wethAddress: '0xc778417e063141139fce010982780140aa0cd5ab',
@@ -27,8 +27,8 @@ const configurations = {
   },
   [ENV_STAGING]: {
     title: 'staging',
-    poolFactoryAddress: '0x31188a1a6AEf040ab08a8B0e8503c1972Ff7AAbB',
-    poolLibraryAddress: '0x7270FA39099bFbB8d1914c3cD99873e2d1C23184',
+    poolFactoryAddress: '0xE76eD7dBaC948e3576291Ee46527ba35164dd4BD',
+    poolLibraryAddress: '0x1A48393ba853b9e1DE7Fc1c041FDaAf04af52454',
     dxAddress: '0x7b7DC59ADBE59CA4D0eB32042fD5259Cf5329DE1', // https://dutchx.readthedocs.io/en/latest/smart-contracts_addresses.html#rinkeby
     dxProxyAddress: '0xaaeb2035ff394fdb2c879190f95e7676f1a9444b', // https://dutchx.readthedocs.io/en/latest/smart-contracts_addresses.html#rinkeby
     wethAddress: '0xc778417e063141139fce010982780140aa0cd5ab', // https://dutchx.readthedocs.io/en/latest/add-token-pair.html#get-the-information-for-adding-a-token-pair

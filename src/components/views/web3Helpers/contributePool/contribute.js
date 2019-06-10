@@ -6,7 +6,7 @@ import {
 import { getPoolData } from '../shared/commonWeb3Helpers'
 
 import ERC20Abi from '../shared/ERC20Abi.json'
-import poolAbi from '../shared/ERC20Abi.json'
+import poolAbi from '../shared/poolAbi.json'
 import BigNumber from 'bignumber.js'
 import getWeb3 from '../../../../lib/blockchain/getWeb3'
 const web3 = getWeb3()
@@ -19,17 +19,14 @@ export const contributeToPool = ({
   account,
   poolAddress,
 }) => {
-  return new Promise((res, rej) => {
-    console.log({ amount, isContributingToken2 })
+  const tokenContract = new web3.eth.Contract(
+    ERC20Abi,
+    isContributingToken2 ? token2 : token1
+  )
+  const poolContract = new web3.eth.Contract(poolAbi, poolAddress)
+  const amountInWei = new BigNumber(amount).times(1e18).toString()
 
-    const amountInWei = new BigNumber(amount).times(1e18).toString()
-
-    const tokenContract = new web3.eth.Contract(
-      ERC20Abi,
-      isContributingToken2 ? token2 : token1
-    )
-    const poolContract = new web3.eth.Contract(poolAbi, poolAddress)
-
+  return new Promise((resolve, rejection) => {
     tokenContract.methods
       .approve(poolAddress, amountInWei)
       .send({ from: account })
@@ -49,16 +46,16 @@ export const contributeToPool = ({
           .on('confirmation', (confirmationNumber, receipt) => {
             showToastOnTxConfirmation(confirmationNumber, receipt)
 
-            if (confirmationNumber === 2) return res(receipt)
+            if (confirmationNumber === 2) return resolve(receipt)
           })
           .on('error', (error, receipt) => {
             showToastOnTxError(receipt)
-            return rej(error)
+            return rejection(error)
           })
       })
       .on('error', (error, receipt) => {
         showToastOnTxError(receipt)
-        return rej(error)
+        return rejection(error)
       })
   })
 }
@@ -68,4 +65,7 @@ export const fetchContributionPageData = poolAddress =>
     getPoolData(poolAddress, 'stage'),
     getPoolData(poolAddress, 'token1'),
     getPoolData(poolAddress, 'token2'),
+    getPoolData(poolAddress, 'isAuctionWithWeth'),
+    getPoolData(poolAddress, 'token1ThresholdReached'),
+    getPoolData(poolAddress, 'token2ThresholdReached'),
   ])

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 import MultiStepForm from '../../MultiStepForm'
-import StepOne from './components/Step_1'
+import FormStep from './components/FormStep'
 import WrongStage from './WrongStage'
 import Loader from '../../Loader'
 import validationSchemas from './validation/'
@@ -17,12 +17,12 @@ const Header = () => {
   return (
     <div>
       <h1 className="font-xl">Contribute</h1>
-      <p className="font-m">...And get in on some of the action</p>
+      <p className="font-m">to list tokens on DutchX</p>
     </div>
   )
 }
 
-const Contribute = ({ match }) => {
+const Contribute = ({ match, history }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [poolData, setPoolData] = useState({})
   const {
@@ -33,11 +33,21 @@ const Contribute = ({ match }) => {
 
   useEffect(() => {
     fetchContributionPageData(poolAddress, account).then(values => {
-      const [stageIndex, token1, token2] = values
+      const [
+        stageIndex,
+        token1,
+        token2,
+        isAuctionWithWeth,
+        token1ThresholdReached,
+        token2ThresholdReached,
+      ] = values
       setPoolData({
         stage: getPoolStage(stageIndex),
         token1,
         token2,
+        isAuctionWithWeth,
+        token1ThresholdReached,
+        token2ThresholdReached,
       })
 
       setIsLoading(false)
@@ -46,7 +56,25 @@ const Contribute = ({ match }) => {
 
   if (isLoading) return <Loader className="fixed" />
 
-  const { token1, token2, stage } = poolData
+  const {
+    token1,
+    token2,
+    stage,
+    isAuctionWithWeth,
+    token1ThresholdReached,
+    token2ThresholdReached,
+  } = poolData
+
+  const submitContribution = ({ amount, isContributingToken2 }) =>
+  contributeToPool({
+    account,
+    token1,
+    token2,
+    poolAddress,
+    isContributingToken2,
+    amount,
+  })
+  .then(() => history.push(`/pools/view-pool/${poolAddress}`))
 
   return (
     <div>
@@ -59,19 +87,14 @@ const Contribute = ({ match }) => {
             amount: '',
           }}
           stepLabels={['Contribution Details', 'Perform transaction']}
-          onSubmit={values =>
-            contributeToPool({
-              account,
-              token1,
-              token2,
-              poolAddress,
-              isContributingToken2: values.isContributingToken2,
-              amount: values.amount,
-            })
-          }
+          onSubmit={(values) => submitContribution(values)}
           validationSchemas={validationSchemas}
         >
-          <StepOne />
+          <FormStep
+            isAuctionWithWeth={isAuctionWithWeth}
+            token1ThresholdReached={token1ThresholdReached}
+            token2ThresholdReached={token2ThresholdReached}
+          />
         </MultiStepForm>
       )}
     </div>
