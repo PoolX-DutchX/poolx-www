@@ -41,17 +41,18 @@ export const showToastOnTxConfirmation = (confirmationNumber, receipt) => {
 export const showToastOnTxError = receipt =>
   toast.error(
     <p>
-      Oops something went wrong! <br />
+      Oops something went wrong!
+      <br />
       {receipt && (
         <span>
-          It Looks like you've ran out of gas,
           <a
             href={getEtherscanTxLink(receipt.transactionHash)}
             target="_blank"
             rel="noopener noreferrer"
           >
-            view on etherscan
+            View tx on etherscan
           </a>
+          <br />
           and try again.
         </span>
       )}

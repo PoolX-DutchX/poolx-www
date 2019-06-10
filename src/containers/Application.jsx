@@ -16,6 +16,7 @@ import SignUp from './../components/views/SignUp'
 import Home from './../components/views/Home'
 
 import ViewPool from './../components/views/ViewPool'
+import Pools from './../components/views/Pools'
 import CreatePool from './../components/views/CreatePool/'
 import EditPool from './../components/views/EditPool/'
 import Update from './../components/views/Update/'
@@ -90,13 +91,18 @@ const Application = () => {
                       />
                       <Web3ProtectedRoute
                         exact
-                        path="/pools/view-pool/:poolAddress"
+                        path="/pools/view/:poolAddress"
                         component={props => <ViewPool {...props} />}
                       />
                       <Web3ProtectedRoute
                         exact
-                        path="/pools/:poolAddress/contribute"
+                        path="/pools/contribute/:poolAddress"
                         component={props => <Contribute {...props} />}
+                      />
+                      <Web3ProtectedRoute
+                        exact
+                        path="/pools"
+                        component={props => <Pools {...props} />}
                       />
                       <Route
                         exact

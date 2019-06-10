@@ -14,7 +14,7 @@ const {
 const configurations = {
   [ENV_LOCALHOST]: {
     title: 'Ganache',
-    poolFactoryAddress: '0x31188a1a6AEf040ab08a8B0e8503c1972Ff7AAbB',
+    poolFactoryAddress: '0xef14E0F46aC65C241a8A602AcF90e8AC513d126A',
     poolLibraryAddress: '0x7270FA39099bFbB8d1914c3cD99873e2d1C23184',
     dxAddress: '0x7b7DC59ADBE59CA4D0eB32042fD5259Cf5329DE1',
     dxProxyAddress: '0xaaeb2035ff394fdb2c879190f95e7676f1a9444b',
@@ -27,7 +27,7 @@ const configurations = {
   },
   [ENV_STAGING]: {
     title: 'staging',
-    poolFactoryAddress: '0x31188a1a6AEf040ab08a8B0e8503c1972Ff7AAbB',
+    poolFactoryAddress: '0xef14E0F46aC65C241a8A602AcF90e8AC513d126A',
     poolLibraryAddress: '0x7270FA39099bFbB8d1914c3cD99873e2d1C23184',
     dxAddress: '0x7b7DC59ADBE59CA4D0eB32042fD5259Cf5329DE1', // https://dutchx.readthedocs.io/en/latest/smart-contracts_addresses.html#rinkeby
     dxProxyAddress: '0xaaeb2035ff394fdb2c879190f95e7676f1a9444b', // https://dutchx.readthedocs.io/en/latest/smart-contracts_addresses.html#rinkeby

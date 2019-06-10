@@ -47,7 +47,7 @@ export default ({ history }) => {
         const data = logs[0].data
         const poolAddress = getAddressFromReceiptData(data)
 
-        history.push(`/pools/view-pool/${poolAddress}`)
+        history.push(`/pools/view/${poolAddress}`)
       })
     })
   }

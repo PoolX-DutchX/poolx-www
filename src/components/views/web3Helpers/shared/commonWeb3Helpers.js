@@ -11,14 +11,19 @@ const mapPoolStage = {
 
 export const getPoolStage = stageIndex => mapPoolStage[stageIndex]
 
-export const getPoolData = (poolAddress, funcIdentifier) =>
-  new Promise(async (resolve, reject) => {
+export const getPoolData = (poolAddress, funcIdentifier) => {
+  new Promise((resolve, reject) => {
     try {
       const contract = new web3.eth.Contract(poolAbi, poolAddress)
-      const data = await contract.methods[funcIdentifier]().call()
-      resolve(data)
+      contract.methods[funcIdentifier]()
+        .call()
+        .then(data => {
+          console.log({ data, funcIdentifier })
+          resolve(data)
+        })
     } catch (error) {
       console.log({ error })
       reject(error)
     }
   })
+}

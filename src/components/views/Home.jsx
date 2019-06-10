@@ -17,6 +17,9 @@ const Home = ({ history }) => (
                 <PillButton onClick={() => history.push('/pools/create')}>
                   Create a Pool
                 </PillButton>
+                <PillButton onClick={() => history.push('/pools')}>
+                  Check all Pools
+                </PillButton>
               </div>
             </div>
           </div>

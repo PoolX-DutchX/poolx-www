@@ -1,4 +1,4 @@
-import poolXCloneFactoryAbi from './poolXCloneFactoryAbi.json'
+import poolXCloneFactoryAbi from '../shared/poolXCloneFactoryAbi.json'
 import config from '../../../../configuration'
 import { wholeNumberToFractionArray } from './fraction'
 import {

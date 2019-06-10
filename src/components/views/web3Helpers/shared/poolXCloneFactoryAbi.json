@@ -9,6 +9,15 @@
     "type": "function"
   },
   {
+    "constant": true,
+    "inputs": [],
+    "name": "getPools",
+    "outputs": [{ "name": "", "type": "address[]" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "constant": false,
     "inputs": [],
     "name": "renounceOwnership",
@@ -31,6 +40,15 @@
     "inputs": [],
     "name": "isOwner",
     "outputs": [{ "name": "", "type": "bool" }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{ "name": "", "type": "uint256" }],
+    "name": "pools",
+    "outputs": [{ "name": "", "type": "address" }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
