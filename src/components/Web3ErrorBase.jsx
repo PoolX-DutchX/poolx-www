@@ -26,7 +26,7 @@ const Body = styled.div`
   background-color: ${backgroundColor};
   flex-direction: column;
   flex-grow: 1;
-  flexShrink: 0;
+  flexshrink: 0;
   align-items: center;
   justify-content: center;
   min-width: 100%;
@@ -39,9 +39,9 @@ const Footer = styled.div`
 `
 
 export const Text = styled.p`
-  font-size: .9em;
+  font-size: 0.9em;
   font-weight: 500;
-  color: ${greyTextColor}
+  color: ${greyTextColor};
 `
 
 export const Button = styled.button`
@@ -51,13 +51,15 @@ export const Button = styled.button`
   background-color: ${linkColor};
   padding-top: 1em;
   padding-bottom: 1em;
-  font-size: .9em;
+  font-size: 0.9em;
   font-weight: 600;
   color: white;
   cursor: pointer;
 
   &:hover {
-    box-shadow: rgba(50, 50, 93, 0.11) 0px 4px 6px 0px, rgba(0, 0, 0, 0.08) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 0px 1px 0px inset;
+    box-shadow: rgba(50, 50, 93, 0.11) 0px 4px 6px 0px,
+      rgba(0, 0, 0, 0.08) 0px 1px 3px 0px,
+      rgba(0, 0, 0, 0.06) 0px 0px 1px 0px inset;
     transition: all 0.15s ease 0s;
     background-color: ${linkColorHover};
   }
@@ -72,13 +74,15 @@ export const ButtonLink = styled.a`
   background-color: ${linkColor};
   padding-top: 1em;
   padding-bottom: 1em;
-  font-size: .9em;
+  font-size: 0.9em;
   font-weight: 600;
   color: white;
   cursor: pointer;
 
   &:hover {
-    box-shadow: rgba(50, 50, 93, 0.11) 0px 4px 6px 0px, rgba(0, 0, 0, 0.08) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 0px 1px 0px inset;
+    box-shadow: rgba(50, 50, 93, 0.11) 0px 4px 6px 0px,
+      rgba(0, 0, 0, 0.08) 0px 1px 3px 0px,
+      rgba(0, 0, 0, 0.06) 0px 0px 1px 0px inset;
     transition: all 0.15s ease 0s;
     background-color: ${linkColorHover};
   }
@@ -93,23 +97,20 @@ export const Link = styled.a`
   }
 `
 
-function Base ({ children }) {
+function Base({ children }) {
   return (
     <Background>
       <FlexWrapper>
-        <Body>
-          {children}
-        </Body>
+        <Body>{children}</Body>
 
-        <Footer>
-        </Footer>
+        <Footer />
       </FlexWrapper>
     </Background>
   )
 }
 
 Base.propTypes = {
-  children: PropTypes.any
+  children: PropTypes.any,
 }
 
 export default Base

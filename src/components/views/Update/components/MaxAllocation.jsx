@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import TextField from '@material-ui/core/TextField';
+import TextField from '@material-ui/core/TextField'
 // import InputAdornment from '@material-ui/core/InputAdornment';
 
 class Fee extends Component {
   render() {
-    const { formik } = this.props; // *** formik props passed in from MultistepForm parent component
-    const { values, handleChange, handleBlur, touched, errors } = formik;
+    const { formik } = this.props // *** formik props passed in from MultistepForm parent component
+    const { values, handleChange, handleBlur, touched, errors } = formik
     return (
       <div>
         <div className="row">
@@ -29,8 +29,8 @@ class Fee extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default Fee;
+export default Fee

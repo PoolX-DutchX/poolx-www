@@ -1,5 +1,5 @@
-import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import React from 'react'
+import { Redirect, Route } from 'react-router-dom'
 
 const PrivateRoute = ({ currentUser, component, ...rest }) => (
   <Route
@@ -14,9 +14,9 @@ const PrivateRoute = ({ currentUser, component, ...rest }) => (
             state: { from: props.location },
           }}
         />
-      );
+      )
     }}
   />
-);
+)
 
-export default PrivateRoute;
+export default PrivateRoute

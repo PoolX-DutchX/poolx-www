@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
-import { File } from 'formsy-react-components';
-import Cropper from 'react-cropper';
-import ImageTools from './../lib/ImageResizer';
+import { File } from 'formsy-react-components'
+import Cropper from 'react-cropper'
+import ImageTools from './../lib/ImageResizer'
 
 /* global FileReader */
 /**
@@ -13,25 +13,25 @@ import ImageTools from './../lib/ImageResizer';
  */
 class FormsyImageUploader extends Component {
   constructor() {
-    super();
+    super()
 
     this.state = {
       image: undefined,
-    };
+    }
 
-    this.cropImage = this.cropImage.bind(this);
-    this.loadAndPreviewImage = this.loadAndPreviewImage.bind(this);
+    this.cropImage = this.cropImage.bind(this)
+    this.loadAndPreviewImage = this.loadAndPreviewImage.bind(this)
   }
 
   componentDidMount() {
-    this.setState({ image: this.props.previewImage || this.props.avatar });
+    this.setState({ image: this.props.previewImage || this.props.avatar })
   }
 
   cropImage() {
     if (!this.cropper) {
-      return;
+      return
     }
-    const imgResized = this.cropper.getCroppedCanvas().toDataURL();
+    const imgResized = this.cropper.getCroppedCanvas().toDataURL()
 
     ImageTools.resize(
       imgResized,
@@ -40,17 +40,17 @@ class FormsyImageUploader extends Component {
         height: 1000,
       },
       (blob, didItResize) => {
-        this.props.setImage(didItResize ? blob : imgResized);
-      },
-    );
+        this.props.setImage(didItResize ? blob : imgResized)
+      }
+    )
   }
 
   loadAndPreviewImage(name, files) {
-    const reader = new FileReader();
+    const reader = new FileReader()
     reader.onload = e => {
-      this.setState({ image: e.target.result });
-      this.props.setImage(e.target.result);
-    };
+      this.setState({ image: e.target.result })
+      this.props.setImage(e.target.result)
+    }
 
     ImageTools.resize(
       files[0],
@@ -59,62 +59,59 @@ class FormsyImageUploader extends Component {
         height: 1000,
       },
       (blob, didItResize) => {
-        reader.readAsDataURL(didItResize ? blob : files[0]);
-      },
-    );
+        reader.readAsDataURL(didItResize ? blob : files[0])
+      }
+    )
   }
 
   render() {
     return (
       <div>
-        {(this.props.previewImage || this.previewImage) &&
-          this.props.resize && (
-            <div>
-              <div style={{ width: '100%' }}>
-                <Cropper
-                  style={{ maxHeight: 300 }}
-                  guides={false}
-                  aspectRatio={this.props.aspectRatio}
-                  src={this.state.image}
-                  ref={cropper => {
-                    this.cropper = cropper;
-                  }}
-                  cropend={this.cropImage}
-                  modal={false}
-                  highlight={false}
-                  autoCropArea={1}
-                  zoomOnWheel={false}
-                />
-              </div>
+        {(this.props.previewImage || this.previewImage) && this.props.resize && (
+          <div>
+            <div style={{ width: '100%' }}>
+              <Cropper
+                style={{ maxHeight: 300 }}
+                guides={false}
+                aspectRatio={this.props.aspectRatio}
+                src={this.state.image}
+                ref={cropper => {
+                  this.cropper = cropper
+                }}
+                cropend={this.cropImage}
+                modal={false}
+                highlight={false}
+                autoCropArea={1}
+                zoomOnWheel={false}
+              />
             </div>
-          )}
-        {this.props.avatar &&
-          this.props.resize && (
-            <div>
-              <div style={{ width: '100%' }}>
-                <Cropper
-                  style={{ maxHeight: 300 }}
-                  guides={false}
-                  aspectRatio={this.props.aspectRatio}
-                  src={this.state.image}
-                  ref={cropper => {
-                    this.cropper = cropper;
-                  }}
-                  cropend={this.cropImage}
-                  modal={false}
-                  highlight={false}
-                  autoCropArea={1}
-                  zoomOnWheel={false}
-                />
-              </div>
+          </div>
+        )}
+        {this.props.avatar && this.props.resize && (
+          <div>
+            <div style={{ width: '100%' }}>
+              <Cropper
+                style={{ maxHeight: 300 }}
+                guides={false}
+                aspectRatio={this.props.aspectRatio}
+                src={this.state.image}
+                ref={cropper => {
+                  this.cropper = cropper
+                }}
+                cropend={this.cropImage}
+                modal={false}
+                highlight={false}
+                autoCropArea={1}
+                zoomOnWheel={false}
+              />
             </div>
-          )}
-        {!this.props.resize &&
-          (this.props.previewImage || this.previewImage) && (
-            <div className="image-preview">
-              <img src={this.state.image} alt="Preview of uploaded file" />
-            </div>
-          )}
+          </div>
+        )}
+        {!this.props.resize && (this.props.previewImage || this.previewImage) && (
+          <div className="image-preview">
+            <img src={this.state.image} alt="Preview of uploaded file" />
+          </div>
+        )}
 
         <File
           label="Add a picture"
@@ -129,7 +126,7 @@ class FormsyImageUploader extends Component {
           required={this.props.isRequired}
         />
       </div>
-    );
+    )
   }
 }
 
@@ -140,7 +137,7 @@ FormsyImageUploader.propTypes = {
   previewImage: PropTypes.string,
   aspectRatio: PropTypes.number,
   resize: PropTypes.bool,
-};
+}
 
 FormsyImageUploader.defaultProps = {
   isRequired: false,
@@ -148,6 +145,6 @@ FormsyImageUploader.defaultProps = {
   previewImage: undefined,
   aspectRatio: 16 / 9,
   resize: true,
-};
+}
 
-export default FormsyImageUploader;
+export default FormsyImageUploader

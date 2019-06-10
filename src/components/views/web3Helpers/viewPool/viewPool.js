@@ -1,18 +1,7 @@
-import poolAbi from './poolAbi.json'
+import poolAbi from '../shared/poolAbi.json'
+import { getPoolData } from '../shared/commonWeb3Helpers'
 import getWeb3 from '../../../../lib/blockchain/getWeb3'
 const web3 = getWeb3()
-
-const getPoolData = (poolAddress, funcIdentifier) =>
-  new Promise(async (resolve, reject) => {
-    try {
-      const contract = new web3.eth.Contract(poolAbi, poolAddress)
-      const data = await contract.methods[`${funcIdentifier}()`]().call()
-      resolve(data)
-    } catch (error) {
-      console.log({ error })
-      reject(error)
-    }
-  })
 
 const getTokenBalancesInUsd = poolAddress =>
   new Promise(async (resolve, reject) => {
@@ -32,9 +21,9 @@ const getUserTokenContribution = (poolAddress, userAddress, funcIdentifier) =>
   new Promise(async (resolve, reject) => {
     try {
       const contract = new web3.eth.Contract(poolAbi, poolAddress)
-      const userContribution = await contract.methods[
-        `${funcIdentifier}(address)`
-      ](userAddress).call()
+      const userContribution = await contract.methods[funcIdentifier](
+        userAddress
+      ).call()
       resolve(userContribution)
     } catch (error) {
       console.log({ error })
@@ -51,6 +40,10 @@ export default (poolAddress, userAddress) =>
     getPoolData(poolAddress, 'currentDxThreshold'),
     getTokenBalancesInUsd(poolAddress),
     getPoolData(poolAddress, 'stage'),
+    getPoolData(poolAddress, 'token1'),
+    getPoolData(poolAddress, 'token2'),
+    getPoolData(poolAddress, 'token1ThresholdReached'),
+    getPoolData(poolAddress, 'token2ThresholdReached'),
     getUserTokenContribution(
       poolAddress,
       userAddress,

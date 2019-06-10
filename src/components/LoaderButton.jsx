@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import Loader from './Loader';
+import Loader from './Loader'
 
 /**
  * Renders a button with an optional loader
@@ -22,7 +22,12 @@ const LoaderButton = ({
   loadingText,
   children,
 }) => (
-  <button className={className} formNoValidate={formNoValidate} type={type} disabled={disabled}>
+  <button
+    className={className}
+    formNoValidate={formNoValidate}
+    type={type}
+    disabled={disabled}
+  >
     {isLoading && (
       <span>
         <Loader className="small btn-loader" />
@@ -32,7 +37,7 @@ const LoaderButton = ({
 
     {!isLoading && <span>{children}</span>}
   </button>
-);
+)
 
 LoaderButton.propTypes = {
   className: PropTypes.string,
@@ -42,7 +47,7 @@ LoaderButton.propTypes = {
   loadingText: PropTypes.string,
   children: PropTypes.node,
   type: PropTypes.string,
-};
+}
 
 LoaderButton.defaultProps = {
   className: '',
@@ -52,6 +57,6 @@ LoaderButton.defaultProps = {
   loadingText: '',
   children: null,
   type: '',
-};
+}
 
-export default LoaderButton;
+export default LoaderButton

@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const GoBackButton = ({ history, styleName }) => (
   <div
@@ -12,17 +12,17 @@ const GoBackButton = ({ history, styleName }) => (
     <i className="fa fa-long-arrow-left" />
     back
   </div>
-);
+)
 
-export default GoBackButton;
+export default GoBackButton
 
 GoBackButton.propTypes = {
   history: PropTypes.shape({
     goBack: PropTypes.func.isRequired,
   }).isRequired,
   styleName: PropTypes.string,
-};
+}
 
 GoBackButton.defaultProps = {
   styleName: '',
-};
+}

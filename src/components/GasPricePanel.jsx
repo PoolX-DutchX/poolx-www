@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 class GasPricePanel extends Component {
   constructor() {
-    super();
+    super()
     this.state = {
       gasPrice: {},
-    };
+    }
   }
 
   componentDidMount() {
@@ -18,12 +18,14 @@ class GasPricePanel extends Component {
             standard: standard / 10,
             fast: fast / 10,
           },
-        });
-      });
+        })
+      })
   }
 
   render() {
-    const { gasPrice: { safeLow, standard, fast } } = this.state;
+    const {
+      gasPrice: { safeLow, standard, fast },
+    } = this.state
 
     return (
       <div className="gas-price-panel">
@@ -40,8 +42,8 @@ class GasPricePanel extends Component {
           <div>{fast} gwei</div>
         </span>
       </div>
-    );
+    )
   }
 }
 
-export default GasPricePanel;
+export default GasPricePanel

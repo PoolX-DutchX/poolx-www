@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import TextField from '@material-ui/core/TextField';
+import TextField from '@material-ui/core/TextField'
 
 class NameAndDescription extends Component {
   render() {
-    const { formik: { values, handleChange, handleBlur, touched, errors } } = this.props; // formik props passed in from Wizard
+    const {
+      formik: { values, handleChange, handleBlur, touched, errors },
+    } = this.props // formik props passed in from Wizard
     return (
       <div>
         <div className="row">
@@ -48,8 +50,8 @@ class NameAndDescription extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default NameAndDescription;
+export default NameAndDescription

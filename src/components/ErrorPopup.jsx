@@ -1,15 +1,15 @@
-import React from 'react';
-import config from '../configuration';
+import React from 'react'
+import config from '../configuration'
 // /* global window */
 
 export default (shortDescription, error) => {
   if (!config.sendErrors) {
-    console.error(shortDescription, error); // eslint-disable-line no-console
-    return;
+    console.error(shortDescription, error) // eslint-disable-line no-console
+    return
   }
 
   const errorHandler = value => {
-    let body;
+    let body
     if (error instanceof Error) {
       body = `
       Description of the Error:
@@ -26,7 +26,7 @@ export default (shortDescription, error) => {
       
       Error stack:
       ${error.stack}
-    `;
+    `
     } else {
       body = `
       Description of the Error:
@@ -34,21 +34,23 @@ export default (shortDescription, error) => {
 
       Transaction link:
       ${error}
-    `;
+    `
     }
 
     if (value === 'email') {
       window.open(
-        `mailto:${config.bugsEmail}?subject=Error in DApp&body=${encodeURIComponent(body)}`,
-      );
+        `mailto:${
+          config.bugsEmail
+        }?subject=Error in DApp&body=${encodeURIComponent(body)}`
+      )
     } else if (value === 'gmail') {
       window.open(
         `https://mail.google.com/mail/u/0/?view=cm&fs=1&tf=1&to=${
           config.bugsEmail
-        }&su=Error in DApp&body=${encodeURIComponent(body)}`,
-      );
+        }&su=Error in DApp&body=${encodeURIComponent(body)}`
+      )
     }
-  };
+  }
 
   if (error) {
     React.swal({
@@ -57,7 +59,7 @@ export default (shortDescription, error) => {
         <div>
           <p>{shortDescription}</p>
           <p>Is this a recurring problem? Click Report.</p>
-        </div>,
+        </div>
       ),
       icon: 'error',
       buttons: {
@@ -83,14 +85,14 @@ export default (shortDescription, error) => {
       },
     }).then(value => {
       if (value) {
-        errorHandler(value);
+        errorHandler(value)
       }
-    });
+    })
   } else {
     React.swal({
       title: 'Oh no!',
       content: React.swal.msg(<p>{shortDescription}</p>),
       icon: 'error',
-    });
+    })
   }
-};
+}

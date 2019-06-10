@@ -1,9 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles'
 
-const styles = theme => ({
+const styles = () => ({
   paper: {
     margin: '1rem 0',
     padding: '1rem',
@@ -14,9 +14,9 @@ const styles = theme => ({
   item: {
     textAlign: 'center',
   },
-});
+})
 
-const WalletProviderPanel = ({ classes, selectProvider }) => {
+const WalletProviderPanel = ({ selectProvider }) => {
   return (
     <div id="wallet-provider-panel">
       <div className="provider-wrap">
@@ -33,18 +33,22 @@ const WalletProviderPanel = ({ classes, selectProvider }) => {
           </span>
         </div>
         <div className="wallet-logo" onClick={selectProvider('myEtherWallet')}>
-          <img src="/img/myetherwallet-logo.png" width="90px" alt="My Ether Wallet logo" />
+          <img
+            src="/img/myetherwallet-logo.png"
+            width="90px"
+            alt="My Ether Wallet logo"
+          />
           <span>
             <h6>MyEtherWallet</h6>
           </span>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 WalletProviderPanel.propTypes = {
   classes: PropTypes.object.isRequired,
-};
+}
 
-export default withStyles(styles)(WalletProviderPanel);
+export default withStyles(styles)(WalletProviderPanel)

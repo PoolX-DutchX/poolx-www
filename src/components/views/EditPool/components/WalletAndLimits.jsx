@@ -1,31 +1,31 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import FormLabel from '@material-ui/core/FormLabel';
-import Tooltip from '@material-ui/core/Tooltip';
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import Button from '@material-ui/core/Button'
+import TextField from '@material-ui/core/TextField'
+import FormLabel from '@material-ui/core/FormLabel'
+import Tooltip from '@material-ui/core/Tooltip'
 
-import ChooseWalletDialog from '../../../ChooseWalletDialog';
+import ChooseWalletDialog from '../../../ChooseWalletDialog'
 
 class StepOne extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       walletDialogOpen: false,
-    };
-    this.handleChooseWalletClick = this.handleChooseWalletClick.bind(this);
-    this.handleWalletDialogClose = this.handleWalletDialogClose.bind(this);
+    }
+    this.handleChooseWalletClick = this.handleChooseWalletClick.bind(this)
+    this.handleWalletDialogClose = this.handleWalletDialogClose.bind(this)
   }
   handleChooseWalletClick() {
     this.setState({
       walletDialogOpen: true,
-    });
+    })
   }
   handleWalletDialogClose(value) {
     if (!!value) {
-      this.props.formik.setFieldValue('ownerAddress', value);
+      this.props.formik.setFieldValue('ownerAddress', value)
     }
-    this.setState({ walletDialogOpen: false });
+    this.setState({ walletDialogOpen: false })
   }
   render() {
     const {
@@ -33,7 +33,7 @@ class StepOne extends Component {
       formik: { values, handleChange, handleBlur, touched, errors },
       currentUser,
       disabledFields = {},
-    } = this.props; // formik props passed in from Wizard
+    } = this.props // formik props passed in from Wizard
     return (
       <div>
         <div className="row align-items-center">
@@ -60,25 +60,24 @@ class StepOne extends Component {
               />
             </Tooltip>
           </div>
-          {this.props.currentUser &&
-            !disabledFields.ownerAddress && (
-              <div className="col-md-3">
-                <Button
-                  type="button"
-                  color="primary"
-                  size="small"
-                  onClick={this.handleChooseWalletClick}
-                >
-                  Choose wallet
-                </Button>
-                <ChooseWalletDialog
-                  wallets={currentUser.wallets}
-                  selectedValue={values.ownerAddress}
-                  open={this.state.walletDialogOpen}
-                  onClose={this.handleWalletDialogClose}
-                />
-              </div>
-            )}
+          {this.props.currentUser && !disabledFields.ownerAddress && (
+            <div className="col-md-3">
+              <Button
+                type="button"
+                color="primary"
+                size="small"
+                onClick={this.handleChooseWalletClick}
+              >
+                Choose wallet
+              </Button>
+              <ChooseWalletDialog
+                wallets={currentUser.wallets}
+                selectedValue={values.ownerAddress}
+                open={this.state.walletDialogOpen}
+                onClose={this.handleWalletDialogClose}
+              />
+            </div>
+          )}
         </div>
         <div className="row">
           <div className="col-md-3">
@@ -113,7 +112,12 @@ class StepOne extends Component {
                     hash: 'maxAllocation',
                   }}
                 >
-                  <Button type="submit" variant="outlined" size="small" color="primary">
+                  <Button
+                    type="submit"
+                    variant="outlined"
+                    size="small"
+                    color="primary"
+                  >
                     Change
                   </Button>
                 </Link>
@@ -158,8 +162,8 @@ class StepOne extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default StepOne;
+export default StepOne

@@ -1,40 +1,40 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withFormsy } from 'formsy-react';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { withFormsy } from 'formsy-react'
 
 class SelectFormsy extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    this.changeValue = this.changeValue.bind(this);
+    this.changeValue = this.changeValue.bind(this)
   }
 
   changeValue(event) {
-    this.props.setValue(event.currentTarget.value);
-    this.props.onChange(event.currentTarget.value);
+    this.props.setValue(event.currentTarget.value)
+    this.props.onChange(event.currentTarget.value)
   }
 
   render() {
-    let reqError = '';
-    if (this.props.showRequired()) reqError = 'required';
-    else if (this.props.showError()) reqError = 'error';
+    let reqError = ''
+    if (this.props.showRequired()) reqError = 'required'
+    else if (this.props.showError()) reqError = 'error'
 
-    const className = `form-group ${this.props.className} ${reqError}`;
+    const className = `form-group ${this.props.className} ${reqError}`
 
-    const errorMessage = this.props.getErrorMessage();
+    const errorMessage = this.props.getErrorMessage()
 
     const options = this.props.options.map(option => (
       <option key={option.title + option.value} value={option.value}>
         {option.title}
       </option>
-    ));
+    ))
 
     if (this.props.cta) {
       options.unshift(
         <option key="cta" value="">
           {this.props.cta}
-        </option>,
-      );
+        </option>
+      )
     }
 
     return (
@@ -53,11 +53,17 @@ class SelectFormsy extends React.Component {
           </select>
         </label>
 
-        <p>{!errorMessage && <small className="help-block">{this.props.helpText}</small>}</p>
+        <p>
+          {!errorMessage && (
+            <small className="help-block">{this.props.helpText}</small>
+          )}
+        </p>
 
-        {errorMessage && <span className="help-block validation-message">{errorMessage}</span>}
+        {errorMessage && (
+          <span className="help-block validation-message">{errorMessage}</span>
+        )}
       </div>
-    );
+    )
   }
 }
 
@@ -79,11 +85,11 @@ SelectFormsy.propTypes = {
     PropTypes.shape({
       title: PropTypes.string.isRequired,
       value: PropTypes.string.isRequired,
-    }),
+    })
   ).isRequired,
   cta: PropTypes.string,
   className: PropTypes.string,
-};
+}
 
 SelectFormsy.defaultProps = {
   helpText: '',
@@ -93,6 +99,6 @@ SelectFormsy.defaultProps = {
   label: '',
   className: '',
   cta: undefined,
-};
+}
 
-export default withFormsy(SelectFormsy);
+export default withFormsy(SelectFormsy)

@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import Avatar from 'react-avatar';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import Avatar from 'react-avatar'
 
-import { feathersClient } from '../../lib/feathersClient';
-import { getNetwork } from '../../lib/blockchain/utils/';
-import GoBackButton from '../GoBackButton';
-import Loader from '../Loader';
-import { getUserName, getUserAvatar } from '../../lib/helpers';
+import { feathersClient } from '../../lib/feathersClient'
+import { getNetwork } from '../../lib/blockchain/utils/'
+import GoBackButton from '../GoBackButton'
+import Loader from '../Loader'
+import { getUserName, getUserAvatar } from '../../lib/helpers'
 
 /**
  * The user profile view mapped to /profile/{userAddress}
@@ -16,19 +16,19 @@ import { getUserName, getUserAvatar } from '../../lib/helpers';
  */
 class Profile extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       isLoading: true,
       hasError: false,
       etherScanUrl: '',
-    };
+    }
 
     getNetwork().then(network => {
       this.setState({
         etherScanUrl: network.etherscan,
-      });
-    });
+      })
+    })
   }
 
   componentDidMount() {
@@ -46,21 +46,21 @@ class Profile extends Component {
             {
               isLoading: false,
               hasError: false,
-            },
-          ),
-        ),
+            }
+          )
+        )
       )
       .catch(() =>
         this.setState({
           address: this.props.match.params.userAddress,
           isLoading: false,
           hasError: true,
-        }),
-      );
+        })
+      )
   }
 
   render() {
-    const { history } = this.props;
+    const { history } = this.props
     const {
       isLoading,
       hasError,
@@ -70,11 +70,11 @@ class Profile extends Component {
       email,
       linkedIn,
       etherScanUrl,
-    } = this.state;
+    } = this.state
     const user = {
       name,
       avatar,
-    };
+    }
 
     return (
       <div id="profile-view">
@@ -83,30 +83,31 @@ class Profile extends Component {
             <div className="col-md-8 m-auto">
               {isLoading && <Loader className="fixed" />}
 
-              {!isLoading &&
-                !hasError && (
-                  <div>
-                    <GoBackButton history={history} />
+              {!isLoading && !hasError && (
+                <div>
+                  <GoBackButton history={history} />
 
-                    <center>
-                      <Avatar size={100} src={getUserAvatar(user)} round />
-                      <h1>{getUserName(user)}</h1>
-                      {etherScanUrl && (
-                        <p>
-                          <a href={`${etherScanUrl}address/${address}`}>{address}</a>
-                        </p>
-                      )}
-                      {!etherScanUrl && <p>{address}</p>}
-                      <p>{email}</p>
-                      <p>{linkedIn}</p>
-                    </center>
-                  </div>
-                )}
+                  <center>
+                    <Avatar size={100} src={getUserAvatar(user)} round />
+                    <h1>{getUserName(user)}</h1>
+                    {etherScanUrl && (
+                      <p>
+                        <a href={`${etherScanUrl}address/${address}`}>
+                          {address}
+                        </a>
+                      </p>
+                    )}
+                    {!etherScanUrl && <p>{address}</p>}
+                    <p>{email}</p>
+                    <p>{linkedIn}</p>
+                  </center>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -120,6 +121,6 @@ Profile.propTypes = {
       userAddress: PropTypes.string,
     }).isRequired,
   }).isRequired,
-};
+}
 
-export default Profile;
+export default Profile

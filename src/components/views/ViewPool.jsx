@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
+import BigNumber from 'bignumber.js'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Button from '@material-ui/core/Button'
 import Loader from '../Loader'
 import WithTooltip from '../WithTooltip'
 
 import fetchPoolData from './web3Helpers/viewPool/viewPool'
+import { getPoolStage } from './web3Helpers/shared/commonWeb3Helpers'
 import isEmpty from 'lodash/isEmpty'
 import { useWeb3Context } from 'web3-react'
 
@@ -16,18 +18,10 @@ const ViewPool = ({ match, web3, history }) => {
   } = match
   const context = useWeb3Context()
   const { account } = context
-  const mapPoolStage = {
-    0: 'Initialization',
-    1: 'Contribution',
-    2: 'Collection',
-    3: 'Claim',
-  }
 
-  const transformFromWei = (number) => {
-    const result = web3.utils.fromWei(
-      number.toString(),
-      'ether'
-    )
+
+  const transfromFromWei = number => {
+    const result = web3.utils.fromWei(number.toString(), 'ether')
     return Number(result)
   }
 
@@ -40,7 +34,11 @@ const ViewPool = ({ match, web3, history }) => {
         description,
         currentDxThreshold,
         tokenBalancesInUsd,
-        stage,
+        stageIndex,
+        token1,
+        token2,
+        token1ThresholdReached,
+        token2ThresholdReached,
         userContributionForToken1Amount,
         userContributionForToken2Amount,
       ] = values
@@ -51,16 +49,24 @@ const ViewPool = ({ match, web3, history }) => {
       const [token1BalanceInUsd, token2BalanceInUsd] = tokenBalanceArray
 
       setPoolData({
-        token1Balance: transformFromWei(token1BalanceResult),
-        token2Balance: transformFromWei(token2BalanceResult),
+        token1Balance: transfromFromWei(token1BalanceResult),
+        token2Balance: transfromFromWei(token2BalanceResult),
         name,
         description,
         currentDxThreshold,
         token1BalanceInUsd,
         token2BalanceInUsd,
-        stage: mapPoolStage[stage],
-        userContributionForToken1Amount: transformFromWei(userContributionForToken1Amount),
-        userContributionForToken2Amount: transformFromWei(userContributionForToken2Amount),
+        stage: getPoolStage(stageIndex),
+        token1,
+        token2,
+        token1ThresholdReached,
+        token2ThresholdReached,
+        userContributionForToken1Amount: transfromFromWei(
+          userContributionForToken1Amount
+        ),
+        userContributionForToken2Amount: transfromFromWei(
+          userContributionForToken2Amount
+        ),
       })
 
       setIsLoading(false)
@@ -81,13 +87,13 @@ const ViewPool = ({ match, web3, history }) => {
     token2BalanceInUsd,
     stage,
     userContributionForToken1Amount,
-    userContributionForToken2Amount
+    userContributionForToken2Amount,
   } = poolData
 
-  const poolProgress = token1BalanceInUsd
-    .add(token2BalanceInUsd)
+  const poolProgress = new BigNumber(token1BalanceInUsd)
+    .plus(token2BalanceInUsd)
     .div(currentDxThreshold)
-    .mul(100)
+    .times(100)
     .toNumber()
 
   return (
@@ -136,11 +142,14 @@ const ViewPool = ({ match, web3, history }) => {
             <div className="total-invested-section">
               <h4 className="invested">
                 <strong>
-                  {token1BalanceInUsd.add(token2BalanceInUsd).toString()} USD
+                {transfromFromWei(
+                    new BigNumber(token1BalanceInUsd).plus(token2BalanceInUsd)
+                  )}
                 </strong>
+                  USD
               </h4>
               <div className="subheading">
-                of {transformFromWei(currentDxThreshold)} USD to list token pair
+                of {transfromFromWei(currentDxThreshold)} USD to list token pair
               </div>
             </div>
             <div className="min-max-section">
@@ -162,16 +171,17 @@ const ViewPool = ({ match, web3, history }) => {
               color="primary"
               fullWidth
               onClick={contribute}
-              disabled={false}
             >
               Contribute to Pool
             </Button>
             <div className="row margin-top-bottom">
-              <div className="col">
-                <Button variant="outlined" fullWidth>
-                  Withdraw
-                </Button>
-              </div>
+              { stage === 'Collection' &&
+                <div className="col">
+                  <Button variant="outlined" fullWidth>
+                    Withdraw
+                  </Button>
+                </div>
+              }
             </div>
           </div>
         </div>

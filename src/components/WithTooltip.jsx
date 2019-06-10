@@ -1,9 +1,9 @@
-import React from 'react';
-import Tooltip from '@material-ui/core/Tooltip';
-import InformationIcon from '@material-ui/icons/Info';
-import { withStyles } from '@material-ui/core/styles';
+import React from 'react'
+import Tooltip from '@material-ui/core/Tooltip'
+import InformationIcon from '@material-ui/icons/Info'
+import { withStyles } from '@material-ui/core/styles'
 
-const styles = theme => ({
+const styles = () => ({
   relative: {
     position: 'relative',
   },
@@ -11,7 +11,7 @@ const styles = theme => ({
     position: 'absolute',
     top: '-10px',
   },
-});
+})
 
 function WithTooltip({
   children,
@@ -27,7 +27,7 @@ function WithTooltip({
         <InformationIcon color={iconColor} className={classes.absolute} />
       </Tooltip>
     </span>
-  );
+  )
 }
 
-export default withStyles(styles)(WithTooltip);
+export default withStyles(styles)(WithTooltip)

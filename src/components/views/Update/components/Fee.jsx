@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import TextField from '@material-ui/core/TextField'
+import InputAdornment from '@material-ui/core/InputAdornment'
 
 class Fee extends Component {
   render() {
-    const { formik } = this.props; // *** formik props passed in from MultistepForm parent component
-    const { values, handleChange, handleBlur, touched, errors } = formik;
+    const { formik } = this.props // *** formik props passed in from MultistepForm parent component
+    const { values, handleChange, handleBlur, touched, errors } = formik
     return (
       <div>
         <div className="row">
@@ -22,10 +22,14 @@ class Fee extends Component {
               helperText={
                 touched.fee && errors.fee
                   ? errors.fee
-                  : !(touched.feePayoutCurrency && errors.feePayoutCurrency) && (
+                  : !(
+                      touched.feePayoutCurrency && errors.feePayoutCurrency
+                    ) && (
                       <span>
                         <span>
-                          Your fee <span className="underline">{values.fee || 0}%</span> +{' '}
+                          Your fee{' '}
+                          <span className="underline">{values.fee || 0}%</span>{' '}
+                          +{' '}
                         </span>
                         <span>
                           PB fee <span className="underline">0.4%</span> ={' '}
@@ -45,7 +49,9 @@ class Fee extends Component {
               InputProps={
                 values.fee || values.fee === 0
                   ? {
-                      startAdornment: <InputAdornment position="start">% </InputAdornment>,
+                      startAdornment: (
+                        <InputAdornment position="start">% </InputAdornment>
+                      ),
                       min: '0',
                       max: '100',
                       step: '0.1',
@@ -60,8 +66,8 @@ class Fee extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default Fee;
+export default Fee

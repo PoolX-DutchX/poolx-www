@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Form, Input } from 'formsy-react-components';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Form, Input } from 'formsy-react-components'
 
-import { feathersClient } from '../../lib/feathersClient';
-import Loader from '../Loader';
-import LoaderButton from '../LoaderButton';
-import { authenticateUser } from '../../lib/helpers';
+import { feathersClient } from '../../lib/feathersClient'
+import Loader from '../Loader'
+import LoaderButton from '../LoaderButton'
+import { authenticateUser } from '../../lib/helpers'
 
 /* global window */
 /**
@@ -13,7 +13,7 @@ import { authenticateUser } from '../../lib/helpers';
  */
 class SignIn extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       isLoading: false,
@@ -21,9 +21,9 @@ class SignIn extends Component {
       address: undefined,
       isSigningIn: false,
       formIsValid: false,
-    };
+    }
 
-    this.submit = this.submit.bind(this);
+    this.submit = this.submit.bind(this)
   }
 
   submit({ email, password }) {
@@ -36,32 +36,32 @@ class SignIn extends Component {
         authenticateUser({ email, password })
           .then(token => feathersClient.passport.verifyJWT(token))
           .then(tokenPayload => {
-            const { userId } = tokenPayload;
-            this.setState({ isSigningIn: false });
-            this.props.onSignIn(userId);
+            const { userId } = tokenPayload
+            this.setState({ isSigningIn: false })
+            this.props.onSignIn(userId)
             React.toast.success(
               <p>
                 Welcome back! <br />
-              </p>,
-            );
-            this.props.history.goBack();
+              </p>
+            )
+            this.props.history.goBack()
           })
           .catch(() => {
-            this.setState({ error: 'Invalid Login', isSigningIn: false });
-          });
-      },
-    );
+            this.setState({ error: 'Invalid Login', isSigningIn: false })
+          })
+      }
+    )
   }
 
   toggleFormValid(state) {
-    this.setState({ formIsValid: state });
+    this.setState({ formIsValid: state })
   }
 
   render() {
-    const { error, isLoading, isSigningIn, formIsValid } = this.state;
+    const { error, isLoading, isSigningIn, formIsValid } = this.state
 
     if (isLoading) {
-      return <Loader className="fixed" />;
+      return <Loader className="fixed" />
     }
 
     return (
@@ -126,7 +126,7 @@ class SignIn extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -136,6 +136,6 @@ SignIn.propTypes = {
     goBack: PropTypes.func.isRequired,
   }).isRequired,
   onSignIn: PropTypes.func.isRequired,
-};
+}
 
-export default SignIn;
+export default SignIn

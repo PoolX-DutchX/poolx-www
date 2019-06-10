@@ -1,17 +1,17 @@
-import React, { Component, createContext } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component, createContext } from 'react'
+import PropTypes from 'prop-types'
 
-import { history } from '../lib/helpers';
-import { feathersClient } from '../lib/feathersClient';
+import { history } from '../lib/helpers'
+import { feathersClient } from '../lib/feathersClient'
 // import getWeb3 from '../lib/blockchain/getWeb3';
-import ErrorPopup from '../components/ErrorPopup';
+import ErrorPopup from '../components/ErrorPopup'
 
 // models
-import User from '../models/User';
+import User from '../models/User'
 
-const Context = createContext();
-const { Provider, Consumer } = Context;
-export { Consumer };
+const Context = createContext()
+const { Provider, Consumer } = Context
+export { Consumer }
 
 /**
  * This container will hold the application and its routes.
@@ -21,20 +21,20 @@ export { Consumer };
  */
 class UserProvider extends Component {
   constructor() {
-    super();
+    super()
 
     this.state = {
       currentUser: undefined,
       isLoading: true,
       hasError: false,
-    };
+    }
 
-    this.onSignOut = this.onSignOut.bind(this);
-    this.onSignIn = this.onSignIn.bind(this);
+    this.onSignOut = this.onSignOut.bind(this)
+    this.onSignIn = this.onSignIn.bind(this)
   }
 
   async componentDidMount() {
-    this.setState({ isLoading: false, hasError: false });
+    this.setState({ isLoading: false, hasError: false })
     // try {
     //   const token = await feathersClient.passport.getJWT();
     //   if (token) {
@@ -74,37 +74,37 @@ class UserProvider extends Component {
   // }
 
   static getUserProfile(userId) {
-    console.log('getting user profile', userId);
+    console.log('getting user profile', userId)
     return feathersClient
       .service('/users')
       .get(userId)
       .then(user => user)
       .catch(err => {
-        console.log('err on getUserProfile', err);
-        React.toast.error(err.message);
+        console.log('err on getUserProfile', err)
+        React.toast.error(err.message)
         ErrorPopup(
           'Something went wrong with getting user profile. Please try again after refresh.',
-          err,
-        );
-      });
+          err
+        )
+      })
   }
 
   onSignOut() {
-    feathersClient.logout();
-    this.setState({ currentUser: undefined });
-    history.push('/');
+    feathersClient.logout()
+    this.setState({ currentUser: undefined })
+    history.push('/')
   }
 
   async onSignIn(userId) {
-    console.log('triggering onSignin');
-    const user = await UserProvider.getUserProfile(userId);
-    this.setState({ currentUser: new User(user) });
+    console.log('triggering onSignin')
+    const user = await UserProvider.getUserProfile(userId)
+    this.setState({ currentUser: new User(user) })
   }
 
   render() {
-    const { currentUser, isLoading, hasError } = this.state;
+    const { currentUser, isLoading, hasError } = this.state
 
-    const { onSignIn, onSignOut } = this;
+    const { onSignIn, onSignOut } = this
 
     return (
       <Provider
@@ -122,12 +122,15 @@ class UserProvider extends Component {
       >
         {this.props.children}
       </Provider>
-    );
+    )
   }
 }
 
 UserProvider.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
-};
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
+}
 
-export default UserProvider;
+export default UserProvider

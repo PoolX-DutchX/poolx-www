@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
 function TeamCard({ imgUrl, name, title }) {
   return (
@@ -11,13 +11,13 @@ function TeamCard({ imgUrl, name, title }) {
         <i className="fa fa-fw fa-linkedin" />
       </a>
     </div>
-  );
+  )
 }
 
 TeamCard.propTypes = {
   imgUrl: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-};
+}
 
-export default TeamCard;
+export default TeamCard

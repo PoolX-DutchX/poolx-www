@@ -14,10 +14,11 @@ const Home = ({ history }) => (
                   Pool digital currency today with the security of smart
                   contracts
                 </p>
-                <PillButton
-                  onClick={() => history.push('/pools/create')}
-                >
+                <PillButton onClick={() => history.push('/pools/create')}>
                   Create a Pool
+                </PillButton>
+                <PillButton onClick={() => history.push('/pools')}>
+                  Check all Pools
                 </PillButton>
               </div>
             </div>

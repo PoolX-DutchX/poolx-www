@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import TextField from '@material-ui/core/TextField';
+import TextField from '@material-ui/core/TextField'
 
 class AdminPayoutAddress extends Component {
   render() {
-    const { formik } = this.props; // *** formik props passed in from MultistepForm parent component
-    const { values, handleChange, handleBlur, touched, errors } = formik;
+    const { formik } = this.props // *** formik props passed in from MultistepForm parent component
+    const { values, handleChange, handleBlur, touched, errors } = formik
     return (
       <div>
         <div className="row">
@@ -18,7 +18,9 @@ class AdminPayoutAddress extends Component {
               onChange={handleChange}
               onBlur={handleBlur}
               error={touched.adminPayoutAddress && !!errors.adminPayoutAddress}
-              helperText={touched.adminPayoutAddress && errors.adminPayoutAddress}
+              helperText={
+                touched.adminPayoutAddress && errors.adminPayoutAddress
+              }
               placeholder="Admin fee payout address"
               autoComplete="Off"
               spellCheck="false"
@@ -29,8 +31,8 @@ class AdminPayoutAddress extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default AdminPayoutAddress;
+export default AdminPayoutAddress

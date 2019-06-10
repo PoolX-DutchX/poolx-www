@@ -1,5 +1,5 @@
-import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import React from 'react'
+import { Redirect, Route } from 'react-router-dom'
 
 const CurrentUserProtectedRoute = ({ currentUser, component, ...rest }) => (
   <Route
@@ -14,9 +14,9 @@ const CurrentUserProtectedRoute = ({ currentUser, component, ...rest }) => (
             state: { from: props.location },
           }}
         />
-      );
+      )
     }}
   />
-);
+)
 
-export default CurrentUserProtectedRoute;
+export default CurrentUserProtectedRoute

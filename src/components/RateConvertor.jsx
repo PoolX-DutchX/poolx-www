@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import BigNumber from 'bignumber.js';
-import PropTypes from 'prop-types';
-import moment from 'moment';
+import React, { Component } from 'react'
+import BigNumber from 'bignumber.js'
+import PropTypes from 'prop-types'
+import moment from 'moment'
 
-import { Input } from 'formsy-react-components';
-import SelectFormsy from './SelectFormsy';
-import DatePickerFormsy from './DatePickerFormsy';
+import { Input } from 'formsy-react-components'
+import SelectFormsy from './SelectFormsy'
+import DatePickerFormsy from './DatePickerFormsy'
 
-import { getStartOfDayUTC } from '../lib/helpers';
+import { getStartOfDayUTC } from '../lib/helpers'
 
-BigNumber.config({ DECIMAL_PLACES: 18 });
+BigNumber.config({ DECIMAL_PLACES: 18 })
 
 const fiatTypes = [
   { value: 'BRL', title: 'BRL' },
@@ -21,13 +21,13 @@ const fiatTypes = [
   { value: 'MXN', title: 'MXN' },
   { value: 'THB', title: 'THB' },
   { value: 'USD', title: 'USD' },
-];
+]
 
-const numberRegex = RegExp('^[0-9]*[.]?[0-9]*$');
+const numberRegex = RegExp('^[0-9]*[.]?[0-9]*$')
 
 class RateConvertor extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       date: props.date,
@@ -35,74 +35,84 @@ class RateConvertor extends Component {
       fiatAmount: new BigNumber(`0${props.fiatAmount}`),
       fiatAmountForm: props.fiatAmount,
       etherAmountForm: props.etherAmount,
-    };
+    }
 
-    this.setEtherAmount = this.setEtherAmount.bind(this);
-    this.setFiatAmount = this.setFiatAmount.bind(this);
-    this.changeSelectedFiat = this.changeSelectedFiat.bind(this);
+    this.setEtherAmount = this.setEtherAmount.bind(this)
+    this.setFiatAmount = this.setFiatAmount.bind(this)
+    this.changeSelectedFiat = this.changeSelectedFiat.bind(this)
   }
 
   componentDidMount() {
     this.props
       .getEthConversion(this.state.date)
-      .then(resp => this.setState({ conversionRate: resp }));
+      .then(resp => this.setState({ conversionRate: resp }))
   }
 
   setDate(date) {
-    this.setState({ date });
+    this.setState({ date })
     this.props.getEthConversion(date).then(resp => {
       // update all the input fields
-      const rate = resp.rates[this.state.selectedFiatType];
+      const rate = resp.rates[this.state.selectedFiatType]
 
       this.setState({
         conversionRate: resp,
         etherAmountForm: this.state.fiatAmountForm
           ? this.state.fiatAmount.div(rate).toString()
           : '',
-      });
-    });
+      })
+    })
   }
 
   setEtherAmount(name, value) {
     if (numberRegex.test(value)) {
-      const fiatAmount = new BigNumber(`0${value}`);
-      const conversionRate = this.state.conversionRate.rates[this.state.selectedFiatType];
+      const fiatAmount = new BigNumber(`0${value}`)
+      const conversionRate = this.state.conversionRate.rates[
+        this.state.selectedFiatType
+      ]
 
       if (conversionRate && fiatAmount.gte(0)) {
         this.setState({
           etherAmountForm: fiatAmount.div(conversionRate).toString(),
           fiatAmount,
           fiatAmountForm: value,
-        });
+        })
       }
     }
   }
 
   setFiatAmount(name, value) {
     if (numberRegex.test(value)) {
-      const etherAmount = new BigNumber(`0${value}`);
-      const conversionRate = this.state.conversionRate.rates[this.state.selectedFiatType];
+      const etherAmount = new BigNumber(`0${value}`)
+      const conversionRate = this.state.conversionRate.rates[
+        this.state.selectedFiatType
+      ]
 
       if (conversionRate && etherAmount.gte(0)) {
         this.setState({
           fiatAmount: etherAmount.times(conversionRate),
           fiatAmountForm: etherAmount.times(conversionRate).toString(),
           etherAmountForm: value,
-        });
+        })
       }
     }
   }
 
   changeSelectedFiat(fiatType) {
-    const conversionRate = this.state.conversionRate.rates[fiatType];
+    const conversionRate = this.state.conversionRate.rates[fiatType]
     this.setState({
       etherAmountForm: this.state.fiatAmount.div(conversionRate).toString(),
       selectedFiatType: fiatType,
-    });
+    })
   }
 
   render() {
-    const { date, selectedFiatType, fiatAmountForm, etherAmountForm, conversionRate } = this.state;
+    const {
+      date,
+      selectedFiatType,
+      fiatAmountForm,
+      etherAmountForm,
+      conversionRate,
+    } = this.state
 
     return (
       <div>
@@ -155,7 +165,9 @@ class RateConvertor extends Component {
               helpText={
                 conversionRate &&
                 conversionRate.rates &&
-                `1 Eth = ${conversionRate.rates[selectedFiatType]} ${selectedFiatType}`
+                `1 Eth = ${
+                  conversionRate.rates[selectedFiatType]
+                } ${selectedFiatType}`
               }
               required
               disabled={this.props.disabled}
@@ -183,18 +195,24 @@ class RateConvertor extends Component {
             name="conversionRate"
             value={
               this.state.conversionRate && this.state.conversionRate.rates
-                ? this.state.conversionRate.rates[this.state.selectedFiatType].toString()
+                ? this.state.conversionRate.rates[
+                    this.state.selectedFiatType
+                  ].toString()
                 : '0'
             }
           />
           <Input
             type="hidden"
             name="ethConversionRateTimestamp"
-            value={this.state.conversionRate ? this.state.conversionRate.timestamp.toString() : ''}
+            value={
+              this.state.conversionRate
+                ? this.state.conversionRate.timestamp.toString()
+                : ''
+            }
           />
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -205,7 +223,7 @@ RateConvertor.propTypes = {
   date: PropTypes.instanceOf(moment),
   fiatAmount: PropTypes.string,
   etherAmount: PropTypes.string,
-};
+}
 
 RateConvertor.defaultProps = {
   disabled: false,
@@ -213,6 +231,6 @@ RateConvertor.defaultProps = {
   date: getStartOfDayUTC().subtract(1, 'd'),
   fiatAmount: '',
   etherAmount: '',
-};
+}
 
-export default RateConvertor;
+export default RateConvertor
