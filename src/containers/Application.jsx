@@ -10,35 +10,18 @@ import Sweetalert from 'sweetalert'
 import { history } from '../lib/helpers'
 
 // views
-import EditProfile from './../components/views/EditProfile'
-import SignIn from './../components/views/SignIn'
-import SignUp from './../components/views/SignUp'
 import Home from './../components/views/Home'
 
 import ViewPool from './../components/views/ViewPool'
 import Pools from './../components/views/Pools'
 import CreatePool from './../components/views/CreatePool/'
-import EditPool from './../components/views/EditPool/'
-import Update from './../components/views/Update/'
-import ClosePool from './../components/views/ClosePool/'
 import Contribute from './../components/views/Contribute/'
-import Dashboard from './../components/views/Dashboard/'
-import Deploy from './../components/views/Deploy/'
-import ConfirmTokenBatch from './../components/views/ConfirmTokenBatch/'
 
 import NotFound from './../components/views/NotFound'
 
 // components
 import MainMenu from './../components/MainMenu'
-import Loader from './../components/Loader'
-import PrivateRoute from '../components/PrivateRoute'
-import CurrentUserProtectedRoute from '../components/CurrentUserProtectedRoute'
 import Web3ProtectedRoute from '../components/Web3ProtectedRoute'
-
-// context providers
-import UserProvider, {
-  Consumer as UserConsumer,
-} from '../contextProviders/UserProvider'
 
 import './../lib/validators'
 
@@ -68,158 +51,53 @@ React.toast = toast
 const Application = () => {
   return (
     <Router history={history}>
-      <UserProvider>
-        <UserConsumer>
-          {({
-            state: { currentUser, isLoading, hasError },
-            actions: { onSignIn, onSignOut },
-          }) => (
+      <div>
+        <div className="full-height">
             <div className="full-height">
-              {isLoading && <Loader className="fixed" />}
-              {!isLoading && !hasError && (
-                <div className="full-height">
-                  <MainMenu onSignOut={onSignOut} currentUser={currentUser} />
-                  <section className="page-layout">
-                    <Switch>
-                      {/* Routes are defined here. Persistent data is set as props on components
+              <MainMenu />
+              <section className="page-layout">
+                <Switch>
+                  {/* Routes are defined here. Persistent data is set as props on components
                     NOTE order matters, wrong order breaks routes!
                  */}
-                      <Web3ProtectedRoute
-                        exact
-                        path="/pools/create"
-                        component={props => <CreatePool {...props} />}
-                      />
-                      <Web3ProtectedRoute
-                        exact
-                        path="/pools/view-pool/:poolAddress"
-                        component={props => <ViewPool {...props} />}
-                      />
-                      <Web3ProtectedRoute
-                        exact
-                        path="/pools/:poolAddress/contribute"
-                        component={props => <Contribute {...props} />}
-                      />
-                      <Web3ProtectedRoute
-                        exact
-                        path="/pools"
-                        component={props => <Pools {...props} />}
-                      />
-                      <Route
-                        exact
-                        path="/pools/:poolId/edit"
-                        component={props => (
-                          <EditPool currentUser={currentUser} {...props} />
-                        )}
-                      />
-                      <Route
-                        exact
-                        path="/pools/:poolId/update"
-                        component={props => (
-                          <Update currentUser={currentUser} {...props} />
-                        )}
-                      />
-                      <Route
-                        exact
-                        path="/pools/:poolId/payout"
-                        component={props => (
-                          <ClosePool currentUser={currentUser} {...props} />
-                        )}
-                      />
-                      <Route
-                        exact
-                        path="/pools/:poolId/confirmTokenBatch"
-                        component={props => (
-                          <ConfirmTokenBatch
-                            currentUser={currentUser}
-                            {...props}
-                          />
-                        )}
-                      />
-                      <Route
-                        exact
-                        path="/pools/:poolId/pendingTx"
-                        component={props => (
-                          <Deploy currentUser={currentUser} {...props} />
-                        )}
-                      />
-                      <Route
-                        exact
-                        path="/contributions/:contributionId/pendingTx"
-                        component={props => (
-                          <Deploy currentUser={currentUser} {...props} />
-                        )}
-                      />
-                      <Route
-                        exact
-                        path="/dashboard"
-                        component={props => (
-                          <Dashboard currentUser={currentUser} {...props} />
-                        )}
-                      />
-                      <CurrentUserProtectedRoute
-                        exact
-                        path="/signin"
-                        currentUser={currentUser}
-                        component={props => (
-                          <SignIn onSignIn={onSignIn} {...props} />
-                        )}
-                      />
-                      <CurrentUserProtectedRoute
-                        exact
-                        path="/signup"
-                        currentUser={currentUser}
-                        component={props => (
-                          <SignUp onSignIn={onSignIn} {...props} />
-                        )}
-                      />
-                      <PrivateRoute
-                        exact
-                        path="/profile"
-                        currentUser={currentUser}
-                        component={props => (
-                          <EditProfile
-                            currentUser={currentUser}
-                            onSignIn={onSignIn}
-                            {...props}
-                          />
-                        )}
-                      />
-                      <Route
-                        exact
-                        path="/"
-                        render={props => (
-                          <Home currentUser={currentUser} {...props} />
-                        )}
-                      />
+                  <Web3ProtectedRoute
+                    exact
+                    path="/pools/create"
+                    component={props => <CreatePool {...props} />}
+                  />
+                  <Web3ProtectedRoute
+                    exact
+                    path="/pools/view-pool/:poolAddress"
+                    component={props => <ViewPool {...props} />}
+                  />
+                  <Web3ProtectedRoute
+                    exact
+                    path="/pools/:poolAddress/contribute"
+                    component={props => <Contribute {...props} />}
+                  />
+                  <Web3ProtectedRoute
+                    exact
+                    path="/pools"
+                    component={props => <Pools {...props} />}
+                  />
+                  <Route exact path="/" render={props => <Home {...props} />} />
 
-                      <Route component={NotFound} />
-                    </Switch>
-                  </section>
-                </div>
-              )}
-
-              {!isLoading && hasError && (
-                <center>
-                  <h2>Oops, something went wrong...</h2>
-                  <p>
-                    PoolX could not load for some reason. Please try again...
-                  </p>
-                </center>
-              )}
-
-              <ToastContainer
-                position="top-right"
-                type="default"
-                autoClose={5000}
-                hideProgressBar
-                newestOnTop={false}
-                closeOnClick
-                pauseOnHover
-              />
+                  <Route component={NotFound} />
+                </Switch>
+              </section>
             </div>
-          )}
-        </UserConsumer>
-      </UserProvider>
+
+          <ToastContainer
+            position="top-right"
+            type="default"
+            autoClose={5000}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            pauseOnHover
+          />
+        </div>
+      </div>
     </Router>
   )
 }
