@@ -10,6 +10,8 @@ import { getPoolStage } from './web3Helpers/shared/commonWeb3Helpers'
 import isEmpty from 'lodash/isEmpty'
 import { useWeb3Context } from 'web3-react'
 
+BigNumber.config({ EXPONENTIAL_AT: 40 })
+
 const ViewPool = ({ match, web3, history }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [poolData, setPoolData] = useState({})
@@ -18,7 +20,6 @@ const ViewPool = ({ match, web3, history }) => {
   } = match
   const context = useWeb3Context()
   const { account } = context
-
 
   const transfromFromWei = number => {
     const result = web3.utils.fromWei(number.toString(), 'ether')
@@ -142,11 +143,11 @@ const ViewPool = ({ match, web3, history }) => {
             <div className="total-invested-section">
               <h4 className="invested">
                 <strong>
-                {transfromFromWei(
+                  {transfromFromWei(
                     new BigNumber(token1BalanceInUsd).plus(token2BalanceInUsd)
                   )}
                 </strong>
-                  USD
+                USD
               </h4>
               <div className="subheading">
                 of {transfromFromWei(currentDxThreshold)} USD to list token pair
@@ -175,13 +176,13 @@ const ViewPool = ({ match, web3, history }) => {
               Contribute to Pool
             </Button>
             <div className="row margin-top-bottom">
-              { stage === 'Collection' &&
+              {stage === 'Collection' && (
                 <div className="col">
                   <Button variant="outlined" fullWidth>
                     Withdraw
                   </Button>
                 </div>
-              }
+              )}
             </div>
           </div>
         </div>
