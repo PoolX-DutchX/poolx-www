@@ -65,16 +65,28 @@ const Contribute = ({ match, history }) => {
     token2ThresholdReached,
   } = poolData
 
-  const submitContribution = ({ amount, isContributingToken2 }) =>
-  contributeToPool({
-    account,
-    token1,
-    token2,
-    poolAddress,
-    isContributingToken2,
-    amount,
-  })
-  .then(() => history.push(`/pools/view-pool/${poolAddress}`))
+  const submitContribution = ({ amount, isContributingToken2 }) => {
+    React.swal({
+      title: 'You are about to contribute to Pool in 2 transactions',
+      content: React.swal.msg(
+        <div>
+          <p>First transaction, you will approve the smart contract to use your token</p>
+          <p>Second transaction you deposit the token to the smart contract</p>
+        </div>,
+      ),
+      icon: 'info',
+    }).then(() => {
+      contributeToPool({
+        account,
+        token1,
+        token2,
+        poolAddress,
+        isContributingToken2,
+        amount,
+      })
+      .then(() => history.push(`/pools/view-pool/${poolAddress}`))
+    })
+  }
 
   return (
     <div>

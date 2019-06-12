@@ -158,13 +158,13 @@ const ViewPool = ({ match, web3, history }) => {
                 <h4>
                   <strong>{token1Balance}</strong>
                 </h4>
-                <div className="subheading">Token1 balance</div>
+                <div className="subheading">Total Token1 balance in pool</div>
               </span>
               <span>
                 <h4>
                   <strong>{token2Balance}</strong>
                 </h4>
-                <div className="subheading">Token2 balance</div>
+                <div className="subheading">Total Token2 balance in pool</div>
               </span>
             </div>
             <Button
