@@ -1,4 +1,4 @@
-import Web3 from 'web3'
+import getWeb3 from './getWeb3'
 
 const MAINNET_ID = 1
 const MORDEN_ID = 2
@@ -40,24 +40,4 @@ async function getNetwork(networkId) {
   return { id, name, etherscan }
 }
 
-function getWeb3() {
-  Web3.providers.HttpProvider.prototype.sendAsync =
-    Web3.providers.HttpProvider.prototype.send
-  const web3 = new Web3(window.web3.currentProvider)
-  return web3
-}
-
-function isMetamaskInstalled() {
-  const { web3 } = window
-
-  if (
-    web3 === undefined ||
-    web3.currentProvider.constructor.name !== 'MetamaskInpageProvider'
-  ) {
-    return false
-  } else {
-    return true
-  }
-}
-
-export { getNetwork, getWeb3, isMetamaskInstalled }
+export { getNetwork }

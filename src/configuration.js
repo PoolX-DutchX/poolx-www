@@ -22,7 +22,8 @@ const configurations = {
     networkId: 123456789123456789,
     etherscan: 'https://rinkeby.etherscan.io/', // this won't work, only here so we can see links during development
     feathersConnection: 'http://localhost:3030',
-    nodeConnection: 'ws://localhost:8545',
+    nodeConnection:
+      'https://rinkeby.infura.io/v3/a7fc9e96cb5b4b95b0d40b8a76e25747',
   },
   [ENV_STAGING]: {
     title: 'staging',
@@ -35,7 +36,8 @@ const configurations = {
     networkId: 4,
     etherscan: 'https://rinkeby.etherscan.io/',
     feathersConnection: 'https://poolx-api.herokuapp.com/',
-    nodeConnection: 'wss://rinkeby.infura.io/ws',
+    nodeConnection:
+      'https://rinkeby.infura.io/v3/a7fc9e96cb5b4b95b0d40b8a76e25747',
   },
   [ENV_PRODUCTION]: {
     title: 'production',

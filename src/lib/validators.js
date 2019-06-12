@@ -1,16 +1,8 @@
 import * as Yup from 'yup'
 import { addValidationRule } from 'formsy-react'
 import moment from 'moment'
-import Web3 from 'web3'
-import isMetamasInstalled from './blockchain/isMetamasInstalled'
-const web3 =
-  isMetamasInstalled() &&
-  new Web3(
-    Web3.givenProvider ||
-      'https://rinkeby.infura.io/v3/a7fc9e96cb5b4b95b0d40b8a76e25747',
-    null,
-    {}
-  )
+import getWeb3 from './blockchain/getWeb3'
+const web3 = getWeb3()
 
 // Formsy validations
 
