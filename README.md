@@ -1,4 +1,4 @@
-![PoolX](./public/img/poolX_logo.png)
+![PoolX](./public/img/poolx_logo.png)
 
 ## Quick Setting Up Of Development
 
