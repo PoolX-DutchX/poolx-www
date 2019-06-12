@@ -5,9 +5,8 @@ export const ENV_PRODUCTION = 'production'
 const {
   REACT_APP_ENVIRONMENT = ENV_LOCALHOST, // optional
   REACT_APP_DECIMALS = 8, // optional
-  REACT_APP_FEATHERJS_CONNECTION_URL,
-  REACT_APP_ETH_NODE_CONNECTION_URL,
   REACT_APP_BLOCKEXPLORER,
+  REACT_APP_ETH_NODE_CONNECTION_URL,
   REACT_APP_BUGS_EMAIL = 'bugs@poolx.io',
 } = process.env
 
@@ -63,8 +62,6 @@ const config = Object.assign({}, configurations[REACT_APP_ENVIRONMENT])
 
 // Overwrite the environment values with parameters
 config.etherscan = REACT_APP_BLOCKEXPLORER || config.etherscan
-config.feathersConnection =
-  REACT_APP_FEATHERJS_CONNECTION_URL || config.feathersConnection
 config.nodeConnection =
   REACT_APP_ETH_NODE_CONNECTION_URL || config.nodeConnection
 config.decimals = REACT_APP_DECIMALS

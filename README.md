@@ -14,12 +14,6 @@
   * [Run](#run)
   * [Build](#build)
   * [Configuration](#configuration)
-* [Contributing](#contributing)
-  * [Local Development](#local-development)
-  * [Development and PR Testing](#development-and-pr-testing)
-  * [Deployment Environments](#deploy-environments)
-  * [Release Process](#release-process)
-* [Help](#help)
 
 ## Getting Started
 
@@ -121,11 +115,7 @@ The DApp has several node environment variables which can be used to alter the D
 | Variable name                      | Default Value                     | Description                                                                                                                                                                                                         |
 | ---------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | PORT                               | 3010                              | Port on which the DApp runs                                                                                                                                                                                         |
-| REACT_APP_ENVIRONMENT              | 'localhost'                       | To which feathers environment should the DApp connect. By default it connects to localhost feathers. Allowed values are: `localhost`, `develop`, `production`. See [Deployment Environments](#deploy-environments). |
-| REACT_APP_DECIMALS                 | 8                                 | How many decimal should be shown for ETH values. Note that the calculations are still done with 18 decimals.                                                                                                        |
-| REACT_APP_FEATHERJS_CONNECTION_URL | Differs per REACT_APP_ENVIRONMENT | Overwrites the environment injected feathers connection URL.                                                                                                                                                        |
 | REACT_APP_ETH_NODE_CONNECTION_URL  | Differs per REACT_APP_ENVIRONMENT | Overwrites the ethereum node connection URL for making ethereum transactions.                                                                                                                                       |
-| REACT_APP_POOL_FACTORY_ADDRESS     | Differs per REACT_APP_ENVIRONMENT | Overwrites the Pool factory address.                                                                                                                                                                                |
 | REACT_APP_BLOCKEXPLORER            | Differs per REACT_APP_ENVIRONMENT | Overwrites the block explorer base URL such as etherscan. The DApp assumes such blockexplorer api is `\<BLOCKEXPLORER\>/tx/\<TRANSACTION_HASH\>`                                                                    |
 
 Example of `.env.local` file that makes the DApp run on port 8080, connects to the **develop** environment and uses custom blockexplorer:
