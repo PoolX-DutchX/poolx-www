@@ -54,7 +54,10 @@ export default function Web3Error({ error, connectorName }) {
     if (error.code === InjectedConnector.errorCodes.UNLOCK_REQUIRED)
       return 'Unlock your Ethereum Account.'
     if (error.code === 'UNSUPPORTED_NETWORK') {
-      return `Unssuported Network. Please connect to Rinkeby or Mainnet.`
+      return 'Unssuported Network. Please connect to Rinkeby or Mainnet.'
+    }
+    if (error.code === 'ALL_CONNECTORS_INVALID') {
+      return 'The DApp only supports Metamask and it looks like you are not using it'
     }
 
     return 'An unexpected error occurred. Please try again.'
