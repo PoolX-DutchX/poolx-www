@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 
+import { TokenBalancesProvider } from './TokenBalancesContext'
 import MultiStepForm from '../../MultiStepForm'
 import FormStep from './components/FormStep'
+import UserTokenBalances from './components/UserTokenBalances'
 import WrongStage from './WrongStage'
 import Loader from '../../Loader'
 import validationSchemas from './validation/'
@@ -22,7 +24,7 @@ const Header = () => {
   )
 }
 
-const Contribute = ({ match, history }) => {
+const Contribute = ({ match, history, web3 }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [poolData, setPoolData] = useState({})
   const {
@@ -92,22 +94,25 @@ const Contribute = ({ match, history }) => {
     <div>
       {stage !== 'Contribution' && <WrongStage stage={stage} />}
       {stage === 'Contribution' && (
-        <MultiStepForm
-          header={<Header />}
-          initialValues={{
-            isContributingToken2: false,
-            amount: '',
-          }}
-          stepLabels={['Contribution Details', 'Perform transaction']}
-          onSubmit={(values) => submitContribution(values)}
-          validationSchemas={validationSchemas}
-        >
-          <FormStep
-            isAuctionWithWeth={isAuctionWithWeth}
-            token1ThresholdReached={token1ThresholdReached}
-            token2ThresholdReached={token2ThresholdReached}
-          />
-        </MultiStepForm>
+        <TokenBalancesProvider>
+          <UserTokenBalances token1={token1} token2={token2} account={account} web3={web3} />
+          <MultiStepForm
+            header={<Header />}
+            initialValues={{
+              isContributingToken2: false,
+              amount: '',
+            }}
+            stepLabels={['Contribution Details', 'Perform transaction']}
+            onSubmit={(values) => submitContribution(values)}
+            validationSchemas={validationSchemas}
+          >
+            <FormStep
+              isAuctionWithWeth={isAuctionWithWeth}
+              token1ThresholdReached={token1ThresholdReached}
+              token2ThresholdReached={token2ThresholdReached}
+            />
+          </MultiStepForm>
+        </TokenBalancesProvider>
       )}
     </div>
   )

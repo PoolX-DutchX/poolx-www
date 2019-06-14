@@ -39,7 +39,7 @@ export default ({ history }) => {
     React.swal({
       title: 'Hold on tight. Your transaction will be mined soon',
       text:
-        'After clicking OK, Metamask will request you to create the transaction for the pool creation. After 5 block confirmations, we will redirect you to the pool page.',
+        'After clicking OK, Metamask will request you to create the transaction for the pool creation. After 2 block confirmations, we will redirect you to the pool page.',
       icon: 'info',
     }).then(() => {
       createPool(account, values).then(receipt => {

@@ -1,10 +1,12 @@
 import React, { toast } from 'react'
 import { getEtherscanTxLink } from '../../../../constants'
+import config from '../../../../configuration'
+const { numberOfConfirmations } = config
 
-export const showToastOnTxSubmitted = txHash =>
+export const showToastOnTxSubmitted = (txHash, poolStatus) =>
   toast.info(
     <p>
-      Your MetaMask transaction submitted! <br />
+      Your MetaMask transaction submitted for pool {poolStatus}! <br />
       <a
         href={getEtherscanTxLink(txHash)}
         target="_blank"
@@ -18,11 +20,15 @@ export const showToastOnTxSubmitted = txHash =>
     }
   )
 
-export const showToastOnTxConfirmation = (confirmationNumber, receipt) => {
-  if (confirmationNumber === 5) {
+export const showToastOnTxConfirmation = (
+  confirmationNumber,
+  receipt,
+  poolStatus
+) => {
+  if (confirmationNumber === numberOfConfirmations) {
     toast.success(
       <p>
-        Your transaction has been mined! <br />
+        Your transaction has been mined for pool {poolStatus}! <br />
         <a
           href={getEtherscanTxLink(receipt.transactionHash)}
           target="_blank"
@@ -38,10 +44,10 @@ export const showToastOnTxConfirmation = (confirmationNumber, receipt) => {
   }
 }
 
-export const showToastOnTxError = receipt =>
+export const showToastOnTxError = (receipt, poolStatus) =>
   toast.error(
     <p>
-      Oops something went wrong!
+      Oops something went wrong for pool {poolStatus}!
       <br />
       {receipt && (
         <span>
