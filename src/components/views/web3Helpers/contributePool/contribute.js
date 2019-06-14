@@ -9,6 +9,8 @@ import ERC20Abi from '../shared/ERC20Abi.json'
 import poolAbi from '../shared/poolAbi.json'
 import BigNumber from 'bignumber.js'
 import getWeb3 from '../../../../lib/blockchain/getWeb3'
+import config from '../../../../configuration'
+const { numberOfConfirmations } = config
 const web3 = getWeb3()
 
 export const contributeToPool = ({
@@ -32,7 +34,7 @@ export const contributeToPool = ({
       .send({ from: account })
 
       .on('transactionHash', txHash => {
-        showToastOnTxSubmitted(txHash)
+        showToastOnTxSubmitted(txHash, 'contribution')
       })
       .once('confirmation', () => {
         poolContract.methods
@@ -44,9 +46,14 @@ export const contributeToPool = ({
             from: account,
           })
           .on('confirmation', (confirmationNumber, receipt) => {
-            showToastOnTxConfirmation(confirmationNumber, receipt)
+            showToastOnTxConfirmation(
+              confirmationNumber,
+              receipt,
+              'contribution'
+            )
 
-            if (confirmationNumber === 2) return resolve(receipt)
+            if (confirmationNumber === numberOfConfirmations)
+              return resolve(receipt)
           })
           .on('error', (error, receipt) => {
             showToastOnTxError(receipt)
@@ -54,7 +61,7 @@ export const contributeToPool = ({
           })
       })
       .on('error', (error, receipt) => {
-        showToastOnTxError(receipt)
+        showToastOnTxError(receipt, 'contribution')
         return rejection(error)
       })
   })
