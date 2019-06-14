@@ -24,6 +24,7 @@ const configurations = {
     feathersConnection: 'http://localhost:3030',
     nodeConnection:
       'https://rinkeby.infura.io/v3/a7fc9e96cb5b4b95b0d40b8a76e25747',
+    numberOfConfirmations: 2,
   },
   [ENV_STAGING]: {
     title: 'staging',
@@ -38,6 +39,7 @@ const configurations = {
     feathersConnection: 'https://poolx-api.herokuapp.com/',
     nodeConnection:
       'https://rinkeby.infura.io/v3/a7fc9e96cb5b4b95b0d40b8a76e25747',
+    numberOfConfirmations: 2,
   },
   [ENV_PRODUCTION]: {
     title: 'production',

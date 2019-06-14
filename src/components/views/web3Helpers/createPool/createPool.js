@@ -8,7 +8,7 @@ import {
 } from '../shared/showToasts'
 import getWeb3 from '../../../../lib/blockchain/getWeb3'
 const web3 = getWeb3()
-const { poolFactoryAddress, dxProxyAddress } = config
+const { poolFactoryAddress, dxProxyAddress, numberOfConfirmations } = config
 
 export default (
   ethereumAddressFrom,
@@ -38,15 +38,16 @@ export default (
         from: ethereumAddressFrom,
       })
       .on('transactionHash', txHash => {
-        showToastOnTxSubmitted(txHash)
+        showToastOnTxSubmitted(txHash, 'creation')
       })
       .on('confirmation', (confirmationNumber, receipt) => {
-        showToastOnTxConfirmation(confirmationNumber, receipt)
+        showToastOnTxConfirmation(confirmationNumber, receipt, 'creation')
 
-        if (confirmationNumber === 2) return resolve(receipt)
+        if (confirmationNumber === numberOfConfirmations)
+          return resolve(receipt)
       })
       .on('error', (error, receipt) => {
-        showToastOnTxError(receipt)
+        showToastOnTxError(receipt, 'creation')
         return reject(error)
       })
   })
