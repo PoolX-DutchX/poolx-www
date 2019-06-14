@@ -95,7 +95,7 @@ const Contribute = ({ match, history }) => {
         <MultiStepForm
           header={<Header />}
           initialValues={{
-            isContributingToken2: '',
+            isContributingToken2: false,
             amount: '',
           }}
           stepLabels={['Contribution Details', 'Perform transaction']}
