@@ -76,3 +76,24 @@ export const fetchContributionPageData = poolAddress =>
     getPoolData(poolAddress, 'token1ThresholdReached'),
     getPoolData(poolAddress, 'token2ThresholdReached'),
   ])
+
+export const getTokenInfo = ({ tokenAddress, account }) => {
+  const tokenContract = new web3.eth.Contract(ERC20Abi, tokenAddress)
+
+  return new Promise(async (resolve, reject) => {
+    try {
+      const userBalance = await tokenContract.methods.balanceOf(account).call()
+      const tokenName = await tokenContract.methods.name().call()
+      resolve({ userBalance, tokenName })
+    } catch (error) {
+      console.log({ error })
+      reject(error)
+    }
+  })
+}
+
+export const fetchUserTokenBalances = ({ token1, token2, account }) =>
+  Promise.all([
+    getTokenInfo({ tokenAddress: token1, account }),
+    getTokenInfo({ tokenAddress: token2, account }),
+  ])
