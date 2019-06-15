@@ -1,13 +1,23 @@
 import React, { useState, useEffect } from 'react'
+
 import BigNumber from 'bignumber.js'
+import moment from 'moment'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Button from '@material-ui/core/Button'
 import Loader from '../Loader'
+import Tooltip from '@material-ui/core/Tooltip'
 import WithTooltip from '../WithTooltip'
+
+import {
+  showToastOnTxSubmitted,
+  showToastOnTxConfirmation,
+  showToastOnTxError,
+} from './web3Helpers/shared/showToasts'
+
+import poolAbi from './web3Helpers/shared/poolAbi.json'
 
 import fetchPoolData from './web3Helpers/viewPool/viewPool'
 import { getPoolStage } from './web3Helpers/shared/commonWeb3Helpers'
-import isEmpty from 'lodash/isEmpty'
 import { useWeb3Context } from 'web3-react'
 
 BigNumber.config({ EXPONENTIAL_AT: 40 })
@@ -21,13 +31,13 @@ const ViewPool = ({ match, web3, history }) => {
   const context = useWeb3Context()
   const { account } = context
 
-  const transfromFromWei = number => {
-    const result = web3.utils.fromWei(number.toString(), 'ether')
-    return Number(result)
-  }
-
   useEffect(() => {
     fetchPoolData(poolAddress, account).then(values => {
+      const transfromFromWei = number => {
+        const result = web3.utils.fromWei(number.toString(), 'ether')
+        return Number(result)
+      }
+
       const [
         token1BalanceResult,
         token2BalanceResult,
@@ -42,6 +52,8 @@ const ViewPool = ({ match, web3, history }) => {
         token2ThresholdReached,
         userContributionForToken1Amount,
         userContributionForToken2Amount,
+        dutchAuctionIndex,
+        dutchAuctionStartTime,
       ] = values
 
       const tokenBalanceArray = Object.entries(tokenBalancesInUsd).map(
@@ -68,13 +80,83 @@ const ViewPool = ({ match, web3, history }) => {
         userContributionForToken2Amount: transfromFromWei(
           userContributionForToken2Amount
         ),
+        dutchAuctionIndex,
+        dutchAuctionStartTime,
       })
 
       setIsLoading(false)
     })
-  }, [isEmpty(poolData)])
+  }, [account, poolAddress, web3.utils])
 
   const contribute = () => history.push(`/pools/${poolAddress}/contribute`)
+
+  const postBuyAndCollect = () => {
+    const poolContract = new web3.eth.Contract(poolAbi, poolAddress)
+
+    return new Promise((resolve, rejection) => {
+      poolContract.methods
+        .buyAndCollect()
+        .send({
+          from: account,
+        })
+        .on('transactionHash', txHash => {
+          showToastOnTxSubmitted(txHash, 'contribution')
+        })
+        .on('confirmation', (confirmationNumber, receipt) => {
+          showToastOnTxConfirmation(confirmationNumber, receipt, 'contribution')
+          resolve(receipt)
+        })
+        .on('error', (error, receipt) => {
+          showToastOnTxError(receipt, 'contribution')
+          return rejection(error)
+        })
+    })
+  }
+  const claimFunds = () => {
+    const poolContract = new web3.eth.Contract(poolAbi, poolAddress)
+
+    return new Promise((resolve, rejection) => {
+      poolContract.methods
+        .claimFunds()
+        .send({
+          from: account,
+        })
+        .on('transactionHash', txHash => {
+          showToastOnTxSubmitted(txHash, 'contribution')
+        })
+        .on('confirmation', (confirmationNumber, receipt) => {
+          showToastOnTxConfirmation(confirmationNumber, receipt, 'contribution')
+          resolve(receipt)
+        })
+        .on('error', (error, receipt) => {
+          showToastOnTxError(receipt, 'contribution')
+          return rejection(error)
+        })
+    })
+  }
+
+  const withdrawContribution = () => {
+    const poolContract = new web3.eth.Contract(poolAbi, poolAddress)
+
+    return new Promise((resolve, rejection) => {
+      poolContract.methods
+        .withdrawContribution()
+        .send({
+          from: account,
+        })
+        .on('transactionHash', txHash => {
+          showToastOnTxSubmitted(txHash, 'contribution')
+        })
+        .on('confirmation', (confirmationNumber, receipt) => {
+          showToastOnTxConfirmation(confirmationNumber, receipt, 'contribution')
+          resolve(receipt)
+        })
+        .on('error', (error, receipt) => {
+          showToastOnTxError(receipt, 'contribution')
+          return rejection(error)
+        })
+    })
+  }
 
   if (isLoading) return <Loader className="fixed" />
 
@@ -89,6 +171,8 @@ const ViewPool = ({ match, web3, history }) => {
     stage,
     userContributionForToken1Amount,
     userContributionForToken2Amount,
+    dutchAuctionIndex,
+    dutchAuctionStartTime,
   } = poolData
 
   const poolProgress = new BigNumber(token1BalanceInUsd)
@@ -96,6 +180,13 @@ const ViewPool = ({ match, web3, history }) => {
     .div(currentDxThreshold)
     .times(100)
     .toNumber()
+
+  const transfromFromWei = number => {
+    const result = web3.utils.fromWei(number.toString(), 'ether')
+    return Number(result)
+  }
+
+  const auctionStarted = dutchAuctionStartTime * 1000 > Date.now()
 
   return (
     <div id="view-pool-view" className="container">
@@ -167,19 +258,76 @@ const ViewPool = ({ match, web3, history }) => {
                 <div className="subheading">Total Token2 balance in pool</div>
               </span>
             </div>
-            <Button
-              variant="contained"
-              color="primary"
-              fullWidth
-              onClick={contribute}
-            >
-              Contribute to Pool
-            </Button>
-            <div className="row margin-top-bottom">
-              {stage === 'Collection' && (
-                <div className="col">
-                  <Button variant="outlined" fullWidth>
+            {stage === 'Contributing' && (
+              <div className="row">
+                <div className="col-md-6">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    onClick={contribute}
+                  >
+                    Contribute
+                  </Button>
+                </div>
+                <div className="col-md-6">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    onClick={withdrawContribution}
+                  >
                     Withdraw
+                  </Button>
+                </div>
+              </div>
+            )}
+            {stage === 'Collection' && (
+              <div className="row">
+                <div className="col-md-4 subheading">
+                  {`Finished? ${
+                    dutchAuctionIndex.toString() === '1' ? 'No' : 'Yes'
+                  }`}
+                </div>
+                <div className="col-md-4 subheading">
+                  {`Starts at: ${moment(dutchAuctionStartTime * 1000).format(
+                    'MMMM Do YYYY, h:mm:ss a'
+                  )}\n`}
+                </div>
+                <div className="col-md-4 subheading">
+                  {`Starts in: ${moment(
+                    dutchAuctionStartTime * 1000
+                  ).fromNow()}`}
+                </div>
+              </div>
+            )}
+            <div>
+              {stage === 'Collection' && (
+                <Tooltip
+                  title={!auctionStarted ? '' : 'Auction not yet started'}
+                >
+                  <div className="row margin-top-bottom">
+                    <Button
+                      disabled={!auctionStarted}
+                      variant="contained"
+                      color="divrimary"
+                      fullWidth
+                      onClick={postBuyAndCollect}
+                    >
+                      POST BUY ORDER
+                    </Button>
+                  </div>
+                </Tooltip>
+              )}
+              {stage === 'Claim' && (
+                <div className="row margin-top-bottom">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    onClick={claimFunds}
+                  >
+                    CLAIM FUNDS
                   </Button>
                 </div>
               )}
