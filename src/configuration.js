@@ -7,13 +7,13 @@ const {
   REACT_APP_DECIMALS = 8, // optional
   REACT_APP_BLOCKEXPLORER,
   REACT_APP_ETH_NODE_CONNECTION_URL,
-  REACT_APP_BUGS_EMAIL = 'bugs@poolx.io',
+  REACT_APP_BUGS_EMAIL = 'bugs@poolx.org',
 } = process.env
 
 const configurations = {
   [ENV_LOCALHOST]: {
     title: 'Ganache',
-    poolFactoryAddress: '0xE76eD7dBaC948e3576291Ee46527ba35164dd4BD',
+    poolFactoryAddress: '0x0dd9036704f0ee58811ab7eeab4cb37d354ea88c',
     poolLibraryAddress: '0x1A48393ba853b9e1DE7Fc1c041FDaAf04af52454',
     dxAddress: '0x7b7DC59ADBE59CA4D0eB32042fD5259Cf5329DE1',
     dxProxyAddress: '0xaaeb2035ff394fdb2c879190f95e7676f1a9444b',
@@ -28,7 +28,7 @@ const configurations = {
   },
   [ENV_STAGING]: {
     title: 'staging',
-    poolFactoryAddress: '0xE76eD7dBaC948e3576291Ee46527ba35164dd4BD',
+    poolFactoryAddress: '0x0dd9036704f0ee58811ab7eeab4cb37d354ea88c',
     poolLibraryAddress: '0x1A48393ba853b9e1DE7Fc1c041FDaAf04af52454',
     dxAddress: '0x7b7DC59ADBE59CA4D0eB32042fD5259Cf5329DE1', // https://dutchx.readthedocs.io/en/latest/smart-contracts_addresses.html#rinkeby
     dxProxyAddress: '0xaaeb2035ff394fdb2c879190f95e7676f1a9444b', // https://dutchx.readthedocs.io/en/latest/smart-contracts_addresses.html#rinkeby
