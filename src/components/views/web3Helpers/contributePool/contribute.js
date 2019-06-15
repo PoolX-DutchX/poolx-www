@@ -10,6 +10,7 @@ import poolAbi from '../shared/poolAbi.json'
 import BigNumber from 'bignumber.js'
 import getWeb3 from '../../../../lib/blockchain/getWeb3'
 import config from '../../../../configuration'
+
 const { numberOfConfirmations } = config
 const web3 = getWeb3()
 
