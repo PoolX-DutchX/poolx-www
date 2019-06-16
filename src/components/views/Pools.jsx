@@ -19,7 +19,7 @@ export default () => {
       setPools(pools)
       setIsLoading(false)
     })
-  }, [isEmpty(pools)])
+  }, [])
 
   if (isLoading) return <Loader className="fixed" />
 
@@ -38,13 +38,13 @@ export default () => {
       <div className="container main-wrap">
         <div className="row">
           <div className="col-md-12">
-            { isEmpty(pools) &&
+            {isEmpty(pools) && (
               <div className="fixed">
                 <Link to={`/pools/create`}>
                   No pools created yet. Be the first one!
                 </Link>
               </div>
-            }
+            )}
             <Paper>
               <Table>
                 <TableBody>
