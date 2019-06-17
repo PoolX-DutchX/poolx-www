@@ -186,7 +186,7 @@ const ViewPool = ({ match, web3, history }) => {
     return Number(result)
   }
 
-  const auctionStarted = dutchAuctionStartTime * 1000 > Date.now()
+  const auctionStarted = Date.now() > dutchAuctionStartTime * 1000
 
   return (
     <div id="view-pool-view" className="container">
@@ -304,13 +304,13 @@ const ViewPool = ({ match, web3, history }) => {
             <div>
               {stage === 'Collection' && (
                 <Tooltip
-                  title={!auctionStarted ? '' : 'Auction not yet started'}
+                  title={auctionStarted ? '' : 'Auction not yet started'}
                 >
                   <div className="row margin-top-bottom">
                     <Button
                       disabled={!auctionStarted}
                       variant="contained"
-                      color="divrimary"
+                      color="primary"
                       fullWidth
                       onClick={postBuyAndCollect}
                     >
