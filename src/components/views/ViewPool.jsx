@@ -18,6 +18,7 @@ import poolAbi from './web3Helpers/shared/poolAbi.json'
 
 import fetchPoolData from './web3Helpers/viewPool/viewPool'
 import { getPoolStage } from './web3Helpers/shared/commonWeb3Helpers'
+import { fetchUserTokenBalances } from './web3Helpers/contributePool/contribute'
 import { useWeb3Context } from 'web3-react'
 
 BigNumber.config({ EXPONENTIAL_AT: 40 })
@@ -25,15 +26,14 @@ BigNumber.config({ EXPONENTIAL_AT: 40 })
 const ViewPool = ({ match, web3, history }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [poolData, setPoolData] = useState({})
-  const {
-    params: { poolAddress },
-  } = match
+  const [tokenNames, setTokenNames] = useState({})
   const context = useWeb3Context()
+  const { params: { poolAddress } } = match
   const { account } = context
 
   useEffect(() => {
     fetchPoolData(poolAddress, account).then(values => {
-      const transfromFromWei = number => {
+      const transformFromWei = number => {
         const result = web3.utils.fromWei(number.toString(), 'ether')
         return Number(result)
       }
@@ -62,8 +62,8 @@ const ViewPool = ({ match, web3, history }) => {
       const [token1BalanceInUsd, token2BalanceInUsd] = tokenBalanceArray
 
       setPoolData({
-        token1Balance: transfromFromWei(token1BalanceResult),
-        token2Balance: transfromFromWei(token2BalanceResult),
+        token1Balance: transformFromWei(token1BalanceResult),
+        token2Balance: transformFromWei(token2BalanceResult),
         name,
         description,
         currentDxThreshold,
@@ -74,10 +74,10 @@ const ViewPool = ({ match, web3, history }) => {
         token2,
         token1ThresholdReached,
         token2ThresholdReached,
-        userContributionForToken1Amount: transfromFromWei(
+        userContributionForToken1Amount: transformFromWei(
           userContributionForToken1Amount
         ),
-        userContributionForToken2Amount: transfromFromWei(
+        userContributionForToken2Amount: transformFromWei(
           userContributionForToken2Amount
         ),
         dutchAuctionIndex,
@@ -87,6 +87,25 @@ const ViewPool = ({ match, web3, history }) => {
       setIsLoading(false)
     })
   }, [account, poolAddress, web3.utils])
+
+  useEffect(() => {
+    const { token1, token2 } = poolData
+    if (token1 && token2) {
+      fetchUserTokenBalances({ token1, token2, account })
+      .then(values => {
+        const [
+          token1Data,
+          token2Data,
+        ] = values
+
+
+        setTokenNames({
+          token1Name: token1Data.tokenName,
+          token2Name: token2Data.tokenName,
+        })
+      })
+    }
+}, [poolData, account])
 
   const contribute = () => history.push(`/pools/${poolAddress}/contribute`)
 
@@ -175,13 +194,15 @@ const ViewPool = ({ match, web3, history }) => {
     dutchAuctionStartTime,
   } = poolData
 
+  const { token1Name, token2Name } = tokenNames
+
   const poolProgress = new BigNumber(token1BalanceInUsd)
     .plus(token2BalanceInUsd)
     .div(currentDxThreshold)
     .times(100)
     .toNumber()
 
-  const transfromFromWei = number => {
+  const transformFromWei = number => {
     const result = web3.utils.fromWei(number.toString(), 'ether')
     return Number(result)
   }
@@ -207,7 +228,7 @@ const ViewPool = ({ match, web3, history }) => {
               <div className="col-md-4 ">
                 <h6>
                   <WithTooltip title="Sum total of all your contributions for this pool">
-                    My Contributions in Token 1
+                    My Contributions in { token1Name || 'Token 1' }
                   </WithTooltip>
                 </h6>
                 <h2>{userContributionForToken1Amount.toFixed(2)}</h2>
@@ -215,7 +236,7 @@ const ViewPool = ({ match, web3, history }) => {
               <div className="col-md-4 ">
                 <h6>
                   <WithTooltip title="Sum total of all your contributions for this pool">
-                    My Contributions in token 2
+                    My Contributions in { token2Name || 'Token 2'}
                   </WithTooltip>
                 </h6>
                 <h2>{userContributionForToken2Amount.toFixed(2)}</h2>
@@ -234,14 +255,14 @@ const ViewPool = ({ match, web3, history }) => {
             <div className="total-invested-section">
               <h4 className="invested">
                 <strong>
-                  {transfromFromWei(
+                  {transformFromWei(
                     new BigNumber(token1BalanceInUsd).plus(token2BalanceInUsd)
                   )}
                 </strong>
                 USD
               </h4>
               <div className="subheading">
-                of {transfromFromWei(currentDxThreshold)} USD to list token pair
+                of {transformFromWei(currentDxThreshold)} USD to list token pair
               </div>
             </div>
             <div className="min-max-section">
@@ -249,16 +270,16 @@ const ViewPool = ({ match, web3, history }) => {
                 <h4>
                   <strong>{token1Balance}</strong>
                 </h4>
-                <div className="subheading">Total Token1 balance in pool</div>
+                <div className="subheading">Total { token1Name || 'Token 1' } balance in pool</div>
               </span>
               <span>
                 <h4>
                   <strong>{token2Balance}</strong>
                 </h4>
-                <div className="subheading">Total Token2 balance in pool</div>
+                <div className="subheading">Total { token2Name || 'Token 2'} balance in pool</div>
               </span>
             </div>
-            {stage === 'Contributing' && (
+            {stage === 'Contribution' && (
               <div className="row">
                 <div className="col-md-6">
                   <Button

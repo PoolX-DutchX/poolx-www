@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import Paper from '@material-ui/core/Paper'
 import Table from '@material-ui/core/Table'
+import TableHead from '@material-ui/core/TableHead'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import Loader from '../Loader'
 
 import { Link } from 'react-router-dom'
-import fetchPools from './web3Helpers/pools/fetchPools'
+import {
+  fetchPools,
+  fetchPoolNameDescriptionAddress,
+} from './web3Helpers/pools/fetchPools'
 import isEmpty from 'lodash/isEmpty'
 
 export default () => {
@@ -15,9 +19,22 @@ export default () => {
   const [pools, setPools] = useState(null)
 
   useEffect(() => {
-    fetchPools().then(pools => {
-      setPools(pools)
-      setIsLoading(false)
+    fetchPools().then(allPools => {
+      const normalizedPools = allPools.map(pool =>
+        fetchPoolNameDescriptionAddress(pool)
+      )
+
+      Promise.all(normalizedPools).then(normPools => {
+        const newArrayOfPools = normPools.map(
+          ([name, description, address]) => ({
+            name,
+            description,
+            address,
+          })
+        )
+        setPools(newArrayOfPools)
+        setIsLoading(false)
+      })
     })
   }, [])
 
@@ -47,17 +64,30 @@ export default () => {
             )}
             <Paper>
               <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Description</TableCell>
+                    <TableCell>Contract address</TableCell>
+                  </TableRow>
+                </TableHead>
                 <TableBody>
-                  {pools.map((pool, index) => (
-                    <TableRow key={index}>
-                      <TableCell component="th" scope="row">
-                        {pool}
-                      </TableCell>
-                      <TableCell>
-                        <Link to={`/pools/view-pool/${pool}`}>{pool}</Link>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {pools &&
+                    pools.map((pool, index) => (
+                      <TableRow key={index}>
+                        <TableCell component="th" scope="row">
+                          {pool.name}
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          {pool.description}
+                        </TableCell>
+                        <TableCell>
+                          <Link to={`/pools/view-pool/${pool.address}`}>
+                            {pool.address}
+                          </Link>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </Paper>
