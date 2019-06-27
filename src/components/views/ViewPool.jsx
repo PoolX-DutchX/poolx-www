@@ -166,6 +166,7 @@ const ViewPool = ({ match, web3, history }) => {
         .on('confirmation', (confirmationNumber, receipt) => {
           showToastOnTxConfirmation(confirmationNumber, receipt, 'contribution')
           resolve(receipt)
+          setTimeout(() => window.location.reload(), 2000)
         })
         .on('error', (error, receipt) => {
           showToastOnTxError(receipt, 'contribution')
