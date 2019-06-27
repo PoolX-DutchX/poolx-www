@@ -11,6 +11,7 @@ export const showToastOnTxSubmitted = (txHash, poolStatus) =>
         href={getEtherscanTxLink(txHash)}
         target="_blank"
         rel="noopener noreferrer"
+        style={{ color: 'white' }}
       >
         View on etherscan
       </a>
@@ -33,6 +34,7 @@ export const showToastOnTxConfirmation = (
           href={getEtherscanTxLink(receipt.transactionHash)}
           target="_blank"
           rel="noopener noreferrer"
+          style={{ color: 'white' }}
         >
           View on etherscan
         </a>

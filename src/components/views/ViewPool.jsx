@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import BigNumber from 'bignumber.js'
 import moment from 'moment'
-import LinearProgress from '@material-ui/core/LinearProgress'
+// import LinearProgress from '@material-ui/core/LinearProgress'
 import Button from '@material-ui/core/Button'
 import Loader from '../Loader'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -28,7 +28,9 @@ const ViewPool = ({ match, web3, history }) => {
   const [poolData, setPoolData] = useState({})
   const [tokenNames, setTokenNames] = useState({})
   const context = useWeb3Context()
-  const { params: { poolAddress } } = match
+  const {
+    params: { poolAddress },
+  } = match
   const { account } = context
 
   useEffect(() => {
@@ -91,13 +93,8 @@ const ViewPool = ({ match, web3, history }) => {
   useEffect(() => {
     const { token1, token2 } = poolData
     if (token1 && token2) {
-      fetchUserTokenBalances({ token1, token2, account })
-      .then(values => {
-        const [
-          token1Data,
-          token2Data,
-        ] = values
-
+      fetchUserTokenBalances({ token1, token2, account }).then(values => {
+        const [token1Data, token2Data] = values
 
         setTokenNames({
           token1Name: token1Data.tokenName,
@@ -105,7 +102,7 @@ const ViewPool = ({ match, web3, history }) => {
         })
       })
     }
-}, [poolData, account])
+  }, [poolData, account])
 
   const contribute = () => history.push(`/pools/${poolAddress}/contribute`)
 
@@ -185,22 +182,22 @@ const ViewPool = ({ match, web3, history }) => {
     name,
     description,
     currentDxThreshold,
-    token1BalanceInUsd,
-    token2BalanceInUsd,
     stage,
     userContributionForToken1Amount,
     userContributionForToken2Amount,
     dutchAuctionIndex,
     dutchAuctionStartTime,
+    token1ThresholdReached,
+    token2ThresholdReached,
   } = poolData
 
   const { token1Name, token2Name } = tokenNames
 
-  const poolProgress = new BigNumber(token1BalanceInUsd)
-    .plus(token2BalanceInUsd)
-    .div(currentDxThreshold)
-    .times(100)
-    .toNumber()
+  // const poolProgress = new BigNumber(token1BalanceInUsd)
+  //   .plus(token2BalanceInUsd)
+  //   .div(currentDxThreshold)
+  //   .times(100)
+  //   .toNumber()
 
   const transformFromWei = number => {
     const result = web3.utils.fromWei(number.toString(), 'ether')
@@ -208,6 +205,12 @@ const ViewPool = ({ match, web3, history }) => {
   }
 
   const auctionStarted = Date.now() > dutchAuctionStartTime * 1000
+  const hasContributedToPool =
+    userContributionForToken1Amount > 0 || userContributionForToken2Amount > 0
+  const hasReachedPoolContributionThresholdInfo =
+    token1ThresholdReached || token2ThresholdReached
+      ? 'Contribution reached. You are able to list token on DutchX'
+      : 'Contribution ongoing'
 
   return (
     <div id="view-pool-view" className="container">
@@ -228,7 +231,7 @@ const ViewPool = ({ match, web3, history }) => {
               <div className="col-md-4 ">
                 <h6>
                   <WithTooltip title="Sum total of all your contributions for this pool">
-                    My Contributions in { token1Name || 'Token 1' }
+                    My Contributions in {token1Name || 'Token 1'}
                   </WithTooltip>
                 </h6>
                 <h2>{userContributionForToken1Amount.toFixed(2)}</h2>
@@ -236,7 +239,7 @@ const ViewPool = ({ match, web3, history }) => {
               <div className="col-md-4 ">
                 <h6>
                   <WithTooltip title="Sum total of all your contributions for this pool">
-                    My Contributions in { token2Name || 'Token 2'}
+                    My Contributions in {token2Name || 'Token 2'}
                   </WithTooltip>
                 </h6>
                 <h2>{userContributionForToken2Amount.toFixed(2)}</h2>
@@ -251,18 +254,21 @@ const ViewPool = ({ match, web3, history }) => {
             <h3>
               <strong>{stage} phase</strong>
             </h3>
-            <LinearProgress variant="determinate" value={poolProgress} />
+            <p>{hasReachedPoolContributionThresholdInfo}</p>
+            {/* <LinearProgress variant="determinate" value={poolProgress} /> */}
             <div className="total-invested-section">
-              <h4 className="invested">
+              {/* <h4 className="invested">
                 <strong>
                   {transformFromWei(
                     new BigNumber(token1BalanceInUsd).plus(token2BalanceInUsd)
                   )}
                 </strong>
                 USD
-              </h4>
+              </h4> */}
               <div className="subheading">
-                of {transformFromWei(currentDxThreshold)} USD to list token pair
+                Currently on DutchX, it is required{' '}
+                <strong>{transformFromWei(currentDxThreshold)}</strong> USD to
+                list a token pair
               </div>
             </div>
             <div className="min-max-section">
@@ -270,13 +276,17 @@ const ViewPool = ({ match, web3, history }) => {
                 <h4>
                   <strong>{token1Balance}</strong>
                 </h4>
-                <div className="subheading">Total { token1Name || 'Token 1' } balance in pool</div>
+                <div className="subheading">
+                  Total {token1Name || 'Token 1'} balance in pool
+                </div>
               </span>
               <span>
                 <h4>
                   <strong>{token2Balance}</strong>
                 </h4>
-                <div className="subheading">Total { token2Name || 'Token 2'} balance in pool</div>
+                <div className="subheading">
+                  Total {token2Name || 'Token 2'} balance in pool
+                </div>
               </span>
             </div>
             {stage === 'Contribution' && (
@@ -291,16 +301,18 @@ const ViewPool = ({ match, web3, history }) => {
                     Contribute
                   </Button>
                 </div>
-                <div className="col-md-6">
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                    onClick={withdrawContribution}
-                  >
-                    Withdraw
-                  </Button>
-                </div>
+                {hasContributedToPool && (
+                  <div className="col-md-6">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                      onClick={withdrawContribution}
+                    >
+                      Withdraw
+                    </Button>
+                  </div>
+                )}
               </div>
             )}
             {stage === 'Collection' && (
@@ -352,6 +364,13 @@ const ViewPool = ({ match, web3, history }) => {
                   </Button>
                 </div>
               )}
+              <p className="info-disclaimer">
+                Once pool is finalized it will automatically send the collected
+                funds to DutchX. Important: the auction starts six hours after
+                the token pair is added. Use this interface to send a buy order
+                for the DutchX auction once it starts. Only then, users are able
+                to claim tokens.
+              </p>
             </div>
           </div>
         </div>
