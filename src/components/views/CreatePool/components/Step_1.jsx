@@ -73,7 +73,7 @@ const StepOne = ({
         <div className="d-flex justify-content-between two-col-inner-padding">
           <TextField
             id="token1"
-            label="Token 1"
+            label="Token 1 address"
             placeholder="ERC20 Token"
             value={token1}
             onChange={handleChange}
@@ -89,7 +89,7 @@ const StepOne = ({
           {!willUseWeth && (
             <TextField
               id="token2"
-              label="Token 2"
+              label="Token 2 address"
               placeholder="0xc778417E063141139Fce010982780140Aa0cD5Ab"
               value={token2}
               onChange={handleChange}

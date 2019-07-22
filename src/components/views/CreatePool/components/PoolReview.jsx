@@ -10,7 +10,7 @@ const rowTitleMapping = {
   description: 'Pool description',
   token1: 'Token 1',
   token2: 'Token 2',
-  initialClosingPrice: 'Token1 / Token 2 Initial Price',
+  initialClosingPrice: 'Token1 / Token2 Closing Price',
   willUseWeth: 'Using Wrapped ETH (WETH)',
 }
 

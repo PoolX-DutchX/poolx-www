@@ -9,10 +9,13 @@ const Home = ({ history }) => (
           <div className="container">
             <div className="row">
               <div className="col-sm-5 ">
-                <h1>Powered by the Ethereum blockchain!</h1>
+                <h1>List tokens easily on DutchX</h1>
                 <p>
-                  Pool digital currency today with the security of smart
+                  Pool WETH and other ERC20 tokens with the security of smart
                   contracts
+                </p>
+                <p>
+                  Once minimun amount of contribution is met, it starts the first auction for the listed token automatically
                 </p>
                 <PillButton onClick={() => history.push('/pools/create')}>
                   Create a Pool

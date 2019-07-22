@@ -365,13 +365,18 @@ const ViewPool = ({ match, web3, history }) => {
                   </Button>
                 </div>
               )}
-              <p className="info-disclaimer">
-                Once pool is finalized it will automatically send the collected
+              <div className="info-disclaimer">
+                Once the pool is finalized it will automatically send the collected
                 funds to DutchX. Important: the auction starts six hours after
                 the token pair is added. Use this interface to send a buy order
                 for the DutchX auction once it starts. Only then, users are able
                 to claim tokens.
-              </p>
+                <a href="https://dutchx.readthedocs.io/en/latest/add-token-to-trade.html?highlight=6%20hours#the-theory-to-list" target="_blank" rel="noopener noreferrer">
+                  <p>
+                    <span>Read more on the DutchX documentation</span>
+                  </p>
+                </a>
+              </div>
             </div>
           </div>
         </div>
