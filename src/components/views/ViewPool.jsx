@@ -121,6 +121,7 @@ const ViewPool = ({ match, web3, history }) => {
         .on('confirmation', (confirmationNumber, receipt) => {
           showToastOnTxConfirmation(confirmationNumber, receipt, 'contribution')
           resolve(receipt)
+          setTimeout(() => window.location.reload(), 2000)
         })
         .on('error', (error, receipt) => {
           showToastOnTxError(receipt, 'contribution')
@@ -143,6 +144,7 @@ const ViewPool = ({ match, web3, history }) => {
         .on('confirmation', (confirmationNumber, receipt) => {
           showToastOnTxConfirmation(confirmationNumber, receipt, 'contribution')
           resolve(receipt)
+          setTimeout(() => window.location.reload(), 2000)
         })
         .on('error', (error, receipt) => {
           showToastOnTxError(receipt, 'contribution')
@@ -210,8 +212,10 @@ const ViewPool = ({ match, web3, history }) => {
     userContributionForToken1Amount > 0 || userContributionForToken2Amount > 0
   const hasReachedPoolContributionThresholdInfo =
     token1ThresholdReached || token2ThresholdReached
-      ? 'Contribution reached. You are able to list token on DutchX'
+      ? 'Contribution reached'
       : 'Contribution ongoing'
+
+  const userHasNoBalanceInPool = userContributionForToken1Amount === 0 && userContributionForToken2Amount === 0
 
   return (
     <div id="view-pool-view" className="container">
@@ -278,7 +282,7 @@ const ViewPool = ({ match, web3, history }) => {
                   <strong>{token1Balance}</strong>
                 </h4>
                 <div className="subheading">
-                  Total {token1Name || 'Token 1'} balance in pool
+                  Raised {token1Name || 'Token 1'} balance in pool
                 </div>
               </span>
               <span>
@@ -286,7 +290,7 @@ const ViewPool = ({ match, web3, history }) => {
                   <strong>{token2Balance}</strong>
                 </h4>
                 <div className="subheading">
-                  Total {token2Name || 'Token 2'} balance in pool
+                  Raised {token2Name || 'Token 2'} balance in pool
                 </div>
               </span>
             </div>
@@ -329,9 +333,7 @@ const ViewPool = ({ match, web3, history }) => {
                   )}\n`}
                 </div>
                 <div className="col-md-4 subheading">
-                  {`Starts in: ${moment(
-                    dutchAuctionStartTime * 1000
-                  ).fromNow()}`}
+                  {`Start: ${moment(dutchAuctionStartTime * 1000).fromNow()}`}
                 </div>
               </div>
             )}
@@ -360,18 +362,25 @@ const ViewPool = ({ match, web3, history }) => {
                     color="primary"
                     fullWidth
                     onClick={claimFunds}
+                    disabled={userHasNoBalanceInPool}
                   >
-                    CLAIM FUNDS
+                    {userHasNoBalanceInPool
+                      ? 'No more funds to claim'
+                      : 'CLAIM FUNDS'}
                   </Button>
                 </div>
               )}
               <div className="info-disclaimer">
-                Once the pool is finalized it will automatically send the collected
-                funds to DutchX. Important: the auction starts six hours after
-                the token pair is added. Use this interface to send a buy order
-                for the DutchX auction once it starts. Only then, users are able
-                to claim tokens.
-                <a href="https://dutchx.readthedocs.io/en/latest/add-token-to-trade.html?highlight=6%20hours#the-theory-to-list" target="_blank" rel="noopener noreferrer">
+                Once the pool is finalized it will automatically send the
+                collected funds to DutchX. Important: the auction starts six
+                hours after the token pair is added. Use this interface to send
+                a buy order for the DutchX auction once it starts. Only then,
+                users are able to claim tokens.
+                <a
+                  href="https://dutchx.readthedocs.io/en/latest/add-token-to-trade.html?highlight=6%20hours#the-theory-to-list"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <p>
                     <span>Read more on the DutchX documentation</span>
                   </p>
