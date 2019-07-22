@@ -45,6 +45,12 @@ const UserTokenBalances = ({ token1, token2, account, web3 }) => {
       <Typography component="p">
         Your {token2Name} balance: {token2Balance}
       </Typography>
+      <Typography Typography component="h3">
+        <strong>
+          NOTE: any surplus amount from reaching the contribution threshold will
+          be sent back to you
+        </strong>
+      </Typography>
     </SpacedPaper>
   )
 }
